@@ -9,13 +9,6 @@
 *.sqlite
 *.sqlite3
 
-# Environment files
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-
 # IDE and Editor files
 .vscode/
 .idea/
@@ -55,8 +48,6 @@ wheels/
 *.egg
 MANIFEST
 venv/
-env/
-ENV/
 env.bak/
 venv.bak/
 .venv/
