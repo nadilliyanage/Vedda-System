@@ -9,7 +9,7 @@ pandas>=2.3.0
 openpyxl>=3.1.0
 
 # Database
-sqlite3  # Built-in with Python
+# sqlite3 is built-in with Python, no need to install
 
 # Development
 python-dotenv>=1.0.0
