@@ -16,7 +16,6 @@ const TranslationOutput = ({
   error,
   sourceIpaTranscription,
   targetIpaTranscription,
-  bridgeTranslation,
   confidence,
   translationMethods = [],
   onCopyOutput,
@@ -147,16 +146,6 @@ const TranslationOutput = ({
                   </p>
                 </div>
               )}
-            </div>
-          )}
-
-          {/* Bridge Translation Info */}
-          {bridgeTranslation && (
-            <div className="bg-blue-50 p-4 rounded-lg mb-4 border border-blue-200">
-              <p className="text-sm text-gray-600 mb-2">
-                Bridge Translation (via English):
-              </p>
-              <p className="italic">{bridgeTranslation}</p>
             </div>
           )}
 

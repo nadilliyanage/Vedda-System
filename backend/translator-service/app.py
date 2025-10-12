@@ -117,8 +117,152 @@ class VeddaTranslator:
             print(f"Google Translate error: {e}")
             return None
     
+    def translate_to_vedda_via_sinhala(self, text, source_language):
+        """Translate any language to Vedda via Sinhala bridge"""
+        print(f"DEBUG VEDDA: Translating '{text}' from {source_language} to Vedda via Sinhala")
+        
+        # Step 1: Translate source to Sinhala (if not already Sinhala)
+        if source_language == 'sinhala':
+            sinhala_text = text
+            step1_confidence = 1.0
+        else:
+            sinhala_text = self.google_translate(text, source_language, 'sinhala')
+            if not sinhala_text:
+                return {
+                    'translated_text': text,
+                    'confidence': 0.1,
+                    'method': 'fallback',
+                    'source_ipa': '',
+                    'target_ipa': '',
+                    'bridge_translation': '',
+                    'methods_used': ['fallback'],
+                    'note': 'Failed to translate to Sinhala bridge'
+                }
+            step1_confidence = 0.8
+        
+        print(f"DEBUG VEDDA: Step 1 - Sinhala bridge: '{sinhala_text}'")
+        
+        # Step 2: Convert Sinhala words to Vedda using dictionary
+        sinhala_words = [word.strip() for word in sinhala_text.split() if word.strip()]
+        vedda_words = []
+        dictionary_hits = 0
+        
+        for sinhala_word in sinhala_words:
+            # Try to find Vedda equivalent in dictionary
+            dict_result = self.search_dictionary(sinhala_word, 'sinhala', 'vedda')
+            if dict_result and dict_result.get('found'):
+                vedda_word = dict_result['translation'].get('vedda', sinhala_word)
+                vedda_words.append(vedda_word)
+                dictionary_hits += 1
+                print(f"DEBUG VEDDA: '{sinhala_word}' -> '{vedda_word}' (dictionary)")
+            else:
+                # Keep Sinhala word if no Vedda equivalent found
+                vedda_words.append(sinhala_word)
+                print(f"DEBUG VEDDA: '{sinhala_word}' -> '{sinhala_word}' (kept Sinhala)")
+        
+        final_text = ' '.join(vedda_words)
+        
+        # Calculate confidence based on dictionary coverage
+        dict_coverage = dictionary_hits / len(sinhala_words) if sinhala_words else 0
+        final_confidence = step1_confidence * 0.7 + dict_coverage * 0.3
+        
+        print(f"DEBUG VEDDA: Final result: '{final_text}' (confidence: {final_confidence})")
+        
+        return {
+            'translated_text': final_text,
+            'confidence': final_confidence,
+            'method': 'sinhala_to_vedda_bridge',
+            'source_ipa': '',
+            'target_ipa': '',
+            'bridge_translation': sinhala_text,
+            'methods_used': ['google', 'dictionary', 'sinhala_bridge'],
+            'note': f'Translated via Sinhala bridge. Dictionary coverage: {dictionary_hits}/{len(sinhala_words)} words'
+        }
+    
+    def translate_from_vedda_via_sinhala(self, text, target_language):
+        """Translate Vedda to any language via Sinhala bridge"""
+        print(f"DEBUG VEDDA: Translating '{text}' from Vedda to {target_language} via Sinhala")
+        
+        # Step 1: Convert Vedda words to Sinhala using dictionary
+        vedda_words = [word.strip() for word in text.split() if word.strip()]
+        sinhala_words = []
+        dictionary_hits = 0
+        
+        for vedda_word in vedda_words:
+            # Try to find Sinhala equivalent in dictionary
+            dict_result = self.search_dictionary(vedda_word, 'vedda', 'sinhala')
+            if dict_result and dict_result.get('found'):
+                sinhala_word = dict_result['translation'].get('sinhala', vedda_word)
+                sinhala_words.append(sinhala_word)
+                dictionary_hits += 1
+                print(f"DEBUG VEDDA: '{vedda_word}' -> '{sinhala_word}' (dictionary)")
+            else:
+                # Keep Vedda word (assume it's close to Sinhala)
+                sinhala_words.append(vedda_word)
+                print(f"DEBUG VEDDA: '{vedda_word}' -> '{vedda_word}' (kept as Sinhala)")
+        
+        sinhala_text = ' '.join(sinhala_words)
+        print(f"DEBUG VEDDA: Step 1 - Sinhala bridge: '{sinhala_text}'")
+        
+        # Step 2: Translate Sinhala to target language (if not Sinhala)
+        if target_language == 'sinhala':
+            final_text = sinhala_text
+            step2_confidence = 1.0
+        else:
+            final_text = self.google_translate(sinhala_text, 'sinhala', target_language)
+            if not final_text:
+                # Fallback: return Sinhala text
+                final_text = sinhala_text
+                step2_confidence = 0.5
+            else:
+                step2_confidence = 0.8
+        
+        # Calculate confidence based on dictionary coverage
+        dict_coverage = dictionary_hits / len(vedda_words) if vedda_words else 0
+        final_confidence = dict_coverage * 0.7 + step2_confidence * 0.3
+        
+        print(f"DEBUG VEDDA: Final result: '{final_text}' (confidence: {final_confidence})")
+        
+        return {
+            'translated_text': final_text,
+            'confidence': final_confidence,
+            'method': 'vedda_to_sinhala_bridge',
+            'source_ipa': '',
+            'target_ipa': '',
+            'bridge_translation': sinhala_text,
+            'methods_used': ['dictionary', 'google', 'sinhala_bridge'],
+            'note': f'Translated via Sinhala bridge. Dictionary coverage: {dictionary_hits}/{len(vedda_words)} words'
+        }
+    
+    def direct_translation(self, text, source_language, target_language):
+        """Direct translation for non-Vedda languages"""
+        print(f"DEBUG DIRECT: Translating '{text}' from {source_language} to {target_language}")
+        
+        result = self.google_translate(text, source_language, target_language)
+        if result:
+            return {
+                'translated_text': result,
+                'confidence': 0.85,
+                'method': 'google_direct',
+                'source_ipa': '',
+                'target_ipa': '',
+                'bridge_translation': '',
+                'methods_used': ['google']
+            }
+        else:
+            return {
+                'translated_text': text,
+                'confidence': 0.1,
+                'method': 'fallback',
+                'source_ipa': '',
+                'target_ipa': '',
+                'bridge_translation': '',
+                'methods_used': ['fallback'],
+                'note': 'Google Translate failed'
+            }
+    
     def translate_text(self, text, source_language, target_language):
-        """Main translation method"""
+        """Main translation method with Sinhala bridge for Vedda"""
         if not text.strip():
             return {
                 'translated_text': '',
@@ -126,306 +270,22 @@ class VeddaTranslator:
                 'method': 'none',
                 'source_ipa': '',
                 'target_ipa': '',
-                'bridge_translation': ''
+                'bridge_translation': '',
+                'methods_used': []
             }
-        
-        # Initialize result
-        result = {
-            'translated_text': '',
-            'confidence': 0,
-            'method': 'unknown',
-            'source_ipa': '',
-            'target_ipa': '',
-            'bridge_translation': '',
-            'methods_used': []
-        }
-        
-        # Split text into words for word-by-word translation
-        # Handle both English and Sinhala/Vedda Unicode text properly
-        if source_language in ['vedda', 'sinhala']:
-            # For Sinhala/Vedda, split by spaces and filter out empty strings
-            words = [word.strip() for word in text.split() if word.strip()]
-        else:
-            # For other languages, use regex word boundaries
-            words = re.findall(r'\b\w+\b', text.lower())
-        
-        print(f"DEBUG: Split '{text}' into words: {words}")
-        translated_words = []
-        translation_methods = []
-        total_confidence = 0
-        
-        for word in words:
-            word_result = self.translate_word(word, source_language, target_language)
-            print(f"DEBUG: Word '{word}' result: {word_result}")
-            if word_result:
-                translated_words.append(word_result['translation'])
-                translation_methods.append(word_result['method'])
-                total_confidence += word_result['confidence']
-            else:
-                translated_words.append(word)
-                translation_methods.append('fallback')
-                total_confidence += 0.1
-        
-        print(f"DEBUG: Final translated_words: {translated_words}")
-        print(f"DEBUG: Total confidence: {total_confidence}, Words count: {len(words)}")
-        
-        if translated_words:
-            result['translated_text'] = ' '.join(translated_words)
-            result['confidence'] = total_confidence / len(words)
-            result['methods_used'] = list(set(translation_methods))
-            
-            # Determine primary method
-            if 'dictionary' in translation_methods:
-                result['method'] = 'dictionary'
-            elif 'bridge' in translation_methods:
-                result['method'] = 'bridge'
-            elif 'google' in translation_methods:
-                result['method'] = 'google'
-            else:
-                result['method'] = 'fallback'
-        
-        # Try phrase-level translation if word-by-word didn't work well
-        print(f"DEBUG: Word-by-word result confidence: {result['confidence']}")
-        if result['confidence'] < 0.5:
-            print(f"DEBUG: Trying phrase-level translation because confidence {result['confidence']} < 0.5")
-            phrase_result = self.translate_phrase(text, source_language, target_language)
-            print(f"DEBUG: Phrase result: {phrase_result}")
-            if phrase_result and phrase_result['confidence'] > result['confidence']:
-                print(f"DEBUG: Using phrase result because {phrase_result['confidence']} > {result['confidence']}")
-                result = phrase_result
-        else:
-            print(f"DEBUG: Skipping phrase translation because confidence {result['confidence']} >= 0.5")
-        
-        return result
-    
-    def translate_word(self, word, source_language, target_language):
-        """Translate a single word using various methods"""
-        
-        print(f"DEBUG: Translating '{word}' from {source_language} to {target_language}")
-        
-        # Method 1: Direct dictionary lookup
-        if source_language == 'vedda' or target_language == 'vedda':
-            dict_result = self.search_dictionary(word, source_language, target_language)
-            print(f"DEBUG: Dictionary result for '{word}': {dict_result}")
-            if dict_result and dict_result.get('found'):
-                translation_data = dict_result['translation']
-                print(f"DEBUG: Translation data: {translation_data}")
-                
-                if target_language == 'english' and 'english' in translation_data:
-                    return {
-                        'translation': translation_data['english'],
-                        'confidence': 0.9,
-                        'method': 'dictionary',
-                        'ipa': translation_data.get('english_ipa', '')
-                    }
-                elif target_language == 'sinhala' and 'sinhala' in translation_data:
-                    return {
-                        'translation': translation_data['sinhala'],
-                        'confidence': 0.9,
-                        'method': 'dictionary',
-                        'ipa': translation_data.get('sinhala_ipa', '')
-                    }
-                elif target_language == 'vedda' and 'vedda' in translation_data:
-                    vedda_translation = translation_data['vedda']
-                    print(f"DEBUG: Found Vedda translation: '{vedda_translation}'")
-                    return {
-                        'translation': vedda_translation,
-                        'confidence': 0.9,
-                        'method': 'dictionary',
-                        'ipa': translation_data.get('vedda_ipa', '')
-                    }
-        
-        # Method 1.5: Fallback to Sinhala if Vedda not found
+
+        print(f"DEBUG: Main translation - '{text}' from {source_language} to {target_language}")
+
+        # VEDDA TRANSLATION LOGIC: Always use Sinhala as bridge
         if target_language == 'vedda':
-            print(f"DEBUG: Vedda not found for '{word}', trying Sinhala fallback")
-            # Try to get Sinhala translation using Google Translate
-            sinhala_result = self.google_translate(word, source_language, 'sinhala')
-            if sinhala_result:
-                print(f"DEBUG: Found Sinhala fallback: '{sinhala_result}'")
-                return {
-                    'translation': sinhala_result,
-                    'confidence': 0.7,
-                    'method': 'sinhala_fallback',
-                    'ipa': '',
-                    'note': 'Vedda translation not available, showing Sinhala'
-                }
-        
-        # Method 2: Bridge translation (English as bridge language)
-        if source_language != 'english' and target_language != 'english':
-            # First translate to English
-            english_result = None
-            if source_language == 'vedda':
-                dict_result = self.search_dictionary(word, 'vedda', 'english')
-                if dict_result and dict_result.get('found'):
-                    english_result = dict_result['translation'].get('english')
-            else:
-                english_result = self.google_translate(word, source_language, 'english')
-            
-            if english_result:
-                # Then translate from English to target
-                if target_language == 'vedda':
-                    dict_result = self.search_dictionary(english_result, 'english', 'vedda')
-                    if dict_result and dict_result.get('found'):
-                        return {
-                            'translation': dict_result['translation'].get('vedda', word),
-                            'confidence': 0.7,
-                            'method': 'bridge',
-                            'bridge_language': 'english'
-                        }
-                else:
-                    final_result = self.google_translate(english_result, 'english', target_language)
-                    if final_result:
-                        return {
-                            'translation': final_result,
-                            'confidence': 0.6,
-                            'method': 'bridge',
-                            'bridge_language': 'english'
-                        }
-        
-        # Method 2.5: Sinhala bridge for Vedda to other languages
-        if source_language == 'vedda' and target_language != 'vedda' and target_language != 'sinhala':
-            print(f"DEBUG: Vedda->English not found for '{word}', trying Sinhala bridge")
-            # Try Sinhala as bridge language if English bridge failed
-            sinhala_result = None
-            dict_result = self.search_dictionary(word, 'vedda', 'sinhala')
-            if dict_result and dict_result.get('found'):
-                sinhala_result = dict_result['translation'].get('sinhala')
-                print(f"DEBUG: Found Sinhala in dictionary: '{sinhala_result}'")
-            
-            if sinhala_result:
-                # Translate from Sinhala to target language
-                final_result = self.google_translate(sinhala_result, 'sinhala', target_language)
-                if final_result:
-                    print(f"DEBUG: Sinhala bridge result: '{final_result}'")
-                    return {
-                        'translation': final_result,
-                        'confidence': 0.65,
-                        'method': 'sinhala_bridge',
-                        'bridge_language': 'sinhala',
-                        'note': f'Translated via Sinhala: {sinhala_result}'
-                    }
-            else:
-                print(f"DEBUG: No Sinhala found in dictionary, treating Vedda word as Sinhala")
-                # If no Sinhala in dictionary, treat the Vedda word as Sinhala and translate
-                fallback_result = self.google_translate(word, 'sinhala', target_language)
-                if fallback_result:
-                    print(f"DEBUG: Sinhala fallback result: '{fallback_result}'")
-                    return {
-                        'translation': fallback_result,
-                        'confidence': 0.6,
-                        'method': 'sinhala_fallback_bridge',
-                        'bridge_language': 'sinhala',
-                        'note': f'Vedda word treated as Sinhala for translation'
-                    }
-        
-        # Method 3: Direct Google Translate (if both languages are supported)
-        if (source_language in self.supported_languages and 
-            target_language in self.supported_languages and
-            source_language != 'vedda' and target_language != 'vedda'):
-            
-            google_result = self.google_translate(word, source_language, target_language)
-            if google_result:
-                return {
-                    'translation': google_result,
-                    'confidence': 0.8,
-                    'method': 'google'
-                }
-        
-        return None
-    
-    def translate_phrase(self, text, source_language, target_language):
-        """Translate entire phrase using available methods"""
-        
-        # For Vedda translations, try to use dictionary for key words
-        if source_language == 'vedda' or target_language == 'vedda':
-            return self.vedda_phrase_translation(text, source_language, target_language)
-        
-        # For other languages, use Google Translate
-        google_result = self.google_translate(text, source_language, target_language)
-        if google_result:
-            return {
-                'translated_text': google_result,
-                'confidence': 0.8,
-                'method': 'google',
-                'source_ipa': '',
-                'target_ipa': '',
-                'bridge_translation': '',
-                'methods_used': ['google']
-            }
-        
-        return None
-    
-    def vedda_phrase_translation(self, text, source_language, target_language):
-        """Special handling for Vedda phrase translation"""
-        # This would implement more sophisticated Vedda phrase translation
-        # For now, it's a placeholder that could be enhanced with linguistic rules
-        words = text.split()
-        translated_parts = []
-        
-        print(f"DEBUG PHRASE: Processing phrase '{text}' with {len(words)} words")
-        
-        for word in words:
-            word_result = self.translate_word(word.lower(), source_language, target_language)
-            print(f"DEBUG PHRASE: Word '{word}' -> {word_result}")
-            if word_result:
-                translated_parts.append(word_result['translation'])
-            else:
-                translated_parts.append(word)
-        
-        print(f"DEBUG PHRASE: Final translated_parts: {translated_parts}")
-        
-        # Check if we need Sinhala fallback for the entire phrase
-        if target_language == 'vedda' and translated_parts == words:
-            print(f"DEBUG PHRASE: No Vedda translations found, trying Sinhala fallback for entire phrase")
-            sinhala_phrase = self.google_translate(text, source_language, 'sinhala')
-            if sinhala_phrase:
-                print(f"DEBUG PHRASE: Sinhala fallback result: '{sinhala_phrase}'")
-                return {
-                    'translated_text': sinhala_phrase,
-                    'confidence': 0.5,
-                    'method': 'sinhala_phrase_fallback',
-                    'source_ipa': '',
-                    'target_ipa': '',
-                    'bridge_translation': '',
-                    'methods_used': ['sinhala_fallback'],
-                    'note': 'Vedda translation not available, showing Sinhala'
-                }
-        
-        # Check if we need Sinhala bridge for Vedda to other languages
-        if source_language == 'vedda' and target_language != 'vedda' and target_language != 'sinhala':
-            # Check if most words failed to translate (indicating it might be Sinhala text)
-            failed_words = [word for i, word in enumerate(words) if i < len(translated_parts) and translated_parts[i] == word]
-            if len(failed_words) >= len(words) / 2:  # If more than half the words failed
-                print(f"DEBUG PHRASE: {len(failed_words)}/{len(words)} words failed, trying Sinhala bridge for entire phrase")
-                # Try treating the entire phrase as Sinhala and translate
-                sinhala_bridge_result = self.google_translate(text, 'sinhala', target_language)
-                if sinhala_bridge_result:
-                    print(f"DEBUG PHRASE: Sinhala bridge result: '{sinhala_bridge_result}'")
-                    return {
-                        'translated_text': sinhala_bridge_result,
-                        'confidence': 0.55,
-                        'method': 'sinhala_bridge_phrase',
-                        'source_ipa': '',
-                        'target_ipa': '',
-                        'bridge_translation': text,
-                        'methods_used': ['sinhala_bridge'],
-                        'note': f'Mixed Vedda/Sinhala phrase treated as Sinhala for translation'
-                    }
-        
-        if translated_parts:
-            final_text = ' '.join(translated_parts)
-            print(f"DEBUG PHRASE: Final translated text: '{final_text}'")
-            return {
-                'translated_text': final_text,
-                'confidence': 0.6,
-                'method': 'vedda_phrase',
-                'source_ipa': '',
-                'target_ipa': '',
-                'bridge_translation': '',
-                'methods_used': ['dictionary', 'vedda_phrase']
-            }
-        
-        return None
+            # Any Language → Sinhala → Vedda
+            return self.translate_to_vedda_via_sinhala(text, source_language)
+        elif source_language == 'vedda':
+            # Vedda → Sinhala → Any Language
+            return self.translate_from_vedda_via_sinhala(text, target_language)
+        else:
+            # Direct translation for non-Vedda languages
+            return self.direct_translation(text, source_language, target_language)
     
     def save_translation_history(self, input_text, output_text, source_language, 
                                target_language, translation_method, confidence):
@@ -521,43 +381,6 @@ def get_languages():
         'supported_languages': translator.supported_languages,
         'total_count': len(translator.supported_languages)
     })
-
-@app.route('/api/translate/word', methods=['POST'])
-def translate_word():
-    """Translate a single word with detailed information"""
-    data = request.get_json()
-    
-    if not data:
-        return jsonify({'error': 'No data provided'}), 400
-    
-    word = data.get('word', '').strip()
-    source_language = data.get('source_language', 'english').lower()
-    target_language = data.get('target_language', 'vedda').lower()
-    
-    if not word:
-        return jsonify({'error': 'Word is required'}), 400
-    
-    result = translator.translate_word(word, source_language, target_language)
-    
-    if result:
-        return jsonify({
-            'success': True,
-            'word': word,
-            'translation': result['translation'],
-            'confidence': result['confidence'],
-            'method': result['method'],
-            'ipa': result.get('ipa', ''),
-            'source_language': source_language,
-            'target_language': target_language
-        })
-    else:
-        return jsonify({
-            'success': False,
-            'word': word,
-            'message': 'Translation not found',
-            'source_language': source_language,
-            'target_language': target_language
-        })
 
 if __name__ == '__main__':
     print("Starting Translation Service on port 5001...")

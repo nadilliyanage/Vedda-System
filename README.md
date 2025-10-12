@@ -59,6 +59,7 @@ vedda-system/
 ## Technology Stack
 
 ### Backend Microservices
+
 - **API Gateway**: Central routing and service orchestration (Flask, Port 5000)
 - **Translator Service**: Core translation engine with Sinhala bridge logic (Flask, Port 5001)
 - **Dictionary Service**: Vedda vocabulary management and lookup (Flask, Port 5002)
@@ -67,6 +68,7 @@ vedda-system/
 - **Translation Engine**: Multi-layered approach with dictionary → Sinhala bridge → Google Translate fallback
 
 ### Frontend
+
 - **Framework**: React.js 18.2.0 with Vite 7.1.9 (Port 5173)
 - **Styling**: Tailwind CSS v3.4.18 (migrated from Material-UI)
 - **Icons**: React Icons library for consistent iconography
@@ -74,6 +76,7 @@ vedda-system/
 - **PWA Support**: Progressive Web App capabilities with manifest.json
 
 ### Translation Logic
+
 - **Primary**: Dictionary-based translation (Confidence: 0.9)
 - **Sinhala Bridge**: Uses Sinhala as intermediate language for unknown Vedda words
 - **Google Translate Integration**: 40+ languages support with intelligent fallback
@@ -194,13 +197,13 @@ For detailed component documentation, see [`frontend/COMPONENT_STRUCTURE.md`](fr
    python app.py
    # Running on http://localhost:5002
 
-   # Terminal 2: History Service  
+   # Terminal 2: History Service
    cd backend/history-service
    python app.py
    # Running on http://localhost:5003
 
    # Terminal 3: Translator Service
-   cd backend/translator-service  
+   cd backend/translator-service
    python app.py
    # Running on http://localhost:5001
 
@@ -221,8 +224,9 @@ For detailed component documentation, see [`frontend/COMPONENT_STRUCTURE.md`](fr
 #### Method 2: Direct Service Access
 
 The frontend can connect directly to individual services:
+
 - **Translator Service**: Primary translation endpoint (Port 5001)
-- **Dictionary Service**: Vocabulary management (Port 5002)  
+- **Dictionary Service**: Vocabulary management (Port 5002)
 - **History Service**: Translation tracking (Port 5003)
 
 ### Service Health Checks
@@ -232,7 +236,7 @@ Verify all services are running:
 ```bash
 # Check individual services
 curl http://localhost:5001/health  # Translator Service
-curl http://localhost:5002/health  # Dictionary Service  
+curl http://localhost:5002/health  # Dictionary Service
 curl http://localhost:5003/health  # History Service
 curl http://localhost:5000/health  # API Gateway (if running)
 
@@ -244,7 +248,7 @@ curl http://localhost:5000/health  # API Gateway (if running)
 
 - ✅ **Microservices Architecture**: All 4 backend services operational
   - 🟢 Dictionary Service (Port 5002): Vocabulary management
-  - 🟢 History Service (Port 5003): Translation tracking  
+  - 🟢 History Service (Port 5003): Translation tracking
   - 🟢 Translator Service (Port 5001): Core translation engine
   - 🟢 API Gateway (Port 5000): Optional unified endpoint
 - ✅ **Frontend Application**: Modern React with Vite (Port 5173)
@@ -320,6 +324,7 @@ curl http://localhost:5000/health  # API Gateway (if running)
 ## API Endpoints
 
 ### Translator Service (Port 5001)
+
 - `POST /api/translate` - Main translation endpoint
   - **Input**: `{"text": "වතුර පිරිසිදු", "source_language": "vedda", "target_language": "english"}`
   - **Output**: Translation with confidence score, method, and bridge language info
@@ -328,7 +333,8 @@ curl http://localhost:5000/health  # API Gateway (if running)
 - `POST /api/translate/word` - Single word translation
 - `GET /health` - Service health check
 
-### Dictionary Service (Port 5002)  
+### Dictionary Service (Port 5002)
+
 - `GET /api/dictionary/search` - Search for word translations
   - **Params**: `word`, `source`, `target`
   - **Example**: `/api/dictionary/search?word=වතුර&source=vedda&target=english`
@@ -338,14 +344,16 @@ curl http://localhost:5000/health  # API Gateway (if running)
 - `GET /health` - Service health check
 
 ### History Service (Port 5003)
+
 - `GET /api/history` - Get translation history
-- `POST /api/history` - Save translation to history  
+- `POST /api/history` - Save translation to history
 - `GET /api/feedback` - Get user feedback
 - `POST /api/feedback` - Submit translation feedback
 - `GET /api/statistics` - Translation usage statistics
 - `GET /health` - Service health check
 
 ### API Gateway (Port 5000) - Optional
+
 - `GET /health` - Overall system health
 - `POST /api/*` - Proxies requests to appropriate services
 - Provides unified API endpoint for all services
@@ -403,14 +411,17 @@ This project aims to preserve and promote the Vedda language. Contributions from
 ### Translation Method Priority
 
 1. **Dictionary Translation** (Confidence: 0.9)
+
    - Direct lookup in Vedda dictionary
    - Highest accuracy for known words
 
 2. **Sinhala Bridge** (Confidence: 0.65)
+
    - Uses Sinhala as intermediate language
    - For Vedda words not in dictionary but available in Sinhala
 
-3. **Sinhala Fallback** (Confidence: 0.7)  
+3. **Sinhala Fallback** (Confidence: 0.7)
+
    - Shows Sinhala translation when Vedda unavailable
    - Maintains linguistic relevance
 
