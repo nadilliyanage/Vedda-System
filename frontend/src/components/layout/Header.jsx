@@ -1,6 +1,6 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, IconButton } from "@mui/material";
-import { Translate, History, Menu } from "@mui/icons-material";
+import { History, Menu } from "@mui/icons-material";
 
 const Header = ({ onHistoryClick }) => {
   return (
@@ -13,7 +13,7 @@ const Header = ({ onHistoryClick }) => {
         <IconButton edge="start" color="inherit" sx={{ mr: 2 }}>
           <Menu />
         </IconButton>
-        <Translate sx={{ mr: 2 }} />
+
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Vedda Translate
         </Typography>

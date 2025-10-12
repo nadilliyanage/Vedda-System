@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Card, Grid, Box, Button, CircularProgress } from "@mui/material";
 import { Translate } from "@mui/icons-material";
-import LanguageSelector from "./LanguageSelector";
-import TranslationInput from "./TranslationInput";
-import TranslationOutput from "./TranslationOutput";
+import LanguageSelector from "./LanguageSelector.jsx";
+import TranslationInput from "./TranslationInput.jsx";
+import TranslationOutput from "./TranslationOutput.jsx";
 import { useTranslation } from "../../hooks/useTranslation";
 
 const TranslationCard = ({
@@ -145,7 +145,7 @@ const TranslationCard = ({
             textTransform: "none",
             fontSize: "1rem",
           }}
-          startIcon={loading ? <CircularProgress size={20} /> : <Translate />}
+          // startIcon={loading ? <CircularProgress size={20} /> : <Translate />}
         >
           {loading ? "Translating..." : "Translate"}
         </Button>

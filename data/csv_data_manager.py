@@ -248,7 +248,7 @@ class VeddaDataManager:
         """Print formatted statistics"""
         stats = self.get_statistics()
         
-        print("\n📊 Vedda Dictionary Statistics")
+        print("\n Vedda Dictionary Statistics")
         print("=" * 40)
         print(f"📖 Total entries: {stats['total_entries']}")
         print(f"🏷️  Word types: {stats['word_types']}")

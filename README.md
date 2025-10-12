@@ -12,7 +12,6 @@ The Vedda language is an indigenous language of Sri Lanka that has significant o
 4. Support both text and potentially speech translation
 5. Preserve and promote the Vedda language through modern technology
 
-
 ## Project Structure
 
 ```
@@ -60,12 +59,14 @@ vedda-system/
 ## Development Status
 
 ### ✅ Phase 1: Basic Dictionary-Based Translation (Completed)
+
 - ✅ Created Vedda-Sinhala-English word mappings (48+ words)
 - ✅ Implemented dictionary-based translation with intelligent fallback
 - ✅ Built Google Translate-style web interface
 - ✅ Added IPA phonetic transcriptions
 
 ### ✅ Phase 2: Enhanced Translation Engine (Completed)
+
 - ✅ Added context-based translation with Sinhala fallback
 - ✅ Implemented Google Translate API integration for 18+ languages
 - ✅ Added CSV-based dataset management system
@@ -73,12 +74,15 @@ vedda-system/
 - ✅ Real-time translation with confidence scoring
 
 ### ✅ Phase 3: Component-Based Architecture (Completed)
+
 - ✅ Refactored frontend to component-based architecture
 - ✅ Created reusable React components for better maintainability
 - ✅ Implemented custom hooks for business logic separation
 - ✅ Organized code structure for team collaboration
 - ✅ Added comprehensive component documentation
+
 ### 🚧 Phase 4: Advanced Features (In Progress)
+
 - ✅ Streamlined CSV data management
 - 🔄 Expanding Vedda vocabulary through community contributions
 - 🔄 Performance optimizations with React.memo
@@ -87,6 +91,7 @@ vedda-system/
 - ⏳ TypeScript integration for better type safety
 
 ### 📋 Phase 5: Future Enhancements
+
 - Speech-to-text and text-to-speech integration
 - Mobile application development
 - Advanced ML translation models
@@ -99,12 +104,14 @@ vedda-system/
 The frontend follows modern React best practices with a component-based architecture:
 
 ### 🧩 **Components Structure**
+
 - **Layout Components**: Header, navigation
 - **Translation Components**: Input, output, language selector, history
 - **UI Components**: Reusable elements like example phrases
 - **Custom Hooks**: Business logic separation for translations and history
 
 ### 🎯 **Benefits**
+
 - **Maintainability**: Single responsibility components
 - **Reusability**: Components can be used across different views
 - **Scalability**: Easy to add new features without affecting existing code
@@ -116,6 +123,7 @@ For detailed component documentation, see [`frontend/COMPONENT_STRUCTURE.md`](fr
 ## Getting Started
 
 ### Prerequisites
+
 - Python 3.8+ installed
 - Node.js 16+ and npm installed
 - Git installed
@@ -123,26 +131,29 @@ For detailed component documentation, see [`frontend/COMPONENT_STRUCTURE.md`](fr
 ### Installation & Setup
 
 1. **Clone this repository**
+
    ```bash
    git clone <repository-url>
    cd vedda-system
    ```
 
 2. **Backend Setup**
+
    ```bash
    # Install Python dependencies
    python -m pip install -r requirements.txt
-   
+
    # Navigate to data directory and initialize database
    cd data
    python csv_data_manager.py
    ```
 
 3. **Frontend Setup**
+
    ```bash
    # Navigate to frontend directory
    cd frontend
-   
+
    # Install Node.js dependencies
    npm install
    ```
@@ -150,11 +161,13 @@ For detailed component documentation, see [`frontend/COMPONENT_STRUCTURE.md`](fr
 ### Running the Application
 
 1. **Start the Backend Server**
+
    ```bash
    # From project root, navigate to backend
    cd backend
    python app.py
    ```
+
    The backend will be available at: `http://localhost:5000`
 
 2. **Start the Frontend Development Server**
@@ -168,7 +181,7 @@ For detailed component documentation, see [`frontend/COMPONENT_STRUCTURE.md`](fr
 ### Current Status ✅
 
 - ✅ **Backend Server**: Running on http://localhost:5000
-- ✅ **Frontend Application**: Running on http://localhost:3000  
+- ✅ **Frontend Application**: Running on http://localhost:3000
 - ✅ **Database**: Initialized with 48 Vedda dictionary entries
 - ✅ **Component Architecture**: Fully implemented and functional
 - ✅ **Translation Engine**: Supporting 18+ languages with intelligent fallback
@@ -176,12 +189,14 @@ For detailed component documentation, see [`frontend/COMPONENT_STRUCTURE.md`](fr
 ### Adding More Vedda Words
 
 1. **Edit the CSV file**
+
    ```bash
    # Open data/vedda_dictionary.csv and add new rows:
    # vedda_word,sinhala_word,english_word,vedda_ipa,sinhala_ipa,english_ipa,word_type,usage_example
    ```
 
 2. **Import to Database**
+
    ```bash
    cd data
    python csv_data_manager.py
@@ -195,11 +210,13 @@ For detailed component documentation, see [`frontend/COMPONENT_STRUCTURE.md`](fr
 ### Development Commands
 
 - **Database Management:**
+
   - `python csv_data_manager.py` - Import CSV data and show statistics
   - `python csv_data_manager.py --export` - Export database to CSV
   - `python csv_data_manager.py --stats` - View statistics only
 
 - **Development Servers:**
+
   - Backend: `python backend/app.py`
   - Frontend: `npm start` (from frontend directory)
 
@@ -234,6 +251,7 @@ For detailed component documentation, see [`frontend/COMPONENT_STRUCTURE.md`](fr
 ## Architecture Benefits
 
 ### 🏗️ **Component-Based Frontend**
+
 - **Modular Design**: Each component has a single responsibility
 - **Reusable Components**: Consistent UI patterns across the application
 - **Custom Hooks**: Business logic separated from UI components
@@ -241,12 +259,14 @@ For detailed component documentation, see [`frontend/COMPONENT_STRUCTURE.md`](fr
 - **Team Collaboration**: Clear code organization for multiple developers
 
 ### 🔧 **Maintainable Backend**
+
 - **Flask API**: RESTful endpoints for translation services
 - **SQLite Database**: Lightweight database with migration support
 - **CSV Integration**: Easy vocabulary management and updates
 - **Intelligent Fallback**: Sinhala fallback when Vedda words unavailable
 
 ### 📊 **Data Management**
+
 - **CSV-Based Vocabulary**: Easy editing and version control
 - **Database Migration**: Smooth schema updates
 - **Translation History**: User interaction tracking
@@ -277,11 +297,13 @@ This project aims to preserve and promote the Vedda language. Contributions from
 ### Data Format
 
 When adding words to `vedda_dictionary.csv`, use this format:
+
 ```csv
 vedda_word,sinhala_word,english_word,vedda_ipa,sinhala_ipa,english_ipa,word_type,usage_example
 ```
 
 Example:
+
 ```csv
 කැකුලෝ,ලමයි,children,kækulo,ləməi,ˈtʃɪldrən,noun,මේ කැකුලෝ ගෙදර ඉන්නවා - These children are at home
 ```

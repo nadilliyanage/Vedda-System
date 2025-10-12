@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Container, Grid, Box } from "@mui/material";
 
 // Components
-import Header from "./components/layout/Header";
-import TranslationCard from "./components/translation/TranslationCard";
-import TranslationHistory from "./components/translation/TranslationHistory";
-import ExamplePhrases from "./components/ui/ExamplePhrases";
+import Header from "./components/layout/Header.jsx";
+import TranslationCard from "./components/translation/TranslationCard.jsx";
+import TranslationHistory from "./components/translation/TranslationHistory.jsx";
+import ExamplePhrases from "./components/ui/ExamplePhrases.jsx";
 
 // Hooks
 import { useTranslationHistory } from "./hooks/useTranslationHistory";

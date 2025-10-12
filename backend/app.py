@@ -496,7 +496,7 @@ def get_supported_languages():
     """Get list of all supported languages"""
     return jsonify({
         'languages': [
-            {'code': 'vedda', 'name': 'Vedda', 'native': 'වැද්දා', 'flag': '🏝️'},
+            {'code': 'vedda', 'name': 'Vedda', 'native': 'වැද්දා', 'flag': 'VE'},
             {'code': 'sinhala', 'name': 'Sinhala', 'native': 'සිංහල', 'flag': '🇱🇰'},
             {'code': 'english', 'name': 'English', 'native': 'English', 'flag': '🇺🇸'},
             {'code': 'tamil', 'name': 'Tamil', 'native': 'தமிழ்', 'flag': '🇮🇳'},
