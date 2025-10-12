@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { API_BASE_URL } from "../constants/languages";
+import { SERVICE_URLS } from "../constants/languages";
 
 export const useTranslation = () => {
   const [loading, setLoading] = useState(false);
@@ -16,21 +16,22 @@ export const useTranslation = () => {
     setError("");
 
     try {
-      const response = await axios.post(`${API_BASE_URL}/api/translate`, {
-        text: inputText,
-        source_language: sourceLanguage,
-        target_language: targetLanguage,
-        include_ipa: true,
-      });
+      const response = await axios.post(
+        `${SERVICE_URLS.TRANSLATOR}/api/translate`,
+        {
+          text: inputText,
+          source_language: sourceLanguage,
+          target_language: targetLanguage,
+          include_ipa: true,
+        }
+      );
 
       return {
         translatedText: response.data.translated_text,
-        translationMethods: response.data.translation_methods,
+        translationMethods: response.data.methods_used || [],
         targetIpaTranscription:
-          response.data.target_ipa_transcription ||
-          response.data.ipa_transcription ||
-          "",
-        sourceIpaTranscription: response.data.source_ipa_transcription || "",
+          response.data.target_ipa || response.data.ipa_transcription || "",
+        sourceIpaTranscription: response.data.source_ipa || "",
         bridgeTranslation: response.data.bridge_translation || "",
         confidence: response.data.confidence || null,
         sinhalaWordsDetected: response.data.sinhala_words_detected,

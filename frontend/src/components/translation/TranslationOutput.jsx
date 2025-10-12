@@ -18,7 +18,7 @@ const TranslationOutput = ({
   targetIpaTranscription,
   bridgeTranslation,
   confidence,
-  translationMethods,
+  translationMethods = [],
   onCopyOutput,
 }) => {
   const getLanguageNative = (code) => {
