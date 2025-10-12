@@ -87,8 +87,13 @@ class VeddaTranslator:
             source_code = self.supported_languages.get(source_lang, source_lang)
             target_code = self.supported_languages.get(target_lang, target_lang)
             
-            if source_code == 'vedda' or target_code == 'vedda':
-                return None  # Google doesn't support Vedda
+            # Special handling for Vedda - use Sinhala as fallback
+            if target_code == 'vedda':
+                target_code = 'si'  # Use Sinhala as fallback for Vedda
+                print(f"DEBUG GOOGLE: Using Sinhala (si) as fallback for Vedda translation")
+            elif source_code == 'vedda':
+                source_code = 'si'  # Use Sinhala as source for Vedda
+                print(f"DEBUG GOOGLE: Using Sinhala (si) as source for Vedda text")
             
             params = {
                 'client': 'gtx',
@@ -98,11 +103,14 @@ class VeddaTranslator:
                 'q': text
             }
             
+            print(f"DEBUG GOOGLE: Translating '{text}' from {source_code} to {target_code}")
             response = requests.get(GOOGLE_TRANSLATE_URL, params=params, timeout=10)
             if response.status_code == 200:
                 result = response.json()
                 if result and len(result) > 0 and len(result[0]) > 0:
-                    return result[0][0][0]
+                    translated_text = result[0][0][0]
+                    print(f"DEBUG GOOGLE: Result: '{translated_text}'")
+                    return translated_text
             return None
             
         except Exception as e:
@@ -133,7 +141,15 @@ class VeddaTranslator:
         }
         
         # Split text into words for word-by-word translation
-        words = re.findall(r'\b\w+\b', text.lower())
+        # Handle both English and Sinhala/Vedda Unicode text properly
+        if source_language in ['vedda', 'sinhala']:
+            # For Sinhala/Vedda, split by spaces and filter out empty strings
+            words = [word.strip() for word in text.split() if word.strip()]
+        else:
+            # For other languages, use regex word boundaries
+            words = re.findall(r'\b\w+\b', text.lower())
+        
+        print(f"DEBUG: Split '{text}' into words: {words}")
         translated_words = []
         translation_methods = []
         total_confidence = 0
@@ -219,6 +235,21 @@ class VeddaTranslator:
                         'ipa': translation_data.get('vedda_ipa', '')
                     }
         
+        # Method 1.5: Fallback to Sinhala if Vedda not found
+        if target_language == 'vedda':
+            print(f"DEBUG: Vedda not found for '{word}', trying Sinhala fallback")
+            # Try to get Sinhala translation using Google Translate
+            sinhala_result = self.google_translate(word, source_language, 'sinhala')
+            if sinhala_result:
+                print(f"DEBUG: Found Sinhala fallback: '{sinhala_result}'")
+                return {
+                    'translation': sinhala_result,
+                    'confidence': 0.7,
+                    'method': 'sinhala_fallback',
+                    'ipa': '',
+                    'note': 'Vedda translation not available, showing Sinhala'
+                }
+        
         # Method 2: Bridge translation (English as bridge language)
         if source_language != 'english' and target_language != 'english':
             # First translate to English
@@ -250,6 +281,42 @@ class VeddaTranslator:
                             'method': 'bridge',
                             'bridge_language': 'english'
                         }
+        
+        # Method 2.5: Sinhala bridge for Vedda to other languages
+        if source_language == 'vedda' and target_language != 'vedda' and target_language != 'sinhala':
+            print(f"DEBUG: Vedda->English not found for '{word}', trying Sinhala bridge")
+            # Try Sinhala as bridge language if English bridge failed
+            sinhala_result = None
+            dict_result = self.search_dictionary(word, 'vedda', 'sinhala')
+            if dict_result and dict_result.get('found'):
+                sinhala_result = dict_result['translation'].get('sinhala')
+                print(f"DEBUG: Found Sinhala in dictionary: '{sinhala_result}'")
+            
+            if sinhala_result:
+                # Translate from Sinhala to target language
+                final_result = self.google_translate(sinhala_result, 'sinhala', target_language)
+                if final_result:
+                    print(f"DEBUG: Sinhala bridge result: '{final_result}'")
+                    return {
+                        'translation': final_result,
+                        'confidence': 0.65,
+                        'method': 'sinhala_bridge',
+                        'bridge_language': 'sinhala',
+                        'note': f'Translated via Sinhala: {sinhala_result}'
+                    }
+            else:
+                print(f"DEBUG: No Sinhala found in dictionary, treating Vedda word as Sinhala")
+                # If no Sinhala in dictionary, treat the Vedda word as Sinhala and translate
+                fallback_result = self.google_translate(word, 'sinhala', target_language)
+                if fallback_result:
+                    print(f"DEBUG: Sinhala fallback result: '{fallback_result}'")
+                    return {
+                        'translation': fallback_result,
+                        'confidence': 0.6,
+                        'method': 'sinhala_fallback_bridge',
+                        'bridge_language': 'sinhala',
+                        'note': f'Vedda word treated as Sinhala for translation'
+                    }
         
         # Method 3: Direct Google Translate (if both languages are supported)
         if (source_language in self.supported_languages and 
@@ -306,6 +373,44 @@ class VeddaTranslator:
                 translated_parts.append(word)
         
         print(f"DEBUG PHRASE: Final translated_parts: {translated_parts}")
+        
+        # Check if we need Sinhala fallback for the entire phrase
+        if target_language == 'vedda' and translated_parts == words:
+            print(f"DEBUG PHRASE: No Vedda translations found, trying Sinhala fallback for entire phrase")
+            sinhala_phrase = self.google_translate(text, source_language, 'sinhala')
+            if sinhala_phrase:
+                print(f"DEBUG PHRASE: Sinhala fallback result: '{sinhala_phrase}'")
+                return {
+                    'translated_text': sinhala_phrase,
+                    'confidence': 0.5,
+                    'method': 'sinhala_phrase_fallback',
+                    'source_ipa': '',
+                    'target_ipa': '',
+                    'bridge_translation': '',
+                    'methods_used': ['sinhala_fallback'],
+                    'note': 'Vedda translation not available, showing Sinhala'
+                }
+        
+        # Check if we need Sinhala bridge for Vedda to other languages
+        if source_language == 'vedda' and target_language != 'vedda' and target_language != 'sinhala':
+            # Check if most words failed to translate (indicating it might be Sinhala text)
+            failed_words = [word for i, word in enumerate(words) if i < len(translated_parts) and translated_parts[i] == word]
+            if len(failed_words) >= len(words) / 2:  # If more than half the words failed
+                print(f"DEBUG PHRASE: {len(failed_words)}/{len(words)} words failed, trying Sinhala bridge for entire phrase")
+                # Try treating the entire phrase as Sinhala and translate
+                sinhala_bridge_result = self.google_translate(text, 'sinhala', target_language)
+                if sinhala_bridge_result:
+                    print(f"DEBUG PHRASE: Sinhala bridge result: '{sinhala_bridge_result}'")
+                    return {
+                        'translated_text': sinhala_bridge_result,
+                        'confidence': 0.55,
+                        'method': 'sinhala_bridge_phrase',
+                        'source_ipa': '',
+                        'target_ipa': '',
+                        'bridge_translation': text,
+                        'methods_used': ['sinhala_bridge'],
+                        'note': f'Mixed Vedda/Sinhala phrase treated as Sinhala for translation'
+                    }
         
         if translated_parts:
             final_text = ' '.join(translated_parts)
