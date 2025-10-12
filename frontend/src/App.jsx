@@ -1,11 +1,10 @@
-import React, { useState } from "react";
-import { Container, Grid, Box } from "@mui/material";
+import { useState } from "react";
 
 // Components
-import Header from "./components/layout/Header";
-import TranslationCard from "./components/translation/TranslationCard";
-import TranslationHistory from "./components/translation/TranslationHistory";
-import ExamplePhrases from "./components/ui/ExamplePhrases";
+import Header from "./components/layout/Header.jsx";
+import TranslationCard from "./components/translation/TranslationCard.jsx";
+import TranslationHistory from "./components/translation/TranslationHistory.jsx";
+import ExamplePhrases from "./components/ui/ExamplePhrases.jsx";
 
 // Hooks
 import { useTranslationHistory } from "./hooks/useTranslationHistory";
@@ -35,11 +34,11 @@ function App() {
   };
 
   return (
-    <Box sx={{ flexGrow: 1, minHeight: "100vh", bgcolor: "#f8f9fa" }}>
+    <div className="flex-grow min-h-screen bg-gray-50">
       {/* Header */}
       <Header onHistoryClick={handleHistoryClick} />
 
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <div className="mx-auto px-4 py-8">
         {/* Main Translation Card */}
         <TranslationCard
           inputText={inputText}
@@ -52,22 +51,22 @@ function App() {
         />
 
         {/* Recent Translations & Examples */}
-        <Grid container spacing={3} sx={{ mt: 2 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           {/* Recent Translations */}
-          <Grid item xs={12} md={6}>
+          <div>
             <TranslationHistory
               history={translationHistory}
               onSelectHistoryItem={handleHistoryItemSelect}
             />
-          </Grid>
+          </div>
 
           {/* Example Phrases */}
-          <Grid item xs={12} md={6}>
+          <div>
             <ExamplePhrases onSelectExample={handleExampleSelect} />
-          </Grid>
-        </Grid>
-      </Container>
-    </Box>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

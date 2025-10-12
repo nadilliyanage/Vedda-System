@@ -21,11 +21,12 @@ wheels/
 *.egg
 MANIFEST
 
-# Virtual environments
+# Virtual Environment
 venv/
-env.bak/
-venv.bak/
-.venv/
+env/
+ENV/
+.venv
+.env
 
 # IDE
 .vscode/
@@ -34,20 +35,7 @@ venv.bak/
 *.swo
 *~
 
-# Flask
-instance/
-.webassets-cache
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
-# Logs
-*.log
-logs/
-
-# OS generated files
+# OS
 .DS_Store
 .DS_Store?
 ._*
@@ -56,17 +44,38 @@ logs/
 ehthumbs.db
 Thumbs.db
 
-# Backup files
-*.bak
-*.backup
+# Logs
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Service PIDs
+.service_pids
+
+# Docker
+.dockerignore
+
+# Temporary files
 *.tmp
+*.temp
+.cache/
+
+# Environment specific
+.env.local
+.env.production
+.env.development
 
 # Testing
 .coverage
 .pytest_cache/
+.tox/
 htmlcov/
 
-# MyPy
-.mypy_cache/
-.dmypy.json
-dmypy.json
+# Backup files
+*.bak
+*_old.py
+*_backup.*

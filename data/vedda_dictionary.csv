@@ -1,11 +1,15 @@
 vedda_word,sinhala_word,english_word,vedda_ipa,sinhala_ipa,english_ipa,word_type,usage_example
-කැකුලෝ,ලමයි,children,kækulo,ləməi,ˈtʃɪldrən,noun,මේ කැකුලෝ ගෙදර ඉන්නවා - These children are at home
-මේ,මේ,this,meː,meː,ðɪs,determiner,මේ කැකුලෝ - this children
-අම්මා,අම්මා,mother,əmmaː,əmmaː,ˈmʌðər,noun,අම්මා ගෙදර ඉන්නවා - Mother is at home
-තාත්තා,තාත්තා,father,t̪aːt̪t̪aː,t̪aːt̪t̪aː,ˈfɑːðər,noun,තාත්තා වැඩට ගියා - Father went to work
+කැකුලෝ,ළමයි,children,kækulo,ləməi,ˈtʃɪldrən,noun,මේ කැකුලෝ ගෙදර ඉන්නවා - These children are at home
+මේ,මේ,this,meː,meː,ðɪs,determiner,මේ කැකුලෝ - these children
 ගස්,ගස,tree,ɡas,ɡəsə,triː,noun,ගස් ලොකු - The tree is big
 වතුර,වතුර,water,væt̪urə,væt̪urə,ˈwɔːtər,noun,වතුර පිරිසිදු - Water is clean
 ගෙදර,ගෙදර,home,ɡed̪ərə,ɡed̪ərə,hoʊm,noun,ගෙදර ගියා - Went home
+සෙල්ලම්,ක්රීඩා,sports,sellam,kriːɖaː,spɔːrts,noun,පාපන්දු සෙල්ලම් - football sports
+සෙල්ලම්,සෙල්ලම්,playing,sellam,sellam,ˈpleɪɪŋ,verb,සෙල්ලම් කරනවා - playing
+කරනවා,කරනවා,doing,kərənaːvaː,kərənaːvaː,ˈduːɪŋ,verb,වැඩ කරනවා - doing work
+පාපන්දු,පාපන්දු,football,paːpəndu,paːpəndu,ˈfʊtbɔːl,noun,පාපන්දු ක්රීඩා - football game
+අම්මා,අම්මා,mother,əmmaː,əmmaː,ˈmʌðər,noun,අම්මා ගෙදර ඉන්නවා - Mother is at home
+තාත්තා,තාත්තා,father,t̪aːt̪t̪aː,t̪aːt̪t̪aː,ˈfɑːðər,noun,තාත්තා වැඩට ගියා - Father went to work
 කන්න,කන්න,eat,kənnə,kənnə,iːt,verb,බත් කන්න - Eat rice
 යන්න,යන්න,go,jənnə,jənnə,ɡoʊ,verb,ගෙදර යන්න - Go home
 එන්න,එන්න,come,ennə,ennə,kʌm,verb,මෙහෙ එන්න - Come here
@@ -43,7 +47,18 @@ vedda_word,sinhala_word,english_word,vedda_ipa,sinhala_ipa,english_ipa,word_type
 පෙනන්න,පෙනන්න,see,penənnə,penənnə,siː,verb,ගස් පෙනන්න - See the tree
 හිතන්න,හිතන්න,think,hit̪ənnə,hit̪ənnə,θɪŋk,verb,හොඳට හිතන්න - Think well
 ගහන්න,ගහන්න,hit,ɡəhənnə,ɡəhənnə,hɪt,verb,බෝලය ගහන්න - Hit the ball
-පොජ්ජක්,ටිකක්,little,t̪ikək,t̪ikək,ˈlɪtəl,quantifier,ටිකක් ඉන්න - Wait a little
+ටිකක්,ටිකක්,little,t̪ikək,t̪ikək,ˈlɪtəl,quantifier,ටිකක් ඉන්න - Wait a little
 ගොඩක්,ගොඩක්,many,ɡoɖək,ɡoɖək,ˈmɛni,quantifier,ගොඩක් අය - Many people
 හැමදාම,හැමදාම,always,hæməd̪aːmə,hæməd̪aːmə,ˈɔːlweɪz,adverb,හැමදාම වැඩ - Always work
 කවදාවත්,කවදාවත්,never,kəvəd̪aːvət̪,kəvəd̪aːvət̪,ˈnɛvər,adverb,කවදාවත් නෑ - Never happen
+දියරච්ඡා,වතුර,water,dijaratʃaː,væt̪urə,ˈwɔːtər,noun,වතුර පිරිසිදු - Water is clean
+දන්ඩුකච්චා,නෞකාව,ship,danɖukætʃtʃaː,ˈnaukɑːvə,ʃɪp,noun,නෞකාවෙන් යන්න - Go by ship
+දියරච්චා,වැස්ස,rain,dijaratʃtʃaː,væsa,reɪn,noun,වැස්ස වැටෙනවා - It’s raining
+කොඩුයි,නැත,no,koduj,næːtə,nəʊ,adverb,නෑ කියන්න - Say no
+කොයිබා,කොයිද?,where,kɔjba,kɔjida,wɛər,question,ඔබ කොයිබේ යනවාද? - Where are you going?
+ටොපන්,ඔබ,you,topan,oba,juː,pronoun,ඔබ කොයිබේ යනවාද? - Where are you going?
+දෙනමක්,දෙදෙනා,two,deːkəmæk,deneːka,tuː,number,දෙදෙනාට කෑම ගොඩක් තියෙනවා - Enough food for two people
+තුනමක්,තුන්දෙනා,three people,tunəməka,tundenaː,θriː,number,තුන්දෙනා ගෙදර යනවා - Three people go home
+නැනා,නංගි,sister,nænæ,nængi,ˈsɪstər,noun,නැනා ගෙදර ඉන්නවා - Sister is at home
+අච්චි,අක්කා,elder sister,ætʃi,ækkæ,ˈɛldər ˈsɪstər,noun,අච්චි වැඩට ගියා - Elder sister went to work
+මේඇත්තෝ,මම,I,miːattoː,mama,aɪ,pronoun,මට ආහාරය අවශ්‍යයි - I need food

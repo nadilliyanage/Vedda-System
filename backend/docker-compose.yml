@@ -1,0 +1,95 @@
+version: "3.8"
+
+services:
+  # API Gateway - Main entry point
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    depends_on:
+      - translator-service
+      - dictionary-service
+      - history-service
+    environment:
+      - FLASK_ENV=development
+      - TRANSLATOR_SERVICE_URL=http://translator-service:5001
+      - DICTIONARY_SERVICE_URL=http://dictionary-service:5002
+      - HISTORY_SERVICE_URL=http://history-service:5003
+    networks:
+      - vedda-network
+
+  # Translation Service
+  translator-service:
+    build:
+      context: ./translator-service
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    depends_on:
+      - dictionary-service
+      - history-service
+    environment:
+      - FLASK_ENV=development
+      - DICTIONARY_SERVICE_URL=http://dictionary-service:5002
+      - HISTORY_SERVICE_URL=http://history-service:5003
+    networks:
+      - vedda-network
+
+  # Dictionary Service
+  dictionary-service:
+    build:
+      context: ./dictionary-service
+      dockerfile: Dockerfile
+    ports:
+      - "5002:5002"
+    environment:
+      - FLASK_ENV=development
+      - DATABASE_PATH=/app/data/vedda_dictionary.db
+    volumes:
+      - ./data:/app/data
+      - ../data:/app/data # Mount the shared data directory
+    networks:
+      - vedda-network
+
+  # History Service
+  history-service:
+    build:
+      context: ./history-service
+      dockerfile: Dockerfile
+    ports:
+      - "5003:5003"
+    environment:
+      - FLASK_ENV=development
+      - DATABASE_PATH=/app/data/vedda_history.db
+    volumes:
+      - ./data:/app/data
+      - ../data:/app/data # Mount the shared data directory
+    networks:
+      - vedda-network
+
+  # Database initialization service (runs once)
+  db-init:
+    build:
+      context: ./dictionary-service
+      dockerfile: Dockerfile
+    command: python -c "
+      import sqlite3;
+      import os;
+      os.makedirs('/app/data', exist_ok=True);
+      print('Database directory created');
+      "
+    volumes:
+      - ./data:/app/data
+      - ../data:/app/data
+    networks:
+      - vedda-network
+
+networks:
+  vedda-network:
+    driver: bridge
+
+volumes:
+  vedda-data:
+    driver: local

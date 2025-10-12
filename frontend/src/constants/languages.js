@@ -1,5 +1,5 @@
 export const LANGUAGES = [
-  { code: "vedda", name: "Vedda", native: "වැද්දා", flag: "🏝️" },
+  { code: "vedda", name: "Vedda", native: "වැද්දා", flag: "VE" },
   { code: "sinhala", name: "Sinhala", native: "සිංහල", flag: "🇱🇰" },
   { code: "english", name: "English", native: "English", flag: "🇺🇸" },
   { code: "tamil", name: "Tamil", native: "தமிழ்", flag: "🇮🇳" },
@@ -33,4 +33,11 @@ export const EXAMPLE_PHRASES = [
 ];
 
 export const API_BASE_URL =
-  process.env.REACT_APP_API_URL || "http://localhost:5000";
+  import.meta.env.VITE_API_URL || "http://localhost:5001";
+
+// Service URLs for direct access (temporary fix)
+export const SERVICE_URLS = {
+  TRANSLATOR: "http://localhost:5001",
+  DICTIONARY: "http://localhost:5002",
+  HISTORY: "http://localhost:5003",
+};
