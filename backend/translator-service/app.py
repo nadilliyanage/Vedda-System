@@ -5,6 +5,7 @@ import urllib.parse
 import json
 import re
 from datetime import datetime
+from random import choice
 
 app = Flask(__name__)
 CORS(app)
@@ -381,6 +382,47 @@ def get_languages():
         'supported_languages': translator.supported_languages,
         'total_count': len(translator.supported_languages)
     })
+
+@app.route('/api/learn/next-challenge', methods=['GET'])
+def next_challenge():
+    """Provide the next challenge for the learner (mock for now)"""
+    # Sample multiple-choice challenge derived from dictionary words
+    sample = {
+        'id': 'c42',
+        'type': 'multiple_choice',
+        'prompt': "Translate 'kola'",
+        'options': [
+            { 'id': 'o1', 'label': 'leaf' },
+            { 'id': 'o2', 'label': 'stone' },
+            { 'id': 'o3', 'label': 'river' },
+            { 'id': 'o4', 'label': 'bird' }
+        ],
+        'correct': ['o1'],
+        'xp': 15,
+        'coins': 3,
+        'timeLimitSec': 30
+    }
+    return jsonify(sample)
+
+@app.route('/api/learn/submit', methods=['POST'])
+def submit_challenge():
+    """Accept challenge submission and return result with rewards"""
+    data = request.get_json() or {}
+    challenge_id = data.get('challengeId')
+    answer = data.get('answer')
+
+    # Very simple correctness check for the mock
+    correct_ids = {'c42': {'o1'}}
+    is_correct = str(answer) in correct_ids.get(challenge_id, set())
+    result = {
+        'success': True,
+        'challengeId': challenge_id,
+        'correct': is_correct,
+        'xpAwarded': 15 if is_correct else 5,
+        'coinsAwarded': 3 if is_correct else 1,
+        'streak': 1,
+    }
+    return jsonify(result)
 
 if __name__ == '__main__':
     print("Starting Translation Service on port 5001...")

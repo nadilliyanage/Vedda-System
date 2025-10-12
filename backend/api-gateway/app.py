@@ -28,6 +28,7 @@ SERVICES = {
 ROUTE_MAPPINGS = {
     '/api/translate': 'translator',
     '/api/languages': 'translator',
+    '/api/learn': 'translator',
     '/api/dictionary': 'dictionary',
     '/api/dictionary/search': 'dictionary',
     '/api/dictionary/add': 'dictionary',
