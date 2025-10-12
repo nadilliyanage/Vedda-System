@@ -1,41 +1,41 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App.jsx';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App.jsx";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
+    mode: "light",
     primary: {
-      main: '#1976d2',
-      light: '#42a5f5',
-      dark: '#1565c0',
+      main: "#1976d2",
+      light: "#42a5f5",
+      dark: "#1565c0",
     },
     secondary: {
-      main: '#9c27b0',
+      main: "#9c27b0",
     },
     background: {
-      default: '#f8f9fa',
-      paper: '#ffffff',
+      default: "#f8f9fa",
+      paper: "#ffffff",
     },
     text: {
-      primary: '#202124',
-      secondary: '#5f6368',
+      primary: "#202124",
+      secondary: "#5f6368",
     },
   },
   typography: {
     fontFamily: '"Google Sans", "Roboto", "Helvetica", "Arial", sans-serif',
     h6: {
       fontWeight: 500,
-      fontSize: '1.25rem',
+      fontSize: "1.25rem",
     },
     body1: {
-      fontSize: '1rem',
+      fontSize: "1rem",
       lineHeight: 1.5,
     },
     body2: {
-      fontSize: '0.875rem',
+      fontSize: "0.875rem",
       lineHeight: 1.43,
     },
   },
@@ -46,7 +46,7 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: 'none',
+          textTransform: "none",
           borderRadius: 20,
           fontWeight: 500,
         },
@@ -56,14 +56,15 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 12,
-          boxShadow: '0 1px 3px 0 rgba(60,64,67,.3), 0 4px 8px 3px rgba(60,64,67,.15)',
+          boxShadow:
+            "0 1px 3px 0 rgba(60,64,67,.3), 0 4px 8px 3px rgba(60,64,67,.15)",
         },
       },
     },
     MuiTextField: {
       styleOverrides: {
         root: {
-          '& .MuiOutlinedInput-root': {
+          "& .MuiOutlinedInput-root": {
             borderRadius: 8,
           },
         },
@@ -72,7 +73,7 @@ const theme = createTheme({
   },
 });
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
