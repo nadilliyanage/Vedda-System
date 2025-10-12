@@ -1,7 +1,59 @@
-import React from "react";
-import { Box, FormControl, Select, MenuItem, IconButton } from "@mui/material";
-import { SwapHoriz } from "@mui/icons-material";
+import { useState } from "react";
+import { HiSwitchVertical, HiChevronDown } from "react-icons/hi";
 import { LANGUAGES } from "../../constants/languages";
+
+const CustomSelect = ({ value, onChange, languages, placeholder }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const selectedLang = languages.find((lang) => lang.code === value);
+
+  return (
+    <div className="relative min-w-[150px]">
+      <button
+        type="button"
+        className="w-full flex items-center justify-between gap-2 px-3 py-2 text-left bg-white border-0 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-lg transition-colors duration-200"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <div className="flex items-center gap-2">
+          {selectedLang && (
+            <>
+              <span>{selectedLang.flag}</span>
+              <span className="text-gray-900">{selectedLang.name}</span>
+            </>
+          )}
+          {!selectedLang && (
+            <span className="text-gray-500">{placeholder}</span>
+          )}
+        </div>
+        <HiChevronDown className="w-4 h-4" />
+      </button>
+
+      {isOpen && (
+        <>
+          <div
+            className="fixed inset-0 z-10"
+            onClick={() => setIsOpen(false)}
+          />
+          <div className="absolute z-20 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-60 overflow-auto">
+            {languages.map((lang) => (
+              <button
+                key={lang.code}
+                type="button"
+                className="w-full flex items-center gap-2 px-3 py-2 text-left hover:bg-gray-50 focus:outline-none focus:bg-gray-50 transition-colors duration-150"
+                onClick={() => {
+                  onChange(lang.code);
+                  setIsOpen(false);
+                }}
+              >
+                <span>{lang.flag}</span>
+                <span className="text-gray-900">{lang.name}</span>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
 
 const LanguageSelector = ({
   sourceLanguage,
@@ -11,81 +63,36 @@ const LanguageSelector = ({
   onSwapLanguages,
 }) => {
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        borderBottom: "1px solid #e0e0e0",
-        p: 2,
-      }}
-    >
+    <div className="flex items-center justify-between border-b border-gray-200 p-4">
       {/* Source Language */}
-      <FormControl variant="outlined" size="small" sx={{ minWidth: 150 }}>
-        <Select
-          value={sourceLanguage}
-          onChange={(e) => onSourceLanguageChange(e.target.value)}
-          displayEmpty
-          sx={{
-            border: "none",
-            "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-            "& .MuiSelect-select": {
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-            },
-          }}
-        >
-          {LANGUAGES.map((lang) => (
-            <MenuItem key={lang.code} value={lang.code}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <span>{lang.flag}</span>
-                <span>{lang.name}</span>
-              </Box>
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <CustomSelect
+        value={sourceLanguage}
+        onChange={onSourceLanguageChange}
+        languages={LANGUAGES}
+        placeholder="Select source language"
+      />
 
       {/* Swap Button */}
-      <IconButton
+      <button
         onClick={onSwapLanguages}
-        sx={{
-          mx: 2,
-          bgcolor: "#f5f5f5",
-          "&:hover": { bgcolor: "#e0e0e0" },
-        }}
+        className={`mx-4 p-2 rounded-lg transition-colors duration-200 ${
+          sourceLanguage === targetLanguage
+            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+            : "bg-gray-100 hover:bg-gray-200 text-gray-600 hover:text-gray-800"
+        }`}
         disabled={sourceLanguage === targetLanguage}
       >
-        <SwapHoriz />
-      </IconButton>
+        <HiSwitchVertical className="w-5 h-5" />
+      </button>
 
       {/* Target Language */}
-      <FormControl variant="outlined" size="small" sx={{ minWidth: 150 }}>
-        <Select
-          value={targetLanguage}
-          onChange={(e) => onTargetLanguageChange(e.target.value)}
-          displayEmpty
-          sx={{
-            border: "none",
-            "& .MuiOutlinedInput-notchedOutline": { border: "none" },
-            "& .MuiSelect-select": {
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-            },
-          }}
-        >
-          {LANGUAGES.map((lang) => (
-            <MenuItem key={lang.code} value={lang.code}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <span>{lang.flag}</span>
-                <span>{lang.name}</span>
-              </Box>
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
+      <CustomSelect
+        value={targetLanguage}
+        onChange={onTargetLanguageChange}
+        languages={LANGUAGES}
+        placeholder="Select target language"
+      />
+    </div>
   );
 };
 

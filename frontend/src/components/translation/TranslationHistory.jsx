@@ -1,50 +1,36 @@
-import React from "react";
-import { Card, CardContent, Typography, Divider } from "@mui/material";
-import { History } from "@mui/icons-material";
+import { HiClock } from "react-icons/hi";
 
 const TranslationHistory = ({ history, onSelectHistoryItem }) => {
   return (
-    <Card elevation={1} sx={{ borderRadius: 2 }}>
-      <CardContent>
-        <Typography
-          variant="h6"
-          gutterBottom
-          sx={{ display: "flex", alignItems: "center" }}
-        >
-          <History sx={{ mr: 1 }} />
+    <div className="card">
+      <div className="flex items-center mb-4">
+        <HiClock className="w-5 h-5 mr-2" />
+        <h3 className="text-lg font-semibold text-gray-900">
           Recent Translations
-        </Typography>
-        <Divider sx={{ mb: 2 }} />
-        {history.length > 0 ? (
-          history.map((item, index) => (
-            <Card
+        </h3>
+      </div>
+
+      <hr className="border-gray-200 mb-4" />
+
+      {history.length > 0 ? (
+        <div className="space-y-2">
+          {history.map((item, index) => (
+            <div
               key={index}
-              variant="outlined"
-              sx={{
-                mb: 1,
-                cursor: "pointer",
-                "&:hover": { bgcolor: "#f5f5f5" },
-                borderRadius: 1,
-              }}
+              className="border border-gray-200 rounded-lg p-3 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
               onClick={() => onSelectHistoryItem(item)}
             >
-              <CardContent sx={{ p: 2, "&:last-child": { pb: 2 } }}>
-                <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                  {item.input_text}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  → {item.output_text}
-                </Typography>
-              </CardContent>
-            </Card>
-          ))
-        ) : (
-          <Typography variant="body2" color="textSecondary">
-            No recent translations
-          </Typography>
-        )}
-      </CardContent>
-    </Card>
+              <p className="font-medium text-gray-900 text-sm mb-1">
+                {item.input_text}
+              </p>
+              <p className="text-sm text-gray-600">→ {item.output_text}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-sm text-gray-500">No recent translations</p>
+      )}
+    </div>
   );
 };
 

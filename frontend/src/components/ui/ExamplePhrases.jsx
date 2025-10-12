@@ -1,39 +1,29 @@
-import React from "react";
-import { Card, CardContent, Typography, Divider } from "@mui/material";
 import { EXAMPLE_PHRASES } from "../../constants/languages";
 
 const ExamplePhrases = ({ onSelectExample }) => {
   return (
-    <Card elevation={1} sx={{ borderRadius: 2 }}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>
-          Try These Examples
-        </Typography>
-        <Divider sx={{ mb: 2 }} />
+    <div className="card">
+      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+        Try These Examples
+      </h3>
+
+      <hr className="border-gray-200 mb-4" />
+
+      <div className="space-y-2">
         {EXAMPLE_PHRASES.map((example, index) => (
-          <Card
+          <div
             key={index}
-            variant="outlined"
-            sx={{
-              mb: 1,
-              cursor: "pointer",
-              "&:hover": { bgcolor: "#f5f5f5" },
-              borderRadius: 1,
-            }}
+            className="border border-gray-200 rounded-lg p-3 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
             onClick={() => onSelectExample(example)}
           >
-            <CardContent sx={{ p: 2, "&:last-child": { pb: 2 } }}>
-              <Typography variant="body2" sx={{ fontWeight: "bold" }}>
-                {example.vedda}
-              </Typography>
-              <Typography variant="body2" color="textSecondary">
-                {example.english}
-              </Typography>
-            </CardContent>
-          </Card>
+            <p className="font-medium text-gray-900 text-sm mb-1">
+              {example.vedda}
+            </p>
+            <p className="text-sm text-gray-600">{example.english}</p>
+          </div>
         ))}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 };
 

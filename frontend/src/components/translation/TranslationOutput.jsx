@@ -1,15 +1,13 @@
-import React from "react";
-import {
-  Box,
-  Typography,
-  Alert,
-  Fade,
-  Skeleton,
-  Chip,
-  IconButton,
-} from "@mui/material";
-import { VolumeUp, ContentCopy, Share } from "@mui/icons-material";
+import { HiVolumeUp, HiClipboardCopy, HiShare } from "react-icons/hi";
 import { LANGUAGES } from "../../constants/languages";
+
+// Loading skeleton component
+const Skeleton = ({ width = "100%", height = "1.5rem" }) => (
+  <div
+    className="animate-pulse bg-gray-200 rounded"
+    style={{ width, height }}
+  />
+);
 
 const TranslationOutput = ({
   outputText,
@@ -31,38 +29,28 @@ const TranslationOutput = ({
   const getMethodColor = (method) => {
     switch (method) {
       case "dictionary":
-        return "success";
       case "english_to_vedda_direct":
-        return "success";
-      case "english_to_sinhala_fallback":
-        return "warning";
-      case "english_to_sinhala_google":
-        return "info";
-      case "bridge_via_english":
-        return "warning";
-      case "google_translate":
-        return "primary";
-      case "sinhala_word":
-        return "secondary";
-      case "sinhala_to_target":
-        return "info";
-      case "vedda_as_sinhala_batch":
-        return "secondary";
-      case "unknown":
-        return "error";
-      // Legacy methods
       case "vedda_direct":
-        return "success";
+        return "bg-green-100 text-green-800 border-green-200";
+      case "english_to_sinhala_fallback":
+      case "bridge_via_english":
       case "vedda_fallback":
-        return "warning";
-      case "sinhala_passthrough":
-        return "info";
       case "vedda_to_english_to_target":
-        return "secondary";
       case "source_to_english_to_vedda":
-        return "secondary";
+        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "english_to_sinhala_google":
+      case "sinhala_to_target":
+      case "sinhala_passthrough":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "google_translate":
+        return "bg-indigo-100 text-indigo-800 border-indigo-200";
+      case "sinhala_word":
+      case "vedda_as_sinhala_batch":
+        return "bg-purple-100 text-purple-800 border-purple-200";
+      case "unknown":
+        return "bg-red-100 text-red-800 border-red-200";
       default:
-        return "default";
+        return "bg-gray-100 text-gray-800 border-gray-200";
     }
   };
 
@@ -105,211 +93,136 @@ const TranslationOutput = ({
   };
 
   return (
-    <Box
-      sx={{
-        p: 3,
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <div className="p-6 h-full flex flex-col">
       {/* Output Language Label */}
-      <Typography variant="body2" color="textSecondary" gutterBottom>
+      <p className="text-sm text-gray-600 mb-3">
         {getLanguageNative(targetLanguage)}
-      </Typography>
+      </p>
 
       {/* Loading State */}
       {loading && (
-        <Box
-          sx={{
-            flexGrow: 1,
-            display: "flex",
-            flexDirection: "column",
-            gap: 1,
-          }}
-        >
-          <Skeleton variant="text" width="80%" height={30} />
-          <Skeleton variant="text" width="60%" height={30} />
-          <Skeleton variant="text" width="90%" height={30} />
-        </Box>
+        <div className="flex-grow flex flex-col gap-2">
+          <Skeleton width="80%" height="1.875rem" />
+          <Skeleton width="60%" height="1.875rem" />
+          <Skeleton width="90%" height="1.875rem" />
+        </div>
       )}
 
       {/* Error State */}
       {error && !loading && (
-        <Alert severity="error" sx={{ mb: 2 }}>
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
           {error}
-        </Alert>
+        </div>
       )}
 
       {/* Translation Output */}
       {outputText && !loading && (
-        <Fade in={!!outputText}>
-          <Box sx={{ flexGrow: 1 }}>
-            <Typography
-              variant="body1"
-              sx={{
-                fontSize: "1.1rem",
-                lineHeight: 1.5,
-                mb: 2,
-                minHeight: "100px",
-              }}
-            >
-              {outputText}
-            </Typography>
+        <div className="flex-grow">
+          <p className="text-lg leading-relaxed mb-4 min-h-[100px]">
+            {outputText}
+          </p>
 
-            {/* IPA Transcriptions */}
-            {(sourceIpaTranscription || targetIpaTranscription) && (
-              <Box
-                sx={{
-                  bgcolor: "#f8f9fa",
-                  p: 3,
-                  borderRadius: 2,
-                  mb: 2,
-                  border: "1px solid #e0e0e0",
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  color="textSecondary"
-                  gutterBottom
-                  sx={{ fontWeight: 500 }}
-                >
-                  Pronunciations
-                </Typography>
+          {/* IPA Transcriptions */}
+          {(sourceIpaTranscription || targetIpaTranscription) && (
+            <div className="bg-gray-50 p-6 rounded-lg mb-4 border border-gray-200">
+              <p className="text-sm font-medium text-gray-600 mb-3">
+                Pronunciations
+              </p>
 
-                {/* Target Language IPA - Full Sentence */}
-                {targetIpaTranscription && (
-                  <Box
-                    sx={{
-                      p: 2,
-                      bgcolor: "#ffffff",
-                      borderRadius: 1,
-                      border: "1px solid #e8eaed",
+              {/* Target Language IPA - Full Sentence */}
+              {targetIpaTranscription && (
+                <div className="bg-white p-4 rounded border border-gray-200">
+                  <p className="text-sm font-medium text-primary-600 mb-2">
+                    {LANGUAGES.find((l) => l.code === targetLanguage)?.name ||
+                      targetLanguage}
+                  </p>
+                  <p
+                    className="text-xl text-primary-700 font-normal tracking-wide leading-relaxed break-words"
+                    style={{
+                      fontFamily:
+                        '"Doulos SIL", "Charis SIL", "Times New Roman", serif',
                     }}
                   >
-                    <Typography
-                      variant="body2"
-                      color="primary"
-                      sx={{
-                        fontSize: "0.85rem",
-                        fontWeight: 500,
-                        mb: 1,
-                      }}
-                    >
-                      {LANGUAGES.find((l) => l.code === targetLanguage)?.name ||
-                        targetLanguage}
-                    </Typography>
-                    <Typography
-                      variant="h6"
-                      sx={{
-                        fontFamily:
-                          '"Doulos SIL", "Charis SIL", "Times New Roman", serif',
-                        fontSize: "1.3rem",
-                        color: "#1a73e8",
-                        fontWeight: 400,
-                        letterSpacing: "1px",
-                        lineHeight: 1.4,
-                        wordBreak: "break-word",
-                      }}
-                    >
-                      /{targetIpaTranscription}/
-                    </Typography>
-                  </Box>
-                )}
-              </Box>
-            )}
+                    /{targetIpaTranscription}/
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
 
-            {/* Bridge Translation Info */}
-            {bridgeTranslation && (
-              <Box
-                sx={{
-                  bgcolor: "#e3f2fd",
-                  p: 2,
-                  borderRadius: 2,
-                  mb: 2,
-                  border: "1px solid #1976d2",
-                }}
-              >
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Bridge Translation (via English):
-                </Typography>
-                <Typography variant="body1" sx={{ fontStyle: "italic" }}>
-                  {bridgeTranslation}
-                </Typography>
-              </Box>
-            )}
+          {/* Bridge Translation Info */}
+          {bridgeTranslation && (
+            <div className="bg-blue-50 p-4 rounded-lg mb-4 border border-blue-200">
+              <p className="text-sm text-gray-600 mb-2">
+                Bridge Translation (via English):
+              </p>
+              <p className="italic">{bridgeTranslation}</p>
+            </div>
+          )}
 
-            {/* Confidence Score */}
-            {confidence && (
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Translation Confidence: {Math.round(confidence * 100)}%
-                </Typography>
-              </Box>
-            )}
+          {/* Confidence Score */}
+          {confidence && (
+            <div className="mb-4">
+              <p className="text-sm text-gray-600">
+                Translation Confidence: {Math.round(confidence * 100)}%
+              </p>
+            </div>
+          )}
 
-            {/* Translation Methods */}
-            {translationMethods.length > 0 && (
-              <Box sx={{ mb: 2 }}>
-                <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Translation methods:
-                </Typography>
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-                  {[...new Set(translationMethods)].map((method, index) => (
-                    <Chip
-                      key={index}
-                      label={getMethodLabel(method)}
-                      color={getMethodColor(method)}
-                      size="small"
-                      variant="outlined"
-                    />
-                  ))}
-                </Box>
-              </Box>
-            )}
-          </Box>
-        </Fade>
+          {/* Translation Methods */}
+          {translationMethods.length > 0 && (
+            <div className="mb-4">
+              <p className="text-sm text-gray-600 mb-2">Translation methods:</p>
+              <div className="flex flex-wrap gap-2">
+                {[...new Set(translationMethods)].map((method, index) => (
+                  <span
+                    key={index}
+                    className={`px-2 py-1 text-xs font-medium rounded border ${getMethodColor(
+                      method
+                    )}`}
+                  >
+                    {getMethodLabel(method)}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       )}
 
       {/* Empty State */}
       {!outputText && !loading && !error && (
-        <Box
-          sx={{
-            flexGrow: 1,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "text.secondary",
-          }}
-        >
-          <Typography>Click translate to see results</Typography>
-        </Box>
+        <div className="flex-grow flex items-center justify-center text-gray-500">
+          <p>Click translate to see results</p>
+        </div>
       )}
 
       {/* Output Actions */}
       {outputText && (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mt: 2,
-          }}
-        >
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <IconButton size="small" disabled>
-              <VolumeUp />
-            </IconButton>
-            <IconButton size="small" onClick={onCopyOutput}>
-              <ContentCopy />
-            </IconButton>
-            <IconButton size="small" disabled>
-              <Share />
-            </IconButton>
-          </Box>
-        </Box>
+        <div className="flex justify-between items-center mt-4">
+          <div className="flex gap-2">
+            <button
+              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              disabled
+            >
+              <HiVolumeUp className="w-5 h-5" />
+            </button>
+            <button
+              className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              onClick={onCopyOutput}
+            >
+              <HiClipboardCopy className="w-5 h-5" />
+            </button>
+            <button
+              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              disabled
+            >
+              <HiShare className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
       )}
-    </Box>
+    </div>
   );
 };
 

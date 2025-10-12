@@ -1,12 +1,4 @@
-import React from "react";
-import {
-  Box,
-  Typography,
-  TextField,
-  IconButton,
-  InputAdornment,
-} from "@mui/material";
-import { VolumeUp, Clear, Mic, PhotoCamera } from "@mui/icons-material";
+import { HiVolumeUp, HiMicrophone, HiCamera, HiX } from "react-icons/hi";
 import { LANGUAGES } from "../../constants/languages";
 
 const TranslationInput = ({
@@ -27,120 +19,79 @@ const TranslationInput = ({
   };
 
   return (
-    <Box
-      sx={{
-        p: 3,
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
+    <div className="p-6 h-full flex flex-col">
       {/* Input Language Label */}
-      <Typography variant="body2" color="textSecondary" gutterBottom>
+      <p className="text-sm text-gray-600 mb-3">
         {getLanguageNative(sourceLanguage)}
-      </Typography>
+      </p>
 
-      {/* Input Text Area */}
-      <TextField
-        multiline
-        rows={8}
-        value={inputText}
-        onChange={(e) => onInputChange(e.target.value)}
-        placeholder={`Type in ${getLanguageName(sourceLanguage)}`}
-        variant="outlined"
-        fullWidth
-        sx={{
-          flexGrow: 1,
-          "& .MuiOutlinedInput-root": {
-            border: "none",
-            "& fieldset": { border: "none" },
-            "&:hover fieldset": { border: "none" },
-            "&.Mui-focused fieldset": { border: "none" },
-          },
-          "& .MuiInputBase-input": {
-            fontSize: "1.1rem",
-            lineHeight: 1.5,
-          },
-        }}
-        InputProps={{
-          endAdornment: inputText && (
-            <InputAdornment position="end">
-              <IconButton onClick={onClear} size="small">
-                <Clear />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
+      {/* Input Text Area Container */}
+      <div className="flex-grow relative">
+        <textarea
+          rows={8}
+          value={inputText}
+          onChange={(e) => onInputChange(e.target.value)}
+          placeholder={`Type in ${getLanguageName(sourceLanguage)}`}
+          className="textarea-field h-full text-lg leading-relaxed resize-none"
+          maxLength={5000}
+        />
+
+        {inputText && (
+          <button
+            onClick={onClear}
+            className="absolute top-2 right-2 p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors duration-200"
+          >
+            <HiX className="w-4 h-4" />
+          </button>
+        )}
+      </div>
 
       {/* Source Language IPA Display */}
       {sourceIpaTranscription && inputText && (
-        <Box
-          sx={{
-            bgcolor: "#f8f9fa",
-            p: 2,
-            borderRadius: 2,
-            mt: 2,
-            border: "1px solid #e0e0e0",
-          }}
-        >
-          <Typography
-            variant="body2"
-            color="primary"
-            sx={{
-              fontSize: "0.85rem",
-              fontWeight: 500,
-              mb: 1,
-            }}
-          >
+        <div className="bg-gray-50 p-4 rounded-lg mt-4 border border-gray-200">
+          <p className="text-sm font-medium text-primary-600 mb-2">
             {LANGUAGES.find((l) => l.code === sourceLanguage)?.name ||
               sourceLanguage}{" "}
             pronunciation
-          </Typography>
-          <Typography
-            variant="h6"
-            sx={{
+          </p>
+          <p
+            className="text-xl text-primary-700 font-normal tracking-wide leading-relaxed break-words"
+            style={{
               fontFamily:
                 '"Doulos SIL", "Charis SIL", "Times New Roman", serif',
-              fontSize: "1.2rem",
-              color: "#1a73e8",
-              fontWeight: 400,
-              letterSpacing: "1px",
-              lineHeight: 1.4,
-              wordBreak: "break-word",
             }}
           >
             /{sourceIpaTranscription}/
-          </Typography>
-        </Box>
+          </p>
+        </div>
       )}
 
       {/* Input Actions */}
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mt: 2,
-        }}
-      >
-        <Box sx={{ display: "flex", gap: 1 }}>
-          <IconButton size="small" disabled>
-            <VolumeUp />
-          </IconButton>
-          <IconButton size="small" disabled>
-            <Mic />
-          </IconButton>
-          <IconButton size="small" disabled>
-            <PhotoCamera />
-          </IconButton>
-        </Box>
+      <div className="flex justify-between items-center mt-4">
+        <div className="flex gap-2">
+          <button
+            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+            disabled
+          >
+            <HiVolumeUp className="w-5 h-5" />
+          </button>
+          <button
+            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+            disabled
+          >
+            <HiMicrophone className="w-5 h-5" />
+          </button>
+          <button
+            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+            disabled
+          >
+            <HiCamera className="w-5 h-5" />
+          </button>
+        </div>
 
-        <Typography variant="body2" color="textSecondary">
-          {inputText.length}/5000
-        </Typography>
-      </Box>
-    </Box>
+        <p className="text-sm text-gray-500">{inputText.length}/5000</p>
+      </div>
+    </div>
   );
 };
 
