@@ -1,72 +1,23 @@
-import { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// Components
-import Header from "./components/layout/Header.jsx";
-import TranslationCard from "./components/translation/TranslationCard.jsx";
-import TranslationHistory from "./components/translation/TranslationHistory.jsx";
-import ExamplePhrases from "./components/ui/ExamplePhrases.jsx";
-
-// Hooks
-import { useTranslationHistory } from "./hooks/useTranslationHistory";
+// Pages
+import HomePage from "./pages/HomePage.jsx";
+import TranslatorPage from "./pages/TranslatorPage.jsx";
+import QuizPage from "./pages/QuizPage.jsx";
+import ArtifactPage from "./pages/ArtifactPage.jsx";
+import VisualsPage from "./pages/VisualsPage.jsx";
 
 function App() {
-  const [inputText, setInputText] = useState("");
-  const [sourceLanguage, setSourceLanguage] = useState("vedda");
-  const [targetLanguage, setTargetLanguage] = useState("english");
-
-  const { translationHistory, fetchHistory } = useTranslationHistory();
-
-  const handleHistoryItemSelect = (item) => {
-    setInputText(item.input_text);
-    setSourceLanguage(item.source_language);
-    setTargetLanguage(item.target_language);
-  };
-
-  const handleExampleSelect = (example) => {
-    setInputText(example.vedda);
-    setSourceLanguage("vedda");
-    setTargetLanguage("english");
-  };
-
-  const handleHistoryClick = () => {
-    // Handle history navigation if needed
-    console.log("History clicked");
-  };
-
   return (
-    <div className="flex-grow min-h-screen bg-gray-50">
-      {/* Header */}
-      <Header onHistoryClick={handleHistoryClick} />
-
-      <div className="mx-auto px-4 py-8">
-        {/* Main Translation Card */}
-        <TranslationCard
-          inputText={inputText}
-          setInputText={setInputText}
-          sourceLanguage={sourceLanguage}
-          setSourceLanguage={setSourceLanguage}
-          targetLanguage={targetLanguage}
-          setTargetLanguage={setTargetLanguage}
-          onTranslationComplete={fetchHistory}
-        />
-
-        {/* Recent Translations & Examples */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-          {/* Recent Translations */}
-          <div>
-            <TranslationHistory
-              history={translationHistory}
-              onSelectHistoryItem={handleHistoryItemSelect}
-            />
-          </div>
-
-          {/* Example Phrases */}
-          <div>
-            <ExamplePhrases onSelectExample={handleExampleSelect} />
-          </div>
-        </div>
-      </div>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/translator" element={<TranslatorPage />} />
+        <Route path="/quiz" element={<QuizPage />} />
+        <Route path="/artifacts" element={<ArtifactPage />} />
+        <Route path="/3d-visuals" element={<VisualsPage />} />
+      </Routes>
+    </Router>
   );
 }
 
