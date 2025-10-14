@@ -17,14 +17,17 @@ function App() {
     <Router>
       <AuthProvider>
         <Routes>
+          {/* Auth routes */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          
+          {/* Main routes */}
           <Route element={<Layout />}>
             <Route path="/" element={<HomePage />} />
             <Route path="/translator" element={<TranslatorPage />} />
             <Route path="/quiz" element={<QuizPage />} />
             <Route path="/artifacts" element={<ArtifactPage />} />
             <Route path="/3d-visuals" element={<VisualsPage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<ProfilePage />} />
           </Route>
         </Routes>

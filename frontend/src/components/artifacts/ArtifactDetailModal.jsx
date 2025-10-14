@@ -8,7 +8,7 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
   const relatedArtifacts = getRelatedArtifacts(artifact.id);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
         {/* Close Button */}
         <button
