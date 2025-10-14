@@ -28,6 +28,10 @@ def init_db():
             english_ipa TEXT,
             word_type TEXT,
             usage_example TEXT,
+            frequency_score REAL DEFAULT 1.0,
+            confidence_score REAL DEFAULT 0.95,
+            last_updated TIMESTAMP,
+            source TEXT DEFAULT 'manual',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
@@ -151,7 +155,8 @@ class DictionaryService:
         
         return words
 
-# Initialize service
+# Initialize database and service
+init_db()
 dictionary_service = DictionaryService()
 
 @app.route('/health', methods=['GET'])

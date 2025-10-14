@@ -116,7 +116,7 @@ const TranslationCard = ({
       {/* Translate Button */}
       <div className="p-6 border-t border-gray-200 flex justify-center">
         <button
-          className={`btn-primary min-w-[120px] flex items-center justify-center ${
+          className={`btn-blue min-w-[120px] flex items-center justify-center ${
             loading || !inputText.trim() ? "opacity-50 cursor-not-allowed" : ""
           }`}
           onClick={handleTranslate}

@@ -49,13 +49,13 @@ const TranslationInput = ({
       {/* Source Language IPA Display */}
       {sourceIpaTranscription && inputText && (
         <div className="bg-gray-50 p-4 rounded-lg mt-4 border border-gray-200">
-          <p className="text-sm font-medium text-primary-600 mb-2">
+          <p className="text-sm font-medium text-blue-600 mb-2">
             {LANGUAGES.find((l) => l.code === sourceLanguage)?.name ||
               sourceLanguage}{" "}
             pronunciation
           </p>
           <p
-            className="text-xl text-primary-700 font-normal tracking-wide leading-relaxed break-words"
+            className="text-xl text-blue-700 font-normal tracking-wide leading-relaxed break-words"
             style={{
               fontFamily:
                 '"Doulos SIL", "Charis SIL", "Times New Roman", serif',
