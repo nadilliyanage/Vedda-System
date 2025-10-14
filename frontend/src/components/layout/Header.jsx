@@ -22,7 +22,7 @@ const Header = ({ onHistoryClick }) => {
 
             <Link to="/">
               <h1 className="text-xl font-semibold cursor-pointer hover:text-blue-100 transition-colors">
-                Vedda Translate
+                Vedda System
               </h1>
             </Link>
           </div>
