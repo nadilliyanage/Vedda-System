@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify, redirect
-from flask_cors import CORS
-import requests
 import json
 import os
+
+import requests
+from flask import Flask, request, jsonify, redirect
+from flask_cors import CORS
 from werkzeug.exceptions import RequestTimeout
 
 app = Flask(__name__)

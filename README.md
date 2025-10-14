@@ -49,7 +49,7 @@ vedda-system/
 │   ├── package.json          # Node.js dependencies (Vite, Tailwind)
 │   └── COMPONENT_STRUCTURE.md # Component architecture documentation
 └── data/
-    ├── vedda_dictionary.csv     # Main vocabulary dataset (48+ words)
+    ├── vedda_dictionary.csv     # Main vocabulary dataset (62+ words)
     ├── csv_data_manager.py      # CSV import/export tool
     ├── migrate_database.py      # Database migration
     ├── test_dictionary.py       # Dictionary validation
@@ -65,7 +65,8 @@ vedda-system/
 - **Dictionary Service**: Vedda vocabulary management and lookup (Flask, Port 5002)
 - **History Service**: Translation tracking and analytics (Flask, Port 5003)
 - **Database**: SQLite with enhanced schema for comprehensive language data
-- **Translation Engine**: Multi-layered approach with dictionary → Sinhala bridge → Google Translate fallback
+- **Translation Engine**: Multi-layered approach with bidirectional Sinhala bridge support
+- **Code Quality**: Clean production code following PEP 8 standards, organized imports
 
 ### Frontend
 
@@ -77,21 +78,23 @@ vedda-system/
 
 ### Translation Logic
 
-- **Primary**: Dictionary-based translation (Confidence: 0.9)
-- **Sinhala Bridge**: Uses Sinhala as intermediate language for unknown Vedda words
+- **Primary**: Dictionary-based translation (Confidence: 0.95)
+- **Sinhala Bridge**: Bidirectional translation using Sinhala as intermediate language
 - **Google Translate Integration**: 40+ languages support with intelligent fallback
-- **Confidence Scoring**: Transparent translation quality metrics
+- **Confidence Scoring**: Transparent translation quality metrics (0.1-0.95 range)
 - **Method Tracking**: Shows translation method used (dictionary/sinhala_bridge/google)
+- **Bidirectional Support**: Full English↔Vedda and Vedda↔Other languages functionality
 
 ## Development Status
 
-### ✅ Phase 1: Enhanced Translation Engine (Completed)
+### ✅ Phase 1: Core Translation Engine (Completed)
 
 - ✅ **Microservices Architecture**: Scalable backend with 4 separate services
+- ✅ **Sinhala Bridge Translation**: Intelligent bidirectional translation using Sinhala as intermediate language
 - ✅ **Advanced Translation Logic**: Dictionary → Sinhala Bridge → Google Translate fallback
-- ✅ **Sinhala Bridge Translation**: Intelligent use of Sinhala for unknown Vedda words
 - ✅ **Unicode Text Processing**: Proper handling of Sinhala/Vedda Unicode characters
-- ✅ **Confidence Scoring**: Transparent translation quality metrics (0.5-0.9 range)
+- ✅ **Confidence Scoring**: Transparent translation quality metrics (0.1-0.95 range)
+- ✅ **Multi-directional Support**: English→Vedda, Vedda→English, and 40+ international languages
 
 ### ✅ Phase 2: Modern Frontend Architecture (Completed)
 
@@ -101,30 +104,31 @@ vedda-system/
 - ✅ **Custom Hooks**: Business logic separation (useTranslation, useTranslationHistory)
 - ✅ **PWA Support**: Progressive Web App capabilities with proper manifest
 
-### ✅ Phase 3: Advanced Dictionary Management (Completed)
+### ✅ Phase 3: Enhanced Dictionary System (Completed)
 
-- ✅ **Vedda-Sinhala-English Mappings**: 48+ comprehensive word entries
+- ✅ **Bidirectional Dictionary Lookup**: Vedda→Others, English→Vedda, Sinhala→Vedda mappings
+- ✅ **Vedda-Sinhala-English Mappings**: 62+ comprehensive word entries
 - ✅ **IPA Phonetic Transcriptions**: Pronunciation guides for all languages
 - ✅ **CSV-Based Management**: Easy vocabulary updates and version control
-- ✅ **Database Migration Tools**: Smooth schema updates and data management
 - ✅ **Real-time Dictionary Updates**: Dynamic vocabulary additions through API
 
-### 🚧 Phase 4: Translation Quality Enhancement (In Progress)
+### ✅ Phase 4: Translation Quality & Code Standards (Completed)
 
-- ✅ **Multiple Translation Methods**: Dictionary, Sinhala bridge, Google Translate
-- ✅ **Fallback Logic**: Automatic Sinhala fallback for missing Vedda translations
-- 🔄 **Phrase-Level Translation**: Improved handling of multi-word expressions
-- 🔄 **Context-Aware Translation**: Better accuracy for complex phrases
-- ⏳ **Translation Caching**: Performance optimization for repeated queries
+- ✅ **Multiple Translation Methods**: Dictionary, Sinhala bridge, Google Translate with method tracking
+- ✅ **Intelligent Fallback Logic**: Automatic Sinhala fallback for missing Vedda translations
+- ✅ **Clean Production Code**: Removed all experimental/debug code, organized imports (PEP 8)
+- ✅ **Phrase-Level Translation**: Improved handling of multi-word expressions
+- ✅ **Working Bidirectional Translation**: Fixed English→Vedda and Vedda→English functionality
 
 ### 📋 Phase 5: Advanced Features (Planned)
 
-- Speech-to-text and text-to-speech integration
-- Mobile application development with React Native
-- Advanced ML translation models for Vedda-specific patterns
-- Collaborative vocabulary building platform
-- Accessibility features (ARIA support, keyboard navigation)
-- Offline translation capabilities with service workers
+- ⏳ **Speech-to-text and text-to-speech integration**
+- ⏳ **Mobile application development with React Native**  
+- ⏳ **Advanced ML translation models for Vedda-specific patterns**
+- ⏳ **Collaborative vocabulary building platform**
+- ⏳ **Accessibility features (ARIA support, keyboard navigation)**
+- ⏳ **Offline translation capabilities with service workers**
+- ⏳ **Translation caching for performance optimization**
 
 ## Component Architecture
 
@@ -252,19 +256,20 @@ curl http://localhost:5000/health  # API Gateway (if running)
   - 🟢 Translator Service (Port 5001): Core translation engine
   - 🟢 API Gateway (Port 5000): Optional unified endpoint
 - ✅ **Frontend Application**: Modern React with Vite (Port 5173)
-- ✅ **Database**: SQLite with 48+ Vedda dictionary entries
-- ✅ **Translation Engine**: Multi-layered with Sinhala bridge support
+- ✅ **Database**: SQLite with 62+ Vedda dictionary entries
+- ✅ **Translation Engine**: Multi-layered with bidirectional Sinhala bridge support
 - ✅ **Styling**: Complete Tailwind CSS integration with React Icons
 - ✅ **PWA Support**: Progressive Web App capabilities
+- ✅ **Code Quality**: Clean production code with organized imports (PEP 8)
 
 ### Translation Capabilities ✅
 
-- **Dictionary Translation**: Direct Vedda ↔ English/Sinhala (Confidence: 0.9)
-- **Sinhala Bridge**: Unknown Vedda words → Sinhala → Target language (Confidence: 0.65)
-- **Sinhala Fallback**: English → Sinhala when Vedda unavailable (Confidence: 0.7)
+- **Dictionary Translation**: Direct Vedda ↔ English/Sinhala (Confidence: 0.95)
+- **Sinhala Bridge**: Bidirectional translation using Sinhala as intermediate language (Confidence: 0.65-0.8)
 - **Google Translate**: 40+ international languages (Confidence: 0.8)
 - **Phrase Translation**: Multi-word expressions with intelligent fallback
 - **Unicode Support**: Proper handling of Sinhala/Vedda text
+- **Working Bidirectional Translation**: Fixed English→Vedda and Vedda→English functionality
 
 ### Adding More Vedda Words
 
@@ -307,12 +312,12 @@ curl http://localhost:5000/health  # API Gateway (if running)
 
 ### Current Features ✅
 
-- **Enhanced Translation Engine**: Multi-layered approach with 48+ Vedda words
-- **Sinhala Bridge Technology**: Intelligent use of Sinhala for unknown Vedda words
+- **Advanced Translation Engine**: Multi-layered approach with 62+ Vedda words
+- **Bidirectional Sinhala Bridge**: Intelligent translation using Sinhala as intermediate language
 - **Microservices Architecture**: Scalable backend with 4 specialized services
 - **Modern Frontend**: React 18 + Vite + Tailwind CSS + React Icons
 - **Multilingual Support**: Vedda ↔ English/Sinhala + 40+ international languages
-- **Intelligent Fallback**: Automatic Sinhala fallback when Vedda unavailable
+- **Intelligent Fallback**: Automatic translation fallback system
 - **Real-time Translation**: Live translation with confidence scoring and method transparency
 - **Unicode Text Support**: Proper handling of Sinhala/Vedda characters
 - **Translation History**: User interaction tracking and analytics
@@ -320,6 +325,7 @@ curl http://localhost:5000/health  # API Gateway (if running)
 - **PWA Capabilities**: Progressive Web App with offline potential
 - **Component Architecture**: Maintainable React components with custom hooks
 - **Responsive Design**: Modern UI/UX with Tailwind CSS styling
+- **Clean Code**: Production-ready code following PEP 8 standards with organized imports
 
 ## API Endpoints
 
@@ -410,24 +416,27 @@ This project aims to preserve and promote the Vedda language. Contributions from
 
 ### Translation Method Priority
 
-1. **Dictionary Translation** (Confidence: 0.9)
+1. **Dictionary Translation** (Confidence: 0.95)
 
    - Direct lookup in Vedda dictionary
    - Highest accuracy for known words
+   - Supports bidirectional translation
 
-2. **Sinhala Bridge** (Confidence: 0.65)
+2. **Sinhala Bridge** (Confidence: 0.65-0.8)
 
    - Uses Sinhala as intermediate language
-   - For Vedda words not in dictionary but available in Sinhala
+   - Bidirectional support: Other Language ↔ Sinhala ↔ Vedda
+   - Intelligent step-by-step confidence calculation
 
-3. **Sinhala Fallback** (Confidence: 0.7)
+3. **Google Translate** (Confidence: 0.8)
 
-   - Shows Sinhala translation when Vedda unavailable
-   - Maintains linguistic relevance
-
-4. **Google Translate** (Confidence: 0.8)
    - For international language support
    - Handles 40+ languages reliably
+   - Used as fallback for non-Vedda translations
+
+4. **Fallback** (Confidence: 0.1-0.5)
+   - Last resort when other methods fail
+   - Maintains system functionality
 
 ### Data Format
 
@@ -459,14 +468,15 @@ This project is dedicated to preserving the Vedda language and culture. Please u
 
 - **Microservices**: 4 backend services (Translator, Dictionary, History, API Gateway)
 - **Frontend**: Modern React 18 + Vite + Tailwind CSS architecture
-- **Vocabulary**: 48+ Vedda words with English and Sinhala translations
+- **Vocabulary**: 62+ Vedda words with English and Sinhala translations
 - **Languages Supported**: 40+ languages including Vedda, Sinhala, English, and international languages
-- **Translation Methods**: 4 distinct approaches (Dictionary, Sinhala Bridge, Sinhala Fallback, Google Translate)
+- **Translation Methods**: 4 distinct approaches (Dictionary, Sinhala Bridge, Google Translate, Fallback)
 - **Components**: 15+ React components following modern architecture patterns
 - **API Endpoints**: 12+ RESTful endpoints across all microservices
-- **Confidence Scoring**: Transparent quality metrics (0.5-0.9 range)
+- **Confidence Scoring**: Transparent quality metrics (0.1-0.95 range)
 - **Unicode Support**: Full Sinhala/Vedda character handling
 - **PWA Features**: Progressive Web App capabilities with manifest.json
+- **Code Quality**: Clean production code following PEP 8 standards
 
 ---
 
