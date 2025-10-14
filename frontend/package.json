@@ -1,7 +1,7 @@
 {
-  "name": "vedda-translator-frontend",
+  "name": "vedda-system-frontend",
   "version": "1.0.0",
-  "description": "Frontend for Vedda Language Translator",
+  "description": "Frontend for Vedda System",
   "private": true,
   "type": "module",
   "dependencies": {
@@ -14,15 +14,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^5.5.0",
-<<<<<<< Updated upstream
-    "react-router-dom": "^7.9.4",
-=======
-<<<<<<< Updated upstream
-=======
     "react-router-dom": "^7.9.4",
     "tailwindcss": "^4.1.14",
->>>>>>> Stashed changes
->>>>>>> Stashed changes
     "web-vitals": "^2.1.4"
   },
   "scripts": {
