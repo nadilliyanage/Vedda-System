@@ -41,4 +41,9 @@ router.get('/profile', authMiddleware, authController.getProfile);
 router.put('/profile', authMiddleware, authController.updateProfile);
 router.post('/verify', authMiddleware, authController.verifyToken);
 
+// Admin routes
+router.get('/users', authMiddleware, authController.getAllUsers);
+router.patch('/users/:userId/role', authMiddleware, authController.updateUserRole);
+router.delete('/users/:userId', authMiddleware, authController.deleteUser);
+
 module.exports = router;

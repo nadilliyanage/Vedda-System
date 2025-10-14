@@ -11,6 +11,7 @@ import VisualsPage from "./pages/VisualsPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route path="/artifacts" element={<ArtifactPage />} />
             <Route path="/3d-visuals" element={<VisualsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
           </Route>
         </Routes>
       </AuthProvider>
