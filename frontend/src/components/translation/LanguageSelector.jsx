@@ -10,7 +10,7 @@ const CustomSelect = ({ value, onChange, languages, placeholder }) => {
     <div className="relative min-w-[150px]">
       <button
         type="button"
-        className="w-full flex items-center justify-between gap-2 px-3 py-2 text-left bg-white border-0 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary-500 rounded-lg transition-colors duration-200"
+        className="w-full flex items-center justify-between gap-2 px-3 py-2 text-left bg-white border-0 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg transition-colors duration-200"
         onClick={() => setIsOpen(!isOpen)}
       >
         <div className="flex items-center gap-2">
