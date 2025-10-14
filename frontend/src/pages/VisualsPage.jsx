@@ -6,7 +6,7 @@ const VisualsPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100">
-      {/* Header */}
+      {/* Back Button */}
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center">

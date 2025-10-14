@@ -53,7 +53,7 @@ const ArtifactPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100">
-      {/* Header */}
+      {/* Back Button */}
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
