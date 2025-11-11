@@ -123,7 +123,7 @@ vedda-system/
 ### 📋 Phase 5: Advanced Features (Planned)
 
 - ⏳ **Speech-to-text and text-to-speech integration**
-- ⏳ **Mobile application development with React Native**  
+- ⏳ **Mobile application development with React Native**
 - ⏳ **Advanced ML translation models for Vedda-specific patterns**
 - ⏳ **Collaborative vocabulary building platform**
 - ⏳ **Accessibility features (ARIA support, keyboard navigation)**
