@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import toast from 'react-hot-toast';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -9,7 +10,6 @@ const LoginPage = () => {
     email: '',
     password: ''
   });
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Redirect if already authenticated
@@ -24,12 +24,10 @@ const LoginPage = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
-    setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
     setLoading(true);
 
     const result = await login(formData.email, formData.password);
@@ -37,9 +35,10 @@ const LoginPage = () => {
     setLoading(false);
 
     if (result.success) {
+      toast.success('Login successful!');
       navigate('/');
     } else {
-      setError(result.message);
+      toast.error(result.message || 'Login failed. Please try again.');
     }
   };
 
@@ -50,12 +49,6 @@ const LoginPage = () => {
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Welcome Back</h1>
           <p className="text-gray-600">Login to your Vedda System account</p>
         </div>
-
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
-            {error}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
