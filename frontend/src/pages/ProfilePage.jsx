@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { useAuth } from '../contexts/AuthContext';
 
 const ProfilePage = () => {
-  const navigate = useNavigate();
-  const { user, updateProfile, logout } = useAuth();
+  const { user, updateProfile } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     username: '',
     email: ''
   });
-  const [message, setMessage] = useState({ type: '', text: '' });
   const [loading, setLoading] = useState(false);
 
   // Update formData when user data changes
@@ -28,29 +26,22 @@ const ProfilePage = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
-    setMessage({ type: '', text: '' });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setMessage({ type: '', text: '' });
 
     const result = await updateProfile(formData);
     
     setLoading(false);
 
     if (result.success) {
-      setMessage({ type: 'success', text: result.message });
+      toast.success(result.message);
       setIsEditing(false);
     } else {
-      setMessage({ type: 'error', text: result.message });
+      toast.error(result.message);
     }
-  };
-
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
   };
 
   if (!user) {
@@ -70,16 +61,6 @@ const ProfilePage = () => {
           <h1 className="text-3xl font-bold text-gray-800 mb-2">My Profile</h1>
           <p className="text-gray-600">Manage your account information</p>
         </div>
-
-        {message.text && (
-          <div className={`px-4 py-3 rounded-lg mb-5 text-sm ${
-            message.type === 'success' 
-              ? 'bg-green-50 border border-green-200 text-green-700' 
-              : 'bg-red-50 border border-red-200 text-red-700'
-          }`}>
-            {message.text}
-          </div>
-        )}
 
         {!isEditing ? (
           <div className="space-y-6">
@@ -135,15 +116,9 @@ const ProfilePage = () => {
             <div className="flex gap-4 mt-6">
               <button 
                 onClick={() => setIsEditing(true)}
-                className="flex-1 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-2.5 rounded-lg hover:from-purple-700 hover:to-blue-700 transform hover:scale-[1.02] transition-all duration-200"
+                className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-2.5 rounded-lg hover:from-purple-700 hover:to-blue-700 transform hover:scale-[1.02] transition-all duration-200"
               >
                 Edit Profile
-              </button>
-              <button 
-                onClick={handleLogout}
-                className="flex-1 bg-red-500 text-white font-semibold py-2.5 rounded-lg hover:bg-red-600 transform hover:scale-[1.02] transition-all duration-200"
-              >
-                Logout
               </button>
             </div>
           </div>
@@ -199,7 +174,6 @@ const ProfilePage = () => {
                     username: user.username,
                     email: user.email
                   });
-                  setMessage({ type: '', text: '' });
                 }}
                 className="flex-1 bg-gray-500 text-white font-semibold py-2.5 rounded-lg hover:bg-gray-600 transform hover:scale-[1.02] transition-all duration-200"
               >

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import toast from 'react-hot-toast';
 
 const RegisterPage = () => {
   const navigate = useNavigate();
@@ -12,7 +13,6 @@ const RegisterPage = () => {
     confirmPassword: '',
     role: 'user'
   });
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   // Redirect if already authenticated
@@ -27,28 +27,26 @@ const RegisterPage = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
-    setError('');
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
 
     // Validate passwords match
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      toast.error('Passwords do not match');
       return;
     }
 
     // Validate password length
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long');
+      toast.error('Password must be at least 6 characters long');
       return;
     }
 
     // Validate username
     if (formData.username.length < 3) {
-      setError('Username must be at least 3 characters long');
+      toast.error('Username must be at least 3 characters long');
       return;
     }
 
@@ -63,9 +61,10 @@ const RegisterPage = () => {
     setLoading(false);
 
     if (result.success) {
+      toast.success('Account created successfully!');
       navigate('/');
     } else {
-      setError(result.message);
+      toast.error(result.message || 'Registration failed. Please try again.');
     }
   };
 
@@ -76,12 +75,6 @@ const RegisterPage = () => {
           <h1 className="text-4xl font-bold text-gray-800 mb-2">Create Account</h1>
           <p className="text-gray-600">Register for Vedda System</p>
         </div>
-
-        {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6 text-sm">
-            {error}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
