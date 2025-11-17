@@ -1,9 +1,10 @@
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-import sqlite3
 import json
 import os
+import sqlite3
 from datetime import datetime
+
+from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
@@ -54,6 +55,7 @@ class DictionaryService:
         dictionary = {}
         english_to_vedda = {}
         english_to_sinhala = {}
+        sinhala_to_vedda = {}
         
         for row in rows:
             vedda, sinhala, english, vedda_ipa, sinhala_ipa, english_ipa = row
@@ -80,11 +82,22 @@ class DictionaryService:
                     'sinhala': sinhala,
                     'sinhala_ipa': sinhala_ipa
                 }
+            
+            # Sinhala word as key (reverse lookup for Sinhala to Vedda)
+            if sinhala:
+                sinhala_to_vedda[sinhala.lower()] = {
+                    'vedda': vedda,
+                    'english': english,
+                    'vedda_ipa': vedda_ipa,
+                    'sinhala_ipa': sinhala_ipa,
+                    'english_ipa': english_ipa
+                }
         
         return {
             'vedda_to_others': dictionary,
             'english_to_vedda': english_to_vedda,
-            'english_to_sinhala': english_to_sinhala
+            'english_to_sinhala': english_to_sinhala,
+            'sinhala_to_vedda': sinhala_to_vedda
         }
     
     def search_word(self, word, source_lang='vedda', target_lang='english'):
@@ -97,6 +110,8 @@ class DictionaryService:
             return self.dictionary['english_to_vedda'].get(word_lower)
         elif source_lang == 'english' and target_lang == 'sinhala':
             return self.dictionary['english_to_sinhala'].get(word_lower)
+        elif source_lang == 'sinhala' and target_lang == 'vedda':
+            return self.dictionary['sinhala_to_vedda'].get(word_lower)
         
         return None
     

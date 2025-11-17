@@ -33,11 +33,11 @@ export const EXAMPLE_PHRASES = [
 ];
 
 export const API_BASE_URL =
-  import.meta.env.VITE_API_URL || "http://localhost:5001";
+  import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-// Service URLs for direct access (temporary fix)
+// Service URLs - Use API Gateway for all requests
 export const SERVICE_URLS = {
-  TRANSLATOR: "http://localhost:5001",
-  DICTIONARY: "http://localhost:5002",
-  HISTORY: "http://localhost:5003",
+  TRANSLATOR: "http://localhost:5000",
+  DICTIONARY: "http://localhost:5000",
+  HISTORY: "http://localhost:5000",
 };

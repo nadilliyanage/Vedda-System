@@ -1,15 +1,15 @@
 # Vedda Translator Requirements
 # Core dependencies
-flask>=2.3.0
-flask-cors>=4.0.0
-requests>=2.31.0
+flask>=3.1.2
+flask-cors>=6.0.1
+requests>=2.32.5
 
 # Data management
-pandas>=2.3.0
-openpyxl>=3.1.0
+pandas>=2.3.3
+openpyxl>=3.1.5
 
 # Database
 # sqlite3 is built-in with Python, no need to install
 
 # Development
-python-dotenv>=1.0.0
+python-dotenv>=1.1.1
