@@ -31,6 +31,11 @@ echo Starting API Gateway on port 5000...
 start "API Gateway" cmd /k "cd /d "%~dp0api-gateway" && python app.py"
 timeout /t 3 /nobreak >nul
 
+REM Start Auth-service (Port 5004)
+echo Starting Auth Service on port 5004...
+start "Auth Service" cmd /k "cd /d "%~dp0auth-service" && npm start"
+timeout /t 3 /nobreak >nul
+
 echo.
 echo All backend services started successfully!
 echo.
@@ -39,6 +44,7 @@ echo - API Gateway: http://localhost:5000
 echo - Translator Service: http://localhost:5001  
 echo - Dictionary Service: http://localhost:5002
 echo - History Service: http://localhost:5003
+echo - Auth Service: http://localhost:5004
 echo.
 echo To start the frontend, run: npm run dev (in the frontend directory)
 echo Frontend will be available at: http://localhost:5173
