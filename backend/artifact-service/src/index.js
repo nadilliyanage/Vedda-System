@@ -8,7 +8,7 @@ const connectDB = require('./config/database');
 const artifactRoutes = require('./routes/artifactRoutes');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5010;
 
 // Connect to Database
 connectDB();

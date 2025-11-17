@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token'));
 
-  const API_URL = 'http://localhost:5001/api/auth';
+  const API_URL = import.meta.env.VITE_AUTH_SERVICE_URL || 'http://localhost:5011/api/auth';
 
   const logout = useCallback(() => {
     localStorage.removeItem('token');

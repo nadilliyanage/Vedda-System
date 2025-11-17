@@ -35,9 +35,9 @@ export const EXAMPLE_PHRASES = [
 export const API_BASE_URL =
   import.meta.env.VITE_API_URL || "http://localhost:5001";
 
-// Service URLs for direct access (temporary fix)
+// Service URLs using environment variables
 export const SERVICE_URLS = {
-  TRANSLATOR: "http://localhost:5001",
-  DICTIONARY: "http://localhost:5002",
-  HISTORY: "http://localhost:5003",
+  TRANSLATOR: import.meta.env.VITE_TRANSLATOR_SERVICE_URL || "http://localhost:5003/api",
+  DICTIONARY: import.meta.env.VITE_DICTIONARY_SERVICE_URL || "http://localhost:5004/api",
+  HISTORY: import.meta.env.VITE_HISTORY_SERVICE_URL || "http://localhost:5005/api",
 };
