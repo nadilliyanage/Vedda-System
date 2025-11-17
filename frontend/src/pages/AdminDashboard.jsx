@@ -19,7 +19,7 @@ const AdminDashboard = () => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:5001/api/auth/users');
+        const response = await axios.get(`${import.meta.env.VITE_AUTH_SERVICE_URL}/users`);
         
         if (response.data.success) {
           const usersData = response.data.users;

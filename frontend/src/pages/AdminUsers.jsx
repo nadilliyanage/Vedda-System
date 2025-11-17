@@ -1,18 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const AdminUsers = () => {
   const { user } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:5001/api/auth/users');
+        const response = await axios.get(`${import.meta.env.VITE_AUTH_SERVICE_URL}/users`);
         
         if (response.data.success) {
           setUsers(response.data.users);
@@ -31,7 +34,7 @@ const AdminUsers = () => {
 
   const handleRoleChange = async (userId, newRole) => {
     try {
-      const response = await axios.patch(`http://localhost:5001/api/auth/users/${userId}/role`, {
+      const response = await axios.patch(`${import.meta.env.VITE_AUTH_SERVICE_URL}/users/${userId}/role`, {
         role: newRole
       });
 
@@ -45,19 +48,35 @@ const AdminUsers = () => {
     }
   };
 
-  const handleDeleteUser = async (userId) => {
-    if (!window.confirm('Are you sure you want to delete this user?')) {
-      return;
-    }
+  const handleDeleteUser = (userId, username) => {
+    setUserToDelete({ id: userId, username });
+    setShowDeleteConfirm(true);
+  };
 
+  const confirmDelete = async () => {
     try {
-      const response = await axios.delete(`http://localhost:5001/api/auth/users/${userId}`);
+      const response = await axios.delete(`${import.meta.env.VITE_AUTH_SERVICE_URL}/users/${userToDelete.id}`);
 
       if (response.data.success) {
-        setUsers(users.filter(u => u._id !== userId));
+        setUsers(users.filter(u => u._id !== userToDelete.id));
+        setShowDeleteConfirm(false);
+        setUserToDelete(null);
       }
+      toast.success('User deleted successfully');
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to delete user');
+      setShowDeleteConfirm(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setUserToDelete(null);
+  };
+
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      cancelDelete();
     }
   };
 
@@ -159,7 +178,7 @@ const AdminUsers = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
                     <button
-                      onClick={() => handleDeleteUser(userItem._id)}
+                      onClick={() => handleDeleteUser(userItem._id, userItem.username)}
                       disabled={userItem._id === user?.id}
                       className={`text-red-600 hover:text-red-800 font-medium ${
                         userItem._id === user?.id
@@ -176,6 +195,46 @@ const AdminUsers = () => {
           </table>
         </div>
       </div>
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm"
+          onClick={handleBackdropClick}
+        >
+          <div className="bg-white rounded-2xl p-8 shadow-2xl transform transition-all duration-200 scale-100 max-w-md w-full mx-4">
+            <div className="flex flex-col items-center space-y-6">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              </div>
+              
+              <div className="text-center">
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Delete User</h3>
+                <p className="text-gray-600">
+                  Are you sure you want to delete user <span className="font-semibold text-gray-900">{userToDelete?.username}</span>? This action cannot be undone.
+                </p>
+              </div>
+              
+              <div className="flex space-x-4 w-full">
+                <button
+                  onClick={cancelDelete}
+                  className="flex-1 px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors duration-200 font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 font-medium"
+                >
+                  Yes, Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
