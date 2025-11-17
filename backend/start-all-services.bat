@@ -33,8 +33,12 @@ timeout /t 3 /nobreak >nul
 
 REM Start Auth-service (Port 5005)
 echo Starting Auth Service on port 5005...
-start "Auth Service" cmd /k "cd /d "%~dp0auth-service" && npm start"
+start "Auth Service" cmd /k "cd /d "%~dp0auth-service" && npm i && npm start"
 timeout /t 3 /nobreak >nul
+
+REM Start Artifact Service (Port 5010)
+echo Starting Artifact Service on port 5010...
+start "Artifact Service" cmd /k "cd /d "%~dp0artifact-service" && npm i && npm start"
 
 echo.
 echo All backend services started successfully!
@@ -45,6 +49,7 @@ echo - Translator Service: http://localhost:5001
 echo - Dictionary Service: http://localhost:5002
 echo - History Service: http://localhost:5003
 echo - Auth Service: http://localhost:5005
+echo - Artifact Service: http://localhost:5010
 echo.
 echo To start the frontend, run: npm run dev (in the frontend directory)
 echo Frontend will be available at: http://localhost:5173
