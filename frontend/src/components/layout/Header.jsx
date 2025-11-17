@@ -68,7 +68,7 @@ const Header = ({ onHistoryClick }) => {
                     title="Admin Dashboard"
                   >
                     <HiShieldCheck className="w-5 h-5" />
-                    <span className="hidden sm:inline">Admin</span>
+                    <span className="hidden sm:inline">Dashboard</span>
                   </Link>
                 )}
                 <Link
