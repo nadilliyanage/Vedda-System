@@ -12,7 +12,7 @@ const AdminUsers = () => {
     const fetchUsers = async () => {
       try {
         setLoading(true);
-        const response = await axios.get('http://localhost:5001/api/auth/users');
+        const response = await axios.get('http://localhost:5005/api/auth/users');
         
         if (response.data.success) {
           setUsers(response.data.users);
@@ -31,7 +31,7 @@ const AdminUsers = () => {
 
   const handleRoleChange = async (userId, newRole) => {
     try {
-      const response = await axios.patch(`http://localhost:5001/api/auth/users/${userId}/role`, {
+      const response = await axios.patch(`http://localhost:5005/api/auth/users/${userId}/role`, {
         role: newRole
       });
 
@@ -51,7 +51,7 @@ const AdminUsers = () => {
     }
 
     try {
-      const response = await axios.delete(`http://localhost:5001/api/auth/users/${userId}`);
+      const response = await axios.delete(`http://localhost:5005/api/auth/users/${userId}`);
 
       if (response.data.success) {
         setUsers(users.filter(u => u._id !== userId));

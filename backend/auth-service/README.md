@@ -14,22 +14,26 @@ Authentication service for the Vedda System using Node.js, Express, MongoDB, and
 ## Setup
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Configure environment variables in `.env`:
-- PORT: Service port (default: 5001)
+
+- PORT: Service port
 - MONGODB_URI: MongoDB connection string
 - JWT_SECRET: Secret key for JWT tokens
 - JWT_EXPIRE: Token expiration time (default: 7d)
 
 3. Start the service:
+
 ```bash
 npm start
 ```
 
 For development with auto-reload:
+
 ```bash
 npm run dev
 ```
@@ -40,7 +44,6 @@ npm run dev
 
 - `POST /api/auth/register` - Register a new user
   - Body: `{ username, email, password }`
-  
 - `POST /api/auth/login` - Login user
   - Body: `{ email, password }`
 
@@ -48,11 +51,9 @@ npm run dev
 
 - `GET /api/auth/profile` - Get user profile
   - Headers: `Authorization: Bearer <token>`
-  
 - `PUT /api/auth/profile` - Update user profile
   - Headers: `Authorization: Bearer <token>`
   - Body: `{ username?, email? }`
-  
 - `POST /api/auth/verify` - Verify token validity
   - Headers: `Authorization: Bearer <token>`
 
@@ -75,6 +76,7 @@ All endpoints return JSON responses with the following structure:
 ## Error Handling
 
 The service handles various error types:
+
 - Validation errors (400)
 - Authentication errors (401)
 - Not found errors (404)

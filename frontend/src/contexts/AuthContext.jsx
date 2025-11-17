@@ -1,12 +1,18 @@
-import { createContext, useState, useContext, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useCallback,
+} from "react";
+import axios from "axios";
 
 const AuthContext = createContext();
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
@@ -14,15 +20,15 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
-  const API_URL = 'http://localhost:5001/api/auth';
+  const API_URL = "http://localhost:5005/api/auth";
 
   const logout = useCallback(() => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setToken(null);
     setUser(null);
-    delete axios.defaults.headers.common['Authorization'];
+    delete axios.defaults.headers.common["Authorization"];
   }, []);
 
   const verifyToken = useCallback(async () => {
@@ -34,7 +40,7 @@ export const AuthProvider = ({ children }) => {
         logout();
       }
     } catch (error) {
-      console.error('Token verification failed:', error);
+      console.error("Token verification failed:", error);
       logout();
     } finally {
       setLoading(false);
@@ -44,32 +50,32 @@ export const AuthProvider = ({ children }) => {
   // Configure axios defaults
   useEffect(() => {
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       verifyToken();
     } else {
       setLoading(false);
     }
   }, [token, verifyToken]);
 
-  const register = async (username, email, password, role = 'user') => {
+  const register = async (username, email, password, role = "user") => {
     try {
       const response = await axios.post(`${API_URL}/register`, {
         username,
         email,
         password,
-        role
+        role,
       });
 
       if (response.data.success) {
         const { token, user } = response.data;
-        localStorage.setItem('token', token);
+        localStorage.setItem("token", token);
         setToken(token);
         setUser(user);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         return { success: true, message: response.data.message };
       }
     } catch (error) {
-      const message = error.response?.data?.message || 'Registration failed';
+      const message = error.response?.data?.message || "Registration failed";
       return { success: false, message };
     }
   };
@@ -78,19 +84,19 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post(`${API_URL}/login`, {
         email,
-        password
+        password,
       });
 
       if (response.data.success) {
         const { token, user } = response.data;
-        localStorage.setItem('token', token);
+        localStorage.setItem("token", token);
         setToken(token);
         setUser(user);
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
         return { success: true, message: response.data.message };
       }
     } catch (error) {
-      const message = error.response?.data?.message || 'Login failed';
+      const message = error.response?.data?.message || "Login failed";
       return { success: false, message };
     }
   };
@@ -103,7 +109,7 @@ export const AuthProvider = ({ children }) => {
         return { success: true, message: response.data.message };
       }
     } catch (error) {
-      const message = error.response?.data?.message || 'Update failed';
+      const message = error.response?.data?.message || "Update failed";
       return { success: false, message };
     }
   };
@@ -115,12 +121,8 @@ export const AuthProvider = ({ children }) => {
     register,
     login,
     logout,
-    updateProfile
+    updateProfile,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
