@@ -34,7 +34,8 @@ exports.register = async (req, res) => {
     const user = await User.create({
       username,
       email,
-      password
+      password,
+      lastLogin: new Date()
     });
 
     // Generate token
@@ -49,7 +50,8 @@ exports.register = async (req, res) => {
         username: user.username,
         email: user.email,
         role: user.role,
-        createdAt: user.createdAt
+        createdAt: user.createdAt,
+        lastLogin: user.lastLogin
       }
     });
   } catch (error) {
