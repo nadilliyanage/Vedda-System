@@ -12,6 +12,8 @@ const AdminArtifacts = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [artifactToDelete, setArtifactToDelete] = useState(null);
   const [pagination, setPagination] = useState({
     page: 1,
     limit: 12,
@@ -88,20 +90,35 @@ const AdminArtifacts = () => {
     fetchArtifacts();
   };
 
-  const handleDelete = async (artifact) => {
-    if (!window.confirm(`Are you sure you want to delete "${artifact.name}"?`)) {
-      return;
-    }
+  const handleDelete = (artifact) => {
+    setArtifactToDelete(artifact);
+    setShowDeleteConfirm(true);
+  };
 
+  const confirmDelete = async () => {
     try {
-      const response = await deleteArtifact(artifact._id);
+      const response = await deleteArtifact(artifactToDelete._id);
       if (response.success) {
         toast.success('Artifact deleted successfully');
+        setShowDeleteConfirm(false);
+        setArtifactToDelete(null);
         fetchArtifacts();
       }
     } catch (error) {
       console.error('Delete error:', error);
       toast.error('Failed to delete artifact');
+      setShowDeleteConfirm(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setShowDeleteConfirm(false);
+    setArtifactToDelete(null);
+  };
+
+  const handleBackdropClick = (e) => {
+    if (e.target === e.currentTarget) {
+      cancelDelete();
     }
   };
 
@@ -296,6 +313,46 @@ const AdminArtifacts = () => {
         onClose={() => setIsModalOpen(false)}
         onSuccess={handleSuccess}
       />
+
+      {/* Delete Confirmation Modal */}
+      {showDeleteConfirm && artifactToDelete && (
+        <div 
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm"
+          onClick={handleBackdropClick}
+        >
+          <div className="bg-white rounded-2xl p-8 shadow-2xl transform transition-all duration-200 scale-100 max-w-md w-full mx-4">
+            <div className="flex flex-col items-center space-y-6">
+              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              </div>
+              
+              <div className="text-center">
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Delete Artifact</h3>
+                <p className="text-gray-600">
+                  Are you sure you want to delete <span className="font-semibold text-gray-900">&ldquo;{artifactToDelete.name}&rdquo;</span>? This action cannot be undone.
+                </p>
+              </div>
+              
+              <div className="flex space-x-4 w-full">
+                <button
+                  onClick={cancelDelete}
+                  className="flex-1 px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors duration-200 font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={confirmDelete}
+                  className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 font-medium"
+                >
+                  Yes, Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
