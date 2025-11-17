@@ -19,6 +19,7 @@ The Vedda language is an indigenous language of Sri Lanka that has significant o
 vedda-system/
 ├── README.md                    # Project documentation
 ├── requirements.txt             # Python dependencies
+├── update_dependencies.py       # Automated dependency update script with backups & health checks
 ├── backend/                     # Microservices Backend Architecture
 │   ├── api-gateway/            # API Gateway Service (Port 5000)
 │   │   └── app.py              # Central routing and load balancing
@@ -158,6 +159,49 @@ For detailed component documentation, see [`frontend/COMPONENT_STRUCTURE.md`](fr
 - Python 3.8+ installed
 - Node.js 16+ and npm installed
 - Git installed
+
+### Dependency Management (Recommended First Step)
+
+The project includes automated scripts for updating all Python dependencies across microservices:
+
+#### Quick Dependency Update
+
+```bash
+# Navigate to project root
+cd "D:\SLIIT\RP\Vedda System"
+
+# Update all Python dependencies automatically
+python update_dependencies.py
+```
+
+Or with full Python path:
+
+```bash
+C:/Users/nadil/AppData/Local/Programs/Python/Python313/python.exe "D:\SLIIT\RP\Vedda System\update_dependencies.py"
+```
+
+#### Advanced Options
+
+```bash
+# The script includes backup and health check features by default
+python update_dependencies.py
+
+# Available options:
+python update_dependencies.py --no-backup      # Skip backup creation
+python update_dependencies.py --no-health-check # Skip health checks
+python update_dependencies.py --help           # Show all options
+```
+
+#### Current Dependency Versions
+
+The update scripts will upgrade all services to these latest versions:
+
+- **Flask**: `>=3.1.2` (upgraded from 2.3.3)
+- **flask-cors**: `>=6.0.1` (upgraded from 4.0.0)
+- **requests**: `>=2.32.5` (upgraded from 2.31.0)
+- **python-dotenv**: `>=1.1.1` (upgraded from 1.0.0)
+- **pandas**: `>=2.3.3`
+- **openpyxl**: `>=3.1.5`
 
 ### Installation & Setup
 
@@ -413,6 +457,41 @@ This project aims to preserve and promote the Vedda language. Contributions from
 - Maintain backward compatibility when updating APIs
 - Write unit tests for both frontend components and backend services
 - Document API changes and new translation methods
+
+## Development Workflow
+
+### Dependency Management
+
+Before starting development or after pulling changes:
+
+```bash
+# Update all Python dependencies (recommended)
+python update_dependencies.py
+
+# With additional options if needed
+python update_dependencies.py --help
+```
+
+### Service Development
+
+1. **Update dependencies** first (using scripts above)
+2. **Start services** in development mode
+3. **Test endpoints** using the provided curl examples in backend README
+4. **Monitor logs** for any dependency or service issues
+
+### Troubleshooting
+
+**Dependency Issues:**
+
+- Run `python update_dependencies.py` for health checks (included by default)
+- Check individual service `requirements.txt` files for conflicts
+- Use virtual environments for isolation
+
+**Service Startup Issues:**
+
+- Ensure all dependencies are updated
+- Check that ports 5000-5003 are available
+- Verify database files exist in `data/` directory
 
 ### Translation Method Priority
 
