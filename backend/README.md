@@ -32,6 +32,25 @@ This backend implements a microservices architecture for the Vedda Language Tran
         └─────────────────────────────────────────────────────────┘
 ```
 
+## Project Structure
+
+```
+vedda-system/
+├── backend/
+│   ├── api-gateway/           # API Gateway service
+│   ├── dictionary-service/    # Dictionary management
+│   ├── translator-service/    # Translation engine
+│   ├── history-service/       # History & feedback
+│   ├── docker-compose.yml     # Container orchestration
+│   └── README.md             # This file
+├── frontend/                  # React frontend
+├── data/                     # Database files
+├── requirements.txt          # Main project dependencies
+├── update_dependencies.py    # Dependency update script
+├── update_dependencies_enhanced.py  # Advanced update script
+└── README.md                # Project overview
+```
+
 ## Services
 
 ### 1. API Gateway (Port: 5000)
@@ -75,6 +94,18 @@ This backend implements a microservices architecture for the Vedda Language Tran
   - Usage statistics
 
 ## Quick Start
+
+### Prerequisites
+
+1. **Update Dependencies** (Recommended first step):
+
+   ```bash
+   # Navigate to project root
+   cd "D:\SLIIT\RP\Vedda System"
+
+   # Update all Python dependencies
+   python update_dependencies.py
+   ```
 
 ### Using Docker Compose (Recommended)
 
@@ -256,6 +287,78 @@ user_feedback (
 )
 ```
 
+## Dependency Management
+
+### Automated Dependency Updates
+
+The project includes automated scripts for updating Python dependencies across all microservices:
+
+#### Quick Update (Recommended)
+
+```bash
+# Run the dependency update script
+python update_dependencies.py
+```
+
+Or with full Python path:
+
+```bash
+C:/Users/nadil/AppData/Local/Programs/Python/Python313/python.exe "D:\SLIIT\RP\Vedda System\update_dependencies.py"
+```
+
+#### Enhanced Update (With Backup & Health Checks)
+
+```bash
+# Run enhanced version with logging and backups
+python update_dependencies_enhanced.py
+
+# Skip backup creation
+python update_dependencies_enhanced.py --no-backup
+
+# Skip health checks
+python update_dependencies_enhanced.py --no-health-check
+
+# Custom project root
+python update_dependencies_enhanced.py --project-root "C:\MyProject"
+```
+
+#### Manual Dependency Updates
+
+For individual services:
+
+```bash
+# Update specific service dependencies
+cd api-gateway && pip install -r requirements.txt --upgrade
+cd dictionary-service && pip install -r requirements.txt --upgrade
+cd translator-service && pip install -r requirements.txt --upgrade
+cd history-service && pip install -r requirements.txt --upgrade
+
+# Check for outdated packages
+pip list --outdated
+
+# Update main project dependencies
+pip install -r requirements.txt --upgrade
+```
+
+#### Current Dependency Versions
+
+- **Flask**: `>=3.1.2` (upgraded from 2.3.3)
+- **flask-cors**: `>=6.0.1` (upgraded from 4.0.0)
+- **requests**: `>=2.32.5` (upgraded from 2.31.0)
+- **python-dotenv**: `>=1.1.1` (upgraded from 1.0.0)
+- **pandas**: `>=2.3.3`
+- **openpyxl**: `>=3.1.5`
+
+#### Dependency Update Features
+
+- ✅ **Automated Updates**: Updates all microservices with one command
+- ✅ **Error Handling**: Shows success/failure for each service
+- ✅ **Backup Creation**: Creates backup of requirements files (enhanced version)
+- ✅ **Health Checks**: Verifies services can import dependencies (enhanced version)
+- ✅ **Logging**: Maintains update logs with timestamps (enhanced version)
+- ✅ **Progress Tracking**: Visual feedback with emojis
+- ✅ **Cross-Platform**: Works on Windows, Linux, and macOS
+
 ## Development
 
 ### Adding New Services
@@ -264,6 +367,7 @@ user_feedback (
 2. Add `app.py`, `requirements.txt`, `Dockerfile`, `.env`
 3. Update `docker-compose.yml`
 4. Update API Gateway routing in `api-gateway/app.py`
+5. Add service to dependency update script in `update_dependencies.py`
 
 ### Testing Services
 
@@ -278,6 +382,49 @@ curl -X POST http://localhost:5000/api/translate \
 
 # Test dictionary search
 curl "http://localhost:5000/api/dictionary/search?word=hello&source=english&target=vedda"
+```
+
+## Troubleshooting
+
+### Dependency Issues
+
+**Problem**: Import errors after updates
+
+```bash
+# Solution: Run health check
+python update_dependencies_enhanced.py
+```
+
+**Problem**: Path issues with spaces in directory names
+
+```bash
+# Use quotes around the full path
+"C:/path/to/python.exe" "D:\SLIIT\RP\Vedda System\update_dependencies.py"
+```
+
+**Problem**: Services won't start after dependency updates
+
+```bash
+# Check individual service requirements
+cd backend/api-gateway && pip install -r requirements.txt
+cd ../dictionary-service && pip install -r requirements.txt
+# ... repeat for other services
+```
+
+### Service Startup Issues
+
+**Problem**: Database connection errors
+
+```bash
+# Check database path in .env files
+# Ensure database files exist in data/ directory
+```
+
+**Problem**: Port conflicts
+
+```bash
+# Check if ports 5000-5003 are available
+netstat -an | findstr "500[0-3]"
 ```
 
 ## Monitoring and Logging
@@ -315,3 +462,5 @@ const API_BASE_URL = "http://localhost:5000";
 ```
 
 All existing API endpoints remain the same, but now go through the API Gateway.
+
+taskkill /f /im python.exe
