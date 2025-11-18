@@ -15,6 +15,10 @@ SERVICES = {
         'url': 'http://localhost:5001',
         'health': '/health'
     },
+    'learn': {
+        'url': 'http://localhost:5005',
+        'health': '/health'
+    },
     'dictionary': {
         'url': 'http://localhost:5002',
         'health': '/health'
@@ -29,6 +33,7 @@ SERVICES = {
 ROUTE_MAPPINGS = {
     '/api/translate': 'translator',
     '/api/languages': 'translator',
+    '/api/learn': 'learn',
     '/api/dictionary': 'dictionary',
     '/api/dictionary/search': 'dictionary',
     '/api/dictionary/add': 'dictionary',

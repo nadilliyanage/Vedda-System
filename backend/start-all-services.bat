@@ -36,6 +36,11 @@ echo Starting Auth Service on port 5004...
 start "Auth Service" cmd /k "cd /d "%~dp0auth-service" && npm start"
 timeout /t 3 /nobreak >nul
 
+REM Start Learn Service (Port 5005)
+echo Starting Learn Service on port 5005...
+start "Learn Service" cmd /k "cd /d "%~dp0learn-service" && python app.py"
+timeout /t 3 /nobreak >nul
+
 echo.
 echo All backend services started successfully!
 echo.
@@ -45,6 +50,7 @@ echo - Translator Service: http://localhost:5001
 echo - Dictionary Service: http://localhost:5002
 echo - History Service: http://localhost:5003
 echo - Auth Service: http://localhost:5004
+echo - Learn Service: http://localhost:5005
 echo.
 echo To start the frontend, run: npm run dev (in the frontend directory)
 echo Frontend will be available at: http://localhost:5173
