@@ -1,0 +1,37 @@
+{
+  "challenges": [
+    {
+      "id": "fb1",
+      "type": "fill_blank",
+      "prompt": "Type the English word for 'ගසා (gasa)'",
+      "answers": ["tree"],
+      "xp": 20,
+      "coins": 4,
+      "timeLimitSec": 45
+    },
+    {
+      "id": "fb2",
+      "type": "fill_blank",
+      "prompt": "Type the English word for 'අට (ata)'",
+      "answers": ["eight", "8"],
+      "xp": 20,
+      "coins": 4,
+      "timeLimitSec": 45
+    },
+    {
+      "id": "mc1",
+      "type": "multiple_choice",
+      "prompt": "Select the correct English meaning for 'වැලි (weli)'.",
+      "options": [
+        {"id": "A", "text": "sand"},
+        {"id": "B", "text": "stone"},
+        {"id": "C", "text": "water"},
+        {"id": "D", "text": "leaf"}
+      ],
+      "correct": ["A"],
+      "xp": 15,
+      "coins": 3,
+      "timeLimitSec": 30
+    }
+  ]
+}
