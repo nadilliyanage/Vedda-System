@@ -1,5 +1,6 @@
 import { HiVolumeUp, HiMicrophone, HiCamera, HiX } from "react-icons/hi";
 import { LANGUAGES } from "../../constants/languages";
+import { generateSpeech } from "../../utils/ttsUtils";
 
 const TranslationInput = ({
   inputText,
@@ -22,88 +23,17 @@ const TranslationInput = ({
   const handleTextToSpeech = async () => {
     if (!inputText.trim()) return;
 
-    // Cancel any ongoing speech
+    // Cancel any ongoing browser speech
     if (speechSynthesis.speaking) {
       speechSynthesis.cancel();
-      return;
     }
 
-    // Get available voices
-    const getVoices = () => {
-      return new Promise((resolve) => {
-        let voices = speechSynthesis.getVoices();
-        if (voices.length) {
-          resolve(voices);
-        } else {
-          speechSynthesis.onvoiceschanged = () => {
-            voices = speechSynthesis.getVoices();
-            resolve(voices);
-          };
-        }
-      });
-    };
-
-    const voices = await getVoices();
-    const utterance = new SpeechSynthesisUtterance(inputText);
-
-    // Enhanced language mapping with fallbacks
-    const speechLanguageMap = {
-      english: ["en-US", "en-GB", "en"],
-      sinhala: ["si-LK", "si", "en-US"], // Fallback to English if Sinhala not available
-      vedda: ["si-LK", "si", "en-US"], // Use Sinhala or fallback to English
-      tamil: ["ta-IN", "ta", "en-US"],
-      hindi: ["hi-IN", "hi", "en-US"],
-      chinese: ["zh-CN", "zh-TW", "zh", "en-US"],
-      japanese: ["ja-JP", "ja", "en-US"],
-      korean: ["ko-KR", "ko", "en-US"],
-      french: ["fr-FR", "fr-CA", "fr", "en-US"],
-      german: ["de-DE", "de", "en-US"],
-      spanish: ["es-ES", "es-MX", "es", "en-US"],
-      italian: ["it-IT", "it", "en-US"],
-      portuguese: ["pt-BR", "pt-PT", "pt", "en-US"],
-      russian: ["ru-RU", "ru", "en-US"],
-      arabic: ["ar-SA", "ar", "en-US"],
-    };
-
-    // Find the best available voice
-    const preferredLangs = speechLanguageMap[sourceLanguage] || ["en-US"];
-    let selectedVoice = null;
-    let selectedLang = "en-US";
-
-    for (const lang of preferredLangs) {
-      const voice = voices.find((v) => v.lang.startsWith(lang));
-      if (voice) {
-        selectedVoice = voice;
-        selectedLang = lang;
-        break;
-      }
-    }
-
-    // Set utterance properties
-    utterance.voice = selectedVoice;
-    utterance.lang = selectedLang;
-    utterance.rate = 0.8;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-
-    // Enhanced error handling with user feedback
-    utterance.onerror = (event) => {
-      console.error("Speech synthesis error:", event.error);
+    try {
+      await generateSpeech(inputText, sourceLanguage);
+    } catch (error) {
+      console.error("TTS failed:", error.message);
       // You could add a toast notification here in the future
-    };
-
-    // Log what voice is being used (for debugging)
-    if (selectedVoice) {
-      console.log(
-        `Using voice: ${selectedVoice.name} (${selectedVoice.lang}) for ${sourceLanguage}`
-      );
-    } else {
-      console.log(
-        `No specific voice found for ${sourceLanguage}, using default`
-      );
     }
-
-    speechSynthesis.speak(utterance);
   };
 
   return (
