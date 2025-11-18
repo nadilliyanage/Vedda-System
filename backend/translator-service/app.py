@@ -17,6 +17,7 @@ HISTORY_SERVICE_URL = 'http://localhost:5003'
 # Google Translate API configuration (using free endpoint)
 GOOGLE_TRANSLATE_URL = "https://translate.googleapis.com/translate_a/single"
 
+
 class VeddaTranslator:
     def __init__(self):
         self.supported_languages = {
@@ -360,6 +361,7 @@ def get_languages():
         'supported_languages': translator.supported_languages,
         'total_count': len(translator.supported_languages)
     })
+
 
 if __name__ == '__main__':
     print("Starting Translation Service on port 5001...")
