@@ -7,7 +7,7 @@ from random import choice as rand_choice
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-PORT = int(os.environ.get("PORT", 5005))
+PORT = int(os.environ.get("PORT", 5006))
 DATA_DIR = os.path.join(os.path.dirname(__file__), "storage")
 DATA_FILE = os.path.join(DATA_DIR, "challenges.json")
 

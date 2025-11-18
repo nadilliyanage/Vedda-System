@@ -16,7 +16,7 @@ SERVICES = {
         'health': '/health'
     },
     'learn': {
-        'url': 'http://localhost:5005',
+        'url': 'http://localhost:5006',
         'health': '/health'
     },
     'dictionary': {
