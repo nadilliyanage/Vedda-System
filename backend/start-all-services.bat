@@ -36,6 +36,11 @@ echo Starting Auth Service on port 5005...
 start "Auth Service" cmd /k "cd /d "%~dp0auth-service" && npm i && npm start"
 timeout /t 3 /nobreak >nul
 
+REM Start Learn Service (Port 5006)
+echo Starting Learn Service on port 5006...
+start "Learn Service" cmd /k "cd /d "%~dp0learn-service" && python app.py"
+timeout /t 3 /nobreak >nul
+
 REM Start Artifact Service (Port 5010)
 echo Starting Artifact Service on port 5010...
 start "Artifact Service" cmd /k "cd /d "%~dp0artifact-service" && npm i && npm start"
