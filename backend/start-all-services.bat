@@ -41,6 +41,11 @@ echo Starting Learn Service on port 5006...
 start "Learn Service" cmd /k "cd /d "%~dp0learn-service" && python app.py"
 timeout /t 3 /nobreak >nul
 
+REM Start Speech Service (Port 5007)
+echo Starting Speech Service on port 5007...
+start "Speech Service" cmd /k "cd /d "%~dp0speech-service" && pip install -r requirements.txt && python app.py"
+timeout /t 3 /nobreak >nul
+
 REM Start Artifact Service (Port 5010)
 echo Starting Artifact Service on port 5010...
 start "Artifact Service" cmd /k "cd /d "%~dp0artifact-service" && npm i && npm start"
@@ -54,6 +59,8 @@ echo - Translator Service: http://localhost:5001
 echo - Dictionary Service: http://localhost:5002
 echo - History Service: http://localhost:5003
 echo - Auth Service: http://localhost:5005
+echo - Learn Service: http://localhost:5006
+echo - TTS/Speech Service: http://localhost:5007
 echo - Artifact Service: http://localhost:5010
 echo.
 echo To start the frontend, run: npm run dev (in the frontend directory)

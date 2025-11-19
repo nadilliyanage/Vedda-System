@@ -52,9 +52,6 @@ const TranslatorPage = () => {
           <h1 className="text-4xl font-bold text-gray-800 mb-2">
             Vedda Language Translator
           </h1>
-          <p className="text-gray-600">
-            Translate between Vedda, Sinhala, and English
-          </p>
         </div>
 
         {/* Main Translation Card */}

@@ -8,7 +8,8 @@ const HomePage = () => {
     {
       id: 1,
       title: "Vedda Translator",
-      description: "Translate between Vedda, Sinhala, and English languages",
+      description:
+        "Translate between Vedda, Sinhala, English and other languages",
       icon: FaLanguage,
       path: "/translator",
       color: "from-blue-500 to-blue-600",
@@ -17,7 +18,8 @@ const HomePage = () => {
     {
       id: 2,
       title: "Word Learning Quiz",
-      description: "Test your knowledge with interactive Vedda vocabulary quizzes",
+      description:
+        "Test your knowledge with interactive Vedda vocabulary quizzes",
       icon: FaBookOpen,
       path: "/quiz",
       color: "from-green-500 to-green-600",
@@ -26,7 +28,8 @@ const HomePage = () => {
     {
       id: 3,
       title: "Artifact Learning System",
-      description: "Explore and learn about Vedda cultural artifacts and history",
+      description:
+        "Explore and learn about Vedda cultural artifacts and history",
       icon: FaLandmark,
       path: "/artifacts",
       color: "from-purple-500 to-purple-600",
@@ -35,7 +38,8 @@ const HomePage = () => {
     {
       id: 4,
       title: "3D Visuals",
-      description: "Experience Vedda words through interactive 3D visualizations",
+      description:
+        "Experience Vedda words through interactive 3D visualizations",
       icon: FaCube,
       path: "/3d-visuals",
       color: "from-orange-500 to-orange-600",
@@ -76,7 +80,9 @@ const HomePage = () => {
                     <h2 className="text-2xl font-bold mb-2">{feature.title}</h2>
                   </div>
                   <div className="p-6">
-                    <p className="text-gray-600 text-lg">{feature.description}</p>
+                    <p className="text-gray-600 text-lg">
+                      {feature.description}
+                    </p>
                     <div className="mt-4 flex items-center text-blue-600 font-semibold group-hover:text-blue-700 transition-colors">
                       <span>Get Started</span>
                       <svg
@@ -107,10 +113,10 @@ const HomePage = () => {
           </h2>
           <p className="text-gray-600 text-lg leading-relaxed text-center">
             The Vedda language is the indigenous language of the Vedda people of
-            Sri Lanka. This platform is dedicated to preserving and promoting this
-            unique language through interactive learning tools, cultural resources,
-            and modern technology. Explore our features to immerse yourself in the
-            rich heritage of the Vedda community.
+            Sri Lanka. This platform is dedicated to preserving and promoting
+            this unique language through interactive learning tools, cultural
+            resources, and modern technology. Explore our features to immerse
+            yourself in the rich heritage of the Vedda community.
           </p>
         </div>
       </div>
