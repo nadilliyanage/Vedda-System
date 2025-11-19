@@ -45,22 +45,26 @@ const TranslationOutput = ({
 
   const getMethodColor = (method) => {
     switch (method) {
+      // Current translator service method names
+      case "google":
+      case "google_translate":
+        return "bg-indigo-100 text-indigo-800 border-indigo-200";
       case "dictionary":
       case "english_to_vedda_direct":
       case "vedda_direct":
         return "bg-green-100 text-green-800 border-green-200";
+      case "fallback":
       case "english_to_sinhala_fallback":
       case "bridge_via_english":
       case "vedda_fallback":
       case "vedda_to_english_to_target":
       case "source_to_english_to_vedda":
         return "bg-yellow-100 text-yellow-800 border-yellow-200";
+      case "sinhala_bridge":
       case "english_to_sinhala_google":
       case "sinhala_to_target":
       case "sinhala_passthrough":
         return "bg-blue-100 text-blue-800 border-blue-200";
-      case "google_translate":
-        return "bg-indigo-100 text-indigo-800 border-indigo-200";
       case "sinhala_word":
       case "vedda_as_sinhala_batch":
         return "bg-purple-100 text-purple-800 border-purple-200";
@@ -73,8 +77,16 @@ const TranslationOutput = ({
 
   const getMethodLabel = (method) => {
     switch (method) {
+      // Current translator service method names
+      case "google":
+        return "Google Translator";
       case "dictionary":
         return "Vedda Dictionary";
+      case "fallback":
+        return "Fallback Translation";
+      case "sinhala_bridge":
+        return "Sinhala Bridge";
+      // Detailed method names
       case "english_to_vedda_direct":
         return "English → Vedda Direct";
       case "english_to_sinhala_fallback":
@@ -84,7 +96,7 @@ const TranslationOutput = ({
       case "bridge_via_english":
         return "Via English Bridge";
       case "google_translate":
-        return "Google Translate";
+        return "Google Translator";
       case "sinhala_word":
         return "Sinhala Dictionary";
       case "sinhala_to_target":

@@ -41,17 +41,22 @@ const TranslationInput = ({
   const handleSpeechTranscription = (transcribedText, result) => {
     if (transcribedText.trim()) {
       // If there's existing text, append with a space
-      const newText = inputText.trim() 
+      const newText = inputText.trim()
         ? `${inputText.trim()} ${transcribedText.trim()}`
         : transcribedText.trim();
-      
+
       onInputChange(newText);
-      console.log('Speech transcribed:', transcribedText, 'Method:', result.method);
+      console.log(
+        "Speech transcribed:",
+        transcribedText,
+        "Method:",
+        result.method
+      );
     }
   };
 
   const handleSpeechError = (error) => {
-    console.error('Speech recognition error:', error.message);
+    console.error("Speech recognition error:", error.message);
     // You could add a toast notification here in the future
   };
 
@@ -122,7 +127,7 @@ const TranslationInput = ({
           >
             <HiVolumeUp className="w-5 h-5" />
           </button>
-          
+
           <SpeechInput
             language={sourceLanguage}
             onTranscription={handleSpeechTranscription}

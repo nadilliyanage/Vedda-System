@@ -1,6 +1,6 @@
 // Speech-to-Text utilities with real-time recording capabilities
 
-const STT_API_BASE = import.meta.env.VITE_TTS_URL || 'http://localhost:5007';
+const STT_API_BASE = import.meta.env.VITE_TTS_URL || "http://localhost:5007";
 
 /**
  * Real-time speech recording class
@@ -15,35 +15,37 @@ export class SpeechRecorder {
     this.onError = null;
     this.onStart = null;
     this.onEnd = null;
-    this.language = 'english';
+    this.language = "english";
   }
 
   /**
    * Initialize the recorder
    */
-  async initialize(language = 'english') {
+  async initialize(language = "english") {
     this.language = language;
-    
+
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-      throw new Error('Microphone access not supported by this browser');
+      throw new Error("Microphone access not supported by this browser");
     }
 
     try {
       // Request microphone permission
-      this.stream = await navigator.mediaDevices.getUserMedia({ 
+      this.stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
           autoGainControl: true,
-          sampleRate: 16000
-        } 
+          sampleRate: 16000,
+        },
       });
-      
-      console.log('Microphone access granted');
+
+      console.log("Microphone access granted");
       return true;
     } catch (error) {
-      console.error('Microphone access denied:', error);
-      throw new Error('Microphone access denied. Please allow microphone access and try again.');
+      console.error("Microphone access denied:", error);
+      throw new Error(
+        "Microphone access denied. Please allow microphone access and try again."
+      );
     }
   }
 
@@ -56,30 +58,30 @@ export class SpeechRecorder {
     }
 
     if (this.isRecording) {
-      console.warn('Already recording');
+      console.warn("Already recording");
       return;
     }
 
     this.audioChunks = [];
-    
+
     // Create MediaRecorder
     const options = {
-      mimeType: 'audio/webm;codecs=opus'
+      mimeType: "audio/webm;codecs=opus",
     };
-    
+
     // Fallback for Safari and other browsers
     if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-      options.mimeType = 'audio/webm';
+      options.mimeType = "audio/webm";
       if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-        options.mimeType = 'audio/mp4';
+        options.mimeType = "audio/mp4";
         if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-          options.mimeType = '';
+          options.mimeType = "";
         }
       }
     }
 
     this.mediaRecorder = new MediaRecorder(this.stream, options);
-    
+
     this.mediaRecorder.ondataavailable = (event) => {
       if (event.data.size > 0) {
         this.audioChunks.push(event.data);
@@ -87,12 +89,12 @@ export class SpeechRecorder {
     };
 
     this.mediaRecorder.onstop = async () => {
-      console.log('Recording stopped, processing audio...');
+      console.log("Recording stopped, processing audio...");
       await this.processRecording();
     };
 
     this.mediaRecorder.onerror = (event) => {
-      console.error('MediaRecorder error:', event.error);
+      console.error("MediaRecorder error:", event.error);
       if (this.onError) {
         this.onError(new Error(`Recording error: ${event.error}`));
       }
@@ -101,9 +103,9 @@ export class SpeechRecorder {
     // Start recording
     this.mediaRecorder.start(100); // Collect data every 100ms
     this.isRecording = true;
-    
+
     console.log(`Started recording in ${this.language}`);
-    
+
     if (this.onStart) {
       this.onStart();
     }
@@ -114,14 +116,14 @@ export class SpeechRecorder {
    */
   stopRecording() {
     if (!this.isRecording || !this.mediaRecorder) {
-      console.warn('Not currently recording');
+      console.warn("Not currently recording");
       return;
     }
 
     this.mediaRecorder.stop();
     this.isRecording = false;
-    
-    console.log('Stopping recording...');
+
+    console.log("Stopping recording...");
   }
 
   /**
@@ -130,36 +132,38 @@ export class SpeechRecorder {
   async processRecording() {
     if (this.audioChunks.length === 0) {
       if (this.onError) {
-        this.onError(new Error('No audio data recorded'));
+        this.onError(new Error("No audio data recorded"));
       }
       return;
     }
 
     try {
       // First try browser Web Speech API (more reliable)
-      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      if (
+        "webkitSpeechRecognition" in window ||
+        "SpeechRecognition" in window
+      ) {
         await this.processBrowserSTT();
       } else {
         // Fallback to backend service
-        const audioBlob = new Blob(this.audioChunks, { 
-          type: this.mediaRecorder?.mimeType || 'audio/webm' 
+        const audioBlob = new Blob(this.audioChunks, {
+          type: this.mediaRecorder?.mimeType || "audio/webm",
         });
-        
+
         console.log(`Processing ${audioBlob.size} bytes of audio`);
         const wavBlob = await this.convertToWav(audioBlob);
         const result = await this.sendToSTTService(wavBlob);
-        
+
         if (this.onResult) {
           this.onResult(result);
         }
       }
-      
+
       if (this.onEnd) {
         this.onEnd();
       }
-      
     } catch (error) {
-      console.error('Error processing recording:', error);
+      console.error("Error processing recording:", error);
       if (this.onError) {
         this.onError(error);
       }
@@ -171,33 +175,34 @@ export class SpeechRecorder {
    */
   async processBrowserSTT() {
     return new Promise((resolve, reject) => {
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const SpeechRecognition =
+        window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognition = new SpeechRecognition();
-      
+
       // Language mapping for browser STT
       const browserLanguageMap = {
-        'english': 'en-US',
-        'sinhala': 'si-LK',
-        'tamil': 'ta-IN',
-        'hindi': 'hi-IN',
-        'chinese': 'zh-CN',
-        'japanese': 'ja-JP',
-        'korean': 'ko-KR',
-        'french': 'fr-FR',
-        'german': 'de-DE',
-        'spanish': 'es-ES',
-        'italian': 'it-IT',
-        'portuguese': 'pt-BR',
-        'russian': 'ru-RU',
-        'arabic': 'ar-SA',
-        'dutch': 'nl-NL',
-        'thai': 'th-TH',
-        'vietnamese': 'vi-VN',
-        'turkish': 'tr-TR',
-        'vedda': 'si-LK'
+        english: "en-US",
+        sinhala: "si-LK",
+        tamil: "ta-IN",
+        hindi: "hi-IN",
+        chinese: "zh-CN",
+        japanese: "ja-JP",
+        korean: "ko-KR",
+        french: "fr-FR",
+        german: "de-DE",
+        spanish: "es-ES",
+        italian: "it-IT",
+        portuguese: "pt-BR",
+        russian: "ru-RU",
+        arabic: "ar-SA",
+        dutch: "nl-NL",
+        thai: "th-TH",
+        vietnamese: "vi-VN",
+        turkish: "tr-TR",
+        vedda: "si-LK",
       };
 
-      recognition.lang = browserLanguageMap[this.language] || 'en-US';
+      recognition.lang = browserLanguageMap[this.language] || "en-US";
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.maxAlternatives = 1;
@@ -205,35 +210,37 @@ export class SpeechRecorder {
       recognition.onresult = (event) => {
         const transcript = event.results[0][0].transcript;
         const confidence = event.results[0][0].confidence;
-        
-        console.log(`Browser STT result: "${transcript}" (confidence: ${confidence})`);
-        
+
+        console.log(
+          `Browser STT result: "${transcript}" (confidence: ${confidence})`
+        );
+
         if (this.onResult) {
           this.onResult({
             success: true,
             text: transcript,
             confidence: confidence,
             language: this.language,
-            method: 'browser_stt'
+            method: "browser_stt",
           });
         }
         resolve();
       };
 
       recognition.onerror = (event) => {
-        console.error('Browser STT error:', event.error);
+        console.error("Browser STT error:", event.error);
         reject(new Error(`Speech recognition failed: ${event.error}`));
       };
 
       recognition.onend = () => {
-        console.log('Browser STT ended');
+        console.log("Browser STT ended");
       };
 
       // Convert recorded audio blob to audio element and play silently for recognition
-      const audioBlob = new Blob(this.audioChunks, { 
-        type: this.mediaRecorder?.mimeType || 'audio/webm' 
+      const audioBlob = new Blob(this.audioChunks, {
+        type: this.mediaRecorder?.mimeType || "audio/webm",
       });
-      
+
       // Instead of using recorded audio, start a new recognition session
       // This is because browser STT works better with live audio
       recognition.start();
@@ -255,11 +262,11 @@ export class SpeechRecorder {
    */
   async sendToSTTService(audioBlob) {
     const formData = new FormData();
-    formData.append('audio', audioBlob, 'recording.wav');
-    formData.append('language', this.language);
+    formData.append("audio", audioBlob, "recording.wav");
+    formData.append("language", this.language);
 
     const response = await fetch(`${STT_API_BASE}/api/stt`, {
-      method: 'POST',
+      method: "POST",
       body: formData,
     });
 
@@ -279,12 +286,12 @@ export class SpeechRecorder {
     if (this.mediaRecorder && this.isRecording) {
       this.mediaRecorder.stop();
     }
-    
+
     if (this.stream) {
-      this.stream.getTracks().forEach(track => track.stop());
+      this.stream.getTracks().forEach((track) => track.stop());
       this.stream = null;
     }
-    
+
     this.mediaRecorder = null;
     this.audioChunks = [];
     this.isRecording = false;
@@ -294,25 +301,29 @@ export class SpeechRecorder {
 /**
  * Simple STT function for one-time recording
  */
-export const recordAndTranscribe = async (language = 'english', duration = 5000) => {
+export const recordAndTranscribe = async (
+  language = "english",
+  duration = 5000
+) => {
   return new Promise((resolve, reject) => {
     const recorder = new SpeechRecorder();
-    
+
     recorder.onResult = (result) => {
       recorder.cleanup();
       resolve(result);
     };
-    
+
     recorder.onError = (error) => {
       recorder.cleanup();
       reject(error);
     };
-    
+
     // Start recording
-    recorder.initialize(language)
+    recorder
+      .initialize(language)
       .then(() => recorder.startRecording())
       .catch(reject);
-    
+
     // Auto-stop after duration
     setTimeout(() => {
       if (recorder.isRecording) {
@@ -328,12 +339,12 @@ export const recordAndTranscribe = async (language = 'english', duration = 5000)
 export const checkSTTService = async () => {
   try {
     const response = await fetch(`${STT_API_BASE}/health`, {
-      method: 'GET',
+      method: "GET",
       timeout: 5000,
     });
     return response.ok;
   } catch (error) {
-    console.warn('STT service health check failed:', error.message);
+    console.warn("STT service health check failed:", error.message);
     return false;
   }
 };
@@ -349,9 +360,24 @@ export const getSTTSupportedLanguages = async () => {
       return data.supported_languages || [];
     }
   } catch (error) {
-    console.warn('Failed to get STT supported languages:', error.message);
+    console.warn("Failed to get STT supported languages:", error.message);
   }
-  
+
   // Fallback list
-  return ['english', 'sinhala', 'tamil', 'hindi', 'chinese', 'japanese', 'korean', 'french', 'german', 'spanish', 'italian', 'portuguese', 'russian', 'arabic'];
+  return [
+    "english",
+    "sinhala",
+    "tamil",
+    "hindi",
+    "chinese",
+    "japanese",
+    "korean",
+    "french",
+    "german",
+    "spanish",
+    "italian",
+    "portuguese",
+    "russian",
+    "arabic",
+  ];
 };
