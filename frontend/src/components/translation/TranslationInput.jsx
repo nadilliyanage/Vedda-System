@@ -1,6 +1,7 @@
 import { HiVolumeUp, HiMicrophone, HiCamera, HiX } from "react-icons/hi";
 import { LANGUAGES } from "../../constants/languages";
 import { generateSpeech } from "../../utils/ttsUtils";
+import SpeechInput from "../speech/SpeechInput";
 
 const TranslationInput = ({
   inputText,
@@ -34,6 +35,24 @@ const TranslationInput = ({
       console.error("TTS failed:", error.message);
       // You could add a toast notification here in the future
     }
+  };
+
+  // Speech-to-Text functionality
+  const handleSpeechTranscription = (transcribedText, result) => {
+    if (transcribedText.trim()) {
+      // If there's existing text, append with a space
+      const newText = inputText.trim() 
+        ? `${inputText.trim()} ${transcribedText.trim()}`
+        : transcribedText.trim();
+      
+      onInputChange(newText);
+      console.log('Speech transcribed:', transcribedText, 'Method:', result.method);
+    }
+  };
+
+  const handleSpeechError = (error) => {
+    console.error('Speech recognition error:', error.message);
+    // You could add a toast notification here in the future
   };
 
   return (
@@ -103,12 +122,13 @@ const TranslationInput = ({
           >
             <HiVolumeUp className="w-5 h-5" />
           </button>
-          <button
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
-            disabled
-          >
-            <HiMicrophone className="w-5 h-5" />
-          </button>
+          
+          <SpeechInput
+            language={sourceLanguage}
+            onTranscription={handleSpeechTranscription}
+            onError={handleSpeechError}
+            className="relative"
+          />
           <button
             className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
             disabled

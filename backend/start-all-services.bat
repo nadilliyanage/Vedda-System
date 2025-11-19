@@ -41,9 +41,9 @@ echo Starting Learn Service on port 5006...
 start "Learn Service" cmd /k "cd /d "%~dp0learn-service" && python app.py"
 timeout /t 3 /nobreak >nul
 
-REM Start TTS/Speech Service (Port 5007)
-echo Starting TTS/Speech Service on port 5007...
-start "TTS Service" cmd /k "cd /d "%~dp0speech-service" && pip install -r requirements.txt && python app.py"
+REM Start Speech Service (Port 5007)
+echo Starting Speech Service on port 5007...
+start "Speech Service" cmd /k "cd /d "%~dp0speech-service" && pip install -r requirements.txt && python app.py"
 timeout /t 3 /nobreak >nul
 
 REM Start Artifact Service (Port 5010)
