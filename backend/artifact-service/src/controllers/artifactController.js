@@ -86,7 +86,13 @@ exports.getAllArtifacts = async (req, res) => {
     if (category) filter.category = category;
     if (status) filter.status = status;
     if (search) {
-      filter.$text = { $search: search };
+      // Use regex for partial matching on name, description, and tags
+      filter.$or = [
+        { name: { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+        { tags: { $regex: search, $options: 'i' } },
+        { location: { $regex: search, $options: 'i' } }
+      ];
     }
 
     const skip = (page - 1) * limit;
