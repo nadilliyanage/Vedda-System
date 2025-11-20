@@ -1,10 +1,17 @@
 import json
 import os
-from datetime import datetime
+import csv
+import io
+import logging
+from datetime import datetime, timezone
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from pymongo import MongoClient
 from bson import ObjectId
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 CORS(app)
@@ -297,8 +304,49 @@ def get_word_types():
         types = dictionary_service.get_word_types()
         return jsonify({
             'success': True,
-            'types': types
+            'word_types': types
         })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/dictionary/all', methods=['GET'])
+def get_all_words():
+    """Get all dictionary words with pagination"""
+    try:
+        limit = int(request.args.get('limit', 100))
+        offset = int(request.args.get('offset', 0))
+        
+        # Get all words from MongoDB with pagination
+        cursor = dictionary_service.db.dictionary.find({}).skip(offset).limit(limit)
+        results = []
+        
+        for doc in cursor:
+            results.append({
+                'id': str(doc['_id']),
+                'vedda_word': doc.get('vedda_word', ''),
+                'sinhala_word': doc.get('sinhala_word', ''),
+                'english_word': doc.get('english_word', ''),
+                'vedda_ipa': doc.get('vedda_ipa', ''),
+                'sinhala_ipa': doc.get('sinhala_ipa', ''),
+                'english_ipa': doc.get('english_ipa', ''),
+                'word_type': doc.get('word_type', ''),
+                'usage_example': doc.get('usage_example', ''),
+                'confidence_score': doc.get('confidence_score', 0.95),
+                'frequency_score': doc.get('frequency_score', 1.0)
+            })
+        
+        # Get total count
+        total_count = dictionary_service.db.dictionary.count_documents({})
+        
+        return jsonify({
+            'success': True,
+            'results': results,
+            'count': len(results),
+            'total_count': total_count,
+            'limit': limit,
+            'offset': offset
+        })
+        
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -324,6 +372,232 @@ def get_dictionary_stats():
                 'type_breakdown': [{'type': item['_id'], 'count': item['count']} 
                                  for item in type_breakdown if item['_id']]
             }
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/dictionary/<word_id>', methods=['PUT'])
+def update_word(word_id):
+    """Update a dictionary word"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+        
+        # Validate ObjectId
+        from bson import ObjectId
+        try:
+            object_id = ObjectId(word_id)
+        except:
+            return jsonify({'error': 'Invalid word ID'}), 400
+        
+        # Update word in database
+        update_data = {}
+        for field in ['vedda_word', 'sinhala_word', 'english_word', 'vedda_ipa', 
+                     'sinhala_ipa', 'english_ipa', 'word_type', 'usage_example']:
+            if field in data:
+                update_data[field] = data[field]
+        
+        if not update_data:
+            return jsonify({'error': 'No valid fields to update'}), 400
+        
+        update_data['last_updated'] = datetime.now(timezone.utc)
+        
+        result = dictionary_service.db.dictionary.update_one(
+            {'_id': object_id}, 
+            {'$set': update_data}
+        )
+        
+        if result.matched_count == 0:
+            return jsonify({'error': 'Word not found'}), 404
+        
+        return jsonify({
+            'success': True,
+            'message': 'Word updated successfully',
+            'id': word_id
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/dictionary/<word_id>', methods=['DELETE'])
+def delete_word(word_id):
+    """Delete a dictionary word"""
+    try:
+        # Validate ObjectId
+        from bson import ObjectId
+        try:
+            object_id = ObjectId(word_id)
+        except:
+            return jsonify({'error': 'Invalid word ID'}), 400
+        
+        # Delete word from database
+        result = dictionary_service.db.dictionary.delete_one({'_id': object_id})
+        
+        if result.deleted_count == 0:
+            return jsonify({'error': 'Word not found'}), 404
+        
+        return jsonify({
+            'success': True,
+            'message': 'Word deleted successfully',
+            'id': word_id
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/dictionary/upload-csv', methods=['POST'])
+def upload_csv():
+    """Upload CSV or XLSX file with dictionary words"""
+    import io
+    import csv
+    import pandas as pd
+    
+    try:
+        if 'csv_file' not in request.files:
+            return jsonify({'error': 'No file provided'}), 400
+        
+        file = request.files['csv_file']
+        if file.filename == '':
+            return jsonify({'error': 'No file selected'}), 400
+        
+        # Check file extension
+        filename_lower = file.filename.lower()
+        if not (filename_lower.endswith('.csv') or filename_lower.endswith('.xlsx')):
+            return jsonify({'error': 'File must be CSV or XLSX format'}), 400
+        
+        is_xlsx = filename_lower.endswith('.xlsx')
+        
+        # Read and parse file content (CSV or XLSX)
+        try:
+            file.seek(0)
+            
+            if is_xlsx:
+                # Handle XLSX files using pandas
+                logger.info("Processing XLSX file")
+                df = pd.read_excel(file, engine='openpyxl')
+                
+                # Convert DataFrame to list of dictionaries
+                records = df.to_dict('records')
+                fieldnames = list(df.columns)
+                
+                logger.info(f"XLSX file loaded: {len(records)} rows, columns: {fieldnames}")
+                
+            else:
+                # Handle CSV files with proper UTF-8 handling for Sinhala characters
+                raw_content = file.read()
+                
+                # Try different encodings to properly handle Sinhala/Unicode
+                content = None
+                encoding_used = None
+                
+                for encoding in ['utf-8-sig', 'utf-8', 'utf-16', 'cp1252']:
+                    try:
+                        content = raw_content.decode(encoding)
+                        encoding_used = encoding
+                        logger.info(f"Successfully decoded CSV with {encoding} encoding")
+                        break
+                    except UnicodeDecodeError:
+                        continue
+                
+                if content is None:
+                    logger.error("Failed to decode CSV with any supported encoding")
+                    return jsonify({'error': 'Unable to decode CSV file. Please save as UTF-8 encoding.'}), 400
+                
+                # Parse CSV content
+                stream = io.StringIO(content)
+                csv_reader = csv.DictReader(stream)
+                records = list(csv_reader)
+                fieldnames = csv_reader.fieldnames
+                
+                logger.info(f"CSV file loaded: {len(records)} rows, columns: {fieldnames}")
+            
+            # Check if we have data
+            if not fieldnames or not records:
+                return jsonify({'error': 'File appears to be empty or invalid'}), 400
+                
+        except Exception as e:
+            logger.error(f"Error reading file: {str(e)}")
+            return jsonify({'error': f'Error reading file: {str(e)}'}), 400
+        
+        added_count = 0
+        errors = []
+        
+        # Expected columns
+        required_columns = ['vedda_word']
+        optional_columns = ['sinhala_word', 'english_word', 'vedda_ipa', 'sinhala_ipa', 'english_ipa', 'word_type', 'usage_example']
+        
+        for row_num, row in enumerate(records, start=2):  # Start from 2 to account for header
+            try:
+                # Helper function to safely get string values (handles pandas NaN)
+                def safe_get_string(row, key):
+                    value = row.get(key, '')
+                    if pd.isna(value):
+                        return ''
+                    return str(value).strip()
+                
+                # Check required columns
+                vedda_word = safe_get_string(row, 'vedda_word')
+                if not vedda_word:
+                    errors.append(f"Row {row_num}: vedda_word is required")
+                    continue
+                
+                # Get all fields and ensure proper Unicode handling
+                sinhala_word = safe_get_string(row, 'sinhala_word')
+                english_word = safe_get_string(row, 'english_word')
+                
+                # Log the Unicode content for debugging (with character codes)
+                logger.info(f"Processing row {row_num}:")
+                logger.info(f"  vedda_word: '{vedda_word}' (unicode: {[ord(c) for c in vedda_word[:10]]})")
+                logger.info(f"  sinhala_word: '{sinhala_word}' (unicode: {[ord(c) for c in sinhala_word[:10]]})")
+                logger.info(f"  english_word: '{english_word}'")
+                
+                # Check if word already exists
+                existing = dictionary_service.db.dictionary.find_one({
+                    'vedda_word': vedda_word
+                })
+                
+                if existing:
+                    errors.append(f"Row {row_num}: Word '{vedda_word}' already exists")
+                    continue
+                
+                # Prepare word document with explicit Unicode strings
+                word_doc = {
+                    'vedda_word': vedda_word,
+                    'english_word': english_word,
+                    'sinhala_word': sinhala_word,
+                    'vedda_ipa': safe_get_string(row, 'vedda_ipa'),
+                    'sinhala_ipa': safe_get_string(row, 'sinhala_ipa'),
+                    'english_ipa': safe_get_string(row, 'english_ipa'),
+                    'word_type': safe_get_string(row, 'word_type'),
+                    'usage_example': safe_get_string(row, 'usage_example'),
+                    'frequency_score': 1.0,
+                    'confidence_score': 0.95,
+                    'source': 'xlsx_upload' if is_xlsx else 'csv_upload',
+                    'created_at': datetime.utcnow(),
+                    'last_updated': datetime.utcnow()
+                }
+                
+                # Log what we're about to insert
+                logger.info(f"Inserting document: vedda='{word_doc['vedda_word']}', sinhala='{word_doc['sinhala_word']}'")
+                
+                # Insert word
+                result = dictionary_service.db.dictionary.insert_one(word_doc)
+                logger.info(f"Inserted with ID: {result.inserted_id}")
+                added_count += 1
+                
+            except Exception as e:
+                errors.append(f"Row {row_num}: {str(e)}")
+        
+        # Reload dictionary
+        dictionary_service.dictionary = dictionary_service.load_dictionary()
+        
+        return jsonify({
+            'success': True,
+            'added_count': added_count,
+            'errors': errors,
+            'message': f'Successfully added {added_count} words'
         })
         
     except Exception as e:

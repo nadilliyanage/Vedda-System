@@ -57,9 +57,9 @@ backend/
 ├── api-gateway/ (✅ Active)
 ├── auth-service/ (✅ Active)
 ├── dictionary-service/
-│   └── app_mongo.py (✅ MongoDB version - KEEP)
+│
 ├── history-service/
-│   └── app_mongo.py (✅ MongoDB version - KEEP)
+│
 ├── learn-service/ (✅ Active)
 ├── speech-service/ (✅ Active)
 ├── translator-service/ (✅ Active)

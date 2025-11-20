@@ -14,13 +14,13 @@ echo Starting services in order...
 
 echo Starting Dictionary Service (MongoDB) on port 5002...
 cd "%~dp0dictionary-service"
-start "Dictionary Service" python app_mongo.py
+start "Dictionary Service" python app.py
 cd ..
 timeout /t 2 > nul
 
 echo Starting History Service (MongoDB) on port 5003...
 cd "%~dp0history-service"
-start "History Service" python app_mongo.py
+start "History Service" python app.py
 cd ..
 timeout /t 2 > nul
 
