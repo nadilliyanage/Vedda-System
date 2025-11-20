@@ -23,6 +23,10 @@ match_challenges = [
         "timeLimitSec": 60
     },
     {
+        "id": "mp2",
+        "type": "match_pairs",
+        "prompt": "Match the Vedda numbers with their English translations",
+        "pairs": [
             {"left": "එක (eka)", "right": "one"},
             {"left": "දෙක (deka)", "right": "two"},
             {"left": "තුන (thuna)", "right": "three"},
