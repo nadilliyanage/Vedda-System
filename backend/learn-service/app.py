@@ -208,6 +208,98 @@ def submit_challenge():
     return jsonify(result)
 
 
+# Admin CRUD endpoints
+@app.route("/api/learn/admin/challenges", methods=["GET"])
+def admin_list_challenges():
+    """Get all challenges including answers (for admin)"""
+    ctype = request.args.get("type")
+    query = {"type": ctype} if ctype else {}
+    challenges = list(challenges_collection.find(query))
+    # Return full challenge data including answers for admin
+    return jsonify([{k: v for k, v in c.items() if k != "_id"} for c in challenges])
+
+
+@app.route("/api/learn/admin/challenges", methods=["POST"])
+def admin_create_challenge():
+    """Create a new challenge"""
+    data = request.get_json() or {}
+    
+    # Validate required fields
+    if not data.get("id"):
+        return jsonify({"success": False, "error": "Challenge ID is required"}), 400
+    if not data.get("type"):
+        return jsonify({"success": False, "error": "Challenge type is required"}), 400
+    if not data.get("prompt"):
+        return jsonify({"success": False, "error": "Prompt is required"}), 400
+    
+    # Check if ID already exists
+    if challenges_collection.find_one({"id": data["id"]}):
+        return jsonify({"success": False, "error": "Challenge ID already exists"}), 400
+    
+    # Validate type-specific fields
+    if data["type"] == "fill_blank":
+        if not data.get("answers") or not isinstance(data["answers"], list):
+            return jsonify({"success": False, "error": "Answers array is required for fill_blank"}), 400
+    elif data["type"] == "multiple_choice":
+        if not data.get("options") or not isinstance(data["options"], list):
+            return jsonify({"success": False, "error": "Options array is required for multiple_choice"}), 400
+        if not data.get("correct") or not isinstance(data["correct"], list):
+            return jsonify({"success": False, "error": "Correct answers array is required for multiple_choice"}), 400
+    elif data["type"] == "match_pairs":
+        if not data.get("pairs") or not isinstance(data["pairs"], list):
+            return jsonify({"success": False, "error": "Pairs array is required for match_pairs"}), 400
+    
+    # Insert challenge
+    challenges_collection.insert_one(data)
+    return jsonify({"success": True, "message": "Challenge created successfully", "id": data["id"]})
+
+
+@app.route("/api/learn/admin/challenges/<challenge_id>", methods=["GET"])
+def admin_get_challenge(challenge_id):
+    """Get a single challenge by ID (for admin)"""
+    challenge = challenges_collection.find_one({"id": challenge_id})
+    if not challenge:
+        return jsonify({"error": "Challenge not found"}), 404
+    return jsonify({k: v for k, v in challenge.items() if k != "_id"})
+
+
+@app.route("/api/learn/admin/challenges/<challenge_id>", methods=["PUT"])
+def admin_update_challenge(challenge_id):
+    """Update an existing challenge"""
+    data = request.get_json() or {}
+    
+    # Check if challenge exists
+    existing = challenges_collection.find_one({"id": challenge_id})
+    if not existing:
+        return jsonify({"success": False, "error": "Challenge not found"}), 404
+    
+    # Don't allow changing the ID
+    if "id" in data and data["id"] != challenge_id:
+        return jsonify({"success": False, "error": "Cannot change challenge ID"}), 400
+    
+    # Update challenge
+    result = challenges_collection.update_one(
+        {"id": challenge_id},
+        {"$set": data}
+    )
+    
+    if result.modified_count > 0:
+        return jsonify({"success": True, "message": "Challenge updated successfully"})
+    else:
+        return jsonify({"success": True, "message": "No changes made"})
+
+
+@app.route("/api/learn/admin/challenges/<challenge_id>", methods=["DELETE"])
+def admin_delete_challenge(challenge_id):
+    """Delete a challenge"""
+    result = challenges_collection.delete_one({"id": challenge_id})
+    
+    if result.deleted_count > 0:
+        return jsonify({"success": True, "message": "Challenge deleted successfully"})
+    else:
+        return jsonify({"success": False, "error": "Challenge not found"}), 404
+
+
 if __name__ == "__main__":
     print(f"Starting Learn Service on port {PORT}...")
     app.run(host="0.0.0.0", port=PORT, debug=True)
