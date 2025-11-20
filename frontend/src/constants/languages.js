@@ -27,9 +27,6 @@ export const LANGUAGES = [
 
 export const EXAMPLE_PHRASES = [
   { vedda: "මේ කැකුලෝ", english: "these children" },
-  { vedda: "අම්මා ගෙදර", english: "mother at home" },
-  { vedda: "වතුර පිරිසිදු", english: "water is clean" },
-  { vedda: "යන්න", english: "go" },
 ];
 
 export const API_BASE_URL =

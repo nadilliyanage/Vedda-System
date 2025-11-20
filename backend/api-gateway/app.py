@@ -26,6 +26,14 @@ SERVICES = {
     'history': {
         'url': 'http://localhost:5003',
         'health': '/health'
+    },
+    'speech': {
+        'url': 'http://localhost:5007',
+        'health': '/health'
+    },
+    'auth': {
+        'url': 'http://localhost:5005',
+        'health': '/health'
     }
 }
 
@@ -38,14 +46,17 @@ ROUTE_MAPPINGS = {
     '/api/dictionary/search': 'dictionary',
     '/api/dictionary/add': 'dictionary',
     '/api/history': 'history',
-    '/api/feedback': 'history'
+    '/api/feedback': 'history',
+    '/api/tts': 'speech',
+    '/api/stt': 'speech',
+    '/api/auth': 'auth'
 }
 
 def get_service_url(service_name):
     """Get the base URL for a service"""
     return SERVICES.get(service_name, {}).get('url', '')
 
-def forward_request(service_name, path, method='GET', data=None, params=None):
+def forward_request(service_name, path, method='GET', data=None, params=None, files=None):
     """Forward request to appropriate microservice"""
     try:
         service_url = get_service_url(service_name)
@@ -58,7 +69,11 @@ def forward_request(service_name, path, method='GET', data=None, params=None):
         if method == 'GET':
             response = requests.get(url, params=params, timeout=30)
         elif method == 'POST':
-            response = requests.post(url, json=data, params=params, timeout=30)
+            # Handle file uploads for STT service
+            if files:
+                response = requests.post(url, files=files, data=data, params=params, timeout=30)
+            else:
+                response = requests.post(url, json=data, params=params, timeout=30)
         elif method == 'PUT':
             response = requests.put(url, json=data, params=params, timeout=30)
         elif method == 'DELETE':
@@ -66,7 +81,12 @@ def forward_request(service_name, path, method='GET', data=None, params=None):
         else:
             return jsonify({'error': 'Method not allowed'}), 405
         
-        return jsonify(response.json()), response.status_code
+        # Handle different response types
+        if response.headers.get('content-type', '').startswith('audio/'):
+            # Return audio files directly
+            return response.content, response.status_code, response.headers.items()
+        else:
+            return jsonify(response.json()), response.status_code
         
     except requests.exceptions.RequestException as e:
         return jsonify({'error': f'Service unavailable: {str(e)}'}), 503
@@ -118,13 +138,23 @@ def api_gateway(path):
     
     # Get request data
     data = None
+    files = None
+    
     if request.method in ['POST', 'PUT']:
-        data = request.get_json()
+        # Handle file uploads for STT endpoint
+        if full_path == '/api/stt' and request.files:
+            files = {}
+            for key, file in request.files.items():
+                files[key] = (file.filename, file.stream, file.content_type)
+            # Get form data for STT
+            data = request.form.to_dict()
+        else:
+            data = request.get_json()
     
     params = request.args.to_dict()
     
     # Forward the request
-    return forward_request(service_name, full_path, request.method, data, params)
+    return forward_request(service_name, full_path, request.method, data, params, files)
 
 @app.errorhandler(404)
 def not_found(error):
