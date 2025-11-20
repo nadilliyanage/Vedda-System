@@ -6,36 +6,49 @@ import {
   HiBookOpen,
   HiCollection
 } from 'react-icons/hi';
+import { useAuth } from '../../contexts/AuthContext';
 
 const AdminSidebar = () => {
   const location = useLocation();
+  const { user } = useAuth();
 
   const menuItems = [
     {
       path: '/admin',
       icon: HiHome,
       label: 'Dashboard',
-      exact: true
+      exact: true,
+      roles: ['admin', 'elder']
     },
     {
       path: '/admin/users',
       icon: HiUsers,
-      label: 'User Management'
+      label: 'User Management',
+      roles: ['admin']
     },
     {
       path: '/admin/words',
       icon: HiBookOpen,
-      label: 'Word Management'
+      label: 'Word Management',
+      roles: ['admin', 'elder']
+    },
+    {
+      path: '/admin/lernings',
+      icon: HiBookOpen,
+      label: 'Lerning Management',
+      roles: ['admin', 'elder']
     },
     {
       path: '/admin/artifacts',
       icon: HiCollection,
-      label: 'Artifact Management'
+      label: 'Artifact Management',
+      roles: ['admin', 'elder']
     },
     {
       path: '/admin/settings',
       icon: HiCog,
-      label: 'Settings'
+      label: 'Settings',
+      roles: ['admin']
     }
   ];
 
@@ -52,11 +65,13 @@ const AdminSidebar = () => {
         <h2 className="text-lg font-semibold text-gray-800 mb-6">Admin Panel</h2>
         
         <nav className="space-y-2">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item);
-            
-            return (
+          {menuItems
+            .filter(item => item.roles.includes(user?.role))
+            .map((item) => {
+              const Icon = item.icon;
+              const active = isActive(item);
+              
+              return (
               <Link
                 key={item.path}
                 to={item.path}

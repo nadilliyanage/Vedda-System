@@ -6,10 +6,12 @@ import { SERVICE_URLS } from "../constants/languages";
 
 const QuizPage = () => {
   const navigate = useNavigate();
+  const [selectedType, setSelectedType] = useState("fill_blank");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [challenge, setChallenge] = useState(null);
   const [answer, setAnswer] = useState("");
+  const [pairs, setPairs] = useState({});
   const [result, setResult] = useState(null);
 
   const fetchNext = async () => {
@@ -17,8 +19,9 @@ const QuizPage = () => {
     setError("");
     setResult(null);
     setAnswer("");
+    setPairs({});
     try {
-      const res = await axios.get(`${SERVICE_URLS.TRANSLATOR}/api/learn/next-challenge`, { params: { type: 'fill_blank' } });
+      const res = await axios.get(`${SERVICE_URLS.TRANSLATOR}/api/learn/next-challenge`, { params: { type: selectedType } });
       setChallenge(res.data);
     } catch (e) {
       setError("Failed to load challenge");
@@ -32,10 +35,15 @@ const QuizPage = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.post(`${SERVICE_URLS.TRANSLATOR}/api/learn/submit`, {
-        challengeId: challenge.id,
-        answer: answer
-      });
+      let payload = { challengeId: challenge.id };
+      if (challenge.type === "fill_blank") {
+        payload.answer = answer;
+      } else if (challenge.type === "multiple_choice") {
+        payload.selectedOption = answer;
+      } else if (challenge.type === "match_pairs") {
+        payload.answer = pairs;
+      }
+      const res = await axios.post(`${SERVICE_URLS.TRANSLATOR}/api/learn/submit`, payload);
       setResult(res.data);
     } catch (e) {
       setError("Submission failed");
@@ -47,7 +55,7 @@ const QuizPage = () => {
   useEffect(() => {
     fetchNext();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [selectedType]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-green-100">
@@ -71,7 +79,41 @@ const QuizPage = () => {
           <div className="bg-white rounded-2xl shadow-lg p-12">
             <FaBookOpen className="text-6xl text-green-600 mx-auto mb-6" />
             <h1 className="text-4xl font-bold text-gray-800 mb-2">Word Learning Quiz</h1>
-            <p className="text-lg text-gray-600 mb-8">Fill the blank by typing the correct English word.</p>
+            <p className="text-lg text-gray-600 mb-4">Practice Vedda vocabulary with different challenge types.</p>
+            
+            {/* Challenge Type Selector */}
+            <div className="flex gap-3 justify-center mb-8">
+              <button
+                onClick={() => setSelectedType("fill_blank")}
+                className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+                  selectedType === "fill_blank"
+                    ? "bg-green-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                Fill in the Blank
+              </button>
+              <button
+                onClick={() => setSelectedType("multiple_choice")}
+                className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+                  selectedType === "multiple_choice"
+                    ? "bg-green-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                Multiple Choice
+              </button>
+              <button
+                onClick={() => setSelectedType("match_pairs")}
+                className={`px-6 py-2 rounded-lg font-medium transition-colors ${
+                  selectedType === "match_pairs"
+                    ? "bg-green-600 text-white"
+                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                }`}
+              >
+                Match Pairs
+              </button>
+            </div>
 
             {error && (
               <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded mb-4 text-red-700">{error}</div>
@@ -94,19 +136,78 @@ const QuizPage = () => {
               {!loading && challenge && (
                 <div>
                   <div className="text-xl font-medium text-gray-800 mb-4">{challenge.prompt}</div>
-                  <input
-                    type="text"
-                    value={answer}
-                    onChange={(e) => setAnswer(e.target.value)}
-                    disabled={!!result}
-                    className="w-full border rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-400"
-                    placeholder="Type your answer"
-                  />
+                  
+                  {/* Fill in the Blank */}
+                  {challenge.type === "fill_blank" && (
+                    <input
+                      type="text"
+                      value={answer}
+                      onChange={(e) => setAnswer(e.target.value)}
+                      disabled={!!result}
+                      className="w-full border rounded-lg px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-green-400"
+                      placeholder="Type your answer"
+                    />
+                  )}
+                  
+                  {/* Multiple Choice */}
+                  {challenge.type === "multiple_choice" && challenge.options && (
+                    <div className="space-y-3">
+                      {challenge.options.map((option) => (
+                        <button
+                          key={option.id}
+                          onClick={() => setAnswer(option.id)}
+                          disabled={!!result}
+                          className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-colors ${
+                            answer === option.id
+                              ? "border-green-500 bg-green-50"
+                              : "border-gray-300 hover:border-green-300"
+                          } disabled:opacity-60 disabled:cursor-not-allowed`}
+                        >
+                          <span className="font-semibold mr-2">{option.id}.</span>
+                          {option.text}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {/* Match Pairs */}
+                  {challenge.type === "match_pairs" && challenge.pairs && challenge.rightOptions && (
+                    <div className="space-y-4">
+                      {challenge.pairs.map((pair, idx) => (
+                        <div key={idx} className="space-y-2">
+                          <div className="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 text-gray-800 font-medium">
+                            {pair.left}
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            {challenge.rightOptions.map((option, optIdx) => (
+                              <button
+                                key={optIdx}
+                                onClick={() => setPairs({ ...pairs, [pair.left]: option })}
+                                disabled={!!result}
+                                className={`px-4 py-2 rounded-lg border-2 transition-colors text-left ${
+                                  pairs[pair.left] === option
+                                    ? "border-green-500 bg-green-50 font-medium"
+                                    : "border-gray-300 hover:border-green-300 bg-white"
+                                } disabled:opacity-60 disabled:cursor-not-allowed`}
+                              >
+                                {option}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
                   <div className="mt-6 flex gap-3 justify-center">
                     {!result ? (
                       <button
                         onClick={submit}
-                        disabled={loading || !answer.trim()}
+                        disabled={loading || (
+                          (challenge.type === "fill_blank" && !answer.trim()) ||
+                          (challenge.type === "multiple_choice" && !answer) ||
+                          (challenge.type === "match_pairs" && Object.keys(pairs).length === 0)
+                        )}
                         className="px-6 py-3 rounded-lg bg-green-600 text-white hover:bg-green-700 disabled:opacity-50"
                       >
                         Submit
