@@ -8,7 +8,7 @@ const AdminLayout = () => {
   const navigate = useNavigate();
   const { user, isAuthenticated, loading: authLoading } = useAuth();
 
-  // Check if user is admin
+  // Check if user is admin or elder
   useEffect(() => {
     // Wait for auth to finish loading
     if (authLoading) {
@@ -20,7 +20,7 @@ const AdminLayout = () => {
       return;
     }
     
-    if (user?.role !== 'admin') {
+    if (user?.role !== 'admin' && user?.role !== 'elder') {
       navigate('/');
       return;
     }
@@ -35,8 +35,8 @@ const AdminLayout = () => {
     );
   }
 
-  // Only render if user is admin
-  if (!user || user.role !== 'admin') {
+  // Only render if user is admin or elder
+  if (!user || (user.role !== 'admin' && user.role !== 'elder')) {
     return null;
   }
 

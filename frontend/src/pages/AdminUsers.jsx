@@ -27,9 +27,14 @@ const AdminUsers = () => {
       }
     };
 
-    if (user?.role === 'admin') {
-      fetchUsers();
+    // Only admins can access user management
+    if (user?.role !== 'admin') {
+      setError('Access denied. Admin only.');
+      setLoading(false);
+      return;
     }
+
+    fetchUsers();
   }, [user]);
 
   const handleRoleChange = async (userId, newRole) => {
