@@ -33,6 +33,12 @@ const AdminSidebar = () => {
       roles: ['admin', 'elder']
     },
     {
+      path: '/admin/lernings',
+      icon: HiBookOpen,
+      label: 'Lerning Management',
+      roles: ['admin', 'elder']
+    },
+    {
       path: '/admin/artifacts',
       icon: HiCollection,
       label: 'Artifact Management',
