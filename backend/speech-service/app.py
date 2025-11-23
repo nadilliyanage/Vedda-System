@@ -9,6 +9,11 @@ from datetime import datetime
 import logging
 import io
 import wave
+from dotenv import load_dotenv
+from vedda_stt_processor import VeddaSTTProcessor
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)

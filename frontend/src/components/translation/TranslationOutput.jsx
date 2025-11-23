@@ -53,6 +53,8 @@ const TranslationOutput = ({
       case "english_to_vedda_direct":
       case "vedda_direct":
         return "bg-green-100 text-green-800 border-green-200";
+      case "phrase_match":
+        return "bg-teal-100 text-teal-800 border-teal-200";
       case "fallback":
       case "english_to_sinhala_fallback":
       case "bridge_via_english":
@@ -82,6 +84,8 @@ const TranslationOutput = ({
         return "Google Translator";
       case "dictionary":
         return "Vedda Dictionary";
+      case "phrase_match":
+        return "Phrase Match";
       case "fallback":
         return "Fallback Translation";
       case "sinhala_bridge":

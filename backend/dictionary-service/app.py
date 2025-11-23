@@ -1,273 +1,629 @@
 import json
 import os
-import sqlite3
-from datetime import datetime
-
+import csv
+import io
+import logging
+from datetime import datetime, timezone
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from pymongo import MongoClient
+from bson import ObjectId
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 CORS(app)
 
-# Database setup
-DATABASE = os.path.join('..', '..', 'data', 'vedda_translator.db')
-
-def init_db():
-    """Initialize the database with dictionary table"""
-    conn = sqlite3.connect(DATABASE)
-    cursor = conn.cursor()
-    
-    # Dictionary table for word mappings
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS dictionary (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            vedda_word TEXT NOT NULL,
-            sinhala_word TEXT,
-            english_word TEXT,
-            vedda_ipa TEXT,
-            sinhala_ipa TEXT,
-            english_ipa TEXT,
-            word_type TEXT,
-            usage_example TEXT,
-            frequency_score REAL DEFAULT 1.0,
-            confidence_score REAL DEFAULT 0.95,
-            last_updated TIMESTAMP,
-            source TEXT DEFAULT 'manual',
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-    ''')
-    
-    conn.commit()
-    conn.close()
+# MongoDB setup
+MONGODB_URI = os.getenv('MONGODB_URI', 'mongodb+srv://heshan:3UAXaHwpIRwEqK8K@cluster0.quemmhk.mongodb.net/vedda-system?retryWrites=true&w=majority&appName=Cluster0')
+DATABASE_NAME = 'vedda-system'
 
 class DictionaryService:
     def __init__(self):
+        self.client = MongoClient(MONGODB_URI)
+        self.db = self.client[DATABASE_NAME]
         self.dictionary = self.load_dictionary()
     
     def load_dictionary(self):
-        """Load dictionary from database with reverse lookup support"""
-        conn = sqlite3.connect(DATABASE)
-        cursor = conn.cursor()
-        cursor.execute('SELECT vedda_word, sinhala_word, english_word, vedda_ipa, sinhala_ipa, english_ipa FROM dictionary')
-        rows = cursor.fetchall()
-        conn.close()
-        
-        dictionary = {}
-        english_to_vedda = {}
-        english_to_sinhala = {}
-        sinhala_to_vedda = {}
-        
-        for row in rows:
-            vedda, sinhala, english, vedda_ipa, sinhala_ipa, english_ipa = row
-            
-            # Vedda word as key (original dictionary)
-            dictionary[vedda.lower()] = {
-                'sinhala': sinhala,
-                'english': english,
-                'vedda_ipa': vedda_ipa,
-                'sinhala_ipa': sinhala_ipa,
-                'english_ipa': english_ipa
+        """Load dictionary from MongoDB with reverse lookup support"""
+        try:
+            dictionary = {
+                'vedda_to_english': {},
+                'english_to_vedda': {},
+                'vedda_to_sinhala': {},
+                'sinhala_to_vedda': {},
+                'all_words': []
             }
             
-            # English word as key (reverse lookup)
-            if english:
-                english_to_vedda[english.lower()] = {
-                    'vedda': vedda,
-                    'sinhala': sinhala,
-                    'vedda_ipa': vedda_ipa,
-                    'sinhala_ipa': sinhala_ipa,
-                    'english_ipa': english_ipa
-                }
-                english_to_sinhala[english.lower()] = {
-                    'sinhala': sinhala,
-                    'sinhala_ipa': sinhala_ipa
-                }
+            # Load all dictionary entries
+            cursor = self.db.dictionary.find({})
             
-            # Sinhala word as key (reverse lookup for Sinhala to Vedda)
-            if sinhala:
-                sinhala_to_vedda[sinhala.lower()] = {
-                    'vedda': vedda,
-                    'english': english,
-                    'vedda_ipa': vedda_ipa,
-                    'sinhala_ipa': sinhala_ipa,
-                    'english_ipa': english_ipa
+            for doc in cursor:
+                vedda_word = doc.get('vedda_word', '').strip()
+                english_word = doc.get('english_word', '').strip()
+                sinhala_word = doc.get('sinhala_word', '').strip()
+                
+                if vedda_word and english_word:
+                    # Vedda to English mapping
+                    dictionary['vedda_to_english'][vedda_word.lower()] = english_word
+                    dictionary['english_to_vedda'][english_word.lower()] = vedda_word
+                
+                if vedda_word and sinhala_word:
+                    # Vedda to Sinhala mapping
+                    dictionary['vedda_to_sinhala'][vedda_word.lower()] = sinhala_word
+                    dictionary['sinhala_to_vedda'][sinhala_word.lower()] = vedda_word
+                
+                # Add complete word entry
+                word_entry = {
+                    'id': str(doc['_id']),
+                    'vedda_word': vedda_word,
+                    'english_word': english_word,
+                    'sinhala_word': sinhala_word,
+                    'vedda_ipa': doc.get('vedda_ipa', ''),
+                    'sinhala_ipa': doc.get('sinhala_ipa', ''),
+                    'english_ipa': doc.get('english_ipa', ''),
+                    'word_type': doc.get('word_type', ''),
+                    'usage_example': doc.get('usage_example', ''),
+                    'frequency_score': doc.get('frequency_score', 1.0),
+                    'confidence_score': doc.get('confidence_score', 0.95)
                 }
-        
-        return {
-            'vedda_to_others': dictionary,
-            'english_to_vedda': english_to_vedda,
-            'english_to_sinhala': english_to_sinhala,
-            'sinhala_to_vedda': sinhala_to_vedda
-        }
+                dictionary['all_words'].append(word_entry)
+            
+            print(f"📚 Loaded {len(dictionary['all_words'])} dictionary entries from MongoDB")
+            return dictionary
+            
+        except Exception as e:
+            print(f"❌ Error loading dictionary: {e}")
+            return {
+                'vedda_to_english': {},
+                'english_to_vedda': {},
+                'vedda_to_sinhala': {},
+                'sinhala_to_vedda': {},
+                'all_words': []
+            }
     
-    def search_word(self, word, source_lang='vedda', target_lang='english'):
-        """Search for a word in the dictionary"""
-        word_lower = word.lower()
-        
-        if source_lang == 'vedda':
-            return self.dictionary['vedda_to_others'].get(word_lower)
-        elif source_lang == 'english' and target_lang == 'vedda':
-            return self.dictionary['english_to_vedda'].get(word_lower)
-        elif source_lang == 'english' and target_lang == 'sinhala':
-            return self.dictionary['english_to_sinhala'].get(word_lower)
-        elif source_lang == 'sinhala' and target_lang == 'vedda':
-            return self.dictionary['sinhala_to_vedda'].get(word_lower)
-        
-        return None
-    
-    def add_word(self, vedda_word, sinhala_word=None, english_word=None, 
-                 vedda_ipa=None, sinhala_ipa=None, english_ipa=None,
-                 word_type=None, usage_example=None):
-        """Add a new word to the dictionary"""
+    def search_dictionary(self, query, source_language='all', target_language='all', limit=50):
+        """Search dictionary entries"""
         try:
-            conn = sqlite3.connect(DATABASE)
-            cursor = conn.cursor()
+            # Build MongoDB query
+            search_conditions = []
             
-            cursor.execute('''
-                INSERT INTO dictionary 
-                (vedda_word, sinhala_word, english_word, vedda_ipa, sinhala_ipa, english_ipa, word_type, usage_example)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-            ''', (vedda_word, sinhala_word, english_word, vedda_ipa, sinhala_ipa, english_ipa, word_type, usage_example))
+            if source_language == 'vedda':
+                search_conditions.append({'vedda_word': {'$regex': query, '$options': 'i'}})
+            elif source_language == 'english':
+                search_conditions.append({'english_word': {'$regex': query, '$options': 'i'}})
+            elif source_language == 'sinhala':
+                search_conditions.append({'sinhala_word': {'$regex': query, '$options': 'i'}})
+            else:
+                # Search all languages
+                search_conditions.extend([
+                    {'vedda_word': {'$regex': query, '$options': 'i'}},
+                    {'english_word': {'$regex': query, '$options': 'i'}},
+                    {'sinhala_word': {'$regex': query, '$options': 'i'}},
+                    {'usage_example': {'$regex': query, '$options': 'i'}}
+                ])
             
-            conn.commit()
-            word_id = cursor.lastrowid
-            conn.close()
+            query_filter = {'$or': search_conditions} if len(search_conditions) > 1 else search_conditions[0]
+            
+            # Execute search
+            cursor = self.db.dictionary.find(query_filter).limit(limit)
+            results = []
+            
+            for doc in cursor:
+                result = {
+                    'id': str(doc['_id']),
+                    'vedda_word': doc.get('vedda_word', ''),
+                    'english_word': doc.get('english_word', ''),
+                    'sinhala_word': doc.get('sinhala_word', ''),
+                    'vedda_ipa': doc.get('vedda_ipa', ''),
+                    'sinhala_ipa': doc.get('sinhala_ipa', ''),
+                    'english_ipa': doc.get('english_ipa', ''),
+                    'word_type': doc.get('word_type', ''),
+                    'usage_example': doc.get('usage_example', ''),
+                    'frequency_score': doc.get('frequency_score', 1.0),
+                    'confidence_score': doc.get('confidence_score', 0.95)
+                }
+                results.append(result)
+            
+            return results
+            
+        except Exception as e:
+            print(f"❌ Search error: {e}")
+            return []
+    
+    def add_word(self, vedda_word, english_word, sinhala_word='', vedda_ipa='', 
+                sinhala_ipa='', english_ipa='', word_type='', usage_example=''):
+        """Add new word to dictionary"""
+        try:
+            # Check if word already exists
+            existing = self.db.dictionary.find_one({
+                'vedda_word': vedda_word,
+                'english_word': english_word
+            })
+            
+            if existing:
+                return {'success': False, 'error': 'Word already exists'}
+            
+            # Insert new word
+            word_doc = {
+                'vedda_word': vedda_word.strip(),
+                'english_word': english_word.strip(),
+                'sinhala_word': sinhala_word.strip(),
+                'vedda_ipa': vedda_ipa.strip(),
+                'sinhala_ipa': sinhala_ipa.strip(),
+                'english_ipa': english_ipa.strip(),
+                'word_type': word_type.strip(),
+                'usage_example': usage_example.strip(),
+                'frequency_score': 1.0,
+                'confidence_score': 0.95,
+                'source': 'user_input',
+                'created_at': datetime.utcnow(),
+                'last_updated': datetime.utcnow()
+            }
+            
+            result = self.db.dictionary.insert_one(word_doc)
             
             # Reload dictionary
             self.dictionary = self.load_dictionary()
             
-            return word_id
+            return {
+                'success': True,
+                'id': str(result.inserted_id),
+                'message': 'Word added successfully'
+            }
+            
         except Exception as e:
-            return None
+            print(f"❌ Error adding word: {e}")
+            return {'success': False, 'error': str(e)}
     
-    def get_all_words(self, limit=100, offset=0):
-        """Get all words from dictionary with pagination"""
-        conn = sqlite3.connect(DATABASE)
-        cursor = conn.cursor()
-        
-        cursor.execute('''
-            SELECT vedda_word, sinhala_word, english_word, vedda_ipa, sinhala_ipa, english_ipa, word_type, usage_example
-            FROM dictionary 
-            ORDER BY vedda_word 
-            LIMIT ? OFFSET ?
-        ''', (limit, offset))
-        
-        rows = cursor.fetchall()
-        conn.close()
-        
-        words = []
-        for row in rows:
-            words.append({
-                'vedda_word': row[0],
-                'sinhala_word': row[1],
-                'english_word': row[2],
-                'vedda_ipa': row[3],
-                'sinhala_ipa': row[4],
-                'english_ipa': row[5],
-                'word_type': row[6],
-                'usage_example': row[7]
-            })
-        
-        return words
+    def get_random_words(self, count=10, word_type=None):
+        """Get random words for quiz/learning"""
+        try:
+            pipeline = []
+            
+            # Filter by word type if specified
+            if word_type:
+                pipeline.append({'$match': {'word_type': word_type}})
+            
+            # Random sample
+            pipeline.append({'$sample': {'size': count}})
+            
+            cursor = self.db.dictionary.aggregate(pipeline)
+            results = []
+            
+            for doc in cursor:
+                result = {
+                    'id': str(doc['_id']),
+                    'vedda_word': doc.get('vedda_word', ''),
+                    'english_word': doc.get('english_word', ''),
+                    'sinhala_word': doc.get('sinhala_word', ''),
+                    'word_type': doc.get('word_type', ''),
+                    'usage_example': doc.get('usage_example', '')
+                }
+                results.append(result)
+            
+            return results
+            
+        except Exception as e:
+            print(f"❌ Error getting random words: {e}")
+            return []
+    
+    def get_word_types(self):
+        """Get all available word types"""
+        try:
+            word_types = self.db.dictionary.distinct('word_type')
+            return [wt for wt in word_types if wt and wt.strip()]
+        except Exception as e:
+            print(f"❌ Error getting word types: {e}")
+            return []
 
-# Initialize database and service
-init_db()
+# Initialize service
 dictionary_service = DictionaryService()
 
-@app.route('/health', methods=['GET'])
-def health_check():
-    """Health check endpoint"""
-    return jsonify({
-        'status': 'healthy',
-        'service': 'dictionary-service',
-        'timestamp': datetime.now().isoformat(),
-        'dictionary_size': len(dictionary_service.dictionary['vedda_to_others'])
-    })
-
 @app.route('/api/dictionary/search', methods=['GET'])
-def search_word():
-    """Search for a word in the dictionary"""
-    word = request.args.get('word', '').strip()
-    source_lang = request.args.get('source', 'vedda')
-    target_lang = request.args.get('target', 'english')
-    
-    if not word:
-        return jsonify({'error': 'Word parameter is required'}), 400
-    
-    result = dictionary_service.search_word(word, source_lang, target_lang)
-    
-    if result:
+def search_dictionary():
+    """Search dictionary endpoint"""
+    try:
+        query = request.args.get('q', '').strip()
+        source_language = request.args.get('source', 'all')
+        target_language = request.args.get('target', 'all')
+        limit = int(request.args.get('limit', 50))
+        
+        if not query:
+            return jsonify({'error': 'Query parameter required'}), 400
+        
+        results = dictionary_service.search_dictionary(
+            query, source_language, target_language, limit
+        )
+        
         return jsonify({
-            'found': True,
-            'word': word,
-            'translation': result,
-            'source_language': source_lang,
-            'target_language': target_lang
+            'success': True,
+            'results': results,
+            'count': len(results),
+            'query': query
         })
-    else:
-        return jsonify({
-            'found': False,
-            'word': word,
-            'source_language': source_lang,
-            'target_language': target_lang
-        })
-
-@app.route('/api/dictionary', methods=['GET'])
-def get_dictionary():
-    """Get dictionary words with pagination"""
-    limit = int(request.args.get('limit', 100))
-    offset = int(request.args.get('offset', 0))
-    
-    words = dictionary_service.get_all_words(limit, offset)
-    
-    return jsonify({
-        'words': words,
-        'limit': limit,
-        'offset': offset,
-        'total_count': len(dictionary_service.dictionary['vedda_to_others'])
-    })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/dictionary/add', methods=['POST'])
 def add_word():
-    """Add a new word to the dictionary"""
-    data = request.get_json()
-    
-    if not data or 'vedda_word' not in data:
-        return jsonify({'error': 'vedda_word is required'}), 400
-    
-    word_id = dictionary_service.add_word(
-        vedda_word=data['vedda_word'],
-        sinhala_word=data.get('sinhala_word'),
-        english_word=data.get('english_word'),
-        vedda_ipa=data.get('vedda_ipa'),
-        sinhala_ipa=data.get('sinhala_ipa'),
-        english_ipa=data.get('english_ipa'),
-        word_type=data.get('word_type'),
-        usage_example=data.get('usage_example')
-    )
-    
-    if word_id:
+    """Add new word to dictionary"""
+    try:
+        data = request.get_json()
+        
+        vedda_word = data.get('vedda_word', '').strip()
+        english_word = data.get('english_word', '').strip()
+        
+        if not vedda_word or not english_word:
+            return jsonify({'error': 'vedda_word and english_word are required'}), 400
+        
+        result = dictionary_service.add_word(
+            vedda_word=vedda_word,
+            english_word=english_word,
+            sinhala_word=data.get('sinhala_word', ''),
+            vedda_ipa=data.get('vedda_ipa', ''),
+            sinhala_ipa=data.get('sinhala_ipa', ''),
+            english_ipa=data.get('english_ipa', ''),
+            word_type=data.get('word_type', ''),
+            usage_example=data.get('usage_example', '')
+        )
+        
+        if result['success']:
+            return jsonify(result), 201
+        else:
+            return jsonify(result), 400
+            
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/dictionary/random', methods=['GET'])
+def get_random_words():
+    """Get random words for learning/quiz"""
+    try:
+        count = int(request.args.get('count', 10))
+        word_type = request.args.get('type', None)
+        
+        results = dictionary_service.get_random_words(count, word_type)
+        
         return jsonify({
             'success': True,
-            'word_id': word_id,
-            'message': 'Word added successfully'
-        }), 201
-    else:
-        return jsonify({'error': 'Failed to add word'}), 500
+            'words': results,
+            'count': len(results)
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/dictionary/types', methods=['GET'])
+def get_word_types():
+    """Get available word types"""
+    try:
+        types = dictionary_service.get_word_types()
+        return jsonify({
+            'success': True,
+            'word_types': types
+        })
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/dictionary/all', methods=['GET'])
+def get_all_words():
+    """Get all dictionary words with pagination"""
+    try:
+        limit = int(request.args.get('limit', 100))
+        offset = int(request.args.get('offset', 0))
+        
+        # Get all words from MongoDB with pagination
+        cursor = dictionary_service.db.dictionary.find({}).skip(offset).limit(limit)
+        results = []
+        
+        for doc in cursor:
+            results.append({
+                'id': str(doc['_id']),
+                'vedda_word': doc.get('vedda_word', ''),
+                'sinhala_word': doc.get('sinhala_word', ''),
+                'english_word': doc.get('english_word', ''),
+                'vedda_ipa': doc.get('vedda_ipa', ''),
+                'sinhala_ipa': doc.get('sinhala_ipa', ''),
+                'english_ipa': doc.get('english_ipa', ''),
+                'word_type': doc.get('word_type', ''),
+                'usage_example': doc.get('usage_example', ''),
+                'confidence_score': doc.get('confidence_score', 0.95),
+                'frequency_score': doc.get('frequency_score', 1.0)
+            })
+        
+        # Get total count
+        total_count = dictionary_service.db.dictionary.count_documents({})
+        
+        return jsonify({
+            'success': True,
+            'results': results,
+            'count': len(results),
+            'total_count': total_count,
+            'limit': limit,
+            'offset': offset
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 @app.route('/api/dictionary/stats', methods=['GET'])
-def get_stats():
+def get_dictionary_stats():
     """Get dictionary statistics"""
-    vedda_count = len(dictionary_service.dictionary['vedda_to_others'])
-    english_count = len(dictionary_service.dictionary['english_to_vedda'])
+    try:
+        total_words = dictionary_service.db.dictionary.count_documents({})
+        word_types = len(dictionary_service.get_word_types())
+        
+        # Word type breakdown
+        pipeline = [
+            {'$group': {'_id': '$word_type', 'count': {'$sum': 1}}},
+            {'$sort': {'count': -1}}
+        ]
+        type_breakdown = list(dictionary_service.db.dictionary.aggregate(pipeline))
+        
+        return jsonify({
+            'success': True,
+            'stats': {
+                'total_words': total_words,
+                'word_types': word_types,
+                'type_breakdown': [{'type': item['_id'], 'count': item['count']} 
+                                 for item in type_breakdown if item['_id']]
+            }
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/dictionary/<word_id>', methods=['PUT'])
+def update_word(word_id):
+    """Update a dictionary word"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No data provided'}), 400
+        
+        # Validate ObjectId
+        from bson import ObjectId
+        try:
+            object_id = ObjectId(word_id)
+        except:
+            return jsonify({'error': 'Invalid word ID'}), 400
+        
+        # Update word in database
+        update_data = {}
+        for field in ['vedda_word', 'sinhala_word', 'english_word', 'vedda_ipa', 
+                     'sinhala_ipa', 'english_ipa', 'word_type', 'usage_example']:
+            if field in data:
+                update_data[field] = data[field]
+        
+        if not update_data:
+            return jsonify({'error': 'No valid fields to update'}), 400
+        
+        update_data['last_updated'] = datetime.now(timezone.utc)
+        
+        result = dictionary_service.db.dictionary.update_one(
+            {'_id': object_id}, 
+            {'$set': update_data}
+        )
+        
+        if result.matched_count == 0:
+            return jsonify({'error': 'Word not found'}), 404
+        
+        return jsonify({
+            'success': True,
+            'message': 'Word updated successfully',
+            'id': word_id
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/dictionary/<word_id>', methods=['DELETE'])
+def delete_word(word_id):
+    """Delete a dictionary word"""
+    try:
+        # Validate ObjectId
+        from bson import ObjectId
+        try:
+            object_id = ObjectId(word_id)
+        except:
+            return jsonify({'error': 'Invalid word ID'}), 400
+        
+        # Delete word from database
+        result = dictionary_service.db.dictionary.delete_one({'_id': object_id})
+        
+        if result.deleted_count == 0:
+            return jsonify({'error': 'Word not found'}), 404
+        
+        return jsonify({
+            'success': True,
+            'message': 'Word deleted successfully',
+            'id': word_id
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/dictionary/upload-csv', methods=['POST'])
+def upload_csv():
+    """Upload CSV or XLSX file with dictionary words"""
+    import io
+    import csv
+    import pandas as pd
     
-    return jsonify({
-        'total_vedda_words': vedda_count,
-        'total_english_mappings': english_count,
-        'service_status': 'active'
-    })
+    try:
+        if 'csv_file' not in request.files:
+            return jsonify({'error': 'No file provided'}), 400
+        
+        file = request.files['csv_file']
+        if file.filename == '':
+            return jsonify({'error': 'No file selected'}), 400
+        
+        # Check file extension
+        filename_lower = file.filename.lower()
+        if not (filename_lower.endswith('.csv') or filename_lower.endswith('.xlsx')):
+            return jsonify({'error': 'File must be CSV or XLSX format'}), 400
+        
+        is_xlsx = filename_lower.endswith('.xlsx')
+        
+        # Read and parse file content (CSV or XLSX)
+        try:
+            file.seek(0)
+            
+            if is_xlsx:
+                # Handle XLSX files using pandas
+                logger.info("Processing XLSX file")
+                df = pd.read_excel(file, engine='openpyxl')
+                
+                # Convert DataFrame to list of dictionaries
+                records = df.to_dict('records')
+                fieldnames = list(df.columns)
+                
+                logger.info(f"XLSX file loaded: {len(records)} rows, columns: {fieldnames}")
+                
+            else:
+                # Handle CSV files with proper UTF-8 handling for Sinhala characters
+                raw_content = file.read()
+                
+                # Try different encodings to properly handle Sinhala/Unicode
+                content = None
+                encoding_used = None
+                
+                for encoding in ['utf-8-sig', 'utf-8', 'utf-16', 'cp1252']:
+                    try:
+                        content = raw_content.decode(encoding)
+                        encoding_used = encoding
+                        logger.info(f"Successfully decoded CSV with {encoding} encoding")
+                        break
+                    except UnicodeDecodeError:
+                        continue
+                
+                if content is None:
+                    logger.error("Failed to decode CSV with any supported encoding")
+                    return jsonify({'error': 'Unable to decode CSV file. Please save as UTF-8 encoding.'}), 400
+                
+                # Parse CSV content
+                stream = io.StringIO(content)
+                csv_reader = csv.DictReader(stream)
+                records = list(csv_reader)
+                fieldnames = csv_reader.fieldnames
+                
+                logger.info(f"CSV file loaded: {len(records)} rows, columns: {fieldnames}")
+            
+            # Check if we have data
+            if not fieldnames or not records:
+                return jsonify({'error': 'File appears to be empty or invalid'}), 400
+                
+        except Exception as e:
+            logger.error(f"Error reading file: {str(e)}")
+            return jsonify({'error': f'Error reading file: {str(e)}'}), 400
+        
+        added_count = 0
+        errors = []
+        
+        # Expected columns
+        required_columns = ['vedda_word']
+        optional_columns = ['sinhala_word', 'english_word', 'vedda_ipa', 'sinhala_ipa', 'english_ipa', 'word_type', 'usage_example']
+        
+        for row_num, row in enumerate(records, start=2):  # Start from 2 to account for header
+            try:
+                # Helper function to safely get string values (handles pandas NaN)
+                def safe_get_string(row, key):
+                    value = row.get(key, '')
+                    if pd.isna(value):
+                        return ''
+                    return str(value).strip()
+                
+                # Check required columns
+                vedda_word = safe_get_string(row, 'vedda_word')
+                if not vedda_word:
+                    errors.append(f"Row {row_num}: vedda_word is required")
+                    continue
+                
+                # Get all fields and ensure proper Unicode handling
+                sinhala_word = safe_get_string(row, 'sinhala_word')
+                english_word = safe_get_string(row, 'english_word')
+                
+                # Log the Unicode content for debugging (with character codes)
+                logger.info(f"Processing row {row_num}:")
+                logger.info(f"  vedda_word: '{vedda_word}' (unicode: {[ord(c) for c in vedda_word[:10]]})")
+                logger.info(f"  sinhala_word: '{sinhala_word}' (unicode: {[ord(c) for c in sinhala_word[:10]]})")
+                logger.info(f"  english_word: '{english_word}'")
+                
+                # Check if word already exists
+                existing = dictionary_service.db.dictionary.find_one({
+                    'vedda_word': vedda_word
+                })
+                
+                if existing:
+                    errors.append(f"Row {row_num}: Word '{vedda_word}' already exists")
+                    continue
+                
+                # Prepare word document with explicit Unicode strings
+                word_doc = {
+                    'vedda_word': vedda_word,
+                    'english_word': english_word,
+                    'sinhala_word': sinhala_word,
+                    'vedda_ipa': safe_get_string(row, 'vedda_ipa'),
+                    'sinhala_ipa': safe_get_string(row, 'sinhala_ipa'),
+                    'english_ipa': safe_get_string(row, 'english_ipa'),
+                    'word_type': safe_get_string(row, 'word_type'),
+                    'usage_example': safe_get_string(row, 'usage_example'),
+                    'frequency_score': 1.0,
+                    'confidence_score': 0.95,
+                    'source': 'xlsx_upload' if is_xlsx else 'csv_upload',
+                    'created_at': datetime.utcnow(),
+                    'last_updated': datetime.utcnow()
+                }
+                
+                # Log what we're about to insert
+                logger.info(f"Inserting document: vedda='{word_doc['vedda_word']}', sinhala='{word_doc['sinhala_word']}'")
+                
+                # Insert word
+                result = dictionary_service.db.dictionary.insert_one(word_doc)
+                logger.info(f"Inserted with ID: {result.inserted_id}")
+                added_count += 1
+                
+            except Exception as e:
+                errors.append(f"Row {row_num}: {str(e)}")
+        
+        # Reload dictionary
+        dictionary_service.dictionary = dictionary_service.load_dictionary()
+        
+        return jsonify({
+            'success': True,
+            'added_count': added_count,
+            'errors': errors,
+            'message': f'Successfully added {added_count} words'
+        })
+        
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    try:
+        # Test MongoDB connection
+        dictionary_service.client.admin.command('ping')
+        word_count = dictionary_service.db.dictionary.count_documents({})
+        
+        return jsonify({
+            'status': 'healthy',
+            'service': 'Dictionary Service (MongoDB)',
+            'database': 'connected',
+            'word_count': word_count
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'unhealthy',
+            'service': 'Dictionary Service',
+            'error': str(e)
+        }), 500
 
 if __name__ == '__main__':
-    init_db()
-    print("Starting Dictionary Service on port 5002...")
-    app.run(host='0.0.0.0', port=5002, debug=True)
+    print("🚀 Starting Dictionary Service with MongoDB...")
+    print(f"📊 Dictionary loaded with {len(dictionary_service.dictionary['all_words'])} words")
+    app.run(debug=True, host='0.0.0.0', port=5002)

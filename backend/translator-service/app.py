@@ -69,17 +69,54 @@ class VeddaTranslator:
             response = requests.get(
                 f"{DICTIONARY_SERVICE_URL}/api/dictionary/search",
                 params={
-                    'word': word,
+                    'q': word,  # Fixed: Use 'q' parameter as expected by dictionary service
                     'source': source_lang,
                     'target': target_lang
                 },
                 timeout=5
             )
             if response.status_code == 200:
-                return response.json()
-            return None
+                data = response.json()
+                if data.get('success') and data.get('count', 0) > 0:
+                    # Look for exact match first based on source language
+                    for result in data.get('results', []):
+                        match_found = False
+                        if source_lang == 'vedda' and result.get('vedda_word') == word:
+                            match_found = True
+                        elif source_lang == 'sinhala' and result.get('sinhala_word') == word:
+                            match_found = True
+                        elif source_lang == 'english' and result.get('english_word') == word:
+                            match_found = True
+                        
+                        if match_found:
+                            return {
+                                'found': True,
+                                'translation': {
+                                    'english': result.get('english_word'),
+                                    'sinhala': result.get('sinhala_word'),
+                                    'vedda': result.get('vedda_word'),
+                                    'vedda_ipa': result.get('vedda_ipa'),
+                                    'english_ipa': result.get('english_ipa'),
+                                    'sinhala_ipa': result.get('sinhala_ipa')
+                                }
+                            }
+                    # If no exact match, return first result
+                    first_result = data['results'][0]
+                    return {
+                        'found': True,
+                        'translation': {
+                            'english': first_result.get('english_word'),
+                            'sinhala': first_result.get('sinhala_word'),
+                            'vedda': first_result.get('vedda_word'),
+                            'vedda_ipa': first_result.get('vedda_ipa'),
+                            'english_ipa': first_result.get('english_ipa'),
+                            'sinhala_ipa': first_result.get('sinhala_ipa')
+                        }
+                    }
+                return {'found': False}
+            return {'found': False}
         except Exception as e:
-            return None
+            return {'found': False}
     
     def google_translate(self, text, source_lang, target_lang):
         """Use Google Translate API for translation"""
@@ -171,6 +208,34 @@ class VeddaTranslator:
     def translate_from_vedda_via_sinhala(self, text, target_language):
         """Translate Vedda to any language via Sinhala bridge"""
         
+        # FIRST: Check for exact phrase matches in dictionary
+        phrase_result = self.search_dictionary(text.strip(), 'vedda', target_language)
+        if phrase_result and phrase_result.get('found'):
+            translation = phrase_result['translation']
+            if target_language == 'english' and translation.get('english'):
+                return {
+                    'translated_text': translation['english'],
+                    'confidence': 0.95,
+                    'method': 'vedda_phrase',
+                    'source_ipa': translation.get('vedda_ipa', ''),
+                    'target_ipa': translation.get('english_ipa', ''),
+                    'bridge_translation': translation.get('sinhala', ''),
+                    'methods_used': ['dictionary', 'phrase_match'],
+                    'note': 'Direct phrase match found in dictionary'
+                }
+            elif target_language == 'sinhala' and translation.get('sinhala'):
+                return {
+                    'translated_text': translation['sinhala'],
+                    'confidence': 0.95,
+                    'method': 'vedda_phrase',
+                    'source_ipa': translation.get('vedda_ipa', ''),
+                    'target_ipa': translation.get('sinhala_ipa', ''),
+                    'bridge_translation': translation.get('sinhala', ''),
+                    'methods_used': ['dictionary', 'phrase_match'],
+                    'note': 'Direct phrase match found in dictionary'
+                }
+        
+        # FALLBACK: Word-by-word translation
         # Step 1: Convert Vedda words to Sinhala using dictionary
         vedda_words = [word.strip() for word in text.split() if word.strip()]
         sinhala_words = []

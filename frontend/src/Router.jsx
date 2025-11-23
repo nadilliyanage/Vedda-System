@@ -16,6 +16,7 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import AdminUsers from "./pages/AdminUsers.jsx";
 import AdminWords from "./pages/AdminWords.jsx";
+import AdminLearnings from "./pages/AdminLearnings.jsx";
 import AdminArtifacts from "./pages/AdminArtifacts.jsx";
 import AdminSettings from "./pages/AdminSettings.jsx";
 
@@ -41,6 +42,7 @@ const AppRouter = () => {
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/users" element={<AdminUsers />} />
         <Route path="/admin/words" element={<AdminWords />} />
+        <Route path="/admin/lernings" element={<AdminLearnings />} />
         <Route path="/admin/artifacts" element={<AdminArtifacts />} />
         <Route path="/admin/settings" element={<AdminSettings />} />
       </Route>
