@@ -5,7 +5,7 @@ const VisualsPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 mt-16">
       {/* Back Button */}
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">
