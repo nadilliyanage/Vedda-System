@@ -2,10 +2,20 @@ import json
 import re
 import urllib.parse
 from datetime import datetime
+import os
 
 import requests
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+
+# Try to import Keras translator (optional)
+try:
+    from keras_translator import KerasTranslator
+    KERAS_AVAILABLE = True
+except Exception as e:
+    print(f"⚠️ Keras translator not available: {e}")
+    KERAS_AVAILABLE = False
+    KerasTranslator = None
 
 app = Flask(__name__)
 CORS(app)
@@ -20,6 +30,20 @@ GOOGLE_TRANSLATE_URL = "https://translate.googleapis.com/translate_a/single"
 
 class VeddaTranslator:
     def __init__(self):
+        # Initialize Keras neural translator if available
+        self.keras_translator = None
+        if KERAS_AVAILABLE:
+            try:
+                model_dir = os.path.dirname(os.path.abspath(__file__))
+                self.keras_translator = KerasTranslator(model_dir)
+                if self.keras_translator.is_available():
+                    print("✅ Neural translation models loaded and ready")
+                else:
+                    print("⚠️ Neural translation models failed to load")
+                    self.keras_translator = None
+            except Exception as e:
+                print(f"⚠️ Failed to initialize Keras translator: {e}")
+                self.keras_translator = None
         self.supported_languages = {
             'vedda': 'vedda',
             'sinhala': 'si',
@@ -235,51 +259,79 @@ class VeddaTranslator:
                     'note': 'Direct phrase match found in dictionary'
                 }
         
-        # FALLBACK: Word-by-word translation
-        # Step 1: Convert Vedda words to Sinhala using dictionary
-        vedda_words = [word.strip() for word in text.split() if word.strip()]
-        sinhala_words = []
-        dictionary_hits = 0
+        # SECOND: Try neural translation (Vedda → Sinhala)
+        sinhala_text = None
+        neural_used = False
         
-        for vedda_word in vedda_words:
-            # Try to find Sinhala equivalent in dictionary
-            dict_result = self.search_dictionary(vedda_word, 'vedda', 'sinhala')
-            if dict_result and dict_result.get('found'):
-                sinhala_word = dict_result['translation'].get('sinhala', vedda_word)
-                sinhala_words.append(sinhala_word)
-                dictionary_hits += 1
-            else:
-                # Keep Vedda word (assume it's close to Sinhala)
-                sinhala_words.append(vedda_word)
+        if self.keras_translator and self.keras_translator.is_available():
+            try:
+                neural_result = self.keras_translator.translate_vedda_to_sinhala(text)
+                if neural_result and neural_result.get('success'):
+                    sinhala_text = neural_result['translated_text']
+                    neural_used = True
+                    print(f"✅ Neural translation: '{text}' → '{sinhala_text}'")
+            except Exception as e:
+                print(f"⚠️ Neural translation failed: {e}")
         
-        sinhala_text = ' '.join(sinhala_words)
+        # FALLBACK: Word-by-word dictionary translation
+        if not sinhala_text:
+            # Step 1: Convert Vedda words to Sinhala using dictionary
+            vedda_words = [word.strip() for word in text.split() if word.strip()]
+            sinhala_words = []
+            dictionary_hits = 0
+            
+            for vedda_word in vedda_words:
+                # Try to find Sinhala equivalent in dictionary
+                dict_result = self.search_dictionary(vedda_word, 'vedda', 'sinhala')
+                if dict_result and dict_result.get('found'):
+                    sinhala_word = dict_result['translation'].get('sinhala', vedda_word)
+                    sinhala_words.append(sinhala_word)
+                    dictionary_hits += 1
+                else:
+                    # Keep Vedda word (assume it's close to Sinhala)
+                    sinhala_words.append(vedda_word)
+            
+            sinhala_text = ' '.join(sinhala_words)
         
         # Step 2: Translate Sinhala to target language (if not Sinhala)
+        target_ipa = ''
         if target_language == 'sinhala':
             final_text = sinhala_text
             step2_confidence = 1.0
         else:
-            final_text = self.google_translate(sinhala_text, 'sinhala', target_language)
-            if not final_text:
+            translate_result = self.google_translate(sinhala_text, 'sinhala', target_language, include_ipa=True)
+            if translate_result:
+                if isinstance(translate_result, dict):
+                    final_text = translate_result.get('text', sinhala_text)
+                    target_ipa = translate_result.get('target_ipa', '')
+                else:
+                    final_text = translate_result
+                step2_confidence = 0.8
+            else:
                 # Fallback: return Sinhala text
                 final_text = sinhala_text
                 step2_confidence = 0.5
-            else:
-                step2_confidence = 0.8
         
-        # Calculate confidence based on dictionary coverage
-        dict_coverage = dictionary_hits / len(vedda_words) if vedda_words else 0
-        final_confidence = dict_coverage * 0.7 + step2_confidence * 0.3
+        # Calculate confidence (use neural if available)
+        methods_used = []
+        if neural_used:
+            methods_used = ['neural_model', 'google', 'sinhala_bridge']
+            final_confidence = 0.85 * step2_confidence
+        else:
+            vedda_words = text.split()
+            dict_coverage = dictionary_hits / len(vedda_words) if 'dictionary_hits' in locals() and vedda_words else 0
+            final_confidence = dict_coverage * 0.7 + step2_confidence * 0.3
+            methods_used = ['dictionary', 'google', 'sinhala_bridge']
         
         return {
             'translated_text': final_text,
             'confidence': final_confidence,
             'method': 'vedda_to_sinhala_bridge',
             'source_ipa': '',
-            'target_ipa': '',
+            'target_ipa': target_ipa,
             'bridge_translation': sinhala_text,
-            'methods_used': ['dictionary', 'google', 'sinhala_bridge'],
-            'note': f'Translated via Sinhala bridge. Dictionary coverage: {dictionary_hits}/{len(vedda_words)} words'
+            'methods_used': methods_used,
+            'note': f'Translated via Sinhala bridge{" using neural model" if neural_used else ""}'
         }
     
     def direct_translation(self, text, source_language, target_language):
