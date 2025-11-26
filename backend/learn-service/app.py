@@ -23,6 +23,9 @@ try:
     client.admin.command('ping')
     db = client['vedda-system']
     challenges_collection = db['challenges']
+    lessons_collection = db['lessons']
+    categories_collection = db['categories']
+    exercises_collection = db['exercises']
     print("MongoDB connected successfully")
 except ConnectionFailure as e:
     print(f"MongoDB connection failed: {e}")
@@ -298,6 +301,224 @@ def admin_delete_challenge(challenge_id):
         return jsonify({"success": True, "message": "Challenge deleted successfully"})
     else:
         return jsonify({"success": False, "error": "Challenge not found"}), 404
+
+
+# Category CRUD endpoints
+@app.route("/api/learn/admin/categories", methods=["GET"])
+def admin_list_categories():
+    """Get all categories"""
+    categories = list(categories_collection.find({}))
+    return jsonify([{k: v for k, v in c.items() if k != "_id"} for c in categories])
+
+
+@app.route("/api/learn/admin/categories", methods=["POST"])
+def admin_create_category():
+    """Create a new category"""
+    data = request.get_json() or {}
+    
+    if not data.get("id"):
+        return jsonify({"success": False, "error": "Category ID is required"}), 400
+    if not data.get("name"):
+        return jsonify({"success": False, "error": "Category name is required"}), 400
+    
+    # Check if ID already exists
+    if categories_collection.find_one({"id": data["id"]}):
+        return jsonify({"success": False, "error": "Category ID already exists"}), 400
+    
+    categories_collection.insert_one(data)
+    return jsonify({"success": True, "message": "Category created successfully", "id": data["id"]})
+
+
+@app.route("/api/learn/admin/categories/<category_id>", methods=["GET"])
+def admin_get_category(category_id):
+    """Get a single category by ID"""
+    category = categories_collection.find_one({"id": category_id})
+    if not category:
+        return jsonify({"error": "Category not found"}), 404
+    return jsonify({k: v for k, v in category.items() if k != "_id"})
+
+
+@app.route("/api/learn/admin/categories/<category_id>", methods=["PUT"])
+def admin_update_category(category_id):
+    """Update an existing category"""
+    data = request.get_json() or {}
+    
+    # Check if category exists
+    if not categories_collection.find_one({"id": category_id}):
+        return jsonify({"success": False, "error": "Category not found"}), 404
+    
+    # Don't allow changing the ID
+    if "id" in data and data["id"] != category_id:
+        return jsonify({"success": False, "error": "Cannot change category ID"}), 400
+    
+    result = categories_collection.update_one(
+        {"id": category_id},
+        {"$set": data}
+    )
+    
+    if result.modified_count > 0:
+        return jsonify({"success": True, "message": "Category updated successfully"})
+    else:
+        return jsonify({"success": True, "message": "No changes made"})
+
+
+@app.route("/api/learn/admin/categories/<category_id>", methods=["DELETE"])
+def admin_delete_category(category_id):
+    """Delete a category"""
+    result = categories_collection.delete_one({"id": category_id})
+    
+    if result.deleted_count > 0:
+        return jsonify({"success": True, "message": "Category deleted successfully"})
+    else:
+        return jsonify({"success": False, "error": "Category not found"}), 404
+
+
+# Lesson CRUD endpoints
+@app.route("/api/learn/admin/lessons", methods=["GET"])
+def admin_list_lessons():
+    """Get all lessons"""
+    lessons = list(lessons_collection.find({}))
+    return jsonify([{k: v for k, v in l.items() if k != "_id"} for l in lessons])
+
+
+@app.route("/api/learn/admin/lessons", methods=["POST"])
+def admin_create_lesson():
+    """Create a new lesson"""
+    data = request.get_json() or {}
+    
+    if not data.get("id"):
+        return jsonify({"success": False, "error": "Lesson ID is required"}), 400
+    if not data.get("topic"):
+        return jsonify({"success": False, "error": "Topic is required"}), 400
+    if not data.get("categoryId"):
+        return jsonify({"success": False, "error": "Category ID is required"}), 400
+    
+    # Check if ID already exists
+    if lessons_collection.find_one({"id": data["id"]}):
+        return jsonify({"success": False, "error": "Lesson ID already exists"}), 400
+    
+    lessons_collection.insert_one(data)
+    return jsonify({"success": True, "message": "Lesson created successfully", "id": data["id"]})
+
+
+@app.route("/api/learn/admin/lessons/<lesson_id>", methods=["GET"])
+def admin_get_lesson(lesson_id):
+    """Get a single lesson by ID"""
+    lesson = lessons_collection.find_one({"id": lesson_id})
+    if not lesson:
+        return jsonify({"error": "Lesson not found"}), 404
+    return jsonify({k: v for k, v in lesson.items() if k != "_id"})
+
+
+@app.route("/api/learn/admin/lessons/<lesson_id>", methods=["PUT"])
+def admin_update_lesson(lesson_id):
+    """Update an existing lesson"""
+    data = request.get_json() or {}
+    
+    # Check if lesson exists
+    if not lessons_collection.find_one({"id": lesson_id}):
+        return jsonify({"success": False, "error": "Lesson not found"}), 404
+    
+    # Don't allow changing the ID
+    if "id" in data and data["id"] != lesson_id:
+        return jsonify({"success": False, "error": "Cannot change lesson ID"}), 400
+    
+    result = lessons_collection.update_one(
+        {"id": lesson_id},
+        {"$set": data}
+    )
+    
+    if result.modified_count > 0:
+        return jsonify({"success": True, "message": "Lesson updated successfully"})
+    else:
+        return jsonify({"success": True, "message": "No changes made"})
+
+
+@app.route("/api/learn/admin/lessons/<lesson_id>", methods=["DELETE"])
+def admin_delete_lesson(lesson_id):
+    """Delete a lesson"""
+    result = lessons_collection.delete_one({"id": lesson_id})
+    
+    if result.deleted_count > 0:
+        return jsonify({"success": True, "message": "Lesson deleted successfully"})
+    else:
+        return jsonify({"success": False, "error": "Lesson not found"}), 404
+
+
+# ========== Admin Exercise Routes ==========
+
+@app.route("/api/learn/admin/exercises", methods=["GET"])
+def admin_get_exercises():
+    """Get all exercises"""
+    exercises = list(exercises_collection.find({}, {"_id": 0}))
+    return jsonify(exercises)
+
+
+@app.route("/api/learn/admin/exercises", methods=["POST"])
+def admin_create_exercise():
+    """Create a new exercise"""
+    data = request.get_json()
+    
+    # Validate required fields
+    required = ["id", "lessonId", "categoryId", "exerciseNumber", "questions"]
+    if not all(field in data for field in required):
+        return jsonify({"success": False, "error": "Missing required fields"}), 400
+    
+    # Check if exercise with this ID already exists
+    if exercises_collection.find_one({"id": data["id"]}):
+        return jsonify({"success": False, "error": "Exercise with this ID already exists"}), 400
+    
+    # Insert the exercise
+    exercises_collection.insert_one(data)
+    return jsonify({"success": True, "message": "Exercise created successfully"})
+
+
+@app.route("/api/learn/admin/exercises/<exercise_id>", methods=["GET"])
+def admin_get_exercise(exercise_id):
+    """Get a single exercise"""
+    exercise = exercises_collection.find_one({"id": exercise_id}, {"_id": 0})
+    
+    if exercise:
+        return jsonify({"success": True, "exercise": exercise})
+    else:
+        return jsonify({"success": False, "error": "Exercise not found"}), 404
+
+
+@app.route("/api/learn/admin/exercises/<exercise_id>", methods=["PUT"])
+def admin_update_exercise(exercise_id):
+    """Update an exercise"""
+    data = request.get_json()
+    
+    # Remove id from data if present (shouldn't update the ID)
+    data.pop("id", None)
+    data.pop("_id", None)
+    
+    # Validate required fields
+    required = ["lessonId", "categoryId", "exerciseNumber", "questions"]
+    if not all(field in data for field in required):
+        return jsonify({"success": False, "error": "Missing required fields"}), 400
+    
+    # Update the exercise
+    result = exercises_collection.update_one(
+        {"id": exercise_id},
+        {"$set": data}
+    )
+    
+    if result.modified_count > 0:
+        return jsonify({"success": True, "message": "Exercise updated successfully"})
+    else:
+        return jsonify({"success": True, "message": "No changes made"})
+
+
+@app.route("/api/learn/admin/exercises/<exercise_id>", methods=["DELETE"])
+def admin_delete_exercise(exercise_id):
+    """Delete an exercise"""
+    result = exercises_collection.delete_one({"id": exercise_id})
+    
+    if result.deleted_count > 0:
+        return jsonify({"success": True, "message": "Exercise deleted successfully"})
+    else:
+        return jsonify({"success": False, "error": "Exercise not found"}), 404
 
 
 if __name__ == "__main__":

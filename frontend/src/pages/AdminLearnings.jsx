@@ -1,548 +1,107 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import { FaPlus, FaEdit, FaTrash, FaEye } from 'react-icons/fa';
-
-const API_BASE = 'http://localhost:5000';
+import { useState } from 'react';
+import { FaBook, FaDumbbell, FaTrophy, FaArrowLeft } from 'react-icons/fa';
+import AdminChallenges from './AdminChallenges';
+import AdminLessons from './AdminLessons';
+import AdminExercises from './AdminExercises';
 
 const AdminLearnings = () => {
-  const [challenges, setChallenges] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [filterType, setFilterType] = useState('all');
-  const [showModal, setShowModal] = useState(false);
-  const [modalMode, setModalMode] = useState('create'); // 'create', 'edit', 'view'
-  const [currentChallenge, setCurrentChallenge] = useState(null);
-  const [formData, setFormData] = useState({
-    id: '',
-    type: 'fill_blank',
-    prompt: '',
-    xp: 20,
-    coins: 4,
-    timeLimitSec: 45,
-    answers: [''],
-    options: [
-      { id: 'A', text: '' },
-      { id: 'B', text: '' },
-      { id: 'C', text: '' },
-      { id: 'D', text: '' }
-    ],
-    correct: [],
-    pairs: [{ left: '', right: '' }]
-  });
+  const [activeView, setActiveView] = useState('main'); // 'main', 'lessons', 'exercises', 'challenges'
 
-  useEffect(() => {
-    fetchChallenges();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterType]);
-
-  const fetchChallenges = async () => {
-    try {
-      setLoading(true);
-      const url = filterType === 'all' 
-        ? `${API_BASE}/api/learn/admin/challenges`
-        : `${API_BASE}/api/learn/admin/challenges?type=${filterType}`;
-      const response = await axios.get(url);
-      setChallenges(response.data);
-    } catch (error) {
-      toast.error('Failed to fetch challenges');
-      console.error(error);
-    } finally {
-      setLoading(false);
+  const navigationCards = [
+    {
+      id: 'lessons',
+      title: 'Manage Lessons',
+      icon: FaBook,
+      color: 'bg-blue-600',
+      hoverColor: 'hover:bg-blue-700',
+      description: 'Create and organize learning lessons'
+    },
+    {
+      id: 'exercises',
+      title: 'Manage Exercises',
+      icon: FaDumbbell,
+      color: 'bg-green-600',
+      hoverColor: 'hover:bg-green-700',
+      description: 'Design practice exercises for learners'
+    },
+    {
+      id: 'challenges',
+      title: 'Manage Challenges',
+      icon: FaTrophy,
+      color: 'bg-orange-600',
+      hoverColor: 'hover:bg-orange-700',
+      description: 'Configure quiz challenges and assessments'
     }
+  ];
+
+  const handleCardClick = (viewId) => {
+    setActiveView(viewId);
   };
 
-  const openModal = (mode, challenge = null) => {
-    setModalMode(mode);
-    setCurrentChallenge(challenge);
-    
-    if (mode === 'create') {
-      setFormData({
-        id: '',
-        type: 'fill_blank',
-        prompt: '',
-        xp: 20,
-        coins: 4,
-        timeLimitSec: 45,
-        answers: [''],
-        options: [
-          { id: 'A', text: '' },
-          { id: 'B', text: '' },
-          { id: 'C', text: '' },
-          { id: 'D', text: '' }
-        ],
-        correct: [],
-        pairs: [{ left: '', right: '' }]
-      });
-    } else if (challenge) {
-      setFormData({
-        id: challenge.id,
-        type: challenge.type,
-        prompt: challenge.prompt,
-        xp: challenge.xp || 20,
-        coins: challenge.coins || 4,
-        timeLimitSec: challenge.timeLimitSec || 45,
-        answers: challenge.answers || [''],
-        options: challenge.options || [
-          { id: 'A', text: '' },
-          { id: 'B', text: '' },
-          { id: 'C', text: '' },
-          { id: 'D', text: '' }
-        ],
-        correct: challenge.correct || [],
-        pairs: challenge.pairs || [{ left: '', right: '' }]
-      });
-    }
-    
-    setShowModal(true);
+  const handleBackToMain = () => {
+    setActiveView('main');
   };
 
-  const closeModal = () => {
-    setShowModal(false);
-    setCurrentChallenge(null);
-  };
+  // Main view with three navigation cards
+  if (activeView === 'main') {
+    return (
+      <div>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-800">Learning Management</h1>
+          <p className="text-gray-600 mt-2">Manage lessons, exercises, and challenges for the Vedda System</p>
+        </div>
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    try {
-      // Prepare data based on challenge type
-      const submitData = {
-        id: formData.id,
-        type: formData.type,
-        prompt: formData.prompt,
-        xp: parseInt(formData.xp),
-        coins: parseInt(formData.coins),
-        timeLimitSec: parseInt(formData.timeLimitSec)
-      };
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
+          {navigationCards.map((card) => {
+            const IconComponent = card.icon;
+            return (
+              <button
+                key={card.id}
+                onClick={() => handleCardClick(card.id)}
+                className={`${card.color} ${card.hoverColor} text-white rounded-xl shadow-lg p-8 transition-all duration-200 transform hover:scale-105 hover:shadow-xl flex flex-col items-center justify-center min-h-[280px]`}
+              >
+                <IconComponent className="text-6xl mb-4" />
+                <h2 className="text-2xl font-bold text-center mb-2">{card.title}</h2>
+                <p className="text-white/90 text-center text-sm">{card.description}</p>
+              </button>
+            );
+          })}
+        </div>
 
-      if (formData.type === 'fill_blank') {
-        submitData.answers = formData.answers.filter(a => a.trim());
-      } else if (formData.type === 'multiple_choice') {
-        submitData.options = formData.options.filter(o => o.text.trim());
-        submitData.correct = formData.correct;
-      } else if (formData.type === 'match_pairs') {
-        submitData.pairs = formData.pairs.filter(p => p.left.trim() && p.right.trim());
-      }
+        {/* Info Section */}
+        <div className="mt-12 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+          <p className="text-blue-700">
+            <strong>Quick Guide:</strong> Select a module above to manage different aspects of the learning system.
+            Lessons contain educational content, Exercises provide practice opportunities, and Challenges test learner knowledge.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
-      if (modalMode === 'create') {
-        await axios.post(`${API_BASE}/api/learn/admin/challenges`, submitData);
-        toast.success('Challenge created successfully');
-      } else if (modalMode === 'edit') {
-        await axios.put(`${API_BASE}/api/learn/admin/challenges/${formData.id}`, submitData);
-        toast.success('Challenge updated successfully');
-      }
-
-      closeModal();
-      fetchChallenges();
-    } catch (error) {
-      toast.error(error.response?.data?.error || 'Failed to save challenge');
-      console.error(error);
-    }
-  };
-
-  const handleDelete = async (challengeId) => {
-    if (!confirm('Are you sure you want to delete this challenge?')) return;
-
-    try {
-      await axios.delete(`${API_BASE}/api/learn/admin/challenges/${challengeId}`);
-      toast.success('Challenge deleted successfully');
-      fetchChallenges();
-    } catch (error) {
-      toast.error('Failed to delete challenge');
-      console.error(error);
-    }
-  };
-
-  const addAnswer = () => {
-    setFormData({ ...formData, answers: [...formData.answers, ''] });
-  };
-
-  const removeAnswer = (index) => {
-    setFormData({ ...formData, answers: formData.answers.filter((_, i) => i !== index) });
-  };
-
-  const updateAnswer = (index, value) => {
-    const newAnswers = [...formData.answers];
-    newAnswers[index] = value;
-    setFormData({ ...formData, answers: newAnswers });
-  };
-
-  const updateOption = (index, field, value) => {
-    const newOptions = [...formData.options];
-    newOptions[index][field] = value;
-    setFormData({ ...formData, options: newOptions });
-  };
-
-  const toggleCorrect = (optionId) => {
-    const newCorrect = formData.correct.includes(optionId)
-      ? formData.correct.filter(id => id !== optionId)
-      : [...formData.correct, optionId];
-    setFormData({ ...formData, correct: newCorrect });
-  };
-
-  const addPair = () => {
-    setFormData({ ...formData, pairs: [...formData.pairs, { left: '', right: '' }] });
-  };
-
-  const removePair = (index) => {
-    setFormData({ ...formData, pairs: formData.pairs.filter((_, i) => i !== index) });
-  };
-
-  const updatePair = (index, field, value) => {
-    const newPairs = [...formData.pairs];
-    newPairs[index][field] = value;
-    setFormData({ ...formData, pairs: newPairs });
-  };
-
-  const getTypeLabel = (type) => {
-    switch (type) {
-      case 'fill_blank': return 'Fill in the Blank';
-      case 'multiple_choice': return 'Multiple Choice';
-      case 'match_pairs': return 'Match Pairs';
-      default: return type;
-    }
-  };
-
+  // Sub-views
   return (
     <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Learning Management</h1>
-        <p className="text-gray-600 mt-2">Manage quiz challenges and learning activities</p>
+      <div className="mb-6">
+        <button
+          onClick={handleBackToMain}
+          className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors mb-4"
+        >
+          <FaArrowLeft /> Back to Learning Management
+        </button>
+        
+        <h1 className="text-3xl font-bold text-gray-800">
+          {activeView === 'lessons' && 'Manage Lessons'}
+          {activeView === 'exercises' && 'Manage Exercises'}
+          {activeView === 'challenges' && 'Manage Challenges'}
+        </h1>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex gap-2">
-            <button
-              onClick={() => setFilterType('all')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filterType === 'all' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setFilterType('fill_blank')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filterType === 'fill_blank' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              Fill Blank
-            </button>
-            <button
-              onClick={() => setFilterType('multiple_choice')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filterType === 'multiple_choice' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              Multiple Choice
-            </button>
-            <button
-              onClick={() => setFilterType('match_pairs')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filterType === 'match_pairs' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              Match Pairs
-            </button>
-          </div>
-          
-          <button
-            onClick={() => openModal('create')}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
-          >
-            <FaPlus /> Add Challenge
-          </button>
-        </div>
+      {activeView === 'lessons' && <AdminLessons />}
 
-        {loading ? (
-          <div className="text-center py-8">
-            <p className="text-gray-600">Loading challenges...</p>
-          </div>
-        ) : challenges.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No challenges found</p>
-            <p className="text-gray-400 mt-2">Create your first challenge to get started</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prompt</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rewards</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {challenges.map((challenge) => (
-                  <tr key={challenge.id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{challenge.id}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <span className="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
-                        {getTypeLabel(challenge.type)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-900 max-w-md truncate">{challenge.prompt}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {challenge.xp} XP • {challenge.coins} Coins
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => openModal('view', challenge)}
-                          className="text-blue-600 hover:text-blue-900"
-                          title="View"
-                        >
-                          <FaEye />
-                        </button>
-                        <button
-                          onClick={() => openModal('edit', challenge)}
-                          className="text-green-600 hover:text-green-900"
-                          title="Edit"
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(challenge.id)}
-                          className="text-red-600 hover:text-red-900"
-                          title="Delete"
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
+      {activeView === 'exercises' && <AdminExercises />}
 
-      {/* Modal */}
-      {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-2xl font-bold text-gray-800">
-                {modalMode === 'create' ? 'Create Challenge' : modalMode === 'edit' ? 'Edit Challenge' : 'View Challenge'}
-              </h2>
-            </div>
-
-            <form onSubmit={handleSubmit} className="p-6">
-              <div className="space-y-4">
-                {/* Basic Info */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Challenge ID</label>
-                    <input
-                      type="text"
-                      value={formData.id}
-                      onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-                      disabled={modalMode === 'edit' || modalMode === 'view'}
-                      className="w-full border rounded-lg px-3 py-2"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
-                    <select
-                      value={formData.type}
-                      onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                      disabled={modalMode === 'view'}
-                      className="w-full border rounded-lg px-3 py-2"
-                      required
-                    >
-                      <option value="fill_blank">Fill in the Blank</option>
-                      <option value="multiple_choice">Multiple Choice</option>
-                      <option value="match_pairs">Match Pairs</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Prompt</label>
-                  <textarea
-                    value={formData.prompt}
-                    onChange={(e) => setFormData({ ...formData, prompt: e.target.value })}
-                    disabled={modalMode === 'view'}
-                    className="w-full border rounded-lg px-3 py-2"
-                    rows="3"
-                    required
-                  />
-                </div>
-
-                <div className="grid grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">XP Reward</label>
-                    <input
-                      type="number"
-                      value={formData.xp}
-                      onChange={(e) => setFormData({ ...formData, xp: e.target.value })}
-                      disabled={modalMode === 'view'}
-                      className="w-full border rounded-lg px-3 py-2"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Coins Reward</label>
-                    <input
-                      type="number"
-                      value={formData.coins}
-                      onChange={(e) => setFormData({ ...formData, coins: e.target.value })}
-                      disabled={modalMode === 'view'}
-                      className="w-full border rounded-lg px-3 py-2"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Time Limit (sec)</label>
-                    <input
-                      type="number"
-                      value={formData.timeLimitSec}
-                      onChange={(e) => setFormData({ ...formData, timeLimitSec: e.target.value })}
-                      disabled={modalMode === 'view'}
-                      className="w-full border rounded-lg px-3 py-2"
-                      required
-                    />
-                  </div>
-                </div>
-
-                {/* Type-specific fields */}
-                {formData.type === 'fill_blank' && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Accepted Answers</label>
-                    {formData.answers.map((answer, index) => (
-                      <div key={index} className="flex gap-2 mb-2">
-                        <input
-                          type="text"
-                          value={answer}
-                          onChange={(e) => updateAnswer(index, e.target.value)}
-                          disabled={modalMode === 'view'}
-                          className="flex-1 border rounded-lg px-3 py-2"
-                          placeholder={`Answer ${index + 1}`}
-                        />
-                        {modalMode !== 'view' && formData.answers.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => removeAnswer(index)}
-                            className="text-red-600 hover:text-red-800 px-3"
-                          >
-                            <FaTrash />
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                    {modalMode !== 'view' && (
-                      <button
-                        type="button"
-                        onClick={addAnswer}
-                        className="text-green-600 hover:text-green-800 text-sm"
-                      >
-                        + Add Answer
-                      </button>
-                    )}
-                  </div>
-                )}
-
-                {formData.type === 'multiple_choice' && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Options</label>
-                    {formData.options.map((option, index) => (
-                      <div key={index} className="flex items-center gap-2 mb-2">
-                        <input
-                          type="checkbox"
-                          checked={formData.correct.includes(option.id)}
-                          onChange={() => toggleCorrect(option.id)}
-                          disabled={modalMode === 'view'}
-                          className="w-5 h-5"
-                          title="Mark as correct"
-                        />
-                        <span className="font-medium">{option.id}.</span>
-                        <input
-                          type="text"
-                          value={option.text}
-                          onChange={(e) => updateOption(index, 'text', e.target.value)}
-                          disabled={modalMode === 'view'}
-                          className="flex-1 border rounded-lg px-3 py-2"
-                          placeholder={`Option ${option.id}`}
-                        />
-                      </div>
-                    ))}
-                    <p className="text-xs text-gray-500 mt-2">Check the boxes to mark correct answers</p>
-                  </div>
-                )}
-
-                {formData.type === 'match_pairs' && (
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Pairs</label>
-                    {formData.pairs.map((pair, index) => (
-                      <div key={index} className="flex gap-2 mb-2">
-                        <input
-                          type="text"
-                          value={pair.left}
-                          onChange={(e) => updatePair(index, 'left', e.target.value)}
-                          disabled={modalMode === 'view'}
-                          className="flex-1 border rounded-lg px-3 py-2"
-                          placeholder="Left side"
-                        />
-                        <span className="self-center text-gray-400">=</span>
-                        <input
-                          type="text"
-                          value={pair.right}
-                          onChange={(e) => updatePair(index, 'right', e.target.value)}
-                          disabled={modalMode === 'view'}
-                          className="flex-1 border rounded-lg px-3 py-2"
-                          placeholder="Right side"
-                        />
-                        {modalMode !== 'view' && formData.pairs.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => removePair(index)}
-                            className="text-red-600 hover:text-red-800 px-3"
-                          >
-                            <FaTrash />
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                    {modalMode !== 'view' && (
-                      <button
-                        type="button"
-                        onClick={addPair}
-                        className="text-green-600 hover:text-green-800 text-sm"
-                      >
-                        + Add Pair
-                      </button>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              <div className="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
-                <button
-                  type="button"
-                  onClick={closeModal}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
-                >
-                  {modalMode === 'view' ? 'Close' : 'Cancel'}
-                </button>
-                {modalMode !== 'view' && (
-                  <button
-                    type="submit"
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
-                  >
-                    {modalMode === 'create' ? 'Create' : 'Update'}
-                  </button>
-                )}
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+      {activeView === 'challenges' && <AdminChallenges />}
     </div>
   );
 };
