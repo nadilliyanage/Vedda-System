@@ -6,6 +6,7 @@ import AdminLayout from "./components/admin/AdminLayout";
 import HomePage from "./pages/HomePage.jsx";
 import TranslatorPage from "./pages/TranslatorPage.jsx";
 import QuizPage from "./pages/QuizPage.jsx";
+import VeddaLearning from "./pages/VeddaLearning.jsx";
 import ArtifactPage from "./pages/ArtifactPage.jsx";
 import VisualsPage from "./pages/VisualsPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
@@ -31,6 +32,7 @@ const AppRouter = () => {
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/translator" element={<TranslatorPage />} />
+        <Route path="/learning" element={<VeddaLearning />} />
         <Route path="/quiz" element={<QuizPage />} />
         <Route path="/artifacts" element={<ArtifactPage />} />
         <Route path="/3d-visuals" element={<VisualsPage />} />
