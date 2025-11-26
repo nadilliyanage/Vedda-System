@@ -1,22 +1,53 @@
 import { useState } from 'react';
 import { FaBook, FaDumbbell, FaTrophy, FaArrowLeft } from 'react-icons/fa';
 import LessonSelection from './LessonSelection';
-// import PracticeExercises from './PracticeExercises';
+import LessonsList from './LessonsList';
+import LessonContentPlayer from './LessonContentPlayer';
+import PracticeExercises from './PracticeExercises';
+import ExerciseQuizRunner from './ExerciseQuizRunner';
 // import LearningChallenges from './LearningChallenges';
 
 const VeddaLearning = () => {
-  const [activeView, setActiveView] = useState('main'); // 'main', 'learn', 'practice', 'challenges'
+  const [activeView, setActiveView] = useState('main'); // 'main', 'learn', 'practice', 'challenges', 'quiz'
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedLesson, setSelectedLesson] = useState(null);
+  const [selectedExercise, setSelectedExercise] = useState(null);
+  const [allLessons, setAllLessons] = useState([]);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
-    // TODO: Navigate to lessons list for this category
-    console.log('Selected category:', category);
+    setActiveView('lessons');
+  };
+
+  const handleLessonSelect = (lesson, lessons) => {
+    setSelectedLesson(lesson);
+    setAllLessons(lessons);
+    setActiveView('content');
+  };
+
+  const handlePractice = (lesson) => {
+    // Navigate to practice exercises with lesson context
+    setSelectedLesson(lesson);
+    setActiveView('practice');
+  };
+
+  const handleStartExercise = (exercise, lesson, category) => {
+    setSelectedExercise(exercise);
+    setSelectedLesson(lesson);
+    setSelectedCategory(category);
+    setActiveView('quiz');
   };
 
   const handleBackToCategories = () => {
+    setActiveView('learn');
+    setSelectedCategory(null);
+    setSelectedLesson(null);
+  };
+
+  const handleBackToMain = () => {
     setActiveView('main');
     setSelectedCategory(null);
+    setSelectedLesson(null);
   };
 
   // Main hub view
@@ -145,12 +176,36 @@ const VeddaLearning = () => {
     );
   }
 
-  // Learn view
+  // Learn view - Category Selection
   if (activeView === 'learn') {
     return (
       <LessonSelection 
-        onBack={handleBackToCategories}
+        onBack={handleBackToMain}
         onCategorySelect={handleCategorySelect}
+      />
+    );
+  }
+
+  // Lessons view - Show lessons for selected category
+  if (activeView === 'lessons' && selectedCategory) {
+    return (
+      <LessonsList
+        category={selectedCategory}
+        onBack={handleBackToCategories}
+        onLessonSelect={handleLessonSelect}
+      />
+    );
+  }
+
+  // Content view - Show lesson content
+  if (activeView === 'content' && selectedLesson && selectedCategory) {
+    return (
+      <LessonContentPlayer
+        lesson={selectedLesson}
+        category={selectedCategory}
+        allLessons={allLessons}
+        onBack={() => setActiveView('lessons')}
+        onPractice={handlePractice}
       />
     );
   }
@@ -158,20 +213,32 @@ const VeddaLearning = () => {
   // Practice view
   if (activeView === 'practice') {
     return (
-      <div className="min-h-screen bg-gray-50 pt-16">
-        <div className="bg-white shadow-sm border-b border-gray-200 py-4 px-6 mb-6">
-          <button
-            onClick={() => setActiveView('main')}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
-          >
-            <FaArrowLeft /> Back to Learning Hub
-          </button>
-        </div>
-        <div className="text-center py-12">
-          <h2 className="text-2xl font-bold text-gray-800">Practice Exercises</h2>
-          <p className="text-gray-600 mt-2">Coming soon...</p>
-        </div>
-      </div>
+      <PracticeExercises
+        initialCategory={selectedCategory}
+        initialLesson={selectedLesson}
+        onStartExercise={handleStartExercise}
+        onBack={() => {
+          if (selectedLesson) {
+            // If coming from a lesson, go back to content
+            setActiveView('content');
+          } else {
+            // If coming from main hub, go back to main
+            setActiveView('main');
+          }
+        }}
+      />
+    );
+  }
+
+  // Quiz view - Exercise Quiz Runner
+  if (activeView === 'quiz' && selectedExercise && selectedLesson && selectedCategory) {
+    return (
+      <ExerciseQuizRunner
+        exercise={selectedExercise}
+        lesson={selectedLesson}
+        category={selectedCategory}
+        onClose={() => setActiveView('practice')}
+      />
     );
   }
 
