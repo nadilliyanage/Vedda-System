@@ -1,0 +1,14 @@
+{
+  "name": "vedda-stt-training",
+  "version": "1.0.0",
+  "description": "Training pipeline for custom Vedda speech-to-text model",
+  "scripts": {
+    "collect-data": "python scripts/collect_vedda_data.py",
+    "prepare-dataset": "python scripts/prepare_dataset.py",
+    "train-whisper": "python scripts/train_vedda_whisper.py",
+    "evaluate": "python scripts/evaluate_model.py",
+    "deploy": "python scripts/deploy_model.py"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
