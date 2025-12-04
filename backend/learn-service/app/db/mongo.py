@@ -10,7 +10,7 @@ def init_mongo(app):
     global client, db
 
     uri = app.config["MONGODB_URI"]
-    db_name = app.config.get("MONGODB_DB_NAME", "vedda-system")
+    db_name = app.config["MONGODB_DB_NAME"]
 
     try:
         client = MongoClient(uri, serverSelectionTimeoutMS=5000)
