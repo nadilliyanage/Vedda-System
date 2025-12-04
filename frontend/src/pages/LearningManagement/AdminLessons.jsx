@@ -3,6 +3,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FaEye, FaEdit, FaTrash, FaPlus, FaList } from 'react-icons/fa';
 import AdminCategories from './AdminCategories';
+import TextEditor from './TextEditor';
 
 const API_BASE = 'http://localhost:5000';
 
@@ -378,15 +379,7 @@ const AdminLessons = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Content (Rich Text Editor)</label>
-              <textarea
-                value={formData.content}
-                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                className="w-full border rounded-lg px-3 py-2 font-mono text-sm"
-                rows="10"
-                placeholder="Enter lesson content (HTML supported)&#10;&#10;Example:&#10;<h2>Introduction</h2>&#10;<p>Welcome to this lesson...</p>&#10;<img src='image-url' alt='description' />&#10;<audio controls><source src='audio-url' type='audio/mpeg'></audio>"
-              />
-              <p className="text-xs text-gray-500 mt-1">You can use HTML tags for formatting, images, and audio</p>
+              <TextEditor />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
