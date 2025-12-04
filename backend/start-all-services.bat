@@ -43,7 +43,7 @@ timeout /t 3 /nobreak >nul
 
 echo Starting Learn Service on port 5006...
 cd "%~dp0learn-service"
-start "Learn Service" python app.py
+start "Learn Service" python run.py
 cd ..
 timeout /t 2 > nul
 
