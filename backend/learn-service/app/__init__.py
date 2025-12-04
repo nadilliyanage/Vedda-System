@@ -28,12 +28,3 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix="/api/learn/admin")
 
     return app
-
-
-# -------------- merged start point --------------
-app = create_app()
-
-if __name__ == "__main__":
-    port = int(app.config.get("PORT", 5006))
-    print(f"Starting Learn Service on port {port}...")
-    app.run(host="0.0.0.0", port=port, debug=True)
