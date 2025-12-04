@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaBookOpen, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import axios from "axios";
-import { SERVICE_URLS } from "../constants/languages";
+import { SERVICE_URLS } from "../../constants/languages";
 
 const QuizPage = () => {
   const navigate = useNavigate();
