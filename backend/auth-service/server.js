@@ -23,7 +23,7 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => {
     console.log('MongoDB connected successfully');
     // Start server
-    const PORT = process.env.PORT || 5011;
+    const PORT = process.env.PORT || 5005;
     app.listen(PORT, () => {
       console.log(`Auth service running on port ${PORT}`);
     });

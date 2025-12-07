@@ -223,6 +223,7 @@ exports.updateProfile = async (req, res) => {
 
 // Verify token
 exports.verifyToken = async (req, res) => {
+  console.log('Verifying token for user ID:', req);
   try {
     const user = await User.findById(req.user.id);
 

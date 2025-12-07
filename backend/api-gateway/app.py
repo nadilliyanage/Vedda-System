@@ -41,7 +41,7 @@ SERVICES = {
         'health': '/health'
     },
     'auth': {
-        'url': 'http://localhost:5011',
+        'url': 'http://localhost:5005',
         'health': '/health'
     }
 }
