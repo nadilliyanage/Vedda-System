@@ -27,7 +27,12 @@ export const AuthProvider = ({ children }) => {
 
   const verifyToken = useCallback(async () => {
     try {
-      const response = await axios.post(`${API_URL}/verify`);
+      const storedToken = localStorage.getItem('token');
+      const response = await axios.post(`${API_URL}/verify`, {}, {
+        headers: {
+          'Authorization': `Bearer ${storedToken}`
+        }
+      });
       console.log('Token verification response:', response.data);
       if (response.data.success) {
         setUser(response.data.user);

@@ -165,6 +165,8 @@ def api_gateway(path):
     
     # Determine if the route requires authentication
     headers = {}
+    incoming_auth_headers = request.headers.get('Authorization')
+    
     if not is_public_route(full_path):
         token = extract_token_from_header()
         if not token:
@@ -180,7 +182,6 @@ def api_gateway(path):
 
         # Attach the authenticated user id to downstream requests
         headers['X-User-Id'] = user_id
-        headers['Authorization'] = f'Bearer {token}'
     
     # Find the appropriate service
     service_name = None
@@ -195,7 +196,8 @@ def api_gateway(path):
     # Get request data
     data = None
     files = None
-    
+    headers['Authorization'] = incoming_auth_headers or ''
+
     if request.method in ['POST', 'PUT']:
         # Handle file uploads for STT endpoint
         if full_path == '/api/stt' and request.files:
@@ -205,7 +207,7 @@ def api_gateway(path):
             # Get form data for STT
             data = request.form.to_dict()
         else:
-            data = request.get_json()
+            data = request.get_json(silent=True) or {}
     
     params = request.args.to_dict()
     
