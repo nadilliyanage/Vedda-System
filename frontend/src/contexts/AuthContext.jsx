@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token'));
 
-  const API_URL = import.meta.env.VITE_AUTH_SERVICE_URL || 'http://localhost:5011/api/auth';
+  const API_URL = import.meta.env.VITE_AUTH_SERVICE_URL || 'http://localhost:5000/api/auth';
 
   const logout = useCallback(() => {
     localStorage.removeItem('token');
@@ -27,7 +27,13 @@ export const AuthProvider = ({ children }) => {
 
   const verifyToken = useCallback(async () => {
     try {
-      const response = await axios.post(`${API_URL}/verify`);
+      const storedToken = localStorage.getItem('token');
+      const response = await axios.post(`${API_URL}/verify`, {}, {
+        headers: {
+          'Authorization': `Bearer ${storedToken}`
+        }
+      });
+      console.log('Token verification response:', response.data);
       if (response.data.success) {
         setUser(response.data.user);
       } else {

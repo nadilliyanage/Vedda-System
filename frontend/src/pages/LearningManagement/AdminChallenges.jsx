@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FaPlus, FaEdit, FaTrash, FaEye } from 'react-icons/fa';
+import { challengesAPI } from '../../services/learningAPI';
 
-const API_BASE = 'http://localhost:5000';
-
-const AdminLearnings = () => {
+const AdminChallenges = () => {
   const [challenges, setChallenges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filterType, setFilterType] = useState('all');
@@ -38,11 +36,11 @@ const AdminLearnings = () => {
   const fetchChallenges = async () => {
     try {
       setLoading(true);
-      const url = filterType === 'all' 
-        ? `${API_BASE}/api/learn/admin/challenges`
-        : `${API_BASE}/api/learn/admin/challenges?type=${filterType}`;
-      const response = await axios.get(url);
-      setChallenges(response.data);
+      const response = await challengesAPI.getAll();
+      const filteredData = filterType === 'all' 
+        ? response.data 
+        : response.data.filter(c => c.type === filterType);
+      setChallenges(filteredData);
     } catch (error) {
       toast.error('Failed to fetch challenges');
       console.error(error);
@@ -105,7 +103,6 @@ const AdminLearnings = () => {
     e.preventDefault();
     
     try {
-      // Prepare data based on challenge type
       const submitData = {
         id: formData.id,
         type: formData.type,
@@ -125,10 +122,10 @@ const AdminLearnings = () => {
       }
 
       if (modalMode === 'create') {
-        await axios.post(`${API_BASE}/api/learn/admin/challenges`, submitData);
+        await challengesAPI.create(submitData);
         toast.success('Challenge created successfully');
       } else if (modalMode === 'edit') {
-        await axios.put(`${API_BASE}/api/learn/admin/challenges/${formData.id}`, submitData);
+        await challengesAPI.update(formData.id, submitData);
         toast.success('Challenge updated successfully');
       }
 
@@ -141,10 +138,10 @@ const AdminLearnings = () => {
   };
 
   const handleDelete = async (challengeId) => {
-    if (!confirm('Are you sure you want to delete this challenge?')) return;
+    if (!window.confirm('Are you sure you want to delete this challenge?')) return;
 
     try {
-      await axios.delete(`${API_BASE}/api/learn/admin/challenges/${challengeId}`);
+      await challengesAPI.delete(challengeId);
       toast.success('Challenge deleted successfully');
       fetchChallenges();
     } catch (error) {
@@ -204,123 +201,116 @@ const AdminLearnings = () => {
   };
 
   return (
-    <div>
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Learning Management</h1>
-        <p className="text-gray-600 mt-2">Manage quiz challenges and learning activities</p>
-      </div>
-
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex justify-between items-center mb-6">
-          <div className="flex gap-2">
-            <button
-              onClick={() => setFilterType('all')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filterType === 'all' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              All
-            </button>
-            <button
-              onClick={() => setFilterType('fill_blank')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filterType === 'fill_blank' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              Fill Blank
-            </button>
-            <button
-              onClick={() => setFilterType('multiple_choice')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filterType === 'multiple_choice' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              Multiple Choice
-            </button>
-            <button
-              onClick={() => setFilterType('match_pairs')}
-              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
-                filterType === 'match_pairs' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              Match Pairs
-            </button>
-          </div>
-          
+    <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex gap-2">
           <button
-            onClick={() => openModal('create')}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+            onClick={() => setFilterType('all')}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              filterType === 'all' ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
           >
-            <FaPlus /> Add Challenge
+            All
+          </button>
+          <button
+            onClick={() => setFilterType('fill_blank')}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              filterType === 'fill_blank' ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            Fill Blank
+          </button>
+          <button
+            onClick={() => setFilterType('multiple_choice')}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              filterType === 'multiple_choice' ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            Multiple Choice
+          </button>
+          <button
+            onClick={() => setFilterType('match_pairs')}
+            className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+              filterType === 'match_pairs' ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+            }`}
+          >
+            Match Pairs
           </button>
         </div>
-
-        {loading ? (
-          <div className="text-center py-8">
-            <p className="text-gray-600">Loading challenges...</p>
-          </div>
-        ) : challenges.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No challenges found</p>
-            <p className="text-gray-400 mt-2">Create your first challenge to get started</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="min-w-full">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prompt</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rewards</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {challenges.map((challenge) => (
-                  <tr key={challenge.id}>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{challenge.id}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <span className="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
-                        {getTypeLabel(challenge.type)}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-gray-900 max-w-md truncate">{challenge.prompt}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {challenge.xp} XP • {challenge.coins} Coins
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex gap-2">
-                        <button
-                          onClick={() => openModal('view', challenge)}
-                          className="text-blue-600 hover:text-blue-900"
-                          title="View"
-                        >
-                          <FaEye />
-                        </button>
-                        <button
-                          onClick={() => openModal('edit', challenge)}
-                          className="text-green-600 hover:text-green-900"
-                          title="Edit"
-                        >
-                          <FaEdit />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(challenge.id)}
-                          className="text-red-600 hover:text-red-900"
-                          title="Delete"
-                        >
-                          <FaTrash />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        
+        <button
+          onClick={() => openModal('create')}
+          className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors flex items-center gap-2"
+        >
+          <FaPlus /> Add Challenge
+        </button>
       </div>
+
+      {loading ? (
+        <div className="text-center py-8">
+          <p className="text-gray-600">Loading challenges...</p>
+        </div>
+      ) : challenges.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-gray-500 text-lg">No challenges found</p>
+          <p className="text-gray-400 mt-2">Create your first challenge to get started</p>
+        </div>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="min-w-full">
+            <thead className="bg-gray-50">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prompt</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rewards</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {challenges.map((challenge) => (
+                <tr key={challenge.id}>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{challenge.id}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <span className="px-2 py-1 rounded-full text-xs bg-orange-100 text-orange-800">
+                      {getTypeLabel(challenge.type)}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-900 max-w-md truncate">{challenge.prompt}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {challenge.xp} XP • {challenge.coins} Coins
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => openModal('view', challenge)}
+                        className="text-blue-600 hover:text-blue-900"
+                        title="View"
+                      >
+                        <FaEye />
+                      </button>
+                      <button
+                        onClick={() => openModal('edit', challenge)}
+                        className="text-green-600 hover:text-green-900"
+                        title="Edit"
+                      >
+                        <FaEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(challenge.id)}
+                        className="text-red-600 hover:text-red-900"
+                        title="Delete"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* Modal */}
       {showModal && (
@@ -440,7 +430,7 @@ const AdminLearnings = () => {
                       <button
                         type="button"
                         onClick={addAnswer}
-                        className="text-green-600 hover:text-green-800 text-sm"
+                        className="text-orange-600 hover:text-orange-800 text-sm"
                       >
                         + Add Answer
                       </button>
@@ -513,7 +503,7 @@ const AdminLearnings = () => {
                       <button
                         type="button"
                         onClick={addPair}
-                        className="text-green-600 hover:text-green-800 text-sm"
+                        className="text-orange-600 hover:text-orange-800 text-sm"
                       >
                         + Add Pair
                       </button>
@@ -533,7 +523,7 @@ const AdminLearnings = () => {
                 {modalMode !== 'view' && (
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                    className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
                   >
                     {modalMode === 'create' ? 'Create' : 'Update'}
                   </button>
@@ -547,4 +537,4 @@ const AdminLearnings = () => {
   );
 };
 
-export default AdminLearnings;
+export default AdminChallenges;
