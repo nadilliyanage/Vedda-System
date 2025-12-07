@@ -27,3 +27,9 @@ def get_collection(name: str):
     if db is None:
         raise RuntimeError("MongoDB is not initialized. Call init_mongo(app) first.")
     return db[name]
+
+def user_collection():
+    """Get a MongoDB collection from the initialized DB."""
+    if db is None:
+        raise RuntimeError("MongoDB is not initialized. Call init_mongo(app) first.")
+    return db['users']

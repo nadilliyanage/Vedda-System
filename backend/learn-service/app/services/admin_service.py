@@ -1,6 +1,6 @@
 from app.db.mongo import get_collection
 from app.models.common import strip_mongo_id
-
+from flask import g
 
 # ---------- Challenges ----------
 
@@ -197,6 +197,8 @@ def admin_delete_lesson(lesson_id: str):
 # ---------- Exercises ----------
 
 def admin_list_exercises():
+    current_user = g.current_user
+    print(f"current user: {current_user}")
     col = get_collection("exercises")
     exercises = list(col.find({}, {"_id": 0}))
     return exercises
