@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FaEye, FaEdit, FaTrash, FaPlus, FaArrowLeft } from 'react-icons/fa';
-
-const API_BASE = 'http://localhost:5000';
+import { categoriesAPI } from '../../services/learningAPI';
 
 const AdminCategories = ({ onBack }) => {
   const [categories, setCategories] = useState([]);
@@ -25,7 +23,7 @@ const AdminCategories = ({ onBack }) => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_BASE}/api/learn/admin/categories`);
+      const response = await categoriesAPI.getAll();
       setCategories(response.data);
     } catch (error) {
       toast.error('Failed to fetch categories');
@@ -65,10 +63,10 @@ const AdminCategories = ({ onBack }) => {
     
     try {
       if (activeView === 'add') {
-        await axios.post(`${API_BASE}/api/learn/admin/categories`, formData);
+        await categoriesAPI.create(formData);
         toast.success('Category created successfully');
       } else if (activeView === 'edit') {
-        await axios.put(`${API_BASE}/api/learn/admin/categories/${formData.id}`, formData);
+        await categoriesAPI.update(formData.id, formData);
         toast.success('Category updated successfully');
       }
 
@@ -83,7 +81,7 @@ const AdminCategories = ({ onBack }) => {
     if (!window.confirm('Are you sure you want to delete this category?')) return;
 
     try {
-      await axios.delete(`${API_BASE}/api/learn/admin/categories/${categoryId}`);
+      await categoriesAPI.delete(categoryId);
       toast.success('Category deleted successfully');
       fetchCategories();
     } catch (error) {

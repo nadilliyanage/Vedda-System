@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FaEye, FaEdit, FaTrash, FaPlus, FaList } from 'react-icons/fa';
 import AdminCategories from './AdminCategories';
 import TextEditor from './TextEditor';
-
-const API_BASE = 'http://localhost:5000';
+import { lessonsAPI, categoriesAPI } from '../../services/learningAPI';
 
 const AdminLessons = () => {
   const [lessons, setLessons] = useState([]);
@@ -37,7 +35,7 @@ const AdminLessons = () => {
   const fetchLessons = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_BASE}/api/learn/admin/lessons`);
+      const response = await lessonsAPI.getAll();
       setLessons(response.data);
     } catch (error) {
       toast.error('Failed to fetch lessons');
@@ -49,7 +47,7 @@ const AdminLessons = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${API_BASE}/api/learn/admin/categories`);
+      const response = await categoriesAPI.getAll();
       setCategories(response.data);
     } catch (error) {
       console.error('Failed to fetch categories:', error);
@@ -104,10 +102,10 @@ const AdminLessons = () => {
       };
 
       if (activeView === 'add') {
-        await axios.post(`${API_BASE}/api/learn/admin/lessons`, submitData);
+        await lessonsAPI.create(submitData);
         toast.success('Lesson created successfully');
       } else if (activeView === 'edit') {
-        await axios.put(`${API_BASE}/api/learn/admin/lessons/${formData.id}`, submitData);
+        await lessonsAPI.update(formData.id, submitData);
         toast.success('Lesson updated successfully');
       }
 
@@ -122,7 +120,7 @@ const AdminLessons = () => {
     if (!window.confirm('Are you sure you want to delete this lesson?')) return;
 
     try {
-      await axios.delete(`${API_BASE}/api/learn/admin/lessons/${lessonId}`);
+      await lessonsAPI.delete(lessonId);
       toast.success('Lesson deleted successfully');
       fetchLessons();
     } catch (error) {

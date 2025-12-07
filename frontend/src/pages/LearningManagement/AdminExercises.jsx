@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FaEye, FaEdit, FaTrash, FaPlus, FaSave } from 'react-icons/fa';
-
-const API_BASE = 'http://localhost:5000';
+import { exercisesAPI, lessonsAPI, categoriesAPI } from '../../services/learningAPI';
 
 const AdminExercises = () => {
   const [exercises, setExercises] = useState([]);
@@ -54,7 +52,7 @@ const AdminExercises = () => {
   const fetchExercises = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_BASE}/api/learn/admin/exercises`);
+      const response = await exercisesAPI.getAll();
       setExercises(response.data);
     } catch (error) {
       toast.error('Failed to fetch exercises');
@@ -66,7 +64,7 @@ const AdminExercises = () => {
 
   const fetchLessons = async () => {
     try {
-      const response = await axios.get(`${API_BASE}/api/learn/admin/lessons`);
+      const response = await lessonsAPI.getAll();
       setLessons(response.data);
     } catch (error) {
       console.error('Failed to fetch lessons:', error);
@@ -75,7 +73,7 @@ const AdminExercises = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get(`${API_BASE}/api/learn/admin/categories`);
+      const response = await categoriesAPI.getAll();
       setCategories(response.data);
     } catch (error) {
       console.error('Failed to fetch categories:', error);
@@ -223,10 +221,10 @@ const AdminExercises = () => {
       };
 
       if (activeView === 'add') {
-        await axios.post(`${API_BASE}/api/learn/admin/exercises`, submitData);
+        await exercisesAPI.create(submitData);
         toast.success('Exercise created successfully');
       } else if (activeView === 'edit') {
-        await axios.put(`${API_BASE}/api/learn/admin/exercises/${formData.id}`, submitData);
+        await exercisesAPI.update(formData.id, submitData);
         toast.success('Exercise updated successfully');
       }
 
@@ -241,7 +239,7 @@ const AdminExercises = () => {
     if (!window.confirm('Are you sure you want to delete this exercise?')) return;
 
     try {
-      await axios.delete(`${API_BASE}/api/learn/admin/exercises/${exerciseId}`);
+      await exercisesAPI.delete(exerciseId);
       toast.success('Exercise deleted successfully');
       fetchExercises();
     } catch (error) {

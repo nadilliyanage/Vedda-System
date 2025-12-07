@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FaArrowLeft, FaSpinner, FaBook } from 'react-icons/fa';
-
-const API_BASE = 'http://localhost:5000';
+import { lessonsAPI } from '../../services/learningAPI';
 
 const LessonsList = ({ category, onBack, onLessonSelect }) => {
   const [lessons, setLessons] = useState([]);
@@ -26,7 +24,7 @@ const LessonsList = ({ category, onBack, onLessonSelect }) => {
   const fetchLessons = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_BASE}/api/learn/admin/lessons`);
+      const response = await lessonsAPI.getAll();
       
       // Filter lessons by selected category
       const filteredLessons = response.data.filter(

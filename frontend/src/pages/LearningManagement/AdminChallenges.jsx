@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FaPlus, FaEdit, FaTrash, FaEye } from 'react-icons/fa';
-
-const API_BASE = 'http://localhost:5000';
+import { challengesAPI } from '../../services/learningAPI';
 
 const AdminChallenges = () => {
   const [challenges, setChallenges] = useState([]);
@@ -38,11 +36,11 @@ const AdminChallenges = () => {
   const fetchChallenges = async () => {
     try {
       setLoading(true);
-      const url = filterType === 'all' 
-        ? `${API_BASE}/api/learn/admin/challenges`
-        : `${API_BASE}/api/learn/admin/challenges?type=${filterType}`;
-      const response = await axios.get(url);
-      setChallenges(response.data);
+      const response = await challengesAPI.getAll();
+      const filteredData = filterType === 'all' 
+        ? response.data 
+        : response.data.filter(c => c.type === filterType);
+      setChallenges(filteredData);
     } catch (error) {
       toast.error('Failed to fetch challenges');
       console.error(error);
@@ -124,10 +122,10 @@ const AdminChallenges = () => {
       }
 
       if (modalMode === 'create') {
-        await axios.post(`${API_BASE}/api/learn/admin/challenges`, submitData);
+        await challengesAPI.create(submitData);
         toast.success('Challenge created successfully');
       } else if (modalMode === 'edit') {
-        await axios.put(`${API_BASE}/api/learn/admin/challenges/${formData.id}`, submitData);
+        await challengesAPI.update(formData.id, submitData);
         toast.success('Challenge updated successfully');
       }
 
@@ -143,7 +141,7 @@ const AdminChallenges = () => {
     if (!window.confirm('Are you sure you want to delete this challenge?')) return;
 
     try {
-      await axios.delete(`${API_BASE}/api/learn/admin/challenges/${challengeId}`);
+      await challengesAPI.delete(challengeId);
       toast.success('Challenge deleted successfully');
       fetchChallenges();
     } catch (error) {

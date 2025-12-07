@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FaArrowLeft, FaSpinner } from 'react-icons/fa';
-
-const API_BASE = 'http://localhost:5000';
+import { categoriesAPI } from '../../services/learningAPI';
 
 const LessonSelection = ({ onBack, onCategorySelect }) => {
   const [categories, setCategories] = useState([]);
@@ -30,7 +28,7 @@ const LessonSelection = ({ onBack, onCategorySelect }) => {
   const fetchCategories = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_BASE}/api/learn/admin/categories`);
+      const response = await categoriesAPI.getAll();
       setCategories(response.data);
     } catch (error) {
       toast.error('Failed to load categories');

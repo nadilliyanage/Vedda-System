@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { FaArrowLeft, FaSpinner, FaChevronDown, FaChevronRight, FaDumbbell } from 'react-icons/fa';
-
-const API_BASE = 'http://localhost:5000';
+import { categoriesAPI, lessonsAPI, exercisesAPI } from '../../services/learningAPI';
 
 const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBack, onStartExercise }) => {
   const [categories, setCategories] = useState([]);
@@ -41,9 +39,9 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
     try {
       setLoading(true);
       const [categoriesRes, lessonsRes, exercisesRes] = await Promise.all([
-        axios.get(`${API_BASE}/api/learn/admin/categories`),
-        axios.get(`${API_BASE}/api/learn/admin/lessons`),
-        axios.get(`${API_BASE}/api/learn/admin/exercises`)
+        categoriesAPI.getAll(),
+        lessonsAPI.getAll(),
+        exercisesAPI.getAll()
       ]);
 
       setCategories(categoriesRes.data);
