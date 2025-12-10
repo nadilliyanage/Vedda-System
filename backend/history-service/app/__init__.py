@@ -5,6 +5,7 @@ from app.config import Config
 from app.db.mongo import init_mongo
 from app.routes.health_routes import health_bp
 from app.routes.history_routes import history_bp
+from app.routes.feedback_routes import feedback_bp
 
 
 def create_app():
@@ -20,6 +21,7 @@ def create_app():
     # Register blueprints
     app.register_blueprint(health_bp)
     app.register_blueprint(history_bp, url_prefix="/api/history")
+    app.register_blueprint(feedback_bp, url_prefix="/api/feedback")
 
     return app
 

@@ -24,4 +24,6 @@ def get_db():
 
 def dictionary_collection():
     """Get dictionary collection"""
-    return _db.dictionary if _db else None
+    if _db is not None:
+        return _db.dictionary
+    return None

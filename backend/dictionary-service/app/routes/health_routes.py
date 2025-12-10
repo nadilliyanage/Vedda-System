@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify
+from app.db.mongo import get_db, dictionary_collection
 
 health_bp = Blueprint('health', __name__)
 
@@ -7,8 +8,6 @@ health_bp = Blueprint('health', __name__)
 def health_check():
     """Health check endpoint"""
     try:
-        from app.db.mongo import get_db, dictionary_collection
-        
         # Test MongoDB connection
         db = get_db()
         db.client.admin.command('ping')

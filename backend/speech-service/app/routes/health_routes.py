@@ -9,5 +9,5 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'service': 'Speech Service',
-        'features': ['TTS', 'STT']
+        'features': ['TTS', 'STT', 'Vedda STT']
     })

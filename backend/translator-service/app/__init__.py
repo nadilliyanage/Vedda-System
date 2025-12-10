@@ -3,7 +3,7 @@ from flask_cors import CORS
 
 from app.config import Config
 from app.routes.health_routes import health_bp
-from app.routes.translator_routes import translator_bp
+from app.routes.translator_routes import translator_bp, init_translator
 
 
 def create_app():
@@ -12,6 +12,9 @@ def create_app():
 
     # Enable CORS
     CORS(app)
+
+    # Initialize translator service
+    init_translator(app)
 
     # Register blueprints
     app.register_blueprint(health_bp)

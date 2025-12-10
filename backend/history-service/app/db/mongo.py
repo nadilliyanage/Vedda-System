@@ -24,9 +24,13 @@ def get_db():
 
 def translation_history_collection():
     """Get translation history collection"""
-    return _db.translation_history if _db else None
+    if _db is not None:
+        return _db.translation_history
+    return None
 
 
 def feedback_collection():
     """Get feedback collection"""
-    return _db.feedback if _db else None
+    if _db is not None:
+        return _db.feedback
+    return None
