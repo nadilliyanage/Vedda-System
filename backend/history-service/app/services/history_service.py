@@ -1,23 +1,11 @@
-import json
-import os
 from datetime import datetime, timezone
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from pymongo import MongoClient
-from bson import ObjectId
+from app.db.mongo import get_db, translation_history_collection, feedback_collection
 
-app = Flask(__name__)
-CORS(app)
-
-# MongoDB setup
-MONGODB_URI = os.getenv('MONGODB_URI', 'mongodb+srv://heshan:3UAXaHwpIRwEqK8K@cluster0.quemmhk.mongodb.net/vedda-system?retryWrites=true&w=majority&appName=Cluster0')
-DATABASE_NAME = 'vedda-system'
 
 class HistoryService:
     def __init__(self):
-        self.client = MongoClient(MONGODB_URI)
-        self.db = self.client[DATABASE_NAME]
-        print("📚 History Service connected to MongoDB")
+        self.db = get_db()
+        print("📚 History Service initialized")
     
     def add_translation_history(self, input_text, output_text, source_language, 
                               target_language, translation_method, confidence_score=None):
@@ -33,7 +21,7 @@ class HistoryService:
                 'created_at': datetime.now(timezone.utc)
             }
             
-            result = self.db.translation_history.insert_one(history_doc)
+            result = translation_history_collection().insert_one(history_doc)
             return str(result.inserted_id)
             
         except Exception as e:
@@ -50,7 +38,7 @@ class HistoryService:
             if target_language:
                 query_filter['target_language'] = target_language
             
-            cursor = self.db.translation_history.find(query_filter)\
+            cursor = translation_history_collection().find(query_filter)\
                 .sort('created_at', -1)\
                 .limit(limit)
             
@@ -84,7 +72,7 @@ class HistoryService:
                 ]
             }
             
-            cursor = self.db.translation_history.find(search_filter)\
+            cursor = translation_history_collection().find(search_filter)\
                 .sort('created_at', -1)\
                 .limit(limit)
             
@@ -122,7 +110,7 @@ class HistoryService:
                 'created_at': datetime.now(timezone.utc)
             }
             
-            result = self.db.user_feedback.insert_one(feedback_doc)
+            result = feedback_collection().insert_one(feedback_doc)
             return str(result.inserted_id)
             
         except Exception as e:
@@ -136,7 +124,7 @@ class HistoryService:
             if feedback_type:
                 query_filter['feedback_type'] = feedback_type
             
-            cursor = self.db.user_feedback.find(query_filter)\
+            cursor = feedback_collection().find(query_filter)\
                 .sort('created_at', -1)\
                 .limit(limit)
             
@@ -164,7 +152,7 @@ class HistoryService:
         """Get history and feedback statistics"""
         try:
             # Translation history stats
-            total_translations = self.db.translation_history.count_documents({})
+            total_translations = translation_history_collection().count_documents({})
             
             # Language pair stats
             language_pairs_pipeline = [
@@ -180,28 +168,28 @@ class HistoryService:
                 {'$sort': {'count': -1}},
                 {'$limit': 10}
             ]
-            language_pairs = list(self.db.translation_history.aggregate(language_pairs_pipeline))
+            language_pairs = list(translation_history_collection().aggregate(language_pairs_pipeline))
             
             # Method stats
             method_pipeline = [
                 {'$group': {'_id': '$translation_method', 'count': {'$sum': 1}}},
                 {'$sort': {'count': -1}}
             ]
-            methods = list(self.db.translation_history.aggregate(method_pipeline))
+            methods = list(translation_history_collection().aggregate(method_pipeline))
             
             # Feedback stats
-            total_feedback = self.db.user_feedback.count_documents({})
+            total_feedback = feedback_collection().count_documents({})
             
             feedback_types_pipeline = [
                 {'$group': {'_id': '$feedback_type', 'count': {'$sum': 1}}},
                 {'$sort': {'count': -1}}
             ]
-            feedback_types = list(self.db.user_feedback.aggregate(feedback_types_pipeline))
+            feedback_types = list(feedback_collection().aggregate(feedback_types_pipeline))
             
             # Recent activity (last 7 days)
             from datetime import timedelta
             week_ago = datetime.now(timezone.utc) - timedelta(days=7)
-            recent_translations = self.db.translation_history.count_documents({
+            recent_translations = translation_history_collection().count_documents({
                 'created_at': {'$gte': week_ago}
             })
             
@@ -230,168 +218,14 @@ class HistoryService:
             print(f"❌ Error getting statistics: {e}")
             return {}
 
-# Initialize service
-history_service = HistoryService()
 
-@app.route('/api/history', methods=['POST'])
-def add_history():
-    """Add translation to history"""
-    try:
-        data = request.get_json()
-        
-        required_fields = ['input_text', 'output_text', 'source_language', 'target_language']
-        for field in required_fields:
-            if not data.get(field):
-                return jsonify({'error': f'{field} is required'}), 400
-        
-        history_id = history_service.add_translation_history(
-            input_text=data['input_text'],
-            output_text=data['output_text'],
-            source_language=data['source_language'],
-            target_language=data['target_language'],
-            translation_method=data.get('translation_method', ''),
-            confidence_score=data.get('confidence_score')
-        )
-        
-        if history_id:
-            return jsonify({
-                'success': True,
-                'id': history_id,
-                'message': 'Translation added to history'
-            }), 201
-        else:
-            return jsonify({'error': 'Failed to add translation to history'}), 500
-            
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+# Global instance
+_history_service = None
 
-@app.route('/api/history', methods=['GET'])
-def get_history():
-    """Get translation history"""
-    try:
-        limit = int(request.args.get('limit', 50))
-        source_language = request.args.get('source_language')
-        target_language = request.args.get('target_language')
-        
-        history = history_service.get_translation_history(
-            limit=limit,
-            source_language=source_language,
-            target_language=target_language
-        )
-        
-        return jsonify({
-            'success': True,
-            'history': history,
-            'count': len(history)
-        })
-        
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
 
-@app.route('/api/history/search', methods=['GET'])
-def search_history():
-    """Search translation history"""
-    try:
-        query = request.args.get('q', '').strip()
-        limit = int(request.args.get('limit', 50))
-        
-        if not query:
-            return jsonify({'error': 'Query parameter required'}), 400
-        
-        results = history_service.search_translation_history(query, limit)
-        
-        return jsonify({
-            'success': True,
-            'results': results,
-            'count': len(results),
-            'query': query
-        })
-        
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/feedback', methods=['POST'])
-def add_feedback():
-    """Add user feedback"""
-    try:
-        data = request.get_json()
-        
-        required_fields = ['original_text', 'suggested_translation', 'feedback_type']
-        for field in required_fields:
-            if not data.get(field):
-                return jsonify({'error': f'{field} is required'}), 400
-        
-        feedback_id = history_service.add_user_feedback(
-            original_text=data['original_text'],
-            suggested_translation=data['suggested_translation'],
-            current_translation=data.get('current_translation', ''),
-            feedback_type=data['feedback_type'],
-            user_rating=data.get('user_rating'),
-            comments=data.get('comments', '')
-        )
-        
-        if feedback_id:
-            return jsonify({
-                'success': True,
-                'id': feedback_id,
-                'message': 'Feedback added successfully'
-            }), 201
-        else:
-            return jsonify({'error': 'Failed to add feedback'}), 500
-            
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/feedback', methods=['GET'])
-def get_feedback():
-    """Get user feedback"""
-    try:
-        limit = int(request.args.get('limit', 50))
-        feedback_type = request.args.get('type')
-        
-        feedback = history_service.get_user_feedback(limit, feedback_type)
-        
-        return jsonify({
-            'success': True,
-            'feedback': feedback,
-            'count': len(feedback)
-        })
-        
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/api/history/stats', methods=['GET'])
-def get_statistics():
-    """Get history and feedback statistics"""
-    try:
-        stats = history_service.get_statistics()
-        return jsonify({
-            'success': True,
-            'statistics': stats
-        })
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-@app.route('/health', methods=['GET'])
-def health_check():
-    try:
-        # Test MongoDB connection
-        history_service.client.admin.command('ping')
-        translation_count = history_service.db.translation_history.count_documents({})
-        
-        return jsonify({
-            'status': 'healthy',
-            'service': 'History Service (MongoDB)',
-            'database': 'connected',
-            'translation_count': translation_count
-        })
-    except Exception as e:
-        return jsonify({
-            'status': 'unhealthy',
-            'service': 'History Service',
-            'error': str(e)
-        }), 500
-
-if __name__ == '__main__':
-    print("🚀 Starting History Service with MongoDB...")
-    app.run(debug=True, host='0.0.0.0', port=5003)
+def get_history_service():
+    """Get history service instance"""
+    global _history_service
+    if _history_service is None:
+        _history_service = HistoryService()
+    return _history_service

@@ -64,6 +64,12 @@ ROUTE_MAPPINGS = {
 # Routes that should bypass JWT validation (login/register/etc.)
 PUBLIC_ROUTE_PREFIXES = [
     '/api/auth',
+    '/api/translate',
+    '/api/dictionary',
+    '/api/history',
+    '/api/feedback',
+    '/api/tts',
+    '/api/stt',
     '/health'
 ]
 
