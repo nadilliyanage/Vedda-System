@@ -252,14 +252,12 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
                   {pair.left}
                 </div>
                 <span className="text-gray-400 text-xl">=</span>
-                <input
-                  type="text"
+                <select
                   value={userAnswer?.[pair.left] || ''}
                   onChange={(e) =>
                     !submitted && handleMatchPairChange(question.questionNo, pair.left, e.target.value)
                   }
                   disabled={submitted}
-                  placeholder="Enter match"
                   className={`flex-1 border-2 rounded-lg px-4 py-3 ${
                     submitted
                       ? userAnswer?.[pair.left]?.toLowerCase().trim() === pair.right.toLowerCase().trim()
@@ -267,7 +265,14 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
                         : 'border-red-500 bg-red-50'
                       : 'border-gray-300 focus:border-blue-500 focus:outline-none'
                   }`}
-                />
+                >
+                  <option value="">Select</option>
+                  {question.pairs?.map((p, i) => (
+                    <option key={i} value={p.right}>
+                      {p.right}
+                    </option>
+                  ))}
+                </select>
                 {submitted && userAnswer?.[pair.left]?.toLowerCase().trim() !== pair.right.toLowerCase().trim() && (
                   <span className="text-sm text-gray-600">
                     (Expected: {pair.right})
