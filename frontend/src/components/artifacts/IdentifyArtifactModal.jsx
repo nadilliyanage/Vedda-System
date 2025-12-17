@@ -1,0 +1,273 @@
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import { X, Upload, Sparkles, Loader2 } from 'lucide-react';
+import toast from 'react-hot-toast';
+
+const IdentifyArtifactModal = ({ isOpen, onClose }) => {
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [identifiedData, setIdentifiedData] = useState(null);
+
+  if (!isOpen) return null;
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast.error('Please select an image file');
+        return;
+      }
+
+      // Validate file size (5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('Image size should be less than 5MB');
+        return;
+      }
+
+      setImageFile(file);
+      setIdentifiedData(null);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleIdentify = async () => {
+    if (!imageFile) {
+      toast.error('Please upload an image first');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // TODO: Replace with actual API call
+      // const uploadResult = await uploadImage(imageFile);
+      // const aiResult = await generateMetadata(uploadResult.data.url);
+      
+      // Simulated delay for demo
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Mock data for demo
+      setIdentifiedData({
+        name: 'Traditional Vedda Arrow',
+        description: 'A traditional hunting arrow crafted by the Vedda people, featuring a bamboo shaft and stone arrowhead. These arrows were essential tools for hunting in the dense forests of Sri Lanka.',
+        category: 'weapons',
+        tags: ['hunting', 'traditional', 'bamboo', 'stone'],
+        estimatedAge: '200-500 years old',
+        culturalSignificance: 'Represents the hunting heritage of the Vedda people'
+      });
+      
+      toast.success('✨ Artifact identified successfully!');
+    } catch (error) {
+      console.error('Identification error:', error);
+      toast.error('Failed to identify artifact. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleClose = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    setIdentifiedData(null);
+    setLoading(false);
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <Sparkles className="text-white" size={24} />
+            <h2 className="text-2xl font-bold text-white">Identify Artifact</h2>
+          </div>
+          <button
+            onClick={handleClose}
+            className="text-white hover:bg-white/20 rounded-full p-2 transition-colors"
+          >
+            <X size={24} />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {/* Left Side - Image Upload */}
+            <div>
+              <div className="bg-gray-50 rounded-xl border-2 border-dashed border-gray-300 p-6 h-full min-h-[400px] flex flex-col">
+                <label className="block text-sm font-medium text-gray-700 mb-4">
+                  Upload Artifact Image
+                </label>
+                
+                {imagePreview ? (
+                  <div className="flex-1 flex flex-col gap-4">
+                    <div className="flex-1 flex items-center justify-center bg-white rounded-lg overflow-hidden">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="max-h-full max-w-full object-contain"
+                      />
+                    </div>
+                    <div className="flex gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setImageFile(null);
+                          setImagePreview(null);
+                          setIdentifiedData(null);
+                        }}
+                        className="flex-1 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors font-medium"
+                      >
+                        Remove Image
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleIdentify}
+                        disabled={loading}
+                        className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 font-medium"
+                      >
+                        {loading ? (
+                          <>
+                            <Loader2 size={20} className="animate-spin" />
+                            Identifying...
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles size={20} />
+                            Identify Artifact
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <label className="flex-1 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
+                    <Upload size={64} className="text-gray-400 mb-4" />
+                    <p className="text-gray-600 text-lg mb-2 font-medium">Click to upload artifact image</p>
+                    <p className="text-gray-400 text-sm">PNG, JPG, WEBP up to 5MB</p>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageChange}
+                      className="hidden"
+                    />
+                  </label>
+                )}
+              </div>
+            </div>
+
+            {/* Right Side - Identification Results */}
+            <div>
+              <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-6 h-full min-h-[400px]">
+                <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <Sparkles className="text-purple-600" size={20} />
+                  Identification Results
+                </h3>
+
+                {identifiedData ? (
+                  <div className="space-y-4">
+                    {/* Name */}
+                    <div className="bg-white rounded-lg p-4 shadow-sm">
+                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 block">
+                        Artifact Name
+                      </label>
+                      <p className="text-lg font-bold text-gray-800">{identifiedData.name}</p>
+                    </div>
+
+                    {/* Category */}
+                    <div className="bg-white rounded-lg p-4 shadow-sm">
+                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 block">
+                        Category
+                      </label>
+                      <span className="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium capitalize">
+                        {identifiedData.category}
+                      </span>
+                    </div>
+
+                    {/* Description */}
+                    <div className="bg-white rounded-lg p-4 shadow-sm">
+                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 block">
+                        Description
+                      </label>
+                      <p className="text-gray-700 leading-relaxed">{identifiedData.description}</p>
+                    </div>
+
+                    {/* Tags */}
+                    <div className="bg-white rounded-lg p-4 shadow-sm">
+                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 block">
+                        Tags
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {identifiedData.tags.map((tag, index) => (
+                          <span
+                            key={index}
+                            className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Estimated Age */}
+                    <div className="bg-white rounded-lg p-4 shadow-sm">
+                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 block">
+                        Estimated Age
+                      </label>
+                      <p className="text-gray-800 font-medium">{identifiedData.estimatedAge}</p>
+                    </div>
+
+                    {/* Cultural Significance */}
+                    <div className="bg-white rounded-lg p-4 shadow-sm">
+                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 block">
+                        Cultural Significance
+                      </label>
+                      <p className="text-gray-700 leading-relaxed">{identifiedData.culturalSignificance}</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="h-full flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-6xl mb-4">🔍</div>
+                      <p className="text-gray-600 text-lg mb-2">Upload an image to identify</p>
+                      <p className="text-gray-400 text-sm">
+                        Our AI will analyze the artifact and provide detailed information
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="border-t px-6 py-4 bg-gray-50 flex justify-between items-center">
+          <p className="text-sm text-gray-600">
+            💡 <span className="font-medium">Tip:</span> Upload clear, well-lit images for best results
+          </p>
+          <button
+            onClick={handleClose}
+            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors font-medium"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+IdentifyArtifactModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+export default IdentifyArtifactModal;
