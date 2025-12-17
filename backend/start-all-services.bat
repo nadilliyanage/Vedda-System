@@ -14,19 +14,19 @@ echo Starting services in order...
 
 echo Starting Dictionary Service on port 5002...
 cd "%~dp0dictionary-service"
-start "Dictionary Service" python app.py
+start "Dictionary Service" python run.py
 cd ..
 timeout /t 2 > nul
 
 echo Starting History Service on port 5003...
 cd "%~dp0history-service"
-start "History Service" python app.py
+start "History Service" python run.py
 cd ..
 timeout /t 2 > nul
 
 echo Starting Translator Service on port 5001...
 cd "%~dp0translator-service"
-start "Translator Service" python app.py
+start "Translator Service" python run.py
 cd ..
 timeout /t 3 > nul
 
@@ -43,13 +43,13 @@ timeout /t 3 /nobreak >nul
 
 echo Starting Learn Service on port 5006...
 cd "%~dp0learn-service"
-start "Learn Service" python app.py
+start "Learn Service" python run.py
 cd ..
 timeout /t 2 > nul
 
 echo Starting Speech Service on port 5007...
 cd "%~dp0speech-service"
-start "Speech Service" python app.py
+start "Speech Service" python run.py
 cd ..
 timeout /t 3 > nul
 

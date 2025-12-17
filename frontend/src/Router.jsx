@@ -5,7 +5,7 @@ import AdminLayout from "./components/admin/AdminLayout";
 // Pages
 import HomePage from "./pages/HomePage.jsx";
 import TranslatorPage from "./pages/TranslatorPage.jsx";
-import QuizPage from "./pages/QuizPage.jsx";
+import VeddaLearning from "./pages/LearningManagement/VeddaLearning.jsx";
 import ArtifactPage from "./pages/ArtifactPage.jsx";
 import VisualsPage from "./pages/VisualsPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
@@ -16,7 +16,7 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import AdminDashboard from "./pages/AdminDashboard.jsx";
 import AdminUsers from "./pages/AdminUsers.jsx";
 import AdminWords from "./pages/AdminWords.jsx";
-import AdminLearnings from "./pages/AdminLearnings.jsx";
+import AdminLearnings from "./pages/LearningManagement/AdminLearnings.jsx";
 import AdminArtifacts from "./pages/AdminArtifacts.jsx";
 import AdminSettings from "./pages/AdminSettings.jsx";
 
@@ -31,7 +31,7 @@ const AppRouter = () => {
       <Route element={<Layout />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/translator" element={<TranslatorPage />} />
-        <Route path="/quiz" element={<QuizPage />} />
+        <Route path="/learning" element={<VeddaLearning />} />
         <Route path="/artifacts" element={<ArtifactPage />} />
         <Route path="/3d-visuals" element={<VisualsPage />} />
         <Route path="/profile" element={<ProfilePage />} />

@@ -5,9 +5,18 @@ import requests
 from flask import Flask, request, jsonify, redirect
 from flask_cors import CORS
 from werkzeug.exceptions import RequestTimeout
+from dotenv import load_dotenv
+import jwt
 
 app = Flask(__name__)
 CORS(app)
+
+load_dotenv()
+
+# JWT configuration
+# JWT_SECRET = os.getenv('JWT_SECRET')
+JWT_SECRET = 'c9b68d055658679667166a6f88d8d708' #Todo add secret to env
+JWT_ALGORITHMS = ['HS256']
 
 # Service configuration
 SERVICES = {
@@ -52,11 +61,44 @@ ROUTE_MAPPINGS = {
     '/api/auth': 'auth'
 }
 
+# Routes that should bypass JWT validation (login/register/etc.)
+PUBLIC_ROUTE_PREFIXES = [
+    '/api/auth',
+    '/api/translate',
+    '/api/dictionary',
+    '/api/history',
+    '/api/feedback',
+    '/api/tts',
+    '/api/stt',
+    '/health'
+]
+
 def get_service_url(service_name):
     """Get the base URL for a service"""
     return SERVICES.get(service_name, {}).get('url', '')
 
-def forward_request(service_name, path, method='GET', data=None, params=None, files=None):
+def is_public_route(full_path):
+    """Return True if the path should skip auth checks"""
+    return any(full_path.startswith(prefix) for prefix in PUBLIC_ROUTE_PREFIXES)
+
+def extract_token_from_header():
+    """Extract Bearer token from Authorization header"""
+    auth_header = request.headers.get('Authorization', '')
+    if not auth_header.startswith('Bearer '):
+        return None
+    return auth_header.split(' ', 1)[1]
+
+def decode_token(token):
+    """Decode JWT and return user id"""
+    if not JWT_SECRET:
+        raise ValueError('JWT secret not configured in API Gateway')
+    payload = jwt.decode(token, JWT_SECRET, algorithms=JWT_ALGORITHMS)
+    user_id = payload.get('userId')
+    if not user_id:
+        raise jwt.InvalidTokenError('userId not present in token payload')
+    return user_id
+
+def forward_request(service_name, path, method='GET', data=None, params=None, files=None, headers=None):
     """Forward request to appropriate microservice"""
     try:
         service_url = get_service_url(service_name)
@@ -64,20 +106,21 @@ def forward_request(service_name, path, method='GET', data=None, params=None, fi
             return jsonify({'error': 'Service not found'}), 404
         
         url = f"{service_url}{path}"
+        request_headers = headers or {}
         
         # Forward the request
         if method == 'GET':
-            response = requests.get(url, params=params, timeout=30)
+            response = requests.get(url, params=params, headers=request_headers, timeout=30)
         elif method == 'POST':
             # Handle file uploads for STT service
             if files:
-                response = requests.post(url, files=files, data=data, params=params, timeout=30)
+                response = requests.post(url, files=files, data=data, params=params, headers=request_headers, timeout=30)
             else:
-                response = requests.post(url, json=data, params=params, timeout=30)
+                response = requests.post(url, json=data, params=params, headers=request_headers, timeout=30)
         elif method == 'PUT':
-            response = requests.put(url, json=data, params=params, timeout=30)
+            response = requests.put(url, json=data, params=params, headers=request_headers, timeout=30)
         elif method == 'DELETE':
-            response = requests.delete(url, params=params, timeout=30)
+            response = requests.delete(url, params=params, headers=request_headers, timeout=30)
         else:
             return jsonify({'error': 'Method not allowed'}), 405
         
@@ -126,6 +169,26 @@ def api_gateway(path):
     """Main API gateway endpoint"""
     full_path = f'/api/{path}'
     
+    # Determine if the route requires authentication
+    headers = {}
+    incoming_auth_headers = request.headers.get('Authorization')
+    
+    if not is_public_route(full_path):
+        token = extract_token_from_header()
+        if not token:
+            return jsonify({'error': 'Authorization token missing'}), 401
+        try:
+            user_id = decode_token(token)
+        except jwt.ExpiredSignatureError:
+            return jsonify({'error': 'Token expired'}), 401
+        except jwt.InvalidTokenError as e:
+            return jsonify({'error': f'Invalid token: {str(e)}'}), 401
+        except ValueError as e:
+            return jsonify({'error': str(e)}), 500
+
+        # Attach the authenticated user id to downstream requests
+        headers['X-User-Id'] = user_id
+    
     # Find the appropriate service
     service_name = None
     for route_pattern, service in ROUTE_MAPPINGS.items():
@@ -139,7 +202,8 @@ def api_gateway(path):
     # Get request data
     data = None
     files = None
-    
+    headers['Authorization'] = incoming_auth_headers or ''
+
     if request.method in ['POST', 'PUT']:
         # Handle file uploads for STT endpoint
         if full_path == '/api/stt' and request.files:
@@ -149,12 +213,12 @@ def api_gateway(path):
             # Get form data for STT
             data = request.form.to_dict()
         else:
-            data = request.get_json()
+            data = request.get_json(silent=True) or {}
     
     params = request.args.to_dict()
     
     # Forward the request
-    return forward_request(service_name, full_path, request.method, data, params, files)
+    return forward_request(service_name, full_path, request.method, data, params, files, headers)
 
 @app.errorhandler(404)
 def not_found(error):

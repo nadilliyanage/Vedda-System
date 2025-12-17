@@ -17,11 +17,11 @@ const HomePage = () => {
     },
     {
       id: 2,
-      title: "Word Learning Quiz",
+      title: "Vedda Vocabulary Learning",
       description:
-        "Test your knowledge with interactive Vedda vocabulary quizzes",
+        "Learn, practice, and test your Vedda vocabulary skills",
       icon: FaBookOpen,
-      path: "/quiz",
+      path: "/learning",
       color: "from-green-500 to-green-600",
       hoverColor: "hover:from-green-600 hover:to-green-700",
     },

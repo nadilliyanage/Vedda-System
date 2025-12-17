@@ -224,6 +224,8 @@ exports.updateProfile = async (req, res) => {
 // Verify token
 exports.verifyToken = async (req, res) => {
   try {
+    // Token is already verified by authMiddleware
+    // req.user contains the authenticated user info from middleware
     const user = await User.findById(req.user.id);
 
     if (!user) {
