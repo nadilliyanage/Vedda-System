@@ -7,6 +7,7 @@ from app.db.mongo import init_mongo, user_collection
 from app.routes.health_routes import health_bp
 from app.routes.learn_routes import learn_bp
 from app.routes.admin_routes import admin_bp
+from app.routes.ai_routes import ai_routes
 from app.services.learn_service import seed_challenges_if_empty
 from app.models.converters import user_from_mongo  # from your models package
 
@@ -46,5 +47,6 @@ def create_app():
     app.register_blueprint(health_bp)
     app.register_blueprint(learn_bp, url_prefix="/api/learn")
     app.register_blueprint(admin_bp, url_prefix="/api/learn/admin")
+    app.register_blueprint(ai_routes)
 
     return app
