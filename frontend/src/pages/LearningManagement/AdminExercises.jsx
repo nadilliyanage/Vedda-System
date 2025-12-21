@@ -17,29 +17,24 @@ const AdminExercises = () => {
     lessonId: '',
     categoryId: '',
     exerciseNumber: '',
-    questions: []
+    question: {
+      questionNo: '1',
+      type: 'multiple_choice',
+      prompt: '',
+      xp: 1,
+      points: 1,
+      timeLimitSec: 30,
+      rest: '',
+      options: [
+        { id: 'A', text: '', correct: false },
+        { id: 'B', text: '', correct: false }
+      ],
+      answer: '',
+      pairs: [
+        { left: '', right: '' }
+      ]
+    }
   });
-
-  // Question builder state
-  const [currentQuestion, setCurrentQuestion] = useState({
-    questionNo: '',
-    type: 'multiple_choice',
-    prompt: '',
-    xp: 1,
-    points: 1,
-    timeLimitSec: 30,
-    rest: '',
-    options: [
-      { id: 'A', text: '', correct: false },
-      { id: 'B', text: '', correct: false }
-    ],
-    answer: '',
-    pairs: [
-      { left: '', right: '' }
-    ]
-  });
-
-  const [editingQuestionIndex, setEditingQuestionIndex] = useState(null);
 
   useEffect(() => {
     if (activeView === 'list') {
@@ -86,9 +81,24 @@ const AdminExercises = () => {
       lessonId: '',
       categoryId: '',
       exerciseNumber: '',
-      questions: []
+      question: {
+        questionNo: '1',
+        type: 'multiple_choice',
+        prompt: '',
+        xp: 1,
+        points: 1,
+        timeLimitSec: 30,
+        rest: '',
+        options: [
+          { id: 'A', text: '', correct: false },
+          { id: 'B', text: '', correct: false }
+        ],
+        answer: '',
+        pairs: [
+          { left: '', right: '' }
+        ]
+      }
     });
-    resetQuestionBuilder();
     setCurrentExercise(null);
     setActiveView('add');
   };
@@ -99,9 +109,24 @@ const AdminExercises = () => {
       lessonId: exercise.lessonId || '',
       categoryId: exercise.categoryId || '',
       exerciseNumber: exercise.exerciseNumber || '',
-      questions: exercise.questions || []
+      question: exercise.question || {
+        questionNo: '1',
+        type: 'multiple_choice',
+        prompt: '',
+        xp: 1,
+        points: 1,
+        timeLimitSec: 30,
+        rest: '',
+        options: [
+          { id: 'A', text: '', correct: false },
+          { id: 'B', text: '', correct: false }
+        ],
+        answer: '',
+        pairs: [
+          { left: '', right: '' }
+        ]
+      }
     });
-    resetQuestionBuilder();
     setCurrentExercise(exercise);
     setActiveView('edit');
   };
@@ -111,113 +136,78 @@ const AdminExercises = () => {
     setActiveView('view');
   };
 
-  const resetQuestionBuilder = () => {
-    setCurrentQuestion({
-      questionNo: '',
-      type: 'multiple_choice',
-      prompt: '',
-      xp: 1,
-      points: 1,
-      timeLimitSec: 30,
-      rest: '',
-      options: [
-        { id: 'A', text: '', correct: false },
-        { id: 'B', text: '', correct: false }
-      ],
-      answer: '',
-      pairs: [
-        { left: '', right: '' }
-      ]
-    });
-    setEditingQuestionIndex(null);
-  };
-
-  const handleSaveQuestion = () => {
-    // Validate question
-    if (!currentQuestion.questionNo || !currentQuestion.prompt) {
-      toast.error('Question number and prompt are required');
-      return;
-    }
-
-    // Prepare question data based on type
-    const questionData = {
-      questionNo: currentQuestion.questionNo,
-      type: currentQuestion.type,
-      prompt: currentQuestion.prompt,
-      xp: parseInt(currentQuestion.xp),
-      points: parseInt(currentQuestion.points),
-      timeLimitSec: parseInt(currentQuestion.timeLimitSec),
-      rest: currentQuestion.rest
-    };
-
-    if (currentQuestion.type === 'multiple_choice') {
-      questionData.options = currentQuestion.options.filter(o => o.text.trim());
-      questionData.correctOptions = currentQuestion.options
-        .filter(o => o.correct && o.text.trim())
-        .map(o => o.id);
-    } else if (currentQuestion.type === 'text_input') {
-      questionData.answer = currentQuestion.answer;
-    } else if (currentQuestion.type === 'match_pairs') {
-      questionData.pairs = currentQuestion.pairs.filter(p => p.left.trim() && p.right.trim());
-    }
-
-    if (editingQuestionIndex !== null) {
-      // Update existing question
-      const updatedQuestions = [...formData.questions];
-      updatedQuestions[editingQuestionIndex] = questionData;
-      setFormData({ ...formData, questions: updatedQuestions });
-      toast.success('Question updated');
-    } else {
-      // Add new question
-      setFormData({ ...formData, questions: [...formData.questions, questionData] });
-      toast.success('Question added');
-    }
-
-    resetQuestionBuilder();
-  };
-
-  const handleEditQuestion = (index) => {
-    const question = formData.questions[index];
-    setCurrentQuestion({
-      questionNo: question.questionNo,
-      type: question.type,
-      prompt: question.prompt,
-      xp: question.xp,
-      points: question.points,
-      timeLimitSec: question.timeLimitSec,
-      rest: question.rest || '',
-      options: question.options || [
-        { id: 'A', text: '', correct: false },
-        { id: 'B', text: '', correct: false }
-      ],
-      answer: question.answer || '',
-      pairs: question.pairs || [{ left: '', right: '' }]
-    });
-    setEditingQuestionIndex(index);
-  };
-
-  const handleDeleteQuestion = (index) => {
-    if (!window.confirm('Remove this question?')) return;
-    const updatedQuestions = formData.questions.filter((_, i) => i !== index);
-    setFormData({ ...formData, questions: updatedQuestions });
-    toast.success('Question removed');
-  };
-
   const handleSubmit = async () => {
     if (!formData.lessonId || !formData.exerciseNumber) {
       toast.error('Please select lesson and exercise number');
       return;
     }
 
-    if (formData.questions.length === 0) {
-      toast.error('Please add at least one question');
+    if (!formData.question.prompt) {
+      toast.error('Please fill in the question prompt');
       return;
     }
 
+    // Validate based on question type
+    const question = formData.question;
+    if (question.type === 'multiple_choice') {
+      const validOptions = question.options.filter(o => o.text.trim());
+      if (validOptions.length < 2) {
+        toast.error('Multiple choice requires at least 2 options');
+        return;
+      }
+      const hasCorrect = question.options.some(o => o.correct && o.text.trim());
+      if (!hasCorrect) {
+        toast.error('Please mark at least one option as correct');
+        return;
+      }
+    } else if (question.type === 'text_input') {
+      if (!question.answer || !question.answer.trim()) {
+        toast.error('Please provide the expected answer');
+        return;
+      }
+    } else if (question.type === 'match_pairs') {
+      const validPairs = question.pairs.filter(p => p.left.trim() && p.right.trim());
+      if (validPairs.length < 1) {
+        toast.error('Match pairs requires at least 1 complete pair');
+        return;
+      }
+    }
+
     try {
+      // Prepare question data based on type
+      const questionData = {
+        questionNo: '1', // Always 1 since there's only one question
+        type: question.type,
+        prompt: question.prompt,
+        xp: parseInt(question.xp) || 1,
+        points: parseInt(question.points) || 1,
+        timeLimitSec: parseInt(question.timeLimitSec) || 30,
+        rest: question.rest || ''
+      };
+
+      if (question.type === 'multiple_choice') {
+        questionData.options = question.options.filter(o => o.text.trim());
+        questionData.correctOptions = question.options
+          .filter(o => o.correct && o.text.trim())
+          .map(o => o.id);
+        // Add correct_ans field with text values
+        const correctOptions = question.options.filter(o => o.correct && o.text.trim());
+        questionData.correct_ans = correctOptions.map(o => o.text).join(', ');
+      } else if (question.type === 'text_input') {
+        questionData.answer = question.answer;
+        questionData.correct_ans = question.answer || '';
+      } else if (question.type === 'match_pairs') {
+        questionData.pairs = question.pairs.filter(p => p.left.trim() && p.right.trim());
+        const validPairs = question.pairs.filter(p => p.left.trim() && p.right.trim());
+        questionData.correct_ans = validPairs.map(p => `${p.left}: ${p.right}`).join(', ');
+      }
+
       const submitData = {
-        ...formData,
-        id: formData.id || `${formData.lessonId}_ex${formData.exerciseNumber}`
+        id: formData.id || `${formData.lessonId}_ex${formData.exerciseNumber}`,
+        lessonId: formData.lessonId,
+        categoryId: formData.categoryId,
+        exerciseNumber: formData.exerciseNumber,
+        question: questionData
       };
 
       if (activeView === 'add') {
@@ -254,78 +244,86 @@ const AdminExercises = () => {
   };
 
   const addOption = () => {
-    const nextId = String.fromCharCode(65 + currentQuestion.options.length); // A, B, C, D...
-    setCurrentQuestion({
-      ...currentQuestion,
-      options: [...currentQuestion.options, { id: nextId, text: '', correct: false }]
+    const nextId = String.fromCharCode(65 + formData.question.options.length); // A, B, C, D...
+    setFormData({
+      ...formData,
+      question: {
+        ...formData.question,
+        options: [...formData.question.options, { id: nextId, text: '', correct: false }]
+      }
     });
   };
 
   const updateOption = (index, field, value) => {
-    const newOptions = [...currentQuestion.options];
+    const newOptions = [...formData.question.options];
     newOptions[index][field] = value;
-    setCurrentQuestion({ ...currentQuestion, options: newOptions });
+    setFormData({
+      ...formData,
+      question: {
+        ...formData.question,
+        options: newOptions
+      }
+    });
   };
 
   const removeOption = (index) => {
-    if (currentQuestion.options.length <= 2) {
+    if (formData.question.options.length <= 2) {
       toast.error('At least 2 options required');
       return;
     }
-    setCurrentQuestion({
-      ...currentQuestion,
-      options: currentQuestion.options.filter((_, i) => i !== index)
+    setFormData({
+      ...formData,
+      question: {
+        ...formData.question,
+        options: formData.question.options.filter((_, i) => i !== index)
+      }
     });
   };
 
   const addPair = () => {
-    setCurrentQuestion({
-      ...currentQuestion,
-      pairs: [...currentQuestion.pairs, { left: '', right: '' }]
+    setFormData({
+      ...formData,
+      question: {
+        ...formData.question,
+        pairs: [...formData.question.pairs, { left: '', right: '' }]
+      }
     });
   };
 
   const updatePair = (index, field, value) => {
-    const newPairs = [...currentQuestion.pairs];
+    const newPairs = [...formData.question.pairs];
     newPairs[index][field] = value;
-    setCurrentQuestion({ ...currentQuestion, pairs: newPairs });
-  };
-
-  const removePair = (index) => {
-    if (currentQuestion.pairs.length <= 1) {
-      toast.error('At least 1 pair required');
-      return;
-    }
-    setCurrentQuestion({
-      ...currentQuestion,
-      pairs: currentQuestion.pairs.filter((_, i) => i !== index)
+    setFormData({
+      ...formData,
+      question: {
+        ...formData.question,
+        pairs: newPairs
+      }
     });
   };
 
-  const renderQuestionPreview = (question, index) => {
+  const removePair = (index) => {
+    if (formData.question.pairs.length <= 1) {
+      toast.error('At least 1 pair required');
+      return;
+    }
+    setFormData({
+      ...formData,
+      question: {
+        ...formData.question,
+        pairs: formData.question.pairs.filter((_, i) => i !== index)
+      }
+    });
+  };
+
+  const renderQuestionPreview = (question) => {
     return (
-      <div key={index} className="border-2 border-gray-200 rounded-lg p-4 mb-3 bg-white">
+      <div className="border-2 border-gray-200 rounded-lg p-4 mb-3 bg-white">
         <div className="flex justify-between items-start mb-2">
           <div>
-            <span className="font-semibold text-gray-700">Q{question.questionNo}:</span>
+            <span className="font-semibold text-gray-700">Question:</span>
             <span className="ml-2 text-gray-900">{question.prompt}</span>
             <span className="ml-2 text-xs text-gray-500">({question.type.replace('_', ' ')})</span>
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => handleEditQuestion(index)}
-              className="text-blue-600 hover:text-blue-800"
-              title="Edit"
-            >
-              <FaEdit />
-            </button>
-            <button
-              onClick={() => handleDeleteQuestion(index)}
-              className="text-red-600 hover:text-red-800"
-              title="Delete"
-            >
-              <FaTrash />
-            </button>
           </div>
         </div>
 
@@ -408,7 +406,7 @@ const AdminExercises = () => {
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lesson</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Topic</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Questions</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rewards</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                   </tr>
@@ -424,10 +422,10 @@ const AdminExercises = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">Ex {exercise.exerciseNumber}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {exercise.questions?.length || 0} questions
+                        {exercise.question?.type?.replace('_', ' ') || 'N/A'}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {exercise.questions?.reduce((sum, q) => sum + (q.xp || 0), 0) || 0} XP
+                        {exercise.question?.xp || 0} XP
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                         <div className="flex gap-2">
@@ -492,10 +490,8 @@ const AdminExercises = () => {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">Questions ({currentExercise.questions?.length || 0})</h3>
-            <div className="space-y-3">
-              {currentExercise.questions?.map((question, index) => renderQuestionPreview(question, index))}
-            </div>
+            <h3 className="text-lg font-semibold text-gray-800 mb-3">Question</h3>
+            {currentExercise.question ? renderQuestionPreview(currentExercise.question) : <p className="text-gray-500">No question added</p>}
           </div>
 
           <div className="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
@@ -574,9 +570,7 @@ const AdminExercises = () => {
 
         {/* Question Builder */}
         <div className="mb-6 pb-6 border-b-2 border-dashed border-gray-300">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            {editingQuestionIndex !== null ? 'Edit Question' : 'Add Question'}
-          </h3>
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">Question</h3>
 
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -584,17 +578,18 @@ const AdminExercises = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Question No.</label>
                 <input
                   type="text"
-                  value={currentQuestion.questionNo}
-                  onChange={(e) => setCurrentQuestion({ ...currentQuestion, questionNo: e.target.value })}
+                  value={formData.question.questionNo}
+                  onChange={(e) => setFormData({ ...formData, question: { ...formData.question, questionNo: e.target.value }})}
                   className="w-full border rounded-lg px-3 py-2"
                   placeholder="e.g., 1"
+                  disabled
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Type</label>
                 <select
-                  value={currentQuestion.type}
-                  onChange={(e) => setCurrentQuestion({ ...currentQuestion, type: e.target.value })}
+                  value={formData.question.type}
+                  onChange={(e) => setFormData({ ...formData, question: { ...formData.question, type: e.target.value }})}
                   className="w-full border rounded-lg px-3 py-2"
                 >
                   <option value="multiple_choice">Multiple Choice</option>
@@ -604,15 +599,13 @@ const AdminExercises = () => {
               </div>
             </div>
 
-            
-
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">XP Reward</label>
                 <input
                   type="number"
-                  value={currentQuestion.xp}
-                  onChange={(e) => setCurrentQuestion({ ...currentQuestion, xp: e.target.value })}
+                  value={formData.question.xp}
+                  onChange={(e) => setFormData({ ...formData, question: { ...formData.question, xp: e.target.value }})}
                   className="w-full border rounded-lg px-3 py-2"
                   min="0"
                 />
@@ -621,8 +614,8 @@ const AdminExercises = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Points</label>
                 <input
                   type="number"
-                  value={currentQuestion.points}
-                  onChange={(e) => setCurrentQuestion({ ...currentQuestion, points: e.target.value })}
+                  value={formData.question.points}
+                  onChange={(e) => setFormData({ ...formData, question: { ...formData.question, points: e.target.value }})}
                   className="w-full border rounded-lg px-3 py-2"
                   min="0"
                 />
@@ -631,8 +624,8 @@ const AdminExercises = () => {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Time Limit (sec)</label>
                 <input
                   type="number"
-                  value={currentQuestion.timeLimitSec}
-                  onChange={(e) => setCurrentQuestion({ ...currentQuestion, timeLimitSec: e.target.value })}
+                  value={formData.question.timeLimitSec}
+                  onChange={(e) => setFormData({ ...formData, question: { ...formData.question, timeLimitSec: e.target.value }})}
                   className="w-full border rounded-lg px-3 py-2"
                   min="0"
                 />
@@ -642,8 +635,8 @@ const AdminExercises = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Prompt</label>
               <textarea
-                value={currentQuestion.prompt}
-                onChange={(e) => setCurrentQuestion({ ...currentQuestion, prompt: e.target.value })}
+                value={formData.question.prompt}
+                onChange={(e) => setFormData({ ...formData, question: { ...formData.question, prompt: e.target.value }})}
                 className="w-full border rounded-lg px-3 py-2"
                 rows="2"
                 placeholder="Enter question prompt"
@@ -651,15 +644,16 @@ const AdminExercises = () => {
             </div>
 
             {/* Type-specific fields */}
-            {currentQuestion.type === 'multiple_choice' && (
+            {formData.question.type === 'multiple_choice' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Options</label>
-                {currentQuestion.options.map((option, index) => (
+                {formData.question.options.map((option, index) => (
                   <div key={index} className="flex items-center gap-2 mb-2">
                     <input
                       type="checkbox"
                       checked={option.correct}
                       onChange={(e) => updateOption(index, 'correct', e.target.checked)}
+                    
                       className="w-5 h-5"
                       title="Mark as correct"
                     />
@@ -671,7 +665,7 @@ const AdminExercises = () => {
                       className="flex-1 border rounded-lg px-3 py-2"
                       placeholder={`Option ${option.id}`}
                     />
-                    {currentQuestion.options.length > 2 && (
+                    {formData.question.options.length > 2 && (
                       <button
                         type="button"
                         onClick={() => removeOption(index)}
@@ -692,23 +686,23 @@ const AdminExercises = () => {
               </div>
             )}
 
-            {currentQuestion.type === 'text_input' && (
+            {formData.question.type === 'text_input' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Expected Answer</label>
                 <input
                   type="text"
-                  value={currentQuestion.answer}
-                  onChange={(e) => setCurrentQuestion({ ...currentQuestion, answer: e.target.value })}
+                  value={formData.question.answer}
+                  onChange={(e) => setFormData({ ...formData, question: { ...formData.question, answer: e.target.value }})}
                   className="w-full border rounded-lg px-3 py-2"
                   placeholder="Enter expected answer"
                 />
               </div>
             )}
 
-            {currentQuestion.type === 'match_pairs' && (
+            {formData.question.type === 'match_pairs' && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Pairs</label>
-                {currentQuestion.pairs.map((pair, index) => (
+                {formData.question.pairs.map((pair, index) => (
                   <div key={index} className="flex gap-2 mb-2">
                     <input
                       type="text"
@@ -725,7 +719,7 @@ const AdminExercises = () => {
                       className="flex-1 border rounded-lg px-3 py-2"
                       placeholder="Right side"
                     />
-                    {currentQuestion.pairs.length > 1 && (
+                    {formData.question.pairs.length > 1 && (
                       <button
                         type="button"
                         onClick={() => removePair(index)}
@@ -745,29 +739,21 @@ const AdminExercises = () => {
                 </button>
               </div>
             )}
-
-            <button
-              type="button"
-              onClick={handleSaveQuestion}
-              className="w-full bg-green-600 text-white px-4 py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2 font-medium"
-            >
-              <FaSave /> {editingQuestionIndex !== null ? 'Update Question' : 'Save Question'}
-            </button>
           </div>
         </div>
 
-        {/* Question Review List */}
+        {/* Question Preview */}
         <div className="mb-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
-            Questions Added ({formData.questions.length})
+            Question Preview
           </h3>
-          {formData.questions.length === 0 ? (
-            <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-              <p className="text-gray-500">No questions added yet. Use the builder above to add questions.</p>
+          {formData.question.prompt ? (
+            <div>
+              {renderQuestionPreview(formData.question)}
             </div>
           ) : (
-            <div className="max-h-96 overflow-y-auto">
-              {formData.questions.map((question, index) => renderQuestionPreview(question, index))}
+            <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
+              <p className="text-gray-500">Fill in the question details above to see a preview.</p>
             </div>
           )}
         </div>
@@ -786,7 +772,7 @@ const AdminExercises = () => {
             onClick={handleSubmit}
             className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
           >
-            Close & Save Exercise
+            Save Exercise
           </button>
         </div>
       </div>

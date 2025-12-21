@@ -10,18 +10,14 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
   const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
 
   useEffect(() => {
-    // Initialize answers object
-    const initialAnswers = {};
-    exercise.questions?.forEach(question => {
-      if (question.type === 'multiple_choice') {
-        initialAnswers[question.questionNo] = [];
-      } else if (question.type === 'text_input') {
-        initialAnswers[question.questionNo] = '';
-      } else if (question.type === 'match_pairs') {
-        initialAnswers[question.questionNo] = {};
-      }
-    });
-    setAnswers(initialAnswers);
+    // Initialize answer based on question type
+    if (exercise.question?.type === 'multiple_choice') {
+      setAnswers({ [exercise.question.questionNo]: [] });
+    } else if (exercise.question?.type === 'text_input') {
+      setAnswers({ [exercise.question.questionNo]: '' });
+    } else if (exercise.question?.type === 'match_pairs') {
+      setAnswers({ [exercise.question.questionNo]: {} });
+    }
   }, [exercise]);
 
   const handleMultipleChoiceChange = (questionNo, optionId, isChecked) => {
@@ -51,43 +47,40 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
   };
 
   const validateAnswers = () => {
-    const questionResults = {};
-    let totalScore = 0;
-    let earnedScore = 0;
+    const question = exercise.question;
+    if (!question) return { questionResults: {}, totalScore: 0, earnedScore: 0 };
 
-    exercise.questions?.forEach(question => {
-      const userAnswer = answers[question.questionNo];
-      let isCorrect = false;
+    const userAnswer = answers[question.questionNo];
+    let isCorrect = false;
 
-      if (question.type === 'multiple_choice') {
-        const correctOptions = question.correctOptions || [];
-        const userOptions = userAnswer || [];
-        isCorrect = 
-          correctOptions.length === userOptions.length &&
-          correctOptions.every(opt => userOptions.includes(opt));
-      } else if (question.type === 'text_input') {
-        const expectedAnswer = (question.answer || '').toLowerCase().trim();
-        const userText = (userAnswer || '').toLowerCase().trim();
-        isCorrect = userText === expectedAnswer;
-      } else if (question.type === 'match_pairs') {
-        const correctPairs = question.pairs || [];
-        const userPairs = userAnswer || {};
-        isCorrect = correctPairs.every(pair => 
-          userPairs[pair.left]?.toLowerCase().trim() === pair.right.toLowerCase().trim()
-        );
-      }
+    if (question.type === 'multiple_choice') {
+      const correctOptions = question.correctOptions || [];
+      const userOptions = userAnswer || [];
+      isCorrect = 
+        correctOptions.length === userOptions.length &&
+        correctOptions.every(opt => userOptions.includes(opt));
+    } else if (question.type === 'text_input') {
+      const expectedAnswer = (question.answer || '').toLowerCase().trim();
+      const userText = (userAnswer || '').toLowerCase().trim();
+      isCorrect = userText === expectedAnswer;
+    } else if (question.type === 'match_pairs') {
+      const correctPairs = question.pairs || [];
+      const userPairs = userAnswer || {};
+      isCorrect = correctPairs.every(pair => 
+        userPairs[pair.left]?.toLowerCase().trim() === pair.right.toLowerCase().trim()
+      );
+    }
 
-      questionResults[question.questionNo] = {
+    const questionResults = {
+      [question.questionNo]: {
         isCorrect,
         userAnswer,
         question
-      };
-
-      totalScore += question.xp || 0;
-      if (isCorrect) {
-        earnedScore += question.xp || 0;
       }
-    });
+    };
+
+    const totalScore = question.xp || 0;
+    const earnedScore = isCorrect ? (question.xp || 0) : 0;
 
     return { questionResults, totalScore, earnedScore };
   };
@@ -98,23 +91,17 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
     // Simulate AI generation
     setTimeout(() => {
       const { questionResults, earnedScore, totalScore } = results;
-      const correctCount = Object.values(questionResults).filter(r => r.isCorrect).length;
-      const totalCount = Object.keys(questionResults).length;
-      const percentage = Math.round((correctCount / totalCount) * 100);
+      const isCorrect = Object.values(questionResults)[0]?.isCorrect || false;
 
-      let summary = `You answered ${correctCount} out of ${totalCount} questions correctly (${percentage}%).\n\n`;
+      let summary = '';
       
-      if (percentage === 100) {
-        summary += '🎉 Perfect score! You have mastered this exercise.';
-      } else if (percentage >= 70) {
-        summary += '👏 Great job! You have a good understanding of this material.';
-      } else if (percentage >= 50) {
-        summary += '📚 Good effort! Review the lesson content to improve your understanding.';
+      if (isCorrect) {
+        summary = '🎉 Perfect! You answered correctly.\n\n';
       } else {
-        summary += '💪 Keep practicing! Consider reviewing the lesson before trying again.';
+        summary = '❌ Not quite right. Review the material and try again.\n\n';
       }
 
-      summary += `\n\nYou earned ${earnedScore} out of ${totalScore} XP.`;
+      summary += `You earned ${earnedScore} out of ${totalScore} XP.`;
 
       setAiSummary(summary);
       setIsGeneratingSummary(false);
@@ -122,21 +109,26 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
   };
 
   const handleSubmit = () => {
-    // Validate all questions are answered
-    const allAnswered = exercise.questions?.every(question => {
-      const answer = answers[question.questionNo];
-      if (question.type === 'multiple_choice') {
-        return answer && answer.length > 0;
-      } else if (question.type === 'text_input') {
-        return answer && answer.trim() !== '';
-      } else if (question.type === 'match_pairs') {
-        return answer && Object.keys(answer).length === question.pairs?.length;
-      }
-      return false;
-    });
+    // Validate question is answered
+    const question = exercise.question;
+    if (!question) {
+      toast.error('No question found');
+      return;
+    }
 
-    if (!allAnswered) {
-      toast.error('Please answer all questions before submitting');
+    const answer = answers[question.questionNo];
+    let isAnswered = false;
+
+    if (question.type === 'multiple_choice') {
+      isAnswered = answer && answer.length > 0;
+    } else if (question.type === 'text_input') {
+      isAnswered = answer && answer.trim() !== '';
+    } else if (question.type === 'match_pairs') {
+      isAnswered = answer && Object.keys(answer).length === question.pairs?.length;
+    }
+
+    if (!isAnswered) {
+      toast.error('Please answer the question before submitting');
       return;
     }
 
@@ -317,7 +309,11 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
 
         {/* Questions */}
         <div className="mb-6">
-          {exercise.questions?.map((question, index) => renderQuestion(question, index))}
+          {exercise.question ? renderQuestion(exercise.question, 0) : (
+            <div className="text-center py-12 bg-white rounded-xl">
+              <p className="text-gray-500 text-lg">No question available</p>
+            </div>
+          )}
         </div>
 
         {/* AI Summary (After Submission) */}
@@ -361,8 +357,7 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
         {!submitted && (
           <div className="mt-6 bg-blue-50 rounded-xl p-4 border-2 border-blue-200">
             <p className="text-blue-700 text-center">
-              <strong>{exercise.questions?.length || 0}</strong> questions • 
-              Total <strong>{exercise.questions?.reduce((sum, q) => sum + (q.xp || 0), 0)} XP</strong> available
+              <strong>{exercise.question?.xp || 0} XP</strong> available for correct answer
             </p>
           </div>
         )}

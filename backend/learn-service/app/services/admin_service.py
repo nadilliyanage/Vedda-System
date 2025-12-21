@@ -207,7 +207,7 @@ def admin_list_exercises():
 def admin_create_exercise(data: dict):
     col = get_collection("exercises")
 
-    required = ["id", "lessonId", "categoryId", "exerciseNumber", "questions"]
+    required = ["id", "lessonId", "categoryId", "exerciseNumber", "question"]
     if not all(field in data for field in required):
         return {"success": False, "error": "Missing required fields"}, 400
 
@@ -234,7 +234,7 @@ def admin_update_exercise(exercise_id: str, data: dict):
     data.pop("id", None)
     data.pop("_id", None)
 
-    required = ["lessonId", "categoryId", "exerciseNumber", "questions"]
+    required = ["lessonId", "categoryId", "exerciseNumber", "question"]
     if not all(field in data for field in required):
         return {"success": False, "error": "Missing required fields"}, 400
 

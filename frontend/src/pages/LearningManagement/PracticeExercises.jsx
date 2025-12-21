@@ -228,7 +228,7 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                             {isLessonExpanded && (
                               <div className="ml-8 mt-2 space-y-2">
                                 {lessonExercises.map((exercise) => {
-                                  const totalXP = exercise.questions?.reduce((sum, q) => sum + (q.xp || 0), 0) || 0;
+                                  const totalXP = exercise.question?.xp || 0;
                                   
                                   return (
                                     <div
@@ -242,7 +242,7 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                                             Exercise {exercise.exerciseNumber}
                                           </h4>
                                           <p className="text-sm text-blue-100 mt-1">
-                                            {exercise.questions?.length || 0} Questions
+                                            {exercise.question?.type?.replace('_', ' ') || 'Question'}
                                           </p>
                                         </div>
                                         <div className="flex items-center gap-4">
