@@ -5,8 +5,8 @@ Run with: pytest test_ai_integration.py
 
 import pytest
 from unittest.mock import Mock, patch, MagicMock
-from app.AI import AIService, AIConfig
-from app.AI.ai_config import AITaskType, AIModel
+from app.ai import AIService, AIConfig
+from app.ai.ai_config import AITaskType, AIModel
 
 
 class TestAIConfig:
