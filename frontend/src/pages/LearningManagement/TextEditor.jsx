@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useEditor, EditorContent, Node, mergeAttributes } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -34,18 +34,31 @@ const AudioExtension = Node.create({
 });
 
 // --- 2. MAIN COMPONENT ---
-const TextEditor = () => {
+const TextEditor = ({ value = '', onChange }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
       Image,
       AudioExtension, // Register our custom audio node
     ],
-    content: `
+    content: value || `
       <h2>Welcome to the Media Editor</h2>
       <p>You can type text, upload images, and upload audio files below.</p>
     `,
+    onUpdate: ({ editor }) => {
+      // Call the onChange handler with the current HTML content
+      if (onChange) {
+        onChange(editor.getHTML());
+      }
+    },
   });
+
+  // Sync external value changes to editor
+  useEffect(() => {
+    if (editor && value !== undefined && value !== editor.getHTML()) {
+      editor.commands.setContent(value);
+    }
+  }, [editor, value]);
 
   // Helper: Handles Image File Upload
   const addImage = useCallback(() => {
@@ -141,15 +154,6 @@ const TextEditor = () => {
 
       {/* EDITABLE AREA */}
       <EditorContent editor={editor} />
-      
-      {/* (Optional) Debug Output Area */}
-      <div style={{ padding: '20px', borderTop: '1px solid #eee', background: '#fafafa', fontSize: '12px' }}>
-        <strong>Current HTML Output:</strong>
-        <br />
-        <code style={{display:'block', marginTop:'10px', color: '#666'}}>
-          {editor.getHTML()}
-        </code>
-      </div>
     </div>
   );
 };

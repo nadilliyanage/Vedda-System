@@ -379,7 +379,7 @@ const AdminExercises = () => {
       <div>
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Manage Exercises</h1>
+            <h1 className="text-3xl font-bold text-gray-800"></h1>
             <p className="text-gray-600 mt-2">Create practice exercises with questions</p>
           </div>
           <button

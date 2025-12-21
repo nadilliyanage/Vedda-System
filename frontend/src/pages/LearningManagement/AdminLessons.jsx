@@ -145,7 +145,7 @@ const AdminLessons = () => {
       <div>
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Manage Lessons</h1>
+            <h1 className="text-3xl font-bold text-gray-800"></h1>
             <p className="text-gray-600 mt-2">Create and organize learning lessons</p>
           </div>
           <div className="flex gap-3">
@@ -377,7 +377,11 @@ const AdminLessons = () => {
             </div>
 
             <div>
-              <TextEditor />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Lesson Content</label>
+              <TextEditor 
+                value={formData.content}
+                onChange={(content) => setFormData({ ...formData, content })}
+              />
             </div>
 
             <div className="grid grid-cols-2 gap-4">
