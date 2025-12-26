@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import { FaBook, FaDumbbell, FaTrophy, FaArrowLeft } from 'react-icons/fa';
+import { FaBook, FaDumbbell, FaTrophy, FaArrowLeft, FaChartLine } from 'react-icons/fa';
 import LessonSelection from './LessonSelection';
 import LessonsList from './LessonsList';
 import LessonContentPlayer from './LessonContentPlayer';
 import PracticeExercises from './PracticeExercises';
 import ExerciseQuizRunner from './ExerciseQuizRunner';
+import PerformanceView from './PerformanceView';
 // import LearningChallenges from './LearningChallenges';
 
+
 const VeddaLearning = () => {
-  const [activeView, setActiveView] = useState('main'); // 'main', 'learn', 'practice', 'challenges', 'quiz'
+  const [activeView, setActiveView] = useState('main'); // 'main', 'learn', 'practice', 'challenges', 'performance', 'quiz'
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState(null);
@@ -66,7 +68,7 @@ const VeddaLearning = () => {
           </div>
 
           {/* Three Navigation Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
             {/* Learn Card */}
             <div
               onClick={() => setActiveView('learn')}
@@ -140,6 +142,36 @@ const VeddaLearning = () => {
                 </p>
                 <div className="mt-6 flex items-center text-white font-semibold">
                   <span>Take Challenge</span>
+                  <svg
+                    className="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Performance Card */}
+            <div
+              onClick={() => setActiveView('performance')}
+              className="group cursor-pointer transform transition-all duration-300 hover:scale-105"
+            >
+              <div className="bg-gradient-to-br from-purple-500 to-teal-500 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-white h-80 flex flex-col items-center justify-center text-center">
+                <FaChartLine className="text-7xl mb-6 group-hover:scale-110 transition-transform duration-300" />
+                <h2 className="text-3xl font-bold mb-4">Performance</h2>
+                <p className="text-purple-100 text-lg">
+                  View your learning progress and performance insights
+                </p>
+                <div className="mt-6 flex items-center text-white font-semibold">
+                  <span>View Performance</span>
                   <svg
                     className="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform"
                     fill="none"
@@ -259,6 +291,15 @@ const VeddaLearning = () => {
           <p className="text-gray-600 mt-2">Coming soon...</p>
         </div>
       </div>
+    );
+  }
+
+  // Performance view
+  if (activeView === 'performance') {
+    return (
+      <PerformanceView
+        onBack={() => setActiveView('main')}
+      />
     );
   }
 };
