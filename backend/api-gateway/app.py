@@ -43,6 +43,10 @@ SERVICES = {
     'auth': {
         'url': 'http://localhost:5005',
         'health': '/health'
+    },
+    '3d-models': {
+        'url': 'http://localhost:5008',
+        'health': '/health'
     }
 }
 
@@ -58,7 +62,8 @@ ROUTE_MAPPINGS = {
     '/api/feedback': 'history',
     '/api/tts': 'speech',
     '/api/stt': 'speech',
-    '/api/auth': 'auth'
+    '/api/auth': 'auth',
+    '/api/3d-models': '3d-models'
 }
 
 # Routes that should bypass JWT validation (login/register/etc.)
@@ -70,6 +75,7 @@ PUBLIC_ROUTE_PREFIXES = [
     '/api/feedback',
     '/api/tts',
     '/api/stt',
+    '/api/3d-models',
     '/health'
 ]
 
