@@ -7,24 +7,28 @@ const VisualsPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [totalCount, setTotalCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const ITEMS_PER_PAGE = 28;
   const navigate = useNavigate();
 
   // Fetch words from database API
-  const fetchWords = useCallback(async () => {
+  const fetchWords = useCallback(async (pageToFetch = page, searchValue = search) => {
     setIsLoading(true);
     setError(null);
-    
     try {
-      const response = await modelAPI.getWords({ 
-        limit: 100, 
-        skip: 0, 
-        hasVeddaIpa: true 
-      });
-      
+      const params = {
+        limit: ITEMS_PER_PAGE,
+        skip: (pageToFetch - 1) * ITEMS_PER_PAGE,
+        hasVeddaIpa: true
+      };
+      if (searchValue && searchValue.trim() !== '') {
+        params.english_word = searchValue.trim();
+      }
+      const response = await modelAPI.getWords(params);
       const result = response.data;
-      
       if (result.success && result.data) {
-        // Transform API response to match expected format
         const normalizedData = result.data.map(item => ({
           word: item.vedda_word || '',
           ipa: (item.vedda_ipa || '').replace(/^\/|\/$/g, ''),
@@ -33,7 +37,6 @@ const VisualsPage = () => {
           englishWord: item.english_word || '',
           id: item._id || item.id
         })).filter(item => item.word && item.ipa);
-        
         setWords(normalizedData);
         setTotalCount(result.metadata?.total || normalizedData.length);
       } else {
@@ -51,28 +54,72 @@ const VisualsPage = () => {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [page, search]);
 
   // Auto-load words on mount
   useEffect(() => {
-    fetchWords();
-  }, [fetchWords]);
+    fetchWords(page, search);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, search]);
+  // Handle search submit
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    setPage(1);
+    setSearch(searchInput);
+  };
+
+  // Handle search input change
+  const handleSearchInputChange = (e) => {
+    setSearchInput(e.target.value);
+  };
 
   const handleAnimateWord = (wordData) => {
     navigate(`/3d-visuals/${wordData.id}`, { state: { wordData } });
+  };
+
+  const totalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages && newPage !== page) {
+      setPage(newPage);
+    }
   };
 
   return (
     <div className="min-h-screen bg-dark-bg p-20">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+          <div className="flex-1">
             <h1 className="text-3xl font-bold text-black mb-2">Word Library</h1>
             <p className="text-gray-400">Select a word to view its lip-sync animation</p>
           </div>
+          <form onSubmit={handleSearchSubmit} className="flex items-center gap-2">
+            <input
+              type="text"
+              placeholder="Search by English word..."
+              value={searchInput}
+              onChange={handleSearchInputChange}
+              className="px-3 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 text-black"
+              disabled={isLoading}
+            />
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition-colors disabled:bg-blue-800 disabled:cursor-not-allowed"
+              disabled={isLoading}
+            >
+              Search
+            </button>
+            <button
+              type="button"
+              onClick={() => { setSearchInput(''); setSearch(''); setPage(1); }}
+              className="px-3 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-lg font-medium transition-colors disabled:opacity-50"
+              disabled={isLoading && !search}
+            >
+              Clear
+            </button>
+          </form>
           <button
-            onClick={fetchWords}
+            onClick={() => fetchWords(page, search)}
             disabled={isLoading}
             className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors flex items-center gap-2"
           >
@@ -109,19 +156,43 @@ const VisualsPage = () => {
               <span className="text-sm text-gray-400">
                 Showing {words.length} of {totalCount} words with IPA
               </span>
+              {/* Pagination Controls: Hide if searching and only one result */}
+              {!(search && words.length === 1) && (
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => handlePageChange(page - 1)}
+                    disabled={page === 1}
+                    className="px-2 py-1 rounded bg-gray-700 text-white disabled:opacity-50"
+                  >
+                    Prev
+                  </button>
+                  <span className="text-sm text-gray-300">
+                    Page {page} of {totalPages}
+                  </span>
+                  <button
+                    onClick={() => handlePageChange(page + 1)}
+                    disabled={page === totalPages}
+                    className="px-2 py-1 rounded bg-gray-700 text-white disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
             </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className={`grid ${search && words.length === 1 ? 'grid-cols-1' : 'grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'} gap-4`}>
               {words.map((wordData, index) => (
                 <div
                   key={wordData.id || index}
                   className="bg-dark-surface border border-dark-border rounded-xl p-4 hover:border-blue-500/50 transition-all"
                 >
                   <div className="mb-3">
-                    <h3 className="text-lg font-semibold text-white">{wordData.word}</h3>
+                    <h3 className="text-lg font-semibold text-black">{wordData.word}</h3>
                     <p className="text-sm font-mono text-blue-400">/{wordData.ipa}/</p>
                     {wordData.sinhalaWord && (
                       <p className="text-xs text-gray-500 mt-1">{wordData.sinhalaWord}</p>
+                    )}
+                    {wordData.englishWord && (
+                      <p className="text-xs text-gray-500 mt-1">{wordData.englishWord}</p>
                     )}
                   </div>
                   <button

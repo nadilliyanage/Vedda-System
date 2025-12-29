@@ -114,33 +114,33 @@ const Visual3DViewer = () => {
   }, [wordData, meshesWithMorphTargets, speakIPA]);
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-dark-bg">
+    <div className="relative w-screen h-screen overflow-hidden bg-dark-bg pt-10">
       <ModelViewer onModelLoad={handleModelLoad} xrayMode={xrayMode} />
       
       {/* Control Panel */}
-      <div className="fixed top-0 right-0 h-full w-96 bg-dark-bg border-l border-dark-border overflow-y-auto shadow-2xl">
+      <div className="fixed top-15 right-0 h-full w-96 bg-dark-bg border-l border-dark-border overflow-y-auto shadow-2xl bg-blue-200">
         <div className="p-6 space-y-6">
           {/* Header with Back Button */}
           <div className="border-b border-dark-border pb-4">
             <button
-              onClick={() => navigate('/')}
-              className="flex items-center gap-2 text-gray-400 hover:text-white mb-4 transition-colors"
+              onClick={() => navigate('/3d-visuals')}
+              className="flex items-center gap-2 text-gray-700 hover:text-white mb-4 transition-colors"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
               </svg>
               Back to Words
             </button>
-            <h3 className="text-xl font-bold text-white">Animation Player</h3>
-            <p className="text-xs text-gray-400 mt-1">Control lip-sync animation</p>
+            <h3 className="text-xl font-bold text-blue-500">Animation Player</h3>
+            <p className="text-xs text-gray-700 mt-1">Control lip-sync animation</p>
           </div>
 
           {/* Selected Word Display */}
           {wordData ? (
             <div className="p-4 bg-blue-900/20 border border-blue-700/30 rounded-xl">
-              <div className="text-xs text-blue-400 mb-2 uppercase tracking-wide">Selected Word</div>
+              <div className="text-xs text-blue-900 mb-2 uppercase tracking-wide">Selected Word</div>
               <div className="text-2xl font-bold text-white mb-1">{wordData.word}</div>
-              <div className="text-lg font-mono text-blue-300">/{wordData.ipa}/</div>
+              <div className="text-lg font-mono text-blue-600">/{wordData.ipa}/</div>
             </div>
           ) : (
             <div className="p-4 bg-yellow-900/20 border border-yellow-700/30 rounded-xl">
@@ -151,7 +151,7 @@ const Visual3DViewer = () => {
           {/* X-ray Mode Toggle */}
           <div className="flex items-center justify-between p-3 bg-dark-surface rounded-lg border border-dark-border">
             <div>
-              <h4 className="text-sm font-semibold text-white">X-Ray View</h4>
+              <h4 className="text-sm font-semibold text-gray-800">X-Ray View</h4>
               <p className="text-xs text-gray-500">See through the model</p>
             </div>
             <button
@@ -170,7 +170,7 @@ const Visual3DViewer = () => {
 
           {/* Animation Controls */}
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">Animation Controls</h4>
+            <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Animation Controls</h4>
             <div className="grid grid-cols-1 gap-2">
               <button 
                 onClick={handlePlayAnimation}
@@ -192,7 +192,7 @@ const Visual3DViewer = () => {
                 </svg>
                 Speak & Animate
               </button>
-              <button 
+              {/* <button 
                 onClick={handleStopAnimation}
                 className="px-4 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors duration-200"
                 disabled={!isAnimating}
@@ -204,17 +204,17 @@ const Visual3DViewer = () => {
                 className="px-4 py-2.5 bg-gray-600 hover:bg-gray-700 text-white rounded-lg font-medium transition-colors duration-200"
               >
                 Reset All
-              </button>
+              </button> */}
             </div>
           </div>
 
           {/* Speed Control */}
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">Speed Control</h4>
+            <h4 className="text-sm font-semibold text-gray-900 uppercase tracking-wide">Speed Control</h4>
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <label className="text-sm text-gray-400">Animation Speed:</label>
-                <span className="text-sm font-mono text-blue-400 bg-dark-surface px-3 py-1 rounded">
+                <label className="text-sm text-gray-800">Animation Speed:</label>
+                <span className="text-sm font-mono text-blue-800 bg-dark-surface px-3 py-1 rounded">
                   {animationSpeed.toFixed(1)}x
                 </span>
               </div>
@@ -225,13 +225,13 @@ const Visual3DViewer = () => {
                 step="0.1"
                 value={animationSpeed}
                 onChange={(e) => setAnimationSpeed(parseFloat(e.target.value))}
-                className="w-full h-2 bg-dark-surface rounded-lg appearance-none cursor-pointer accent-blue-500"
+                className="w-full h-2 bg-dark-surface rounded-lg appearance-auto cursor-pointer accent-blue-800"
               />
             </div>
           </div>
 
           {/* Morph Targets */}
-          <div className="space-y-3">
+          {/* <div className="space-y-3">
             <h4 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">Morph Targets</h4>
             <div className="max-h-64 overflow-y-auto space-y-2 pr-2 scrollbar-thin">
               {morphTargetNames.length === 0 ? (
@@ -250,7 +250,7 @@ const Visual3DViewer = () => {
                 ))
               )}
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

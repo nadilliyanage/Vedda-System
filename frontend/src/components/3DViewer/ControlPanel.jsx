@@ -27,7 +27,7 @@ const ControlPanel = ({
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="border-b border-dark-border pb-4">
-          <h3 className="text-xl font-bold text-white">Mouth Animation Controls</h3>
+          <h3 className="text-xl font-bold text-blue-500">Mouth Animation Controls</h3>
           <p className="text-xs text-gray-400 mt-1">Control lip-sync and morph targets</p>
         </div>
 
@@ -112,7 +112,7 @@ const ControlPanel = ({
         </div>
 
         {/* Text Input */}
-        <div className="space-y-3">
+        {/* <div className="space-y-3">
           <h4 className="text-sm font-semibold text-gray-300 uppercase tracking-wide">Text to Speech</h4>
           <div className="space-y-3">
             <div>
@@ -142,7 +142,7 @@ const ControlPanel = ({
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Speed Control */}
         <div className="space-y-3">

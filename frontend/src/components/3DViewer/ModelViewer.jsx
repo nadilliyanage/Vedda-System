@@ -20,7 +20,7 @@ const ModelViewer = ({ onModelLoad, onMorphTargetsUpdate, xrayMode }) => {
 
     // Scene setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x1a1a1a);
+    scene.background = new THREE.Color(0xffffff); // Set background to white
     sceneRef.current = scene;
 
     // Camera setup
@@ -62,8 +62,8 @@ const ModelViewer = ({ onModelLoad, onMorphTargetsUpdate, xrayMode }) => {
     scene.add(fillLight);
 
     // Grid helper
-    const gridHelper = new THREE.GridHelper(10, 10, 0x444444, 0x222222);
-    scene.add(gridHelper);
+    // const gridHelper = new THREE.GridHelper(10, 10, 0x444444, 0x222222);
+    // scene.add(gridHelper);
 
     // Load GLTF model
     const loader = new GLTFLoader();
@@ -217,7 +217,7 @@ const ModelViewer = ({ onModelLoad, onMorphTargetsUpdate, xrayMode }) => {
       )}
       
       {/* Instructions overlay */}
-      <div className="absolute top-6 left-6 bg-dark-surface/90 backdrop-blur-sm text-white px-4 py-3 rounded-lg shadow-lg border border-dark-border max-w-xs">
+      <div className="absolute top-6 left-6 bg-blue-900/90 backdrop-blur-sm text-white px-4 py-3 rounded-lg shadow-lg border border-dark-border max-w-xs">
         <h4 className="text-sm font-semibold mb-2 text-blue-400">Controls</h4>
         <ul className="text-xs space-y-1 text-gray-300">
           <li>• <span className="font-medium">Left Click + Drag:</span> Rotate</li>
