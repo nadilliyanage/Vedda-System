@@ -11,6 +11,7 @@ import VisualsPage from "./pages/VisualsPage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
+import Visual3DViewer from "./pages/Visual3DViewer.jsx";
 
 // Admin Pages
 import AdminDashboard from "./pages/AdminDashboard.jsx";
@@ -34,6 +35,7 @@ const AppRouter = () => {
         <Route path="/learning" element={<VeddaLearning />} />
         <Route path="/artifacts" element={<ArtifactPage />} />
         <Route path="/3d-visuals" element={<VisualsPage />} />
+        <Route path="/3d-visuals/:id" element={<Visual3DViewer />} />
         <Route path="/profile" element={<ProfilePage />} />
       </Route>
 
