@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FaTimes, FaCheckCircle, FaTimesCircle, FaSpinner } from 'react-icons/fa';
+import { FaTimes, FaCheckCircle, FaTimesCircle, FaSpinner, FaRedo } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import { exercisesAPI } from '../../services/learningAPI';
 
@@ -199,6 +199,25 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
     generateAISummary(validationResults);
 
     toast.success('Exercise submitted!');
+  };
+
+  const handleRefresh = () => {
+    // Reset all state to initial values
+    const question = exercise.question;
+    if (question?.type === 'multiple_choice') {
+      setAnswers({ [question.questionNo]: [] });
+    } else if (question?.type === 'text_input') {
+      setAnswers({ [question.questionNo]: '' });
+    } else if (question?.type === 'match_pairs') {
+      setAnswers({ [question.questionNo]: {} });
+    }
+    
+    setSubmitted(false);
+    setResults(null);
+    setAiSummary('');
+    setIsGeneratingSummary(false);
+    
+    toast.success('Exercise reset! Try again.');
   };
 
   const renderQuestion = (question, index) => {
@@ -414,12 +433,19 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
           >
             <FaTimes /> Close
           </button>
-          {!submitted && (
+          {!submitted ? (
             <button
               onClick={handleSubmit}
               className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
             >
               Submit
+            </button>
+          ) : (
+            <button
+              onClick={handleRefresh}
+              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+            >
+              <FaRedo /> Try Again
             </button>
           )}
         </div>
