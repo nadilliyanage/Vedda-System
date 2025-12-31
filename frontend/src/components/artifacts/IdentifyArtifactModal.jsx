@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { X, Upload, Sparkles, Loader2 } from 'lucide-react';
+import { X, Upload, Sparkles, Loader2, TrendingUp } from 'lucide-react';
 import toast from 'react-hot-toast';
+import { identifyArtifact } from '../../services/artifactService';
 
 const IdentifyArtifactModal = ({ isOpen, onClose }) => {
   const [imageFile, setImageFile] = useState(null);
@@ -46,27 +47,26 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
 
     setLoading(true);
     try {
-      // TODO: Replace with actual API call
-      // const uploadResult = await uploadImage(imageFile);
-      // const aiResult = await generateMetadata(uploadResult.data.url);
+      const result = await identifyArtifact(imageFile);
       
-      // Simulated delay for demo
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Parse tags if it's a string
+      const tags = typeof result.tags === 'string' 
+        ? result.tags.split(',').map(tag => tag.trim()).filter(Boolean)
+        : result.tags || [];
       
-      // Mock data for demo
       setIdentifiedData({
-        name: 'Traditional Vedda Arrow',
-        description: 'A traditional hunting arrow crafted by the Vedda people, featuring a bamboo shaft and stone arrowhead. These arrows were essential tools for hunting in the dense forests of Sri Lanka.',
-        category: 'weapons',
-        tags: ['hunting', 'traditional', 'bamboo', 'stone'],
-        estimatedAge: '200-500 years old',
-        culturalSignificance: 'Represents the hunting heritage of the Vedda people'
+        name: result.artifact_name,
+        description: result.description,
+        category: result.category,
+        tags: tags,
+        confidence: result.confidence,
+        all_predictions: result.all_predictions
       });
       
       toast.success('✨ Artifact identified successfully!');
     } catch (error) {
       console.error('Identification error:', error);
-      toast.error('Failed to identify artifact. Please try again.');
+      toast.error(error.message || 'Failed to identify artifact. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -173,12 +173,20 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
 
                 {identifiedData ? (
                   <div className="space-y-4">
-                    {/* Name */}
+                    {/* Name with Confidence */}
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 block">
                         Artifact Name
                       </label>
-                      <p className="text-lg font-bold text-gray-800">{identifiedData.name}</p>
+                      <div className="flex items-center justify-between">
+                        <p className="text-lg font-bold text-gray-800 capitalize">{identifiedData.name}</p>
+                        <div className="flex items-center gap-1 bg-green-100 text-green-800 px-3 py-1 rounded-full">
+                          <TrendingUp size={14} />
+                          <span className="text-sm font-semibold">
+                            {(identifiedData.confidence * 100).toFixed(1)}%
+                          </span>
+                        </div>
+                      </div>
                     </div>
 
                     {/* Category */}
@@ -200,37 +208,25 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
                     </div>
 
                     {/* Tags */}
-                    <div className="bg-white rounded-lg p-4 shadow-sm">
-                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 block">
-                        Tags
-                      </label>
-                      <div className="flex flex-wrap gap-2">
-                        {identifiedData.tags.map((tag, index) => (
-                          <span
-                            key={index}
-                            className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
-                          >
-                            {tag}
-                          </span>
-                        ))}
+                    {identifiedData.tags && identifiedData.tags.length > 0 && (
+                      <div className="bg-white rounded-lg p-4 shadow-sm">
+                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 block">
+                          Tags
+                        </label>
+                        <div className="flex flex-wrap gap-2">
+                          {identifiedData.tags.map((tag, index) => (
+                            <span
+                              key={index}
+                              className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
 
-                    {/* Estimated Age */}
-                    <div className="bg-white rounded-lg p-4 shadow-sm">
-                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 block">
-                        Estimated Age
-                      </label>
-                      <p className="text-gray-800 font-medium">{identifiedData.estimatedAge}</p>
-                    </div>
-
-                    {/* Cultural Significance */}
-                    <div className="bg-white rounded-lg p-4 shadow-sm">
-                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 block">
-                        Cultural Significance
-                      </label>
-                      <p className="text-gray-700 leading-relaxed">{identifiedData.culturalSignificance}</p>
-                    </div>
+                    
                   </div>
                 ) : (
                   <div className="h-full flex items-center justify-center">

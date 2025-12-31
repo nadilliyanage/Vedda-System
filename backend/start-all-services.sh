@@ -8,7 +8,7 @@ echo ""
 
 # Kill any existing processes to avoid port conflicts
 echo "Stopping existing processes on ports 5000-5011..."
-lsof -ti:5000,5001,5002,5003,5005,5006,5008,5010,5011 | xargs kill -9 2>/dev/null
+lsof -ti:5000,5001,5002,5003,5005,5006,5007,5008,5009,5010,5011 | xargs kill -9 2>/dev/null
 sleep 2
 
 echo ""
@@ -57,10 +57,18 @@ if [ -d "$SCRIPT_DIR/learn-service" ]; then
   sleep 3
 fi
 
+
 # Start 3D Model Service (Port 5008)
 echo "Starting 3D Model Service on port 5008..."
 if [ -d "$SCRIPT_DIR/3D-model-service" ]; then
   cd "$SCRIPT_DIR/3D-model-service" && python3 run.py > "$SCRIPT_DIR/logs/3d-model.log" 2>&1 &
+  sleep 3
+fi
+
+# Start Artifact Identifier Service (Port 5009)
+echo "Starting Artifact Identifier Service on port 5009..."
+if [ -d "$SCRIPT_DIR/artifact-identifier-service" ]; then
+  cd "$SCRIPT_DIR/artifact-identifier-service" && python3 run.py > "$SCRIPT_DIR/logs/artifact-identifier.log" 2>&1 &
   sleep 3
 fi
 
@@ -82,6 +90,7 @@ echo "- History Service: http://localhost:5003"
 echo "- Auth Service: http://localhost:5005"
 echo "- Learn Service: http://localhost:5006"
 echo "- 3D Model Service: http://localhost:5008"
+echo "- Artifact Identifier Service: http://localhost:5009"
 echo "- Artifact Service: http://localhost:5010"
 echo ""
 echo "Logs are available in the 'logs' directory"
