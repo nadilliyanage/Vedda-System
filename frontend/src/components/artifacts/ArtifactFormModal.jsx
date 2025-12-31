@@ -69,24 +69,23 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess }) => {
       const uploadResult = await uploadImage(imageFile);
       
       if (uploadResult.success) {
-        // Generate metadata using AI (placeholder for now)
+        // Generate metadata using Gemini AI
         const aiResult = await generateMetadata(uploadResult.data.url);
         
-        if (aiResult.success) {
-          setFormData((prev) => ({
-            ...prev,
-            name: aiResult.data.suggestedName || prev.name,
-            description: aiResult.data.suggestedDescription || prev.description,
-            category: aiResult.data.suggestedCategory || prev.category,
-            tags: aiResult.data.suggestedTags?.join(', ') || prev.tags,
-          }));
-          
-          toast.success('✨ AI-powered fields auto-filled! Review and adjust as needed.');
-        }
+        setFormData((prev) => ({
+          ...prev,
+          name: aiResult.name || prev.name,
+          description: aiResult.description || prev.description,
+          category: aiResult.category || prev.category,
+          tags: aiResult.tags?.join(', ') || prev.tags,
+          estimatedAge: aiResult.estimatedAge || prev.estimatedAge,
+        }));
+        
+        toast.success('✨ AI-powered fields auto-filled! Review and adjust as needed.');
       }
     } catch (error) {
       console.error('Auto-fill error:', error);
-      toast.error('AI auto-fill coming soon! Please enter details manually.');
+      toast.error(error.message || 'Failed to auto-fill fields. Please try again.');
     } finally {
       setAiLoading(false);
     }

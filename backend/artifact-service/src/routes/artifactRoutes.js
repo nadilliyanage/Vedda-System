@@ -20,4 +20,7 @@ router.delete('/:id', artifactController.deleteArtifact);
 // Additional routes
 router.get('/category/:category', artifactController.getArtifactsByCategory);
 
+// AI metadata generation
+router.post('/generate-metadata', artifactController.generateMetadata);
+
 module.exports = router;
