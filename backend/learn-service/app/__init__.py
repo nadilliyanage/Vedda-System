@@ -47,6 +47,6 @@ def create_app():
     app.register_blueprint(health_bp)
     app.register_blueprint(learn_bp, url_prefix="/api/learn")
     app.register_blueprint(admin_bp, url_prefix="/api/learn/admin")
-    app.register_blueprint(ai_bp, url_prefix="/api/ai" )
+    app.register_blueprint(ai_bp, url_prefix="/api/learn/ai" )
 
     return app

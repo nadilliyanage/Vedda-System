@@ -52,7 +52,9 @@ export const exercisesAPI = {
   
   update: (id, data) => axios.put(`${API_BASE}/api/learn/admin/exercises/${id}`, data),
   
-  delete: (id) => axios.delete(`${API_BASE}/api/learn/admin/exercises/${id}`)
+  delete: (id) => axios.delete(`${API_BASE}/api/learn/admin/exercises/${id}`),
+
+  submitAnswer: (data) => axios.post(`${API_BASE}/api/learn/ai/submit-answer`, data)
 };
 
 // ========== Challenges API ==========
@@ -76,6 +78,7 @@ export const quizAPI = {
   submitAnswer: (data) => 
     axios.post(`${API_BASE}/api/learn/submit`, data)
 };
+
 
 // Default export with all APIs
 export default {

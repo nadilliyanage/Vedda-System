@@ -19,7 +19,7 @@ def submit_answer():
     if not exercise:
         return jsonify({"error": "Exercise not found"}), 404
 
-    skill_tags = exercise.get("skill_tags", [])
+    skill_tags = exercise.get("skillTags", [])
     sentence = exercise.get("question", "")
     correct_answer = exercise.get("correct_answer", "")
 

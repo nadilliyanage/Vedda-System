@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { FaEye, FaEdit, FaTrash, FaPlus, FaSave } from 'react-icons/fa';
 import { exercisesAPI, lessonsAPI, categoriesAPI } from '../../services/learningAPI';
+import { SKILL_TAGS, TAG_COLORS } from '../../constants/skillTags';
 
 const AdminExercises = () => {
   const [exercises, setExercises] = useState([]);
@@ -17,6 +18,7 @@ const AdminExercises = () => {
     lessonId: '',
     categoryId: '',
     exerciseNumber: '',
+    skillTags: [],
     question: {
       questionNo: '1',
       type: 'multiple_choice',
@@ -81,6 +83,7 @@ const AdminExercises = () => {
       lessonId: '',
       categoryId: '',
       exerciseNumber: '',
+      skillTags: [],
       question: {
         questionNo: '1',
         type: 'multiple_choice',
@@ -109,6 +112,7 @@ const AdminExercises = () => {
       lessonId: exercise.lessonId || '',
       categoryId: exercise.categoryId || '',
       exerciseNumber: exercise.exerciseNumber || '',
+      skillTags: exercise.skillTags || [],
       question: exercise.question || {
         questionNo: '1',
         type: 'multiple_choice',
@@ -190,16 +194,16 @@ const AdminExercises = () => {
         questionData.correctOptions = question.options
           .filter(o => o.correct && o.text.trim())
           .map(o => o.id);
-        // Add correct_ans field with text values
+        // Add correct_answer field with text values
         const correctOptions = question.options.filter(o => o.correct && o.text.trim());
-        questionData.correct_ans = correctOptions.map(o => o.text).join(', ');
+        questionData.correct_answer = correctOptions.map(o => o.text).join(', ');
       } else if (question.type === 'text_input') {
         questionData.answer = question.answer;
-        questionData.correct_ans = question.answer || '';
+        questionData.correct_answer = question.answer || '';
       } else if (question.type === 'match_pairs') {
         questionData.pairs = question.pairs.filter(p => p.left.trim() && p.right.trim());
         const validPairs = question.pairs.filter(p => p.left.trim() && p.right.trim());
-        questionData.correct_ans = validPairs.map(p => `${p.left}: ${p.right}`).join(', ');
+        questionData.correct_answer = validPairs.map(p => `${p.left}: ${p.right}`).join(', ');
       }
 
       const submitData = {
@@ -207,6 +211,7 @@ const AdminExercises = () => {
         lessonId: formData.lessonId,
         categoryId: formData.categoryId,
         exerciseNumber: formData.exerciseNumber,
+        skillTags: formData.skillTags || [],
         question: questionData
       };
 
@@ -641,6 +646,43 @@ const AdminExercises = () => {
                 rows="2"
                 placeholder="Enter question prompt"
               />
+            </div>
+
+            {/* Skill Tags */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Skill Tags</label>
+              <div className="flex flex-wrap gap-2">
+                {SKILL_TAGS.map((tag) => {
+                  const isSelected = formData.skillTags.includes(tag.id);
+                  const colorScheme = TAG_COLORS[tag.color];
+                  
+                  return (
+                    <button
+                      key={tag.id}
+                      type="button"
+                      onClick={() => {
+                        const newTags = isSelected
+                          ? formData.skillTags.filter(t => t !== tag.id)
+                          : [...formData.skillTags, tag.id];
+                        setFormData({ ...formData, skillTags: newTags });
+                      }}
+                      className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                        isSelected
+                          ? colorScheme.selected
+                          : `${colorScheme.bg} ${colorScheme.text} ${colorScheme.hover}`
+                      }`}
+                      title={tag.description}
+                    >
+                      {tag.label}
+                    </button>
+                  );
+                })}
+              </div>
+              {formData.skillTags.length > 0 && (
+                <p className="text-xs text-gray-500 mt-2">
+                  Selected: {formData.skillTags.length} tag(s)
+                </p>
+              )}
             </div>
 
             {/* Type-specific fields */}

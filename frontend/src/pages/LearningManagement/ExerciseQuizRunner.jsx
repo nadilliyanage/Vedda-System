@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { FaTimes, FaCheckCircle, FaTimesCircle, FaSpinner } from 'react-icons/fa';
 import toast from 'react-hot-toast';
+import { exercisesAPI } from '../../services/learningAPI';
 
 const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
   const [answers, setAnswers] = useState({});
@@ -20,13 +21,24 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
     }
   }, [exercise]);
 
-  const handleMultipleChoiceChange = (questionNo, optionId, isChecked) => {
-    setAnswers(prev => ({
-      ...prev,
-      [questionNo]: isChecked
-        ? [...(prev[questionNo] || []), optionId]
-        : (prev[questionNo] || []).filter(id => id !== optionId)
-    }));
+  const handleMultipleChoiceChange = (questionNo, optionId, isChecked, isSingleAnswer = false) => {
+    setAnswers(prev => {
+      if (isSingleAnswer) {
+        // For single answer questions (radio buttons), replace the entire selection
+        return {
+          ...prev,
+          [questionNo]: [optionId]
+        };
+      } else {
+        // For multiple answer questions (checkboxes), add/remove from array
+        return {
+          ...prev,
+          [questionNo]: isChecked
+            ? [...(prev[questionNo] || []), optionId]
+            : (prev[questionNo] || []).filter(id => id !== optionId)
+        };
+      }
+    });
   };
 
   const handleTextInputChange = (questionNo, value) => {
@@ -85,11 +97,60 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
     return { questionResults, totalScore, earnedScore };
   };
 
-  const generateAISummary = (results) => {
+  const generateAISummary = async (results) => {
     setIsGeneratingSummary(true);
     
-    // Simulate AI generation
-    setTimeout(() => {
+    try {
+      const { questionResults } = results;
+      const question = exercise.question;
+      const userAnswer = questionResults[question.questionNo]?.userAnswer;
+      
+      // Get user answer as string
+      let userAnswerStr = '';
+      if (question.type === 'multiple_choice') {
+        userAnswerStr = Array.isArray(userAnswer) ? userAnswer.join(', ') : '';
+      } else if (question.type === 'text_input') {
+        userAnswerStr = userAnswer || '';
+      } else if (question.type === 'match_pairs') {
+        userAnswerStr = JSON.stringify(userAnswer || {});
+      }
+
+      // Get user ID from localStorage or use default
+      const userId = localStorage.getItem('userId') || 'user_001';
+
+      // Call the AI API
+      const response = await exercisesAPI.submitAnswer({
+        user_id: userId,
+        exercise_id: exercise._id || exercise.id,
+        user_answer: userAnswerStr
+      });
+
+      // Format the AI feedback response
+      const feedback = response.data.feedback;
+      let summary = '';
+      
+      if (feedback.is_correct) {
+        summary = '🎉 Perfect! You answered correctly.\n\n';
+      } else {
+        summary = '❌ Not quite right.\n\n';
+      }
+
+      summary += `${feedback.short_summary}\n\n`;
+      summary += `📝 Explanation: ${feedback.explanation}\n\n`;
+      
+      if (feedback.corrected_answer) {
+        summary += `✅ Correct Answer: ${feedback.corrected_answer}\n\n`;
+      }
+
+      if (feedback.error_type) {
+        summary += `⚠️ Error Type: ${feedback.error_type}`;
+      }
+
+      setAiSummary(summary);
+    } catch (error) {
+      console.error('Error generating AI summary:', error);
+      
+      // Fallback to basic summary if API fails
       const { questionResults, earnedScore, totalScore } = results;
       const isCorrect = Object.values(questionResults)[0]?.isCorrect || false;
 
@@ -102,10 +163,10 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
       }
 
       summary += `You earned ${earnedScore} out of ${totalScore} XP.`;
-
       setAiSummary(summary);
+    } finally {
       setIsGeneratingSummary(false);
-    }, 1500);
+    }
   };
 
   const handleSubmit = () => {
@@ -172,43 +233,53 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
         </div>
 
         {/* Question Type Specific Rendering */}
-        {question.type === 'multiple_choice' && (
-          <div className="space-y-3">
-            {question.options?.map(option => (
-              <label
-                key={option.id}
-                className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                  submitted
-                    ? question.correctOptions?.includes(option.id)
-                      ? 'border-green-500 bg-green-50'
+        {question.type === 'multiple_choice' && (() => {
+          const isSingleAnswer = (question.correctOptions?.length || 0) === 1;
+          const inputType = isSingleAnswer ? 'radio' : 'checkbox';
+          const inputName = `question_${question.questionNo}`;
+          
+          return (
+            <div className="space-y-3">
+              <p className="text-sm text-gray-600 mb-2">
+                {isSingleAnswer ? '(Select one answer)' : '(Select all correct answers)'}
+              </p>
+              {question.options?.map(option => (
+                <label
+                  key={option.id}
+                  className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all ${
+                    submitted
+                      ? question.correctOptions?.includes(option.id)
+                        ? 'border-green-500 bg-green-50'
+                        : userAnswer?.includes(option.id)
+                        ? 'border-red-500 bg-red-50'
+                        : 'border-gray-200'
                       : userAnswer?.includes(option.id)
-                      ? 'border-red-500 bg-red-50'
-                      : 'border-gray-200'
-                    : userAnswer?.includes(option.id)
-                    ? 'border-blue-500 bg-blue-50'
-                    : 'border-gray-200 hover:border-blue-300'
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={userAnswer?.includes(option.id) || false}
-                  onChange={(e) =>
-                    !submitted &&
-                    handleMultipleChoiceChange(question.questionNo, option.id, e.target.checked)
-                  }
-                  disabled={submitted}
-                  className="w-5 h-5 text-blue-600 mr-3"
-                />
-                <span className="text-gray-800">{option.text}</span>
-                {submitted && question.correctOptions?.includes(option.id) && (
-                  <span className="ml-auto text-green-600 font-semibold text-sm">
-                    ✓ Correct
-                  </span>
-                )}
-              </label>
-            ))}
-          </div>
-        )}
+                      ? 'border-blue-500 bg-blue-50'
+                      : 'border-gray-200 hover:border-blue-300'
+                  }`}
+                >
+                  <input
+                    type={inputType}
+                    name={isSingleAnswer ? inputName : undefined}
+                    checked={userAnswer?.includes(option.id) || false}
+                    onChange={(e) =>
+                      !submitted &&
+                      handleMultipleChoiceChange(question.questionNo, option.id, e.target.checked, isSingleAnswer)
+                    }
+                    disabled={submitted}
+                    className="w-5 h-5 text-blue-600 mr-3"
+                  />
+                  <span className="text-gray-800">{option.text}</span>
+                  {submitted && question.correctOptions?.includes(option.id) && (
+                    <span className="ml-auto text-green-600 font-semibold text-sm">
+                      ✓ Correct
+                    </span>
+                  )}
+                </label>
+              ))}
+            </div>
+          );
+        })()}
 
         {question.type === 'text_input' && (
           <div>

@@ -200,7 +200,10 @@ def admin_list_exercises():
     current_user = g.current_user
     print(f"current user: {current_user}")
     col = get_collection("exercises")
-    exercises = list(col.find({}, {"_id": 0}))
+    exercises = list(col.find({}))
+    for exercise in exercises:
+        if "_id" in exercise:
+            exercise["_id"] = str(exercise["_id"])
     return exercises
 
 
