@@ -15,6 +15,10 @@ class Config:
     MODEL_PATH = os.getenv("MODEL_PATH", os.path.join(DATA_DIR, "vedda_artifacts_model.keras"))
     METADATA_PATH = os.getenv("METADATA_PATH", os.path.join(DATA_DIR, "artifact_metadata.xlsx"))
     
+    # Download URLs
+    MODEL_URL = os.getenv("MODEL_URL", "")
+    METADATA_URL = os.getenv("METADATA_URL", "")
+    
     # Image processing configuration
     IMG_SIZE = (224, 224)
     MAX_UPLOAD_SIZE = 10 * 1024 * 1024  # 10MB
