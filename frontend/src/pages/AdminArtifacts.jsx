@@ -55,41 +55,6 @@ const AdminArtifacts = () => {
     fetchArtifacts();
   }, [pagination.page, pagination.limit, categoryFilter, statusFilter, searchTerm]);
 
-  const fetchArtifacts = async () => {
-    setLoading(true);
-    try {
-      const params = {
-        page: pagination.page,
-        limit: pagination.limit,
-      };
-
-      if (searchTerm) params.search = searchTerm;
-      if (categoryFilter) params.category = categoryFilter;
-      if (statusFilter) params.status = statusFilter;
-
-      const response = await getArtifacts(params);
-      
-      if (response.success) {
-        setArtifacts(response.artifacts);
-        setPagination((prev) => ({
-          ...prev,
-          total: response.pagination.total,
-          pages: response.pagination.pages,
-        }));
-      }
-    } catch (error) {
-      console.error('Fetch error:', error);
-      toast.error('Failed to load artifacts');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSearch = () => {
-    setPagination((prev) => ({ ...prev, page: 1 }));
-    fetchArtifacts();
-  };
-
   const handleDelete = (artifact) => {
     setArtifactToDelete(artifact);
     setShowDeleteConfirm(true);
@@ -102,7 +67,8 @@ const AdminArtifacts = () => {
         toast.success('Artifact deleted successfully');
         setShowDeleteConfirm(false);
         setArtifactToDelete(null);
-        fetchArtifacts();
+        // Force refresh by updating pagination
+        setPagination((prev) => ({ ...prev, page: prev.page }));
       }
     } catch (error) {
       console.error('Delete error:', error);
@@ -133,7 +99,8 @@ const AdminArtifacts = () => {
   };
 
   const handleSuccess = (newArtifact) => {
-    fetchArtifacts();
+    // Force refresh by updating pagination
+    setPagination((prev) => ({ ...prev, page: prev.page }));
   };
 
   return (
@@ -153,8 +120,10 @@ const AdminArtifacts = () => {
               <input
                 type="text"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setPagination((prev) => ({ ...prev, page: 1 }));
+                }}
                 placeholder="Search artifacts..."
                 className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -196,7 +165,7 @@ const AdminArtifacts = () => {
           {/* Buttons */}
           <div className="flex gap-2">
             <button
-              onClick={fetchArtifacts}
+              onClick={() => setPagination((prev) => ({ ...prev, page: prev.page }))}
               className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
             >
               <RefreshCw size={20} />

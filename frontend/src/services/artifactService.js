@@ -82,17 +82,21 @@ export const getArtifactsByCategory = async (category) => {
 
 // AI auto-generate metadata (placeholder for future implementation)
 export const generateMetadata = async (imageUrl) => {
-  // TODO: Implement when AI service is ready
-  console.log('AI metadata generation coming soon...');
-  return {
-    success: true,
-    data: {
-      suggestedName: 'Detected Artifact',
-      suggestedDescription: 'AI-generated description',
-      suggestedCategory: 'other',
-      suggestedTags: ['artifact'],
-    },
-  };
+  try {
+    const response = await artifactAPI.post('/generate-metadata', { imageUrl });
+    // Backend returns data nested in response.data.data
+    const metadata = response.data.data;
+    return {
+      name: metadata.suggestedName,
+      description: metadata.suggestedDescription,
+      category: metadata.suggestedCategory,
+      tags: metadata.suggestedTags,
+      estimatedAge: metadata.estimatedAge
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    throw new Error(error.response?.data?.message || 'Failed to generate metadata');
+  }
 };
 
 export default {

@@ -1,14 +1,39 @@
 import PropTypes from "prop-types";
-import { FaTimes, FaCalendarAlt, FaRuler, FaLeaf } from "react-icons/fa";
-import { getRelatedArtifacts } from "../../data/artifacts";
+import { useState, useEffect } from "react";
+import { FaTimes, FaCalendarAlt, FaRuler, FaLeaf, FaMapMarkerAlt, FaTag } from "react-icons/fa";
+import { getArtifacts } from "../../services/artifactService";
 
 const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
+  const [relatedArtifacts, setRelatedArtifacts] = useState([]);
+
+  useEffect(() => {
+    if (artifact?.category) {
+      fetchRelatedArtifacts();
+    }
+  }, [artifact]);
+
+  const fetchRelatedArtifacts = async () => {
+    try {
+      const response = await getArtifacts({
+        category: artifact.category,
+        limit: 3,
+      });
+      if (response.success) {
+        // Filter out the current artifact and get max 3 related
+        const related = response.data.artifacts
+          .filter(a => a._id !== artifact._id)
+          .slice(0, 3);
+        setRelatedArtifacts(related);
+      }
+    } catch (error) {
+      console.error('Error fetching related artifacts:', error);
+    }
+  };
+
   if (!artifact) return null;
 
-  const relatedArtifacts = getRelatedArtifacts(artifact.id);
-
   return (
-    <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4 overflow-y-auto">
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 overflow-y-auto">
       <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
         {/* Close Button */}
         <button
@@ -29,9 +54,9 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
               {artifact.name}
             </h2>
-            <p className="text-xl text-purple-300 font-medium">
-              {artifact.veddaName}
-            </p>
+            <span className="inline-block bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium capitalize">
+              {artifact.category}
+            </span>
           </div>
         </div>
 
@@ -39,81 +64,64 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
         <div className="p-6 md:p-8">
           {/* Quick Info */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-purple-50 rounded-lg p-4">
-              <FaCalendarAlt className="text-purple-600 text-2xl mb-2" />
-              <p className="text-xs text-gray-600 mb-1">Era</p>
-              <p className="font-semibold text-gray-800">{artifact.era}</p>
-              <p className="text-sm text-gray-600 mt-1">{artifact.dateRange}</p>
-            </div>
-            <div className="bg-purple-50 rounded-lg p-4">
-              <FaRuler className="text-purple-600 text-2xl mb-2" />
-              <p className="text-xs text-gray-600 mb-1">Dimensions</p>
-              <p className="font-semibold text-gray-800 text-sm">
-                {artifact.dimensions}
-              </p>
-            </div>
-            <div className="bg-purple-50 rounded-lg p-4">
-              <FaLeaf className="text-purple-600 text-2xl mb-2" />
-              <p className="text-xs text-gray-600 mb-1">Status</p>
-              <p className="font-semibold text-gray-800 text-sm">
-                {artifact.modernStatus}
-              </p>
-            </div>
+            {artifact.estimatedAge && (
+              <div className="bg-purple-50 rounded-lg p-4">
+                <FaCalendarAlt className="text-purple-600 text-2xl mb-2" />
+                <p className="text-xs text-gray-600 mb-1">Estimated Age</p>
+                <p className="font-semibold text-gray-800">{artifact.estimatedAge}</p>
+              </div>
+            )}
+            {artifact.location && (
+              <div className="bg-purple-50 rounded-lg p-4">
+                <FaMapMarkerAlt className="text-purple-600 text-2xl mb-2" />
+                <p className="text-xs text-gray-600 mb-1">Location</p>
+                <p className="font-semibold text-gray-800 text-sm">
+                  {artifact.location}
+                </p>
+              </div>
+            )}
+            
           </div>
 
           {/* Description */}
           <section className="mb-6">
             <h3 className="text-2xl font-bold text-gray-800 mb-3">About</h3>
-            <p className="text-gray-700 leading-relaxed">{artifact.longDescription}</p>
+            <p className="text-gray-700 leading-relaxed">{artifact.description}</p>
           </section>
 
-          {/* Materials */}
-          <section className="mb-6">
-            <h3 className="text-2xl font-bold text-gray-800 mb-3">Materials Used</h3>
-            <div className="flex flex-wrap gap-2">
-              {artifact.materials.map((material, index) => (
-                <span
-                  key={index}
-                  className="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium"
-                >
-                  {material}
-                </span>
-              ))}
-            </div>
-          </section>
-
-          {/* Cultural Significance */}
-          <section className="mb-6 bg-purple-50 rounded-lg p-6">
-            <h3 className="text-2xl font-bold text-gray-800 mb-3">
-              Cultural Significance
-            </h3>
-            <p className="text-gray-700 leading-relaxed">
-              {artifact.culturalSignificance}
-            </p>
-          </section>
-
-          {/* Usage Context */}
-          <section className="mb-6">
-            <h3 className="text-2xl font-bold text-gray-800 mb-3">
-              Historical Usage
-            </h3>
-            <p className="text-gray-700 leading-relaxed">{artifact.usageContext}</p>
-          </section>
-
-          {/* Fun Facts */}
-          {artifact.funFacts && artifact.funFacts.length > 0 && (
-            <section className="mb-6 bg-blue-50 rounded-lg p-6">
+          {/* Tags */}
+          {artifact.tags && artifact.tags.length > 0 && (
+            <section className="mb-6">
               <h3 className="text-2xl font-bold text-gray-800 mb-3">
-                💡 Interesting Facts
+                <FaTag className="inline mr-2" />Tags
               </h3>
-              <ul className="space-y-2">
-                {artifact.funFacts.map((fact, index) => (
-                  <li key={index} className="flex items-start">
-                    <span className="text-blue-600 mr-2 mt-1">•</span>
-                    <span className="text-gray-700">{fact}</span>
-                  </li>
+              <div className="flex flex-wrap gap-2">
+                {artifact.tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium"
+                  >
+                    {tag}
+                  </span>
                 ))}
-              </ul>
+              </div>
+            </section>
+          )}
+
+          {/* Date Found */}
+          {artifact.dateFound && (
+            <section className="mb-6 bg-purple-50 rounded-lg p-6">
+              <h3 className="text-2xl font-bold text-gray-800 mb-3">
+                Discovery Information
+              </h3>
+              <p className="text-gray-700">
+                <strong>Date Found:</strong> {new Date(artifact.dateFound).toLocaleDateString()}
+              </p>
+              {artifact.location && (
+                <p className="text-gray-700 mt-2">
+                  <strong>Location:</strong> {artifact.location}
+                </p>
+              )}
             </section>
           )}
 
@@ -126,7 +134,7 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {relatedArtifacts.map((relatedArtifact) => (
                   <div
-                    key={relatedArtifact.id}
+                    key={relatedArtifact._id}
                     onClick={() => {
                       onArtifactClick(relatedArtifact);
                     }}
@@ -140,8 +148,8 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
                     <h4 className="font-bold text-gray-800 mb-1 text-sm">
                       {relatedArtifact.name}
                     </h4>
-                    <p className="text-xs text-purple-600">
-                      {relatedArtifact.veddaName}
+                    <p className="text-xs text-purple-600 capitalize">
+                      {relatedArtifact.category}
                     </p>
                   </div>
                 ))}
@@ -168,7 +176,6 @@ ArtifactDetailModal.propTypes = {
     materials: PropTypes.arrayOf(PropTypes.string).isRequired,
     culturalSignificance: PropTypes.string.isRequired,
     usageContext: PropTypes.string.isRequired,
-    modernStatus: PropTypes.string.isRequired,
     funFacts: PropTypes.arrayOf(PropTypes.string),
     relatedArtifacts: PropTypes.arrayOf(PropTypes.number),
   }),
