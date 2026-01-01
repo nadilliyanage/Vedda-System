@@ -3,6 +3,7 @@ import { Plus, Search, Filter, Loader2, RefreshCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import AdminArtifactCard from '../components/artifacts/AdminArtifactCard';
 import ArtifactFormModal from '../components/artifacts/ArtifactFormModal';
+import ArtifactDetailModal from '../components/artifacts/ArtifactDetailModal';
 import { getArtifacts, deleteArtifact } from '../services/artifactService';
 
 const AdminArtifacts = () => {
@@ -10,6 +11,7 @@ const AdminArtifacts = () => {
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingArtifact, setEditingArtifact] = useState(null);
+  const [viewingArtifact, setViewingArtifact] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -95,8 +97,7 @@ const AdminArtifacts = () => {
   };
 
   const handleView = (artifact) => {
-    // TODO: Implement view modal
-    toast('View details coming soon!', { icon: '👀' });
+    setViewingArtifact(artifact);
   };
 
   const handleSuccess = (artifactData, isUpdate = false) => {
@@ -297,6 +298,15 @@ const AdminArtifacts = () => {
         onSuccess={handleSuccess}
         artifact={editingArtifact}
       />
+
+      {/* View Artifact Detail Modal */}
+      {viewingArtifact && (
+        <ArtifactDetailModal
+          artifact={viewingArtifact}
+          onClose={() => setViewingArtifact(null)}
+          onArtifactClick={(artifact) => setViewingArtifact(artifact)}
+        />
+      )}
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && artifactToDelete && (

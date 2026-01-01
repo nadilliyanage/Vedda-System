@@ -11,19 +11,6 @@ const AdminArtifactCard = ({ artifact, onEdit, onDelete, onView }) => {
     });
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'published':
-        return 'bg-green-100 text-green-800';
-      case 'draft':
-        return 'bg-yellow-100 text-yellow-800';
-      case 'archived':
-        return 'bg-gray-100 text-gray-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
   const getCategoryColor = (category) => {
     const colors = {
       tools: 'bg-blue-100 text-blue-800',
@@ -51,13 +38,6 @@ const AdminArtifactCard = ({ artifact, onEdit, onDelete, onView }) => {
             <span>No Image</span>
           </div>
         )}
-        
-        {/* Status Badge */}
-        <div className="absolute top-3 right-3">
-          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(artifact.status)}`}>
-            {artifact.status?.charAt(0).toUpperCase() + artifact.status?.slice(1)}
-          </span>
-        </div>
 
         {/* AI Generated Badge */}
         {artifact.metadata?.aiGenerated && (
@@ -155,7 +135,6 @@ AdminArtifactCard.propTypes = {
     imageUrl: PropTypes.string,
     tags: PropTypes.arrayOf(PropTypes.string),
     location: PropTypes.string,
-    status: PropTypes.string,
     createdAt: PropTypes.string,
     metadata: PropTypes.shape({
       aiGenerated: PropTypes.bool,
