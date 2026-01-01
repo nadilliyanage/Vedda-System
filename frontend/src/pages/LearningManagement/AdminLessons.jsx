@@ -4,6 +4,7 @@ import { FaEye, FaEdit, FaTrash, FaPlus, FaList } from 'react-icons/fa';
 import AdminCategories from './AdminCategories';
 import TextEditor from './TextEditor';
 import { lessonsAPI, categoriesAPI } from '../../services/learningAPI';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 
 const AdminLessons = () => {
   const [lessons, setLessons] = useState([]);
@@ -11,6 +12,7 @@ const AdminLessons = () => {
   const [loading, setLoading] = useState(true);
   const [activeView, setActiveView] = useState('list'); // 'list', 'add', 'edit', 'view', 'categories'
   const [currentLesson, setCurrentLesson] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, lessonId: null });
   const [formData, setFormData] = useState({
     id: '',
     categoryId: '',
@@ -116,11 +118,9 @@ const AdminLessons = () => {
     }
   };
 
-  const handleDelete = async (lessonId) => {
-    if (!window.confirm('Are you sure you want to delete this lesson?')) return;
-
+  const handleDelete = async () => {
     try {
-      await lessonsAPI.delete(lessonId);
+      await lessonsAPI.delete(confirmDialog.lessonId);
       toast.success('Lesson deleted successfully');
       fetchLessons();
     } catch (error) {
@@ -218,7 +218,7 @@ const AdminLessons = () => {
                             <FaEdit />
                           </button>
                           <button
-                            onClick={() => handleDelete(lesson.id)}
+                            onClick={() => setConfirmDialog({ isOpen: true, lessonId: lesson.id })}
                             className="text-red-600 hover:text-red-900"
                             title="Delete"
                           >
@@ -233,6 +233,16 @@ const AdminLessons = () => {
             </div>
           )}
         </div>
+
+        <ConfirmDialog
+          isOpen={confirmDialog.isOpen}
+          onClose={() => setConfirmDialog({ isOpen: false, lessonId: null })}
+          onConfirm={handleDelete}
+          title="Delete Lesson"
+          message="Are you sure you want to delete this lesson? This action cannot be undone."
+          confirmText="Delete"
+          type="danger"
+        />
       </div>
     );
   }

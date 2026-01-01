@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { FaEye, FaEdit, FaTrash, FaPlus, FaSave } from 'react-icons/fa';
 import { exercisesAPI, lessonsAPI, categoriesAPI } from '../../services/learningAPI';
 import { SKILL_TAGS, TAG_COLORS } from '../../constants/skillTags';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 
 const AdminExercises = () => {
   const [exercises, setExercises] = useState([]);
@@ -11,6 +12,7 @@ const AdminExercises = () => {
   const [loading, setLoading] = useState(true);
   const [activeView, setActiveView] = useState('list'); // 'list', 'add', 'edit', 'view'
   const [currentExercise, setCurrentExercise] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, exerciseId: null });
   
   // Top-level form data
   const [formData, setFormData] = useState({
@@ -230,11 +232,9 @@ const AdminExercises = () => {
     }
   };
 
-  const handleDelete = async (exerciseId) => {
-    if (!window.confirm('Are you sure you want to delete this exercise?')) return;
-
+  const handleDelete = async () => {
     try {
-      await exercisesAPI.delete(exerciseId);
+      await exercisesAPI.delete(confirmDialog.exerciseId);
       toast.success('Exercise deleted successfully');
       fetchExercises();
     } catch (error) {
@@ -449,7 +449,7 @@ const AdminExercises = () => {
                             <FaEdit />
                           </button>
                           <button
-                            onClick={() => handleDelete(exercise.id)}
+                            onClick={() => setConfirmDialog({ isOpen: true, exerciseId: exercise.id })}
                             className="text-red-600 hover:text-red-900"
                             title="Delete"
                           >
@@ -464,6 +464,16 @@ const AdminExercises = () => {
             </div>
           )}
         </div>
+
+        <ConfirmDialog
+          isOpen={confirmDialog.isOpen}
+          onClose={() => setConfirmDialog({ isOpen: false, exerciseId: null })}
+          onConfirm={handleDelete}
+          title="Delete Exercise"
+          message="Are you sure you want to delete this exercise? This action cannot be undone."
+          confirmText="Delete"
+          type="danger"
+        />
       </div>
     );
   }

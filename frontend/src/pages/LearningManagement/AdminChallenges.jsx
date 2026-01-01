@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { FaPlus, FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import { challengesAPI } from '../../services/learningAPI';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 
 const AdminChallenges = () => {
   const [challenges, setChallenges] = useState([]);
@@ -10,6 +11,7 @@ const AdminChallenges = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalMode, setModalMode] = useState('create'); // 'create', 'edit', 'view'
   const [currentChallenge, setCurrentChallenge] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, challengeId: null });
   const [formData, setFormData] = useState({
     id: '',
     type: 'fill_blank',
@@ -137,11 +139,9 @@ const AdminChallenges = () => {
     }
   };
 
-  const handleDelete = async (challengeId) => {
-    if (!window.confirm('Are you sure you want to delete this challenge?')) return;
-
+  const handleDelete = async () => {
     try {
-      await challengesAPI.delete(challengeId);
+      await challengesAPI.delete(confirmDialog.challengeId);
       toast.success('Challenge deleted successfully');
       fetchChallenges();
     } catch (error) {
@@ -297,7 +297,7 @@ const AdminChallenges = () => {
                         <FaEdit />
                       </button>
                       <button
-                        onClick={() => handleDelete(challenge.id)}
+                        onClick={() => setConfirmDialog({ isOpen: true, challengeId: challenge.id })}
                         className="text-red-600 hover:text-red-900"
                         title="Delete"
                       >
@@ -533,6 +533,17 @@ const AdminChallenges = () => {
           </div>
         </div>
       )}
+
+      {/* Confirm Dialog */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={() => setConfirmDialog({ isOpen: false, challengeId: null })}
+        onConfirm={handleDelete}
+        title="Delete Challenge"
+        message="Are you sure you want to delete this challenge? This action cannot be undone."
+        confirmText="Delete"
+        type="danger"
+      />
     </div>
   );
 };
