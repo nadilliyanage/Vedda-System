@@ -64,11 +64,13 @@
 /* Handling Media inside the editor */
 .ProseMirror img,
 .ProseMirror img.editor-image {
-  max-width: 100%;
+  max-width: 200px;
+  max-height: 200px;
+  width: auto;
   height: auto;
   border-radius: 6px;
   display: block;
-  margin: 16px 0;
+  margin: 16px auto;
   border: 2px solid transparent;
   object-fit: contain;
 }
@@ -81,4 +83,16 @@
   width: 100%;
   margin: 16px 0;
   display: block;
+}
+
+/* Styles for lesson content view images */
+.lesson-content img {
+  max-width: 200px;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  border-radius: 6px;
+  display: block;
+  margin: 16px auto;
+  object-fit: contain;
 }
