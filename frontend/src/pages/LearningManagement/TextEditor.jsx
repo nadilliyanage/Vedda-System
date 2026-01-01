@@ -38,13 +38,16 @@ const TextEditor = ({ value = '', onChange }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Image,
+      Image.configure({
+        inline: true,
+        allowBase64: true,
+        HTMLAttributes: {
+          class: 'editor-image',
+        },
+      }),
       AudioExtension, // Register our custom audio node
     ],
-    content: value || `
-      <h2>Welcome to the Media Editor</h2>
-      <p>You can type text, upload images, and upload audio files below.</p>
-    `,
+    content: value || '',
     onUpdate: ({ editor }) => {
       // Call the onChange handler with the current HTML content
       if (onChange) {
@@ -55,8 +58,12 @@ const TextEditor = ({ value = '', onChange }) => {
 
   // Sync external value changes to editor
   useEffect(() => {
-    if (editor && value !== undefined && value !== editor.getHTML()) {
-      editor.commands.setContent(value);
+    if (editor && value !== undefined) {
+      const currentContent = editor.getHTML();
+      // Only update if value is different from current content
+      if (value !== currentContent) {
+        editor.commands.setContent(value || '', false);
+      }
     }
   }, [editor, value]);
 
@@ -69,12 +76,13 @@ const TextEditor = ({ value = '', onChange }) => {
     input.onchange = (e) => {
       const file = e.target.files[0];
       if (file && editor) {
-        // PRODUCTION NOTE: In a real app, upload 'file' to your server here.
-        // Then use the returned URL (e.g., https://aws.com/my-image.png).
-        // For this demo, we use a local preview URL.
-        const url = URL.createObjectURL(file);
-        
-        editor.chain().focus().setImage({ src: url }).run();
+        // Convert image to Base64 for storage in MongoDB
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const base64Url = event.target.result;
+          editor.chain().focus().setImage({ src: base64Url }).run();
+        };
+        reader.readAsDataURL(file);
       }
     };
     input.click();
@@ -89,13 +97,16 @@ const TextEditor = ({ value = '', onChange }) => {
     input.onchange = (e) => {
       const file = e.target.files[0];
       if (file && editor) {
-        // PRODUCTION NOTE: Same as above. Upload to server first!
-        const url = URL.createObjectURL(file);
-
-        editor.chain().focus().insertContent({
-          type: 'audio',
-          attrs: { src: url }
-        }).run();
+        // Convert audio to Base64 for storage in MongoDB
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const base64Url = event.target.result;
+          editor.chain().focus().insertContent({
+            type: 'audio',
+            attrs: { src: base64Url }
+          }).run();
+        };
+        reader.readAsDataURL(file);
       }
     };
     input.click();
@@ -111,18 +122,21 @@ const TextEditor = ({ value = '', onChange }) => {
       <div className="editor-toolbar">
         {/* Basic Formatting */}
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
           className={`editor-btn ${editor.isActive('bold') ? 'is-active' : ''}`}
         >
           Bold
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           className={`editor-btn ${editor.isActive('italic') ? 'is-active' : ''}`}
         >
           Italic
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
           className={`editor-btn ${editor.isActive('strike') ? 'is-active' : ''}`}
         >
@@ -131,12 +145,14 @@ const TextEditor = ({ value = '', onChange }) => {
         
         {/* Headers */}
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
           className={`editor-btn ${editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}`}
         >
           H1
         </button>
         <button
+          type="button"
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           className={`editor-btn ${editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}`}
         >
@@ -144,10 +160,10 @@ const TextEditor = ({ value = '', onChange }) => {
         </button>
 
         {/* Media Buttons */}
-        <button onClick={addImage} className="editor-btn btn-image">
+        <button type="button" onClick={addImage} className="editor-btn btn-image">
           🖼️ Image
         </button>
-        <button onClick={addAudio} className="editor-btn btn-audio">
+        <button type="button" onClick={addAudio} className="editor-btn btn-audio">
           🎵 Audio
         </button>
       </div>

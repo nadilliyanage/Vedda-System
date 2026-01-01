@@ -379,12 +379,13 @@ const AdminLessons = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Lesson Content</label>
               <TextEditor 
+                key={`${activeView}-${formData.id || 'new'}`}
                 value={formData.content}
                 onChange={(content) => setFormData({ ...formData, content })}
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            {/* <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Image URL (Optional)</label>
                 <input
@@ -405,7 +406,7 @@ const AdminLessons = () => {
                   placeholder="https://example.com/audio.mp3"
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -460,6 +461,8 @@ const AdminLessons = () => {
           </div>
         </form>
       </div>
+
+      
     </div>
   );
 };
