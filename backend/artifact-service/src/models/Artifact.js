@@ -28,13 +28,6 @@ const artifactSchema = new mongoose.Schema(
       type: String,
       trim: true
     },
-    dateFound: {
-      type: Date
-    },
-    estimatedAge: {
-      type: String,
-      trim: true
-    },
     imageUrl: {
       type: String
     },
@@ -62,11 +55,6 @@ const artifactSchema = new mongoose.Schema(
       }],
       extractedText: String
     },
-    status: {
-      type: String,
-      enum: ['draft', 'published', 'archived'],
-      default: 'draft'
-    },
     createdBy: {
       type: String,
       required: true
@@ -80,6 +68,5 @@ const artifactSchema = new mongoose.Schema(
 // Index for search optimization
 artifactSchema.index({ name: 'text', description: 'text', tags: 'text' });
 artifactSchema.index({ category: 1 });
-artifactSchema.index({ status: 1 });
 
 module.exports = mongoose.model('Artifact', artifactSchema);

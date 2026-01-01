@@ -99,8 +99,10 @@ const AdminArtifacts = () => {
   };
 
   const handleSuccess = (newArtifact) => {
-    // Force refresh by updating pagination
-    setPagination((prev) => ({ ...prev, page: prev.page }));
+    // Add the new artifact to the beginning of the list
+    setArtifacts((prev) => [newArtifact, ...prev]);
+    // Update total count
+    setPagination((prev) => ({ ...prev, total: prev.total + 1 }));
   };
 
   return (
