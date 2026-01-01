@@ -9,6 +9,7 @@ const AdminArtifacts = () => {
   const [artifacts, setArtifacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingArtifact, setEditingArtifact] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -89,8 +90,8 @@ const AdminArtifacts = () => {
   };
 
   const handleEdit = (artifact) => {
-    // TODO: Implement edit functionality
-    toast('Edit functionality coming soon!', { icon: '🚧' });
+    setEditingArtifact(artifact);
+    setIsModalOpen(true);
   };
 
   const handleView = (artifact) => {
@@ -98,9 +99,19 @@ const AdminArtifacts = () => {
     toast('View details coming soon!', { icon: '👀' });
   };
 
-  const handleSuccess = (newArtifact) => {
-    // Force refresh by updating pagination
-    setPagination((prev) => ({ ...prev, page: prev.page }));
+  const handleSuccess = (artifactData, isUpdate = false) => {
+    if (isUpdate) {
+      // Update existing artifact in the list
+      setArtifacts((prev) => 
+        prev.map((item) => (item._id === artifactData._id ? artifactData : item))
+      );
+      toast.success('Artifact list updated');
+    } else {
+      // Add the new artifact to the beginning of the list
+      setArtifacts((prev) => [artifactData, ...prev]);
+      // Update total count
+      setPagination((prev) => ({ ...prev, total: prev.total + 1 }));
+    }
   };
 
   return (
@@ -276,11 +287,15 @@ const AdminArtifacts = () => {
         </div>
       )}
 
-      {/* Add Artifact Modal */}
+      {/* Add/Edit Artifact Modal */}
       <ArtifactFormModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingArtifact(null);
+        }}
         onSuccess={handleSuccess}
+        artifact={editingArtifact}
       />
 
       {/* Delete Confirmation Modal */}
