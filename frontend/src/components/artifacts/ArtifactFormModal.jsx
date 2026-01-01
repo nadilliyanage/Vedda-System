@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, Upload, Sparkles, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { createArtifactWithImage, uploadImage, generateMetadata } from '../../services/artifactService';
+import { createArtifactWithImage, updateArtifact, uploadImage, generateMetadata } from '../../services/artifactService';
 
 const CATEGORIES = [
   { value: 'tools', label: 'Tools' },
@@ -12,7 +12,9 @@ const CATEGORIES = [
   { value: 'other', label: 'Other' },
 ];
 
-const ArtifactFormModal = ({ isOpen, onClose, onSuccess }) => {
+const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
+  const isEditMode = !!artifact;
+  
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -25,6 +27,20 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess }) => {
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
+
+  // Populate form when editing
+  useEffect(() => {
+    if (artifact && isOpen) {
+      setFormData({
+        name: artifact.name || '',
+        description: artifact.description || '',
+        category: artifact.category || '',
+        tags: artifact.tags?.join(', ') || '',
+        location: artifact.location || '',
+      });
+      setImagePreview(artifact.imageUrl || artifact.images?.[0]?.url || null);
+    }
+  }, [artifact, isOpen]);
 
   if (!isOpen) return null;
 
@@ -98,43 +114,69 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!imageFile) {
+    if (!imageFile && !isEditMode) {
       toast.error('Please upload an artifact image');
       return;
     }
 
     setLoading(true);
     try {
-      const submitData = new FormData();
-      submitData.append('image', imageFile);
-      submitData.append('name', formData.name);
-      submitData.append('description', formData.description);
-      submitData.append('category', formData.category);
-      submitData.append('location', formData.location);
-      submitData.append('status', formData.status);
-      submitData.append('createdBy', 'admin'); // TODO: Get from auth context
+      if (isEditMode) {
+        // Update existing artifact
+        const updateData = {
+          name: formData.name,
+          description: formData.description,
+          category: formData.category,
+          location: formData.location,
+          tags: formData.tags ? formData.tags.split(',').map((tag) => tag.trim()).filter(Boolean) : [],
+        };
 
-      if (formData.dateFound) {
-        submitData.append('dateFound', formData.dateFound);
-      }
-      if (formData.estimatedAge) {
-        submitData.append('estimatedAge', formData.estimatedAge);
-      }
-      if (formData.tags) {
-        const tagsArray = formData.tags.split(',').map((tag) => tag.trim()).filter(Boolean);
-        submitData.append('tags', JSON.stringify(tagsArray));
-      }
+        // If new image is uploaded, handle it separately
+        if (imageFile) {
+          const uploadResult = await uploadImage(imageFile);
+          if (uploadResult.success) {
+            updateData.imageUrl = uploadResult.data.url;
+            updateData.images = [{
+              url: uploadResult.data.url,
+              publicId: uploadResult.data.publicId,
+              isPrimary: true
+            }];
+          }
+        }
 
-      const response = await createArtifactWithImage(submitData);
+        const response = await updateArtifact(artifact._id, updateData);
 
-      if (response.success) {
-        toast.success('Artifact created successfully!');
-        onSuccess(response.data);
-        handleClose();
+        if (response.success) {
+          toast.success('Artifact updated successfully!');
+          onSuccess(response.data, true); // Pass true to indicate update
+          handleClose();
+        }
+      } else {
+        // Create new artifact
+        const submitData = new FormData();
+        submitData.append('image', imageFile);
+        submitData.append('name', formData.name);
+        submitData.append('description', formData.description);
+        submitData.append('category', formData.category);
+        submitData.append('location', formData.location);
+        submitData.append('createdBy', 'admin'); // TODO: Get from auth context
+
+        if (formData.tags) {
+          const tagsArray = formData.tags.split(',').map((tag) => tag.trim()).filter(Boolean);
+          submitData.append('tags', JSON.stringify(tagsArray));
+        }
+
+        const response = await createArtifactWithImage(submitData);
+
+        if (response.success) {
+          toast.success('Artifact created successfully!');
+          onSuccess(response.data);
+          handleClose();
+        }
       }
     } catch (error) {
       console.error('Submit error:', error);
-      toast.error(error.response?.data?.message || 'Failed to create artifact');
+      toast.error(error.response?.data?.message || `Failed to ${isEditMode ? 'update' : 'create'} artifact`);
     } finally {
       setLoading(false);
     }
@@ -158,7 +200,7 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess }) => {
       <div className="bg-white rounded-lg max-w-7xl w-full h-[90vh] flex flex-col">
         {/* Header */}
         <div className="bg-white border-b px-6 py-4 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-800">Add New Artifact</h2>
+          <h2 className="text-2xl font-bold text-gray-800">{isEditMode ? 'Edit Artifact' : 'Add New Artifact'}</h2>
           <button
             onClick={handleClose}
             className="text-gray-500 hover:text-gray-700 transition-colors"
@@ -173,7 +215,7 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess }) => {
             <div className="w-2/5 flex flex-col">
               <div className="flex-1 bg-gray-50 p-6 rounded-lg border-2 border-dashed border-gray-300 flex flex-col">
                 <label className="block text-sm font-medium text-gray-700 mb-4">
-                  Artifact Image *
+                  Artifact Image {!isEditMode && '*'}
                 </label>
                 
                 {imagePreview ? (
@@ -338,10 +380,10 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess }) => {
                   {loading ? (
                     <>
                       <Loader2 size={20} className="animate-spin" />
-                      Creating...
+                      {isEditMode ? 'Updating...' : 'Creating...'}
                     </>
                   ) : (
-                    'Create Artifact'
+                    isEditMode ? 'Update Artifact' : 'Create Artifact'
                   )}
                 </button>
               </div>
