@@ -78,14 +78,12 @@ exports.getAllArtifacts = async (req, res) => {
       page = 1,
       limit = 10,
       category,
-      status,
       search
     } = req.query;
 
     const filter = {};
     
     if (category) filter.category = category;
-    if (status) filter.status = status;
     if (search) {
       // Use regex for partial matching on name, description, and tags
       filter.$or = [
@@ -283,7 +281,6 @@ exports.generateMetadata = async (req, res) => {
         suggestedDescription: metadata.data.description,
         suggestedCategory: metadata.data.category,
         suggestedTags: metadata.data.tags,
-        estimatedAge: metadata.data.estimatedAge,
         culturalSignificance: metadata.data.culturalSignificance
       }
     });

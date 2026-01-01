@@ -99,6 +99,40 @@ export const generateMetadata = async (imageUrl) => {
   }
 };
 
+// Identify artifact from image using AI
+export const identifyArtifact = async (imageFile) => {
+  const IDENTIFIER_API_URL = import.meta.env.VITE_IDENTIFIER_SERVICE_URL || 'http://localhost:5009';
+  
+  const formData = new FormData();
+  formData.append('file', imageFile);
+  
+  try {
+    const response = await axios.post(`${IDENTIFIER_API_URL}/api/identifier/predict`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    
+    if (response.data.success) {
+      const data = response.data.data;
+      return {
+        success: true,
+        artifact_name: data.artifact_name,
+        category: data.category,
+        description: data.description,
+        tags: data.tags,
+        confidence: data.confidence,
+        all_predictions: data.all_predictions
+      };
+    }
+    
+    throw new Error('Failed to identify artifact');
+  } catch (error) {
+    console.error('Error identifying artifact:', error);
+    throw new Error(error.response?.data?.message || 'Failed to identify artifact');
+  }
+};
+
 export default {
   getArtifacts,
   getArtifactById,
@@ -109,4 +143,5 @@ export default {
   deleteArtifact,
   getArtifactsByCategory,
   generateMetadata,
+  identifyArtifact,
 };
