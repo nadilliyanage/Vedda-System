@@ -13,7 +13,7 @@ class DictionaryService:
     def __init__(self):
         self.db = get_db()
         self.dictionary = self.load_dictionary()
-        print("📚 Dictionary Service initialized")
+        print("Dictionary Service initialized")
     
     def load_dictionary(self):
         """Load dictionary from MongoDB with reverse lookup support"""
@@ -60,7 +60,7 @@ class DictionaryService:
                 }
                 dictionary['all_words'].append(word_entry)
             
-            print(f"📚 Loaded {len(dictionary['all_words'])} dictionary entries from MongoDB")
+            print(f"Loaded {len(dictionary['all_words'])} dictionary entries from MongoDB")
             return dictionary
             
         except Exception as e:

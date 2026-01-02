@@ -1,4 +1,4 @@
-# 📚 How to Add and Train New Vedda Words and Sentences
+# How to Add and Train New Vedda Words and Sentences
 
 ## 🎯 Overview
 
