@@ -57,11 +57,19 @@ start "Speech Service" python run.py
 cd ..
 timeout /t 3 > nul
 
-echo starring 3D Model Service on port 5008...
+echo Starting 3D Model Service on port 5008...
 cd "%~dp03D-model-service"
 echo Installing requirements...
 pip install -r requirements.txt > nul 2>&1
 start "3D Model Service" python run.py
+cd ..
+timeout /t 2 > nul
+
+echo Starting Artifact Identifier Service on port 5009...
+cd "%~dp0artifact-identifier-service"
+echo Installing requirements...
+pip install -r requirements.txt > nul 2>&1
+start "Artifact Identifier Service" python run.py
 cd ..
 timeout /t 2 > nul
 
@@ -90,6 +98,7 @@ echo - Auth Service: http://localhost:5005
 echo - Learn Service: http://localhost:5006
 echo - TTS/Speech Service: http://localhost:5007
 echo - 3D Model Service: http://localhost:5008
+echo - Artifact Identifier Service: http://localhost:5009
 echo - Artifact Service: http://localhost:5010
 echo.
 echo To start the frontend, run: npm run dev (in the frontend directory)
