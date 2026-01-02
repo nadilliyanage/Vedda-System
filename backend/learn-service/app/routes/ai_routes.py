@@ -20,8 +20,9 @@ def submit_answer():
         return jsonify({"error": "Exercise not found"}), 404
 
     skill_tags = exercise.get("skillTags", [])
-    sentence = exercise.get("question", "")
-    correct_answer = exercise.get("correct_answer", "")
+    question = exercise.get("question", "")
+    sentence = question.get("prompt", "")
+    correct_answer = question.get("correct_ans", "")    
 
     feedback, usage = get_feedback_with_rag(
         sentence=sentence,

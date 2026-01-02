@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaBook, FaDumbbell, FaTrophy, FaArrowLeft, FaChartLine } from 'react-icons/fa';
 import LessonSelection from './LessonSelection';
 import LessonsList from './LessonsList';
@@ -10,11 +10,64 @@ import PerformanceView from './PerformanceView';
 
 
 const VeddaLearning = () => {
-  const [activeView, setActiveView] = useState('main'); // 'main', 'learn', 'practice', 'challenges', 'performance', 'quiz'
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedLesson, setSelectedLesson] = useState(null);
-  const [selectedExercise, setSelectedExercise] = useState(null);
-  const [allLessons, setAllLessons] = useState([]);
+  // Initialize state from localStorage if available
+  const [activeView, setActiveView] = useState(() => {
+    const saved = localStorage.getItem('veddaLearning_activeView');
+    return saved || 'main';
+  });
+  const [selectedCategory, setSelectedCategory] = useState(() => {
+    const saved = localStorage.getItem('veddaLearning_category');
+    return saved ? JSON.parse(saved) : null;
+  });
+  const [selectedLesson, setSelectedLesson] = useState(() => {
+    const saved = localStorage.getItem('veddaLearning_lesson');
+    return saved ? JSON.parse(saved) : null;
+  });
+  const [selectedExercise, setSelectedExercise] = useState(() => {
+    const saved = localStorage.getItem('veddaLearning_exercise');
+    return saved ? JSON.parse(saved) : null;
+  });
+  const [allLessons, setAllLessons] = useState(() => {
+    const saved = localStorage.getItem('veddaLearning_allLessons');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('veddaLearning_activeView', activeView);
+  }, [activeView]);
+
+  useEffect(() => {
+    if (selectedCategory) {
+      localStorage.setItem('veddaLearning_category', JSON.stringify(selectedCategory));
+    } else {
+      localStorage.removeItem('veddaLearning_category');
+    }
+  }, [selectedCategory]);
+
+  useEffect(() => {
+    if (selectedLesson) {
+      localStorage.setItem('veddaLearning_lesson', JSON.stringify(selectedLesson));
+    } else {
+      localStorage.removeItem('veddaLearning_lesson');
+    }
+  }, [selectedLesson]);
+
+  useEffect(() => {
+    if (selectedExercise) {
+      localStorage.setItem('veddaLearning_exercise', JSON.stringify(selectedExercise));
+    } else {
+      localStorage.removeItem('veddaLearning_exercise');
+    }
+  }, [selectedExercise]);
+
+  useEffect(() => {
+    if (allLessons.length > 0) {
+      localStorage.setItem('veddaLearning_allLessons', JSON.stringify(allLessons));
+    } else {
+      localStorage.removeItem('veddaLearning_allLessons');
+    }
+  }, [allLessons]);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -50,6 +103,11 @@ const VeddaLearning = () => {
     setActiveView('main');
     setSelectedCategory(null);
     setSelectedLesson(null);
+    // Clear stored state when going back to main
+    localStorage.removeItem('veddaLearning_category');
+    localStorage.removeItem('veddaLearning_lesson');
+    localStorage.removeItem('veddaLearning_exercise');
+    localStorage.removeItem('veddaLearning_allLessons');
   };
 
   // Main hub view
