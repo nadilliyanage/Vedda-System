@@ -13,6 +13,6 @@ class Config:
     MONGODB_DB_NAME = os.environ.get("MONGODB_DB_NAME", "vedda-system")
     
     # AI Service Configuration
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "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")
     OPENAI_MODEL_FAST = os.getenv("OPENAI_MODEL_FAST", "gpt-4o-mini")
     OPENAI_MODEL_GEN = os.getenv("OPENAI_MODEL_GEN", "gpt-4o")

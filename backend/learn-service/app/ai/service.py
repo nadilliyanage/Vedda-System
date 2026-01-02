@@ -33,7 +33,7 @@ def _safe_json_loads(text: str):
 
 def get_feedback_with_rag(*, sentence: str, correct_answer: str, student_answer: str,
                           skill_tags: list[str], error_type: str | None = None) -> tuple[dict, dict]:
-    context = build_rag_context(skill_tags)
+    context = build_rag_context(skill_tags, correct_answer)
 
     user_prompt = FEEDBACK_USER_TEMPLATE.format(
         context=context,

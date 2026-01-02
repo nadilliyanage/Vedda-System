@@ -108,7 +108,10 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
       // Get user answer as string
       let userAnswerStr = '';
       if (question.type === 'multiple_choice') {
-        userAnswerStr = Array.isArray(userAnswer) ? userAnswer.join(', ') : '';
+        const optionTextById = new Map((question.options || []).map(option => [option.id, option.text]));
+        userAnswerStr = Array.isArray(userAnswer)
+          ? userAnswer.map(optionId => optionTextById.get(optionId) ?? optionId).join(', ')
+          : '';
       } else if (question.type === 'text_input') {
         userAnswerStr = userAnswer || '';
       } else if (question.type === 'match_pairs') {

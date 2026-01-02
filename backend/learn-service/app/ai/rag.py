@@ -1,14 +1,25 @@
+import re
+
 from app.db.mongo import get_collection
 
-def build_rag_context(skill_tags: list[str], limit_docs: int = 6, max_lines: int = 25) -> str:
+def build_rag_context(
+    skill_tags: list[str],
+    content_word: str | None = None,
+    limit_docs: int = 6,
+    max_lines: int = 25,
+) -> str:
     """
     Retrieves relevant grammar rules/examples from vadda_knowledge collection
-    using skill_tags and builds a small context string for the LLM.
+    using skill_tags and an optional content_word filter.
     """
     coll = get_collection("vedda_knowledge")
     print(skill_tags)
 
-    docs = list(coll.find({"skill_tags": {"$in": skill_tags}}).limit(limit_docs))
+    query = {"skill_tags": {"$in": skill_tags}}
+    if content_word:
+        query["content"] = {"$regex": re.escape(content_word), "$options": "i"}
+
+    docs = list(coll.find(query).limit(limit_docs))
 
     lines: list[str] = []
     for d in docs:

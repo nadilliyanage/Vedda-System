@@ -20,7 +20,7 @@ Predicted error type (optional): {error_type}
 
 Return JSON exactly with this shape:
 {{
-  "is_correct": true/false,
+  "is_correct": true/false (If correct answer and given answer is equal then value should be true),
   "corrected_answer": "string",
   "explanation": "2-4 sentences",
   "short_summary": "1 sentence",
