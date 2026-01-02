@@ -1,5 +1,6 @@
 const Artifact = require('../models/Artifact');
 const { uploadToCloudinary, deleteFromCloudinary, uploadMultipleToCloudinary } = require('../utils/cloudinaryHelper');
+const { generateArtifactMetadata } = require('../services/aiService');
 
 // Upload single image
 exports.uploadImage = async (req, res) => {
@@ -77,14 +78,12 @@ exports.getAllArtifacts = async (req, res) => {
       page = 1,
       limit = 10,
       category,
-      status,
       search
     } = req.query;
 
     const filter = {};
     
     if (category) filter.category = category;
-    if (status) filter.status = status;
     if (search) {
       // Use regex for partial matching on name, description, and tags
       filter.$or = [
@@ -256,6 +255,40 @@ exports.createArtifactWithImage = async (req, res) => {
     res.status(400).json({
       success: false,
       message: error.message
+    });
+  }
+};
+
+// Generate AI metadata from image
+exports.generateMetadata = async (req, res) => {
+  try {
+    const { imageUrl } = req.body;
+
+    if (!imageUrl) {
+      return res.status(400).json({
+        success: false,
+        message: 'Image URL is required'
+      });
+    }
+
+    const metadata = await generateArtifactMetadata(imageUrl);
+
+    res.status(200).json({
+      success: true,
+      message: 'Metadata generated successfully',
+      data: {
+        suggestedName: metadata.data.name,
+        suggestedDescription: metadata.data.description,
+        suggestedCategory: metadata.data.category,
+        suggestedTags: metadata.data.tags,
+        culturalSignificance: metadata.data.culturalSignificance
+      }
+    });
+  } catch (error) {
+    console.error('Generate metadata error:', error);
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to generate metadata'
     });
   }
 };

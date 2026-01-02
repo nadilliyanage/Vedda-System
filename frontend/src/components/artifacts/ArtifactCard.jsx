@@ -13,8 +13,8 @@ const ArtifactCard = ({ artifact, onClick }) => {
           alt={artifact.name}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
         />
-        <div className="absolute top-3 right-3 bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-semibold">
-          {artifact.era}
+        <div className="absolute top-3 right-3 bg-purple-600 text-white px-3 py-1 rounded-full text-xs font-semibold capitalize">
+          {artifact.category}
         </div>
       </div>
 
@@ -23,18 +23,26 @@ const ArtifactCard = ({ artifact, onClick }) => {
         <h3 className="text-xl font-bold text-gray-800 mb-1 group-hover:text-purple-600 transition-colors">
           {artifact.name}
         </h3>
-        <p className="text-sm text-purple-600 font-medium mb-3">
-          {artifact.veddaName}
-        </p>
+        {artifact.tags && artifact.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1 mb-3">
+            {artifact.tags.slice(0, 2).map((tag, index) => (
+              <span key={index} className="text-xs text-purple-600 bg-purple-50 px-2 py-1 rounded-full">
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
         <p className="text-gray-600 text-sm line-clamp-3 mb-4">
           {artifact.description}
         </p>
 
         {/* Footer */}
         <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-          <span className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-            {artifact.dateRange}
-          </span>
+          {artifact.estimatedAge && (
+            <span className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+              {artifact.estimatedAge}
+            </span>
+          )}
           <span className="text-purple-600 text-sm font-semibold flex items-center">
             Learn More
             <svg
@@ -59,13 +67,14 @@ const ArtifactCard = ({ artifact, onClick }) => {
 
 ArtifactCard.propTypes = {
   artifact: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    _id: PropTypes.string,
+    id: PropTypes.number,
     name: PropTypes.string.isRequired,
-    veddaName: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     imageUrl: PropTypes.string.isRequired,
-    era: PropTypes.string.isRequired,
-    dateRange: PropTypes.string.isRequired,
+    category: PropTypes.string.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.string),
+    estimatedAge: PropTypes.string,
   }).isRequired,
   onClick: PropTypes.func.isRequired,
 };

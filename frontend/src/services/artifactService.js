@@ -82,17 +82,55 @@ export const getArtifactsByCategory = async (category) => {
 
 // AI auto-generate metadata (placeholder for future implementation)
 export const generateMetadata = async (imageUrl) => {
-  // TODO: Implement when AI service is ready
-  console.log('AI metadata generation coming soon...');
-  return {
-    success: true,
-    data: {
-      suggestedName: 'Detected Artifact',
-      suggestedDescription: 'AI-generated description',
-      suggestedCategory: 'other',
-      suggestedTags: ['artifact'],
-    },
-  };
+  try {
+    const response = await artifactAPI.post('/generate-metadata', { imageUrl });
+    // Backend returns data nested in response.data.data
+    const metadata = response.data.data;
+    return {
+      name: metadata.suggestedName,
+      description: metadata.suggestedDescription,
+      category: metadata.suggestedCategory,
+      tags: metadata.suggestedTags,
+      estimatedAge: metadata.estimatedAge
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
+    throw new Error(error.response?.data?.message || 'Failed to generate metadata');
+  }
+};
+
+// Identify artifact from image using AI
+export const identifyArtifact = async (imageFile) => {
+  const IDENTIFIER_API_URL = import.meta.env.VITE_IDENTIFIER_SERVICE_URL || 'http://localhost:5009';
+  
+  const formData = new FormData();
+  formData.append('file', imageFile);
+  
+  try {
+    const response = await axios.post(`${IDENTIFIER_API_URL}/api/identifier/predict`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    
+    if (response.data.success) {
+      const data = response.data.data;
+      return {
+        success: true,
+        artifact_name: data.artifact_name,
+        category: data.category,
+        description: data.description,
+        tags: data.tags,
+        confidence: data.confidence,
+        all_predictions: data.all_predictions
+      };
+    }
+    
+    throw new Error('Failed to identify artifact');
+  } catch (error) {
+    console.error('Error identifying artifact:', error);
+    throw new Error(error.response?.data?.message || 'Failed to identify artifact');
+  }
 };
 
 export default {
@@ -105,4 +143,5 @@ export default {
   deleteArtifact,
   getArtifactsByCategory,
   generateMetadata,
+  identifyArtifact,
 };

@@ -9,6 +9,7 @@ const AdminArtifacts = () => {
   const [artifacts, setArtifacts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingArtifact, setEditingArtifact] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -55,41 +56,6 @@ const AdminArtifacts = () => {
     fetchArtifacts();
   }, [pagination.page, pagination.limit, categoryFilter, statusFilter, searchTerm]);
 
-  const fetchArtifacts = async () => {
-    setLoading(true);
-    try {
-      const params = {
-        page: pagination.page,
-        limit: pagination.limit,
-      };
-
-      if (searchTerm) params.search = searchTerm;
-      if (categoryFilter) params.category = categoryFilter;
-      if (statusFilter) params.status = statusFilter;
-
-      const response = await getArtifacts(params);
-      
-      if (response.success) {
-        setArtifacts(response.artifacts);
-        setPagination((prev) => ({
-          ...prev,
-          total: response.pagination.total,
-          pages: response.pagination.pages,
-        }));
-      }
-    } catch (error) {
-      console.error('Fetch error:', error);
-      toast.error('Failed to load artifacts');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSearch = () => {
-    setPagination((prev) => ({ ...prev, page: 1 }));
-    fetchArtifacts();
-  };
-
   const handleDelete = (artifact) => {
     setArtifactToDelete(artifact);
     setShowDeleteConfirm(true);
@@ -102,7 +68,8 @@ const AdminArtifacts = () => {
         toast.success('Artifact deleted successfully');
         setShowDeleteConfirm(false);
         setArtifactToDelete(null);
-        fetchArtifacts();
+        // Force refresh by updating pagination
+        setPagination((prev) => ({ ...prev, page: prev.page }));
       }
     } catch (error) {
       console.error('Delete error:', error);
@@ -123,8 +90,8 @@ const AdminArtifacts = () => {
   };
 
   const handleEdit = (artifact) => {
-    // TODO: Implement edit functionality
-    toast('Edit functionality coming soon!', { icon: '🚧' });
+    setEditingArtifact(artifact);
+    setIsModalOpen(true);
   };
 
   const handleView = (artifact) => {
@@ -132,8 +99,19 @@ const AdminArtifacts = () => {
     toast('View details coming soon!', { icon: '👀' });
   };
 
-  const handleSuccess = (newArtifact) => {
-    fetchArtifacts();
+  const handleSuccess = (artifactData, isUpdate = false) => {
+    if (isUpdate) {
+      // Update existing artifact in the list
+      setArtifacts((prev) => 
+        prev.map((item) => (item._id === artifactData._id ? artifactData : item))
+      );
+      toast.success('Artifact list updated');
+    } else {
+      // Add the new artifact to the beginning of the list
+      setArtifacts((prev) => [artifactData, ...prev]);
+      // Update total count
+      setPagination((prev) => ({ ...prev, total: prev.total + 1 }));
+    }
   };
 
   return (
@@ -153,8 +131,10 @@ const AdminArtifacts = () => {
               <input
                 type="text"
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setPagination((prev) => ({ ...prev, page: 1 }));
+                }}
                 placeholder="Search artifacts..."
                 className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -196,7 +176,7 @@ const AdminArtifacts = () => {
           {/* Buttons */}
           <div className="flex gap-2">
             <button
-              onClick={fetchArtifacts}
+              onClick={() => setPagination((prev) => ({ ...prev, page: prev.page }))}
               className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
             >
               <RefreshCw size={20} />
@@ -307,11 +287,15 @@ const AdminArtifacts = () => {
         </div>
       )}
 
-      {/* Add Artifact Modal */}
+      {/* Add/Edit Artifact Modal */}
       <ArtifactFormModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingArtifact(null);
+        }}
         onSuccess={handleSuccess}
+        artifact={editingArtifact}
       />
 
       {/* Delete Confirmation Modal */}

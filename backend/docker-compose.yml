@@ -69,6 +69,24 @@ services:
     networks:
       - vedda-network
 
+  # Artifact Identifier Service
+  artifact-identifier-service:
+    build:
+      context: ./artifact-identifier-service
+      dockerfile: Dockerfile
+    ports:
+      - "5009:5009"
+    environment:
+      - FLASK_ENV=development
+      - PORT=5009
+      - MODEL_PATH=/app/data/vedda_artifacts_model.keras
+      - METADATA_PATH=/app/data/artifact_metadata.xlsx
+    volumes:
+      - ./artifact-identifier-service/data:/app/data
+      - ../data:/app/shared_data # Mount the shared data directory
+    networks:
+      - vedda-network
+
   # Database initialization service (runs once)
   db-init:
     build:
