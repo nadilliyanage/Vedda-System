@@ -13,6 +13,9 @@ class Config:
     MONGODB_DB_NAME = os.environ.get("MONGODB_DB_NAME", "vedda-system")
     
     # AI Service Configuration
-    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     OPENAI_MODEL_FAST = os.getenv("OPENAI_MODEL_FAST", "gpt-4o-mini")
     OPENAI_MODEL_GEN = os.getenv("OPENAI_MODEL_GEN", "gpt-4o")
+    
+    if not OPENAI_API_KEY:
+        raise ValueError("OPENAI_API_KEY environment variable is required")

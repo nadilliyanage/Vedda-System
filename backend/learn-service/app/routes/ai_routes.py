@@ -22,7 +22,7 @@ def submit_answer():
     skill_tags = exercise.get("skillTags", [])
     question = exercise.get("question", "")
     sentence = question.get("prompt", "")
-    correct_answer = question.get("correct_ans", "")    
+    correct_answer = question.get("correct_answer", "")    
 
     feedback, usage = get_feedback_with_rag(
         sentence=sentence,
