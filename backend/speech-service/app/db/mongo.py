@@ -14,7 +14,7 @@ def init_mongo(app):
     if mongodb_uri:
         _mongo_client = MongoClient(mongodb_uri)
         _db = _mongo_client[database_name]
-        print(f"📚 Speech Service connected to MongoDB: {database_name}")
+        print(f"Speech Service connected to MongoDB: {database_name}")
     else:
         print("⚠️ MongoDB URI not configured, running without dictionary support")
 

@@ -156,30 +156,27 @@ const TranslationOutput = ({
           </p>
 
           {/* IPA Transcriptions */}
-          {(sourceIpaTranscription || targetIpaTranscription) && (
+          {targetIpaTranscription && (
             <div className="bg-gray-50 p-6 rounded-lg mb-4 border border-gray-200">
               <p className="text-sm font-medium text-gray-600 mb-3">
-                Pronunciations
+                Pronunciations (IPA)
               </p>
 
-              {/* Target Language IPA - Full Sentence */}
-              {targetIpaTranscription && (
-                <div className="bg-white p-4 rounded border border-gray-200">
-                  <p className="text-sm font-medium text-blue-600 mb-2">
-                    {LANGUAGES.find((l) => l.code === targetLanguage)?.name ||
-                      targetLanguage}
-                  </p>
-                  <p
-                    className="text-xl text-blue-700 font-normal tracking-wide leading-relaxed break-words"
-                    style={{
-                      fontFamily:
-                        '"Doulos SIL", "Charis SIL", "Times New Roman", serif',
-                    }}
-                  >
-                    /{targetIpaTranscription}/
-                  </p>
-                </div>
-              )}
+              <div className="bg-white p-4 rounded border border-blue-100">
+                <p className="text-xs font-medium text-blue-600 mb-1">
+                  {LANGUAGES.find((l) => l.code === targetLanguage)?.name ||
+                    targetLanguage}
+                </p>
+                <p
+                  className="text-lg text-blue-700 font-normal tracking-wide leading-relaxed break-words"
+                  style={{
+                    fontFamily:
+                      '"Doulos SIL", "Charis SIL", "Times New Roman", serif',
+                  }}
+                >
+                  /{targetIpaTranscription}/
+                </p>
+              </div>
             </div>
           )}
 
