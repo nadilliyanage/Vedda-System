@@ -4,11 +4,6 @@
 *.bak
 *.backup
 
-# Environment variables
-.env
-*.env
-!.env.example
-
 # Database files
 *.db
 *.sqlite
