@@ -1,0 +1,288 @@
+correct_answer,student_answer,error_type
+botakandaa,botakanda,spelling_error
+botakandaa,botakundaa,spelling_error
+malia,malai,spelling_error
+malia,mallia,spelling_error
+ajjejja,ajjeja,spelling_error
+ajjejja,ajejja,spelling_error
+kankunaa,kankuna,spelling_error
+kankunaa,kankuuraa,spelling_error
+kankunaa,kangkanaa,spelling_error
+karia,karai,spelling_error
+hatera,hateraa,spelling_error
+okma,okmmaa,spelling_error
+okma,omka,spelling_error
+kandaarni,kandarni,spelling_error
+mundi,muundi,spelling_error
+potti,potii,spelling_error
+potti,ppotti,spelling_error
+makini,makinni,spelling_error
+ikini,ikni,spelling_error
+ikini,ikinii,spelling_error
+ayrukula,ayruukula,spelling_error
+ugurudanda,ugurudana,spelling_error
+kirigejja,kirigeja,spelling_error
+kavitana,kavittana,spelling_error
+giniracca,giniraca,spelling_error
+barapojja,barapojjaa,spelling_error
+barapojja,barappoja,spelling_error
+ekama,ekmama,spelling_error
+ekamak,ekmak,spelling_error
+dekamak,dekamawk,spelling_error
+tunamay,tunamaya,spelling_error
+meeatto,meiato,spelling_error
+meeatto,meeattoo,spelling_error
+topan,topun,spelling_error
+topan,toppan,spelling_error
+koyba,kayba,spelling_error
+eyaba,eybaba,spelling_error
+puccakaduvaa,pucakaduvaa,spelling_error
+anaganapan,anagananpan,spelling_error
+botadamanya,botadamaanya,spelling_error
+indine,indinie,spelling_error
+diyaracca,diyaraca,spelling_error
+ajjejja,ajjejha,spelling_error
+ijjejja,ijjajja,spelling_error
+ijjejja,ijjeja,spelling_error
+okma,okmaa,spelling_error
+okma,ookma,spelling_error
+botakanda,botakkanda,spelling_error
+botakanda,botakndaa,spelling_error
+kankunaa,kangkunaa,spelling_error
+kandaarni,kandaarnii,spelling_error
+kandaarni,kandaarna,spelling_error
+mundi,mundii,spelling_error
+mundi,undi,spelling_error
+potti,poti,spelling_error
+potti,pootti,spelling_error
+giniraacca,giniracca,spelling_error
+giniraaccaa,giniracca,spelling_error
+giniraaccaa,giniraacaa,spelling_error
+pannilaatto,panilaatto,spelling_error
+pannilaatto,pannilaat,spelling_error
+deyyalaatto,deyalaatto,spelling_error
+deyyalaatto,deyyalaato,spelling_error
+irapojja,irapooja,spelling_error
+irapojja,iroojja,spelling_error
+bara,baara,spelling_error
+bara,brara,spelling_error
+barapojja,barapooja,spelling_error
+barapojja,barapajja,spelling_error
+ayrukula,ayrukkula,spelling_error
+ayrukula,ayrukolla,spelling_error
+ugurudanda,ugurudandaa,spelling_error
+ugurudanda,uguruddanda,spelling_error
+veedipojja,veedippoja,spelling_error
+veedipojja,veedipooja,spelling_error
+kirigejja,kirigejaa,spelling_error
+kirigejja,kirigejjaa,spelling_error
+kavitana,kavritana,spelling_error
+galrakki,galraakki,spelling_error
+galrakki,glarakki,spelling_error
+caalava,caalvava,spelling_error
+caalava,aalava,spelling_error
+bucca,buca,spelling_error
+bucca,buccaa,spelling_error
+meeatto,meatto,spelling_error
+meeatto,meaatto,spelling_error
+topan,toopan,spelling_error
+topan,topann,spelling_error
+eyaba,eayaba,spelling_error
+eyaba,eyabaa,spelling_error
+koyba,koymba,spelling_error
+koyba,koybba,spelling_error
+huura,huurra,spelling_error
+huura,huuraa,spelling_error
+Meeatto okma balanava,Meeatto okma bulanava,spelling_error
+Meeatto okma balanava,Meeato okma balanava,spelling_error
+Meeatto okma balanava,Meeatto okmaa balanava,spelling_error
+Meeatto okma balanava,Meeatto okma balnava,spelling_error
+Meeatto okma balanava,Meeatto okmma balanava,spelling_error
+Topan diyaracca balanava,Topan diyaracca balonava,spelling_error
+Topan diyaracca balanava,Topan diyaracca balanav,spelling_error
+Topan diyaracca balanava,Topan dyaracca balanava,spelling_error
+Topan diyaracca balanava,Topan diaracca balanava,spelling_error
+Topan diyaracca balanava,Topan diyaracca balanava,spelling_error
+Meeatto giniraacca tibenava,Meeatto giniracca tibenava,spelling_error
+Meeatto giniraacca tibenava,Meeatto gnniraacca tibenava,spelling_error
+Meeatto giniraacca tibenava,Meeatto giniraaca tibenava,spelling_error
+Meeatto giniraacca tibenava,Meeatto ginraacca tibenava,spelling_error
+Meeatto giniraacca tibenava,Meeatto giniraacca tibenav,spelling_error
+Topan kankunaa puccakaduvaa,Topan kankuna puccakaduvaa,spelling_error
+Topan kankunaa puccakaduvaa,Topan kangkunaa puccakaduvaa,spelling_error
+Topan kankunaa puccakaduvaa,Topan kankunaa puccakduvaa,spelling_error
+Topan kankunaa puccakaduvaa,Topan kankunaa pucakaduvaa,spelling_error
+Topan kankunaa puccakaduvaa,Topan kankunaa puccakaduvaa,spelling_error
+Meeatto mundi balanava,Meeatto mudi balanava,spelling_error
+Meeatto mundi balanava,Meeatto mundii balanava,spelling_error
+Meeatto mundi balanava,Meeatto mmundi balanava,spelling_error
+Meeatto mundi balanava,Meeatto mundy balanava,spelling_error
+Meeatto mundi balanava,Meeatto mundi balnava,spelling_error
+Topan potti balanava,Topan poti balanava,spelling_error
+Topan potti balanava,Topan pootti balanava,spelling_error
+Topan potti balanava,Topan potti balava,spelling_error
+Topan potti balanava,Topan potti balanva,spelling_error
+Topan potti balanava,Topan potti bkalava,spelling_error
+Meeatto pannilaatto tibenava,Meeatto panilaatto tibenava,spelling_error
+Meeatto pannilaatto tibenava,Meeatto pannilaato tibenava,spelling_error
+Meeatto pannilaatto tibenava,Meeatto pannilaatto tibenav,spelling_error
+Meeatto pannilaatto tibenava,Meeatto pennilaatto tibenava,spelling_error
+Meeatto pannilaatto tibenava,Meeatto pannilaatto tibenaa,spelling_error
+Topan deyyalaatto balanava,Topan deyalaatto balanava,spelling_error
+Topan deyyalaatto balanava,Topan deyyalaatto balnav,spelling_error
+Topan deyyalaatto balanava,Topan deyyalaato balanava,spelling_error
+Topan deyyalaatto balanava,Topan deyyalaatto bulanava,spelling_error
+Topan deyyalaatto balanava,Topan deyyalaatto balanava,spelling_error
+Meeatto kirigejja balanava,Meeatto kirigejjaa balanava,spelling_error
+Meeatto kirigejja balanava,Meeatto kihigejja balanava,spelling_error
+Meeatto kirigejja balanava,Meeatto kirigeja balanava,spelling_error
+Meeatto kirigejja balanava,Meeatto kirijejja balanava,spelling_error
+Meeatto kirigejja balanava,Meeatto kirigejha balanava,spelling_error
+Topan irapojja tibenava,Topan irapojja tibenav,spelling_error
+Topan irapojja tibenava,Topan irapooja tibenava,spelling_error
+Topan irapojja tibenava,Topan irapojja tibnenava,spelling_error
+Topan irapojja tibenava,Topan irapojaj tibenava,spelling_error
+Topan irapojja tibenava,Topan iropojja tibenava,spelling_error
+Meeatto botakandaa balanava,Meeatto botakkandaa balanava,spelling_error
+Meeatto botakandaa balanava,Meeatto botakndaa balanava,spelling_error
+Meeatto botakandaa balanava,Meeatto botakandaa balnava,spelling_error
+Meeatto botakandaa balanava,Meeatto botakandaa bulanava,spelling_error
+Meeatto botakandaa balanava,Meeatto botakandaa balanava,spelling_error
+Topan potti tibenava,Topan poti tibenava,spelling_error
+Topan potti tibenava,Topan pootti tibenava,spelling_error
+Meeatto kandaarni balanava,Meeatto kandaarni balanava,spelling_error
+Meeatto kandaarni balanava,Meeatto kandaarni balnava,spelling_error
+Meeatto kandaarni balanava,Meeatto kandarni balanava,spelling_error
+Meeatto kandaarni balanava,Meeatto kandaarni balanva,spelling_error
+Meeatto kandaarni balanava,Meeatto kandaarni balnva,spelling_error
+Meeatto okma balanava,Meeatto okma balanava,spelling_error
+Meeatto watura tibenava,Meeatto diyaracca tibenava,wrong_question_word
+Meeatto watura tibenava,Meeatto watura tibenava,wrong_question_word
+Topan okma balanava,koduy? Topan okma balanava,wrong_question_word
+Meeatto diyaracca tibenava,koduyM?eeatto diyaracca tibenava,wrong_question_word
+Topan giniraacca tibenava,koduy?Topan giniraacca tibenava,wrong_question_word
+Meeatto kankunaa balanava,koduMy?eeatto kankunaa balanava,wrong_question_word
+Meeatto watura balanava,koduy?Meeatto watura balanava,wrong_question_word
+Meeatto okma tibenava,koduy? Meeatto okma tibenava,wrong_question_word
+Okma eyaba koyba?,Okma eyaba,wrong_question_word
+Kankunaa eyaba koyba?,Kankunaa eyaba,wrong_question_word
+Meeatto nam okma balanava,koduMye?eatto okma balanava koduy?,wrong_question_word
+Topan nam potti balanava,koduy?Topan potti balanava koduy?,wrong_question_word
+Meeatto huura diyaracca,balanavaM keoedauttyo? diyaracca balanava koduy?,wrong_question_word
+Topan huura giniraacca,tibenava kToodpuayn? giniraacca tibenava koduy?,wrong_question_word
+Meeatto okma balanava,koduy? Meeatto okma balanava,wrong_question_word
+Meeatto kankunaa tibenava,koduyM?eeatto kankunaa tibenava,wrong_question_word
+Meeatto mundi puccakaduvaa,kodMueye?atto mundi puccakaduvaa,wrong_question_word
+Topan botakanda puccakaduvaa,kToodpuayn? botakanda puccakaduvaa,wrong_question_word
+Meeatto potti balanava,koduy? Meeatto potti balanava,wrong_question_word
+Meeatto diyaracca balanava,koduMy?eeatto diyaracca balanava,wrong_question_word
+Meeatto giniraacca tibenava,koduMy?eeatto giniraacca tibenava,wrong_question_word
+Topan mundi balanava,koduy? Topan mundi balanava,wrong_question_word
+Meeatto botakanda puccakaduvaaM,keoedauttyo? botakanda puccakaduvaa,wrong_question_word
+Topan potti tibenava koduy?,Topan potti tibenava,wrong_question_word
+Meeatto huura okma balanava,kodMueye?atto okma balanava koduy?,wrong_question_word
+Topan huura diyaracca,tibenava koTodpuay?n diyaracca tibenava koduy?,wrong_question_word
+Meeatto nam giniraacca,tibenava Mkoedeuayt?to giniraacca tibenava koduy?,wrong_question_word
+Topan nam botakanda,balanava koTodpuay?n botakanda balanava koduy?,wrong_question_word
+Topan watura balanava,koduy? Topan diyaracca balanava koduy?,wrong_question_word
+Meeatto watura tibenava,koduy? Meeatto watura tibenava,wrong_question_word
+Topan kandaarni balanava,koduy?Topan kandaarni balanava,wrong_question_word
+Okma eyaba koduy?,Okma eyaba,wrong_question_word
+Meeatto watura tibenava,koduy? Meeatto diyaracca tibenava,wrong_question_word
+Meeatto koduy balanava?,Meeatto balanava,wrong_question_word
+Topan koduy okma balanava?,Topan okma balanava,wrong_question_word
+Okma balanava koduy?,Okma balanava,wrong_question_word
+Meeatto kandaarni balanava,Topan kandaarni balanava,other
+Meeatto kandaarni balanava,Meeatto potti balanava,other
+Topan kandaarni balanava,Topan potti balanava,other
+Meeatto potti balanava,Meeatto kandaarni balanava,other
+Topan potti balanava,Topan kandaarni balanava,other
+Meeatto giniraacca tibenava,Meeatto irapojja tibenava,other
+Topan giniraacca tibenava,Topan irapojja tibenava,other
+Topan irapojja tibenava,Topan giniraacca tibenava,other
+Meeatto okma balanava,Topan okma balanava,other
+Topan okma balanava,Meeatto okma balanava,other
+Meeatto botakanda balanava,Topan botakanda balanava,other
+Topan botakanda balanava,Meeatto botakanda balanava,other
+Meeatto kankunaa balanava,Topan kankunaa balanava,other
+Topan kankunaa balanava,Meeatto kankunaa balanava,other
+Meeatto mundi balanava,Topan mundi balanava,other
+Topan mundi balanava,Meeatto mundi balanava,other
+Meeatto potti balanava,Topan potti balanava,other
+Topan potti balanava,Meeatto potti balanava,other
+Meeatto giniraacca tibenava,Topan giniraacca tibenava,other
+Topan giniraacca tibenava,Meeatto giniraacca tibenava,other
+Meeatto mundi balanava,Meeatto kankunaa balanava,other
+Topan mundi balanava,Topan kankunaa balanava,other
+Meeatto diyaracca balanava,Meeatto mundi balanava,other
+Topan diyaracca balanava,Topan mundi balanava,other
+Meeatto okma balanava,Meeatto giniraacca balanava,other
+Topan okma balanava,Topan giniraacca balanava,other
+Meeatto potti balanava,Meeatto giniraacca balanava,other
+Topan potti balanava,Topan giniraacca balanava,other
+Meeatto pannilaatto tibenava,Meeatto giniraacca tibenava,other
+Topan pannilaatto tibenava,Topan giniraacca tibenava,other
+Meeatto irapojja tibenava,Meeatto giniraacca tibenava,other
+Meeatto okma balanava,Meeatto kandaarni balanava,other
+Topan okma balanava,Topan kandaarni balanava,other
+Meeatto watura balanava,Meeatto diyaracca balanava,other
+Meeatto koduy balanava,Meeatto na balanava,other
+Meeatto watura tibenava,Meeatto diyaracca tibenava,other
+Topan okma balanava,Topan mundi balanava,other
+Topan diyaracca tibenava,Topan watura tibenava,other
+Topan nam potti balanava,Topan potti balanava,other
+Topan okma balanava,koduy? Topan okma balanava?,other
+Meeatto watura tibenava?,Meeatto diyaracca tibenava,other
+Meeatto okma balanava?,Meeatto okma balanava,other
+Topan watura balanava?,Topan diyaracca balanava,other
+Meeatto koduy balanava?,Meeatto balanava,other
+Topan okma balanava?,Topan okma balanava,other
+Meeatto watura tibenava?,Meeatto watura tibenava,other
+Meeatto koduy tibenava?,Meeatto tibenava,other
+Meeatto okma balanava,Meeatto okma balanava?,other
+Meeatto okma balanava,Meeatto okma balanava.,other
+Topan okma balanava,Topan okma balanava?,other
+Topan okma balanava,Topan okma balanava.,other
+Meeatto diyaracca tibenava,Meeatto diyaracca tibenava?,other
+Meeatto diyaracca tibenava,Meeatto diyaracca tibenava.,other
+Topan giniraacca tibenava,Topan giniraacca tibenava?,other
+Topan giniraacca tibenava,Topan giniraacca tibenava.,other
+Meeatto okma balanava,hi Meeatto okma balanava hi,other
+Meeatto botakanda puccakaduvaaM,heieatto botakanda puccakaduvaa,other
+Meeatto kankunaa balanava,hi Meeatto kankunaa balanava hi,other
+Meeatto kandaarni balanava,hi Meeatto kandaarni balanava hi,other
+Meeatto mundi balanava,hi Meeatto mundi balanava hi,other
+Meeatto potti balanava,hi Meeatto potti balanava hi,other
+Meeatto giniraacca tibenava,hi Meeatto giniraacca tibenava hi,other
+Meeatto pannilaatto tibenava,hi Meeatto pannilaatto tibenava hi,other
+Meeatto deyyalaatto balanava,hi Meeatto deyyalaatto balanava,other
+Meeatto irapojja balanava,hi Meeatto irapojja balanava hi,other
+Meeatto diyaracca balanava,hi Meeatto diyaracca balanava hi,other
+Topan okma balanava,hi Topan okma balanava hi,other
+Topan botakanda balanava,hi Topan botakanda balanava hi,other
+Topan kankunaa balanava,hi Topan kankunaa balanava hi,other
+Topan kandaarni balanava,hi Topan kandaarni balanava hi,other
+Topan mundi balanava,hi Topan mundi balanava hi,other
+Topan potti balanava hi,Topan potti balanava hi,other
+Topan giniraacca balanava,hi Topan giniraacca balanava hi,other
+Topan pannilaatto tibenava,hi Topan pannilaatto tibenava hi,other
+Topan deyyalaatto balanava,hi Topan deyyalaatto balanava hi,other
+Topan irapojja tibenava,hi Topan irapojja tibenava hi,other
+Topan diyaracca balanava,hi Topan diyaracca balanava hi,other
+Topan koduy balanava,hi Topan koduy balanava hi,other
+Topan diyaracca tibenava,hi Topan diyaracca tibenava hi,other
+Topan nam okma balanava,hi Topan okma balanava hi,other
+Topan watura balanava,hi Topan diyaracca balanava hi,other
+dandDukacca,danddukacca,spelling_error
+mon-ekaa-da,mon-ekaa-da,spelling_error
+kaevillaeva,kaevillavaeva,spelling_error
+Poramola aeththo botakandala,aebthottha-keakn adeahlair auektuhlath-t-ae km aaenhdirou-kkualraa-ta,other
+Poramola aeththo botakandala,aePthotrha-meko laae aheirtuhkthuola b-toat amkaannddoa-lkaa,other
+Mee aeththa depitullanthena,kaevMilleaen aneat khothdao idepitullanthena kaevillanna,missing_word
+Poramola aeththo botakandala,aePthotrha-meko laae aheirtuhkthuola k-toal am-paonjdjao a-keatrhath-ek,other
+Mee aeththa depitullanthena,kaevMilleaen aneat khothdao idepitullanthena gini-rachcha,other
+Mon-ekaa-da botakandala,aehirukMuolan--teak maaa nbdoota-kkaarnadgaaltah athe-hei?rukula-ta,other
+Mon-ekaa-da botakandala,aehirukMuolan--teak maaa-nddao b-koatarakgaantdhathla- ea?ehirukula-ta,other
+Poramola aeththo botakandala,aePthotrha-meko laae aheirtuhkthuola a-teat hmtha-nedko b-koatarakandala,other
+Mee aeththa depitullanthena,kaevMilleaen aneat khothdao ikaevillanna depitullanthena,other
+Mee aeththa depitullanthena,kaevMilleaen aneat khothdao iaeththa depitullanthena,other

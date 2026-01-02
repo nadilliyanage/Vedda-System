@@ -4,8 +4,18 @@ from bson import ObjectId
 
 from app.db.mongo import get_collection
 from app.ai.service import get_feedback_with_rag
+from app.ml.predictor import classify_mistake
 
 ai_bp = Blueprint("ai", __name__)
+@ai_bp.post("/classify-mistake")
+def classify_mistake():
+    payload = request.get_json(force=True)
+
+    student_answer = payload["student_answer"]
+    correct_answer = payload["correct_answer"]
+
+    result = classify_mistake(correct_answer, student_answer)
+    return jsonify({"error_type": result})
 
 @ai_bp.post("/submit-answer")
 def submit_answer():
