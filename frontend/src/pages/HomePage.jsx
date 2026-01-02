@@ -14,6 +14,7 @@ const HomePage = () => {
       path: "/translator",
       color: "from-blue-500 to-blue-600",
       hoverColor: "hover:from-blue-600 hover:to-blue-700",
+      bgImage: "/assets/background-images/vedda-translator-bg.png",
     },
     {
       id: 2,
@@ -24,6 +25,7 @@ const HomePage = () => {
       path: "/learning",
       color: "from-green-500 to-green-600",
       hoverColor: "hover:from-green-600 hover:to-green-700",
+      bgImage: "/assets/background-images/vocabulary-learning-bg.png",
     },
     {
       id: 3,
@@ -34,6 +36,7 @@ const HomePage = () => {
       path: "/artifacts",
       color: "from-purple-500 to-purple-600",
       hoverColor: "hover:from-purple-600 hover:to-purple-700",
+      bgImage: "/assets/background-images/artifact-learning-bg.png",
     },
     {
       id: 4,
@@ -44,6 +47,7 @@ const HomePage = () => {
       path: "/3d-visuals",
       color: "from-orange-500 to-orange-600",
       hoverColor: "hover:from-orange-600 hover:to-orange-700",
+      bgImage: "/assets/background-images/3d-visuals-bg.png",
     },
   ];
 
@@ -74,10 +78,23 @@ const HomePage = () => {
               >
                 <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden h-full">
                   <div
-                    className={`bg-gradient-to-r ${feature.color} ${feature.hoverColor} transition-all duration-300 p-8 text-white`}
+                    className={`relative bg-gradient-to-r ${feature.color} transition-all duration-300 p-8 text-white h-52 flex flex-col justify-end overflow-hidden`}
                   >
-                    <Icon className="text-5xl mb-4" />
-                    <h2 className="text-2xl font-bold mb-2">{feature.title}</h2>
+                    {/* Background Image with Left-to-Right Gradient Mask */}
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center"
+                      style={{ 
+                        backgroundImage: `url(${feature.bgImage})`,
+                        WebkitMaskImage: 'linear-gradient(to right, transparent 0%, transparent 25%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,1) 75%, rgba(0,0,0,1) 100%)',
+                        maskImage: 'linear-gradient(to right, transparent 0%, transparent 25%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.7) 60%, rgba(0,0,0,1) 75%, rgba(0,0,0,1) 100%)'
+                      }}
+                    />
+                    
+                    {/* Content */}
+                    <div className="relative z-10">
+                      <Icon className="text-5xl mb-4" />
+                      <h2 className="text-2xl font-bold mb-2">{feature.title}</h2>
+                    </div>
                   </div>
                   <div className="p-6">
                     <p className="text-gray-600 text-lg">
