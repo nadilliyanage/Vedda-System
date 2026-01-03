@@ -1,32 +1,42 @@
 import { useState, useEffect } from 'react';
 import { FaArrowLeft, FaChartLine, FaTrophy, FaCheckCircle, FaClock } from 'react-icons/fa';
+import { userStatAPI } from '../../services/learningAPI';
+import { useAuth } from '../../contexts/AuthContext';
+
 
 const PerformanceView = ({ onBack }) => {
+  const { user } = useAuth();
   // Placeholder data - in a real app, this would come from an API
   const [stats, setStats] = useState({
-    totalLessonsCompleted: 0,
-    totalExercisesCompleted: 0,
-    averageScore: 0,
-    streak: 0,
-    totalTimeSpent: 0,
+    totalLessonsCompleted: undefined,
+    totalLessons: undefined,
+    totalExercisesCompleted: undefined,
+    totalExercises: undefined,
+    averageScore: undefined,
+    streak: undefined,
+    totalTimeSpent: undefined,
     recentActivities: []
   });
 
   useEffect(() => {
-    // TODO: Fetch performance data from backend
-    // For now, using placeholder data
-    setStats({
-      totalLessonsCompleted: 15,
-      totalExercisesCompleted: 42,
-      averageScore: 87,
-      streak: 7,
-      totalTimeSpent: 320, // in minutes
-      recentActivities: [
-        { type: 'lesson', title: 'Basic Greetings', score: 92, date: '2025-12-26' },
-        { type: 'exercise', title: 'Family Terms Practice', score: 88, date: '2025-12-25' },
-        { type: 'challenge', title: 'Nature Vocabulary Quiz', score: 95, date: '2025-12-24' },
-      ]
-    });
+    const userId = user?.id;
+    userStatAPI.userDashboard(userId).then((response) => {
+      setStats({
+        totalLessonsCompleted: response.data.lessons_completed,
+        totalLessons: response.data.total_lessons,
+        totalExercisesCompleted: response.data.exercises_completed,
+        totalExercises: response.data.total_exercises,
+        averageScore: response.data.avg_score,
+        streak: response.data.streak,
+        totalTimeSpent: 320, // in minutes
+        recentActivities: [
+          { type: 'lesson', title: 'Basic Greetings', score: 92, date: '2025-12-26' },
+          { type: 'exercise', title: 'Family Terms Practice', score: 88, date: '2025-12-25' },
+          { type: 'challenge', title: 'Nature Vocabulary Quiz', score: 95, date: '2025-12-24' },
+        ]
+      });
+    })
+
   }, []);
 
   return (
@@ -54,7 +64,7 @@ const PerformanceView = ({ onBack }) => {
               <FaCheckCircle className="text-4xl text-blue-500" />
               <div className="text-right">
                 <p className="text-sm text-gray-600">Lessons</p>
-                <p className="text-3xl font-bold text-gray-800">{stats.totalLessonsCompleted}</p>
+                <p className="text-3xl font-bold text-gray-800">{stats.totalLessonsCompleted} / {stats.totalLessons}</p>
               </div>
             </div>
             <p className="text-sm text-gray-500">Completed</p>
@@ -66,7 +76,7 @@ const PerformanceView = ({ onBack }) => {
               <FaTrophy className="text-4xl text-orange-500" />
               <div className="text-right">
                 <p className="text-sm text-gray-600">Exercises</p>
-                <p className="text-3xl font-bold text-gray-800">{stats.totalExercisesCompleted}</p>
+                <p className="text-3xl font-bold text-gray-800">{stats.totalExercisesCompleted} / {stats.totalExercises}</p>
               </div>
             </div>
             <p className="text-sm text-gray-500">Completed</p>

@@ -39,7 +39,13 @@ export const lessonsAPI = {
   
   update: (id, data) => axios.put(`${API_BASE}/api/learn/admin/lessons/${id}`, data),
   
-  delete: (id) => axios.delete(`${API_BASE}/api/learn/admin/lessons/${id}`)
+  delete: (id) => axios.delete(`${API_BASE}/api/learn/admin/lessons/${id}`),
+
+  userDashboard: (userId) => axios.get(`${API_BASE}/api/learn/user-dashboard/${userId}`),
+};
+
+export const userStatAPI = {
+  userDashboard: (userId) => axios.get(`${API_BASE}/api/learn/user-dashboard?user_id=${userId}`),
 };
 
 // ========== Exercises API ==========
