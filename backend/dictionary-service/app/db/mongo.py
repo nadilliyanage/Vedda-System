@@ -14,7 +14,7 @@ def init_mongo(app):
     _mongo_client = MongoClient(mongodb_uri)
     _db = _mongo_client[database_name]
     
-    print(f"📚 Dictionary Service connected to MongoDB: {database_name}")
+    print(f"Dictionary Service connected to MongoDB: {database_name}")
 
 
 def get_db():

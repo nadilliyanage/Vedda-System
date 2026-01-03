@@ -5,7 +5,7 @@ from app.db.mongo import get_db, translation_history_collection, feedback_collec
 class HistoryService:
     def __init__(self):
         self.db = get_db()
-        print("📚 History Service initialized")
+        print("History Service initialized")
     
     def add_translation_history(self, input_text, output_text, source_language, 
                               target_language, translation_method, confidence_score=None):

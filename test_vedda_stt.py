@@ -109,7 +109,7 @@ def test_vedda_processor():
 def test_dictionary_loading():
     """Test dictionary loading functionality"""
     
-    print("\n📚 Testing Dictionary Loading")
+    print("\nTesting Dictionary Loading")
     print("-" * 30)
     
     try:
