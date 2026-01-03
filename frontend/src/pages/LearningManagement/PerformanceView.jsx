@@ -19,12 +19,12 @@ const PerformanceView = ({ onBack }) => {
   });
 
   const [errorData, setErrorData] = useState({
-    spelling_error: 0,
-    wrong_question_word: 0,
-    wrong_verb_form: 0,
-    missing_word: 0,
-    word_order_error: 0,
-    other: 0
+    spelling_error: undefined,
+    wrong_question_word: undefined,
+    wrong_verb_form: undefined,
+    missing_word: undefined,
+    word_order_error: undefined,
+    other: undefined
   });
 
   useEffect(() => {
@@ -43,6 +43,15 @@ const PerformanceView = ({ onBack }) => {
           { type: 'exercise', title: 'Family Terms Practice', score: 88, date: '2025-12-25' },
           { type: 'challenge', title: 'Nature Vocabulary Quiz', score: 95, date: '2025-12-24' },
         ]
+      });
+
+      setErrorData({
+        spelling_error: response.data.error_stats?.spelling_error ?? 0,
+        wrong_question_word: response.data.error_stats?.wrong_question_word ?? 0,
+        wrong_verb_form: response.data.error_stats?.wrong_verb_form ?? 0,
+        missing_word: response.data.error_stats?.missing_word ?? 0,
+        word_order_error: response.data.error_stats?.word_order_error ?? 0,
+        other: response.data.error_stats?.other ?? 0
       });
     })
 

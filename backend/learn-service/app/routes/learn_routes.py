@@ -84,6 +84,7 @@ def get_dashboard():
         "streak": streak,
         "total_lessons": total_lessons,
         "total_exercises": total_exercises,
+        "error_stats": user_stats["error_stats"],
     })
 
 
