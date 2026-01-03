@@ -8,9 +8,54 @@ def _challenges_col():
     return get_collection("challenges")
 
 
-def _user_attempts_col():
-    return get_collection("user_attempts")
+def _user_lesson_col():
+    return get_collection("user_lessons")
 
+#User lesson progress
+
+def save_user_lesson_progress(
+    user_id: str,
+    lesson_id: str,
+    completed: bool = False
+):
+    """
+    Creates or updates a user_lesson record.
+    - If lesson is started: create record
+    - If lesson is completed: mark completed + timestamp
+    """
+    col = _user_lesson_col()
+
+    existing = col.find_one({
+        "user_id": user_id,
+        "lesson_id": lesson_id
+    })
+
+    now = datetime.utcnow()
+
+    # If record does not exist → create it
+    if not existing:
+        doc = {
+            "user_id": user_id,
+            "lesson_id": lesson_id,
+            "completed": completed,
+            "started_at": now,
+            "completed_at": now if completed else None
+        }
+        col.insert_one(doc)
+        return doc
+
+    # If exists and now completed → update
+    if completed and not existing.get("completed", False):
+        col.update_one(
+            {"_id": existing["_id"]},
+            {
+                "$set": {
+                    "completed": True,
+                    "completed_at": now
+                }
+            }
+        )
+    return existing
 
 # ---------- Seeding ----------
 

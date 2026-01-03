@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { FaArrowLeft, FaArrowRight, FaChevronLeft, FaChevronRight, FaPlay } from 'react-icons/fa';
+import {exercisesAPI} from "../../services/learningAPI.js";
+import { useAuth } from '../../contexts/AuthContext';
 
 const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice }) => {
+  const { user } = useAuth();
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
   const [currentLesson, setCurrentLesson] = useState(lesson);
 
@@ -10,6 +13,16 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
     const index = allLessons.findIndex(l => l.id === lesson.id);
     setCurrentLessonIndex(index);
     setCurrentLesson(lesson);
+    const userId = user?.id;
+
+    if (lesson) {
+      exercisesAPI.startExercise({
+        user_id: userId,
+        lesson_id: lesson._id,
+        completed: false
+      });
+    }
+
   }, [lesson, allLessons]);
 
   const handlePrevious = () => {
@@ -26,9 +39,25 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
       setCurrentLesson(nextLesson);
       setCurrentLessonIndex(currentLessonIndex + 1);
     }
+    const userId = user?.id;
+    if (currentLesson) {
+      exercisesAPI.startExercise({
+        user_id: userId,
+        lesson_id: currentLesson._id,
+        completed: true
+      });
+    }
   };
 
   const handlePractice = () => {
+    const userId = user?.id;
+    if (currentLesson) {
+      exercisesAPI.startExercise({
+        user_id: userId,
+        lesson_id: currentLesson._id,
+        completed: true
+      });
+    }
     onPractice(currentLesson);
   };
 
