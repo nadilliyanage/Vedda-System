@@ -116,12 +116,7 @@ vedda-system/
 │   │   │   └── utils/                 # Utilities
 │   │   └── package.json               # Node dependencies
 │   └── logs/                          # Centralized logging
-├── data/                               # Data & Database
-│   ├── vedda_dictionary.csv           # Main vocabulary dataset (62+ words)
-│   ├── vedda_translator.db            # SQLite database
-│   ├── csv_data_manager.py            # CSV import/export tool
-│   ├── migrate_database.py            # Database migration
-│   └── test_dictionary.py             # Dictionary validation
+├
 └── frontend/                           # React Frontend (Port 5173)
     ├── index.html                      # Entry HTML
     ├── package.json                    # Node.js dependencies (Vite, Tailwind)
