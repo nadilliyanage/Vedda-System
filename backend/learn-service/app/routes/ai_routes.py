@@ -5,6 +5,7 @@ from bson import ObjectId
 from app.db.mongo import get_collection
 from app.ai.service import get_feedback_with_rag
 from app.ml.predictor import classify_mistake
+from app.services.learn_service import add_user_attempt
 
 ai_bp = Blueprint("ai", __name__)
 @ai_bp.post("/classify-mistake")
@@ -33,7 +34,15 @@ def submit_answer():
     question = exercise.get("question", "")
     sentence = question.get("prompt", "")
     correct_answer = question.get("correct_answer", "")
-
+    is_correct = student_answer.strip().lower() == correct_answer.strip().lower()
+    add_user_attempt(
+        user_id=user_id,
+        exercise_id=exercise_id,
+        skill_tags=skill_tags,
+        is_correct=is_correct,
+        correct_answer=correct_answer,
+        student_answer=student_answer
+    )
     feedback, usage = get_feedback_with_rag(
         sentence=sentence,
         correct_answer=correct_answer,
@@ -43,22 +52,22 @@ def submit_answer():
     )
 
     # store attempt
-    get_collection("user_attempts").insert_one({
-        "user_id": user_id,
-        "exercise_id": exercise_id,
-        "user_answer": student_answer,
-        "is_correct": bool(feedback.get("is_correct", False)),
-        "mistake_summary": feedback.get("short_summary", ""),
-        "explanation": feedback.get("explanation", ""),
-        "error_type": feedback.get("error_type", None),
-        "skill_tags": skill_tags,
-        "timestamp": datetime.utcnow(),
-        "openai_usage": usage,
-        "model": "gpt-4o-mini"
-    })
+    # get_collection("user_attempts").insert_one({
+    #     "user_id": user_id,
+    #     "exercise_id": exercise_id,
+    #     "user_answer": student_answer,
+    #     "is_correct": bool(feedback.get("is_correct", False)),
+    #     "mistake_summary": feedback.get("short_summary", ""),
+    #     "explanation": feedback.get("explanation", ""),
+    #     "error_type": feedback.get("error_type", None),
+    #     "skill_tags": skill_tags,
+    #     "timestamp": datetime.utcnow(),
+    #     "openai_usage": usage,
+    #     "model": "gpt-4o-mini"
+    # })
 
     # update stats
-    _update_user_stats(user_id, skill_tags, bool(feedback.get("is_correct", False)))
+    # _update_user_stats(user_id, skill_tags, bool(feedback.get("is_correct", False)))
 
     return jsonify({"feedback": feedback, "usage": usage})
 

@@ -1,6 +1,6 @@
 correct_answer,student_answer,error_type
-botakandaa,botakanda,spelling_error
-botakandaa,botakundaa,spelling_error
+botakanda,botakandaa,spelling_error
+botakanda,botakundaa,spelling_error
 malia,malai,spelling_error
 malia,mallia,spelling_error
 ajjejja,ajjeja,spelling_error
@@ -143,11 +143,11 @@ Topan irapojja tibenava,Topan irapooja tibenava,spelling_error
 Topan irapojja tibenava,Topan irapojja tibnenava,spelling_error
 Topan irapojja tibenava,Topan irapojaj tibenava,spelling_error
 Topan irapojja tibenava,Topan iropojja tibenava,spelling_error
-Meeatto botakandaa balanava,Meeatto botakkandaa balanava,spelling_error
-Meeatto botakandaa balanava,Meeatto botakndaa balanava,spelling_error
-Meeatto botakandaa balanava,Meeatto botakandaa balnava,spelling_error
-Meeatto botakandaa balanava,Meeatto botakandaa bulanava,spelling_error
-Meeatto botakandaa balanava,Meeatto botakandaa balanava,spelling_error
+Meeatto botakanda balanava,Meeatto botakkandaa balanava,spelling_error
+Meeatto botakanda balanava,Meeatto botakndaa balanava,spelling_error
+Meeatto botakanda balanava,Meeatto botakanda balnava,spelling_error
+Meeatto botakanda balanava,Meeatto botakanda bulanava,spelling_error
+Meeatto botakanda balanava,Meeatto botakanda balanava,spelling_error
 Topan potti tibenava,Topan poti tibenava,spelling_error
 Topan potti tibenava,Topan pootti tibenava,spelling_error
 Meeatto kandaarni balanava,Meeatto kandaarni balanava,spelling_error

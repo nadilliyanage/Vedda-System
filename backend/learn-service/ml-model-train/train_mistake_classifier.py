@@ -235,8 +235,8 @@ def main():
     # SAMPLE PREDICTION
     # =========================
 
-    sample_correct = "botakandaa"
-    sample_student = "botakanda"
+    sample_correct = "botakanda"
+    sample_student = "botakandaa"
 
     pred = model.predict([build_input_text(sample_correct, sample_student)])[0]
     proba = model.predict_proba(

@@ -3,10 +3,15 @@ from random import choice as rand_choice
 
 from app.db.mongo import get_collection
 from app.models.challenge_model import normalize_text, sanitize_challenge_public
-
+from app.models.user_attempt_model import UserAttempt
+from app.ml.predictor import classify_mistake
 
 def _challenges_col():
     return get_collection("challenges")
+
+
+def _user_attempts_col():
+    return get_collection("user_attempts")
 
 
 # ---------- Seeding ----------
@@ -201,3 +206,64 @@ def submit_challenge(payload: dict):
         "error": "Unsupported challenge type",
     })
     return result, 400
+
+
+# ---------- User Attempts ----------
+def add_user_attempt(user_id: str, exercise_id: str, skill_tags: list, 
+                     is_correct: bool, correct_answer: str = None, student_answer: str = None):
+
+    error_type = classify_mistake(correct_answer, student_answer)
+    return save_user_attempt(
+        user_id=user_id,
+        exercise_id=exercise_id,
+        skill_tags=skill_tags,
+        is_correct=is_correct,
+        error_type=error_type
+    )
+
+def save_user_attempt(user_id: str, exercise_id: str, skill_tags: list, 
+                     is_correct: bool, error_type: str = None):
+
+    col = _user_attempts_col()
+    
+    # Create the user attempt model
+    attempt = UserAttempt(
+        user_id=user_id,
+        exercise_id=exercise_id,
+        skill_tags=skill_tags,
+        is_correct=is_correct,
+        error_type=error_type,
+        timestamp=datetime.utcnow()
+    )
+    
+    # Convert to dictionary and insert into MongoDB
+    attempt_dict = attempt.to_dict()
+    result = col.insert_one(attempt_dict)
+    
+    # Add the MongoDB _id to the returned document
+    attempt_dict["_id"] = str(result.inserted_id)
+    
+    return attempt_dict
+
+
+def get_user_attempts(user_id: str, limit: int = 50):
+    """
+    Retrieve user attempts from MongoDB.
+    
+    Args:
+        user_id: The ID of the user
+        limit: Maximum number of attempts to return (default: 50)
+        
+    Returns:
+        list: List of user attempt documents
+    """
+    col = _user_attempts_col()
+    attempts = list(col.find({"user_id": user_id})
+                    .sort("timestamp", -1)
+                    .limit(limit))
+    
+    # Convert ObjectId to string for JSON serialization
+    for attempt in attempts:
+        attempt["_id"] = str(attempt["_id"])
+    
+    return attempts
