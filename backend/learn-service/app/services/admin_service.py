@@ -1,5 +1,5 @@
 from app.db.mongo import get_collection
-from app.models.common import strip_mongo_id
+from app.models.common import serialize_mongo_doc
 from flask import g
 
 # ---------- Challenges ----------
@@ -8,7 +8,7 @@ def admin_list_challenges(challenge_type: str | None):
     col = get_collection("challenges")
     query = {"type": challenge_type} if challenge_type else {}
     challenges = list(col.find(query))
-    return [strip_mongo_id(c) for c in challenges]
+    return [serialize_mongo_doc(c) for c in challenges]
 
 
 def admin_create_challenge(data: dict):
@@ -46,7 +46,7 @@ def admin_get_challenge(challenge_id: str):
     challenge = col.find_one({"id": challenge_id})
     if not challenge:
         return {"error": "Challenge not found"}, 404
-    return strip_mongo_id(challenge), 200
+    return serialize_mongo_doc(challenge), 200
 
 
 def admin_update_challenge(challenge_id: str, data: dict):
@@ -81,7 +81,7 @@ def admin_delete_challenge(challenge_id: str):
 def admin_list_categories():
     col = get_collection("categories")
     categories = list(col.find({}))
-    return [strip_mongo_id(c) for c in categories]
+    return [serialize_mongo_doc(c) for c in categories]
 
 
 def admin_create_category(data: dict):
@@ -104,7 +104,7 @@ def admin_get_category(category_id: str):
     category = col.find_one({"id": category_id})
     if not category:
         return {"error": "Category not found"}, 404
-    return strip_mongo_id(category), 200
+    return serialize_mongo_doc(category), 200
 
 
 def admin_update_category(category_id: str, data: dict):
@@ -139,7 +139,7 @@ def admin_delete_category(category_id: str):
 def admin_list_lessons():
     col = get_collection("lessons")
     lessons = list(col.find({}))
-    return [strip_mongo_id(l) for l in lessons]
+    return [serialize_mongo_doc(l) for l in lessons]
 
 
 def admin_create_lesson(data: dict):
@@ -164,7 +164,7 @@ def admin_get_lesson(lesson_id: str):
     lesson = col.find_one({"id": lesson_id})
     if not lesson:
         return {"error": "Lesson not found"}, 404
-    return strip_mongo_id(lesson), 200
+    return serialize_mongo_doc(lesson), 200
 
 
 def admin_update_lesson(lesson_id: str, data: dict):
@@ -200,14 +200,17 @@ def admin_list_exercises():
     current_user = g.current_user
     print(f"current user: {current_user}")
     col = get_collection("exercises")
-    exercises = list(col.find({}, {"_id": 0}))
+    exercises = list(col.find({}))
+    for exercise in exercises:
+        if "_id" in exercise:
+            exercise["_id"] = str(exercise["_id"])
     return exercises
 
 
 def admin_create_exercise(data: dict):
     col = get_collection("exercises")
 
-    required = ["id", "lessonId", "categoryId", "exerciseNumber", "questions"]
+    required = ["id", "lessonId", "categoryId", "exerciseNumber", "question"]
     if not all(field in data for field in required):
         return {"success": False, "error": "Missing required fields"}, 400
 
@@ -234,7 +237,7 @@ def admin_update_exercise(exercise_id: str, data: dict):
     data.pop("id", None)
     data.pop("_id", None)
 
-    required = ["lessonId", "categoryId", "exerciseNumber", "questions"]
+    required = ["lessonId", "categoryId", "exerciseNumber", "question"]
     if not all(field in data for field in required):
         return {"success": False, "error": "Missing required fields"}, 400
 

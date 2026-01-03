@@ -4,6 +4,7 @@ import { FaEye, FaEdit, FaTrash, FaPlus, FaList } from 'react-icons/fa';
 import AdminCategories from './AdminCategories';
 import TextEditor from './TextEditor';
 import { lessonsAPI, categoriesAPI } from '../../services/learningAPI';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 
 const AdminLessons = () => {
   const [lessons, setLessons] = useState([]);
@@ -11,6 +12,7 @@ const AdminLessons = () => {
   const [loading, setLoading] = useState(true);
   const [activeView, setActiveView] = useState('list'); // 'list', 'add', 'edit', 'view', 'categories'
   const [currentLesson, setCurrentLesson] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, lessonId: null });
   const [formData, setFormData] = useState({
     id: '',
     categoryId: '',
@@ -116,11 +118,9 @@ const AdminLessons = () => {
     }
   };
 
-  const handleDelete = async (lessonId) => {
-    if (!window.confirm('Are you sure you want to delete this lesson?')) return;
-
+  const handleDelete = async () => {
     try {
-      await lessonsAPI.delete(lessonId);
+      await lessonsAPI.delete(confirmDialog.lessonId);
       toast.success('Lesson deleted successfully');
       fetchLessons();
     } catch (error) {
@@ -145,7 +145,7 @@ const AdminLessons = () => {
       <div>
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Manage Lessons</h1>
+            <h1 className="text-3xl font-bold text-gray-800"></h1>
             <p className="text-gray-600 mt-2">Create and organize learning lessons</p>
           </div>
           <div className="flex gap-3">
@@ -218,7 +218,7 @@ const AdminLessons = () => {
                             <FaEdit />
                           </button>
                           <button
-                            onClick={() => handleDelete(lesson.id)}
+                            onClick={() => setConfirmDialog({ isOpen: true, lessonId: lesson.id })}
                             className="text-red-600 hover:text-red-900"
                             title="Delete"
                           >
@@ -233,6 +233,16 @@ const AdminLessons = () => {
             </div>
           )}
         </div>
+
+        <ConfirmDialog
+          isOpen={confirmDialog.isOpen}
+          onClose={() => setConfirmDialog({ isOpen: false, lessonId: null })}
+          onConfirm={handleDelete}
+          title="Delete Lesson"
+          message="Are you sure you want to delete this lesson? This action cannot be undone."
+          confirmText="Delete"
+          type="danger"
+        />
       </div>
     );
   }
@@ -377,10 +387,15 @@ const AdminLessons = () => {
             </div>
 
             <div>
-              <TextEditor />
+              <label className="block text-sm font-medium text-gray-700 mb-1">Lesson Content</label>
+              <TextEditor 
+                key={`${activeView}-${formData.id || 'new'}`}
+                value={formData.content}
+                onChange={(content) => setFormData({ ...formData, content })}
+              />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            {/* <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Image URL (Optional)</label>
                 <input
@@ -401,7 +416,7 @@ const AdminLessons = () => {
                   placeholder="https://example.com/audio.mp3"
                 />
               </div>
-            </div>
+            </div> */}
 
             <div className="grid grid-cols-2 gap-4">
               <div>
@@ -456,6 +471,8 @@ const AdminLessons = () => {
           </div>
         </form>
       </div>
+
+      
     </div>
   );
 };

@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { FaEye, FaEdit, FaTrash, FaPlus, FaArrowLeft } from 'react-icons/fa';
 import { categoriesAPI } from '../../services/learningAPI';
+import ConfirmDialog from '../../components/common/ConfirmDialog';
 
 const AdminCategories = ({ onBack }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeView, setActiveView] = useState('list'); // 'list', 'add', 'edit', 'view'
   const [currentCategory, setCurrentCategory] = useState(null);
+  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, categoryId: null });
   const [formData, setFormData] = useState({
     id: '',
     name: '',
@@ -77,11 +79,9 @@ const AdminCategories = ({ onBack }) => {
     }
   };
 
-  const handleDelete = async (categoryId) => {
-    if (!window.confirm('Are you sure you want to delete this category?')) return;
-
+  const handleDelete = async () => {
     try {
-      await categoriesAPI.delete(categoryId);
+      await categoriesAPI.delete(confirmDialog.categoryId);
       toast.success('Category deleted successfully');
       fetchCategories();
     } catch (error) {
@@ -160,7 +160,7 @@ const AdminCategories = ({ onBack }) => {
                             <FaEdit />
                           </button>
                           <button
-                            onClick={() => handleDelete(category.id)}
+                            onClick={() => setConfirmDialog({ isOpen: true, categoryId: category.id })}
                             className="text-red-600 hover:text-red-900"
                             title="Delete"
                           >
@@ -175,6 +175,16 @@ const AdminCategories = ({ onBack }) => {
             </div>
           )}
         </div>
+
+        <ConfirmDialog
+          isOpen={confirmDialog.isOpen}
+          onClose={() => setConfirmDialog({ isOpen: false, categoryId: null })}
+          onConfirm={handleDelete}
+          title="Delete Category"
+          message="Are you sure you want to delete this category? This action cannot be undone."
+          confirmText="Delete"
+          type="danger"
+        />
       </div>
     );
   }

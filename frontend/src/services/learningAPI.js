@@ -39,7 +39,13 @@ export const lessonsAPI = {
   
   update: (id, data) => axios.put(`${API_BASE}/api/learn/admin/lessons/${id}`, data),
   
-  delete: (id) => axios.delete(`${API_BASE}/api/learn/admin/lessons/${id}`)
+  delete: (id) => axios.delete(`${API_BASE}/api/learn/admin/lessons/${id}`),
+
+  userDashboard: (userId) => axios.get(`${API_BASE}/api/learn/user-dashboard/${userId}`),
+};
+
+export const userStatAPI = {
+  userDashboard: (userId) => axios.get(`${API_BASE}/api/learn/user-dashboard?user_id=${userId}`),
 };
 
 // ========== Exercises API ==========
@@ -52,7 +58,11 @@ export const exercisesAPI = {
   
   update: (id, data) => axios.put(`${API_BASE}/api/learn/admin/exercises/${id}`, data),
   
-  delete: (id) => axios.delete(`${API_BASE}/api/learn/admin/exercises/${id}`)
+  delete: (id) => axios.delete(`${API_BASE}/api/learn/admin/exercises/${id}`),
+
+  submitAnswer: (data) => axios.post(`${API_BASE}/api/learn/ai/submit-answer`, data),
+
+  startExercise: (data) => axios.post(`${API_BASE}/api/learn/lesson-progress`, data)
 };
 
 // ========== Challenges API ==========
@@ -76,6 +86,7 @@ export const quizAPI = {
   submitAnswer: (data) => 
     axios.post(`${API_BASE}/api/learn/submit`, data)
 };
+
 
 // Default export with all APIs
 export default {
