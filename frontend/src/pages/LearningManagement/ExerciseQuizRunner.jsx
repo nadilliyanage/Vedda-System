@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { FaTimes, FaCheckCircle, FaTimesCircle, FaSpinner, FaRedo } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import { exercisesAPI } from '../../services/learningAPI';
+import { useAuth } from '../../contexts/AuthContext';
 
 const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
+  const { user } = useAuth();
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [results, setResults] = useState(null);
@@ -119,7 +121,12 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
       }
 
       // Get user ID from localStorage or use default
-      const userId = localStorage.getItem('userId') || 'user_001';
+      const userId = user?.id;
+      if (!userId) {
+        toast.error('User not authenticated. Please log in again.');
+        return;
+      }
+
 
       // Call the AI API
       const response = await exercisesAPI.submitAnswer({
