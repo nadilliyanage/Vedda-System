@@ -18,6 +18,15 @@ const PerformanceView = ({ onBack }) => {
     recentActivities: []
   });
 
+  const [errorData, setErrorData] = useState({
+    spelling_error: 0,
+    wrong_question_word: 0,
+    wrong_verb_form: 0,
+    missing_word: 0,
+    word_order_error: 0,
+    other: 0
+  });
+
   useEffect(() => {
     const userId = user?.id;
     userStatAPI.userDashboard(userId).then((response) => {
@@ -114,6 +123,60 @@ const PerformanceView = ({ onBack }) => {
             <p className="text-gray-600 text-lg">
               📊 Progress chart visualization coming soon
             </p>
+          </div>
+        </div>
+
+        {/* Mistake Types Section */}
+        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Common Mistake Types</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-red-50 to-red-100 rounded-lg hover:shadow-md transition-shadow">
+              <div>
+                <p className="font-semibold text-gray-800">Spelling Error</p>
+                <p className="text-sm text-gray-600">Misspelled words</p>
+              </div>
+              <div className="text-3xl font-bold text-red-600">{errorData.spelling_error}</div>
+            </div>
+            
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg hover:shadow-md transition-shadow">
+              <div>
+                <p className="font-semibold text-gray-800">Wrong Question Word</p>
+                <p className="text-sm text-gray-600">Incorrect question formation</p>
+              </div>
+              <div className="text-3xl font-bold text-blue-600">{errorData.wrong_question_word}</div>
+            </div>
+            
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg hover:shadow-md transition-shadow">
+              <div>
+                <p className="font-semibold text-gray-800">Wrong Verb Form</p>
+                <p className="text-sm text-gray-600">Incorrect verb conjugation</p>
+              </div>
+              <div className="text-3xl font-bold text-purple-600">{errorData.wrong_verb_form}</div>
+            </div>
+            
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg hover:shadow-md transition-shadow">
+              <div>
+                <p className="font-semibold text-gray-800">Missing Word</p>
+                <p className="text-sm text-gray-600">Words omitted</p>
+              </div>
+              <div className="text-3xl font-bold text-yellow-600">{errorData.missing_word}</div>
+            </div>
+            
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg hover:shadow-md transition-shadow">
+              <div>
+                <p className="font-semibold text-gray-800">Word Order Error</p>
+                <p className="text-sm text-gray-600">Incorrect word sequence</p>
+              </div>
+              <div className="text-3xl font-bold text-orange-600">{errorData.word_order_error}</div>
+            </div>
+            
+            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg hover:shadow-md transition-shadow">
+              <div>
+                <p className="font-semibold text-gray-800">Other</p>
+                <p className="text-sm text-gray-600">Miscellaneous errors</p>
+              </div>
+              <div className="text-3xl font-bold text-gray-600">{errorData.other}</div>
+            </div>
           </div>
         </div>
 
