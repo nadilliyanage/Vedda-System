@@ -323,9 +323,6 @@ For detailed component documentation, see [`frontend/COMPONENT_STRUCTURE.md`](fr
    # Install Python dependencies
    python -m pip install -r requirements.txt
 
-   # Navigate to data directory and initialize database
-   cd data
-   python csv_data_manager.py
    ```
 
 3. **Backend Setup - Node.js Services**
@@ -910,5 +907,3 @@ For detailed information:
 - 3D Model Service: See [backend/3D-model-service/README.md](backend/3D-model-service/README.md)
 
 ---
-
-**Built with ❤️ for preserving Vedda language and culture**
