@@ -29,7 +29,7 @@ const HomePage = () => {
     },
     {
       id: 3,
-      title: "Artifact Learning System",
+      title: "Artifact Preservation System",
       description:
         "Explore and learn about Vedda cultural artifacts and history",
       icon: FaLandmark,

@@ -81,7 +81,7 @@ const Header = ({ onHistoryClick }) => {
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-600 transition-colors duration-200"
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-blue-600 bg-red-500/90 transition-colors duration-200"
                   title="Logout"
                 >
                   <HiLogout className="w-5 h-5" />
