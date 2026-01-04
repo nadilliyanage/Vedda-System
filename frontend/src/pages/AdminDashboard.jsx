@@ -43,7 +43,8 @@ const AdminDashboard = () => {
         
         // Fetch artifact count (for both admin and elder)
         try {
-          const artifactResponse = await axios.get(`${import.meta.env.VITE_ARTIFACT_SERVICE_URL}?limit=1`);
+          const artifactServiceUrl = import.meta.env.VITE_ARTIFACT_SERVICE_URL || 'http://localhost:5010/api/artifacts';
+          const artifactResponse = await axios.get(`${artifactServiceUrl}?limit=1`);
           if (artifactResponse.data.success) {
             setStats(prev => ({ ...prev, artifactCount: artifactResponse.data.pagination.total }));
           }

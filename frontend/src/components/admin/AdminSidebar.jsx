@@ -35,7 +35,7 @@ const AdminSidebar = () => {
     {
       path: '/admin/lernings',
       icon: HiBookOpen,
-      label: 'Lerning Management',
+      label: 'Learning Management',
       roles: ['admin', 'elder']
     },
     {

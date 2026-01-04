@@ -49,6 +49,17 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
     try {
       const result = await identifyArtifact(imageFile);
       
+      // Check if confidence is below 60%
+      if (result.confidence < 0.6) {
+        setIdentifiedData({
+          notIdentified: true,
+          confidence: result.confidence,
+          all_predictions: result.all_predictions
+        });
+        toast.error('⚠️ Artifact could not be identified with sufficient confidence');
+        return;
+      }
+      
       // Parse tags if it's a string
       const tags = typeof result.tags === 'string' 
         ? result.tags.split(',').map(tag => tag.trim()).filter(Boolean)
@@ -172,7 +183,26 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
                 </h3>
 
                 {identifiedData ? (
-                  <div className="space-y-4">
+                  identifiedData.notIdentified ? (
+                    <div className="h-full flex items-center justify-center">
+                      <div className="text-center bg-white rounded-xl p-8">
+                        <div className="text-6xl mb-4">❌</div>
+                        <h3 className="text-xl font-bold text-red-600 mb-2">Artifact Not Identified</h3>
+                        <p className="text-gray-600 mb-4">
+                          The confidence level is too low to accurately identify this artifact.
+                        </p>
+                        <div className="bg-red-50 rounded-lg p-4 mb-4">
+                          <p className="text-sm text-red-800 font-medium">
+                            Confidence: {(identifiedData.confidence * 100).toFixed(1)}% (Minimum: 60%)
+                          </p>
+                        </div>
+                        <p className="text-sm text-gray-500">
+                          Try uploading a clearer image with better lighting and focus.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
                     {/* Name with Confidence */}
                     <div className="bg-white rounded-lg p-4 shadow-sm">
                       <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 block">
@@ -227,7 +257,8 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
                     )}
 
                     
-                  </div>
+                    </div>
+                  )
                 ) : (
                   <div className="h-full flex items-center justify-center">
                     <div className="text-center">
