@@ -57,13 +57,12 @@ const ArtifactPage = () => {
 
   useEffect(() => {
     fetchArtifacts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [selectedCategory, searchQuery]);
 
   const handleArtifactClick = (artifact) => {
     setSelectedArtifact(artifact);
-    // Scroll to top when modal opens
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleCloseModal = () => {
@@ -97,7 +96,7 @@ const ArtifactPage = () => {
         {/* Page Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-3">
-            Vedda Artifact Learning System
+            Vedda Artifact Preservation System
           </h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-6">
             Explore the rich cultural heritage of the indigenous Vedda people

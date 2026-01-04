@@ -199,7 +199,7 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
     <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg max-w-7xl w-full h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="bg-white border-b px-6 py-4 flex justify-between items-center">
+        <div className="bg-white border-b px-6 py-4 flex justify-between items-center rounded-t-lg">
           <h2 className="text-2xl font-bold text-gray-800">{isEditMode ? 'Edit Artifact' : 'Add New Artifact'}</h2>
           <button
             onClick={handleClose}
