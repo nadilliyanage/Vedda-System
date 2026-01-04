@@ -57,13 +57,12 @@ const ArtifactPage = () => {
 
   useEffect(() => {
     fetchArtifacts();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }, [selectedCategory, searchQuery]);
 
   const handleArtifactClick = (artifact) => {
     setSelectedArtifact(artifact);
-    // Scroll to top when modal opens
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const handleCloseModal = () => {
