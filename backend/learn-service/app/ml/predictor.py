@@ -18,5 +18,8 @@ def load_model():
 
 def classify_mistake(correct_answer: str, student_answer: str) -> str:
     model = load_model()
-    text = f"correct: {(correct_answer or '').strip()} || student: {(student_answer or '').strip()}"
+    text = f"correct: {(correct_answer or '').strip().lower()} || student: {(student_answer or '').strip().lower()}"
+    probs = model.predict_proba([text])[0]
+    confidence = float(probs.max())
+    print(confidence)
     return model.predict([text])[0]

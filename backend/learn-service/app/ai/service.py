@@ -55,24 +55,38 @@ def get_feedback_with_rag(*, sentence: str, correct_answer: str, student_answer:
     data = _safe_json_loads(raw)
     return data, usage
 
-def generate_exercises_with_rag(*, skills: list[str], count: int = 5, exercise_type: str = "fill_blank") -> tuple[list[dict], dict]:
-    context = build_rag_context(skills)
+def generate_exercise_with_rag(
+    *,
+    skills: list[str],
+    error_types: list[str],
+    exercise_number: int = 1,
+) -> tuple[dict, dict]:
+
+    rag_knowledge = build_rag_context(skills)
 
     user_prompt = GEN_USER_TEMPLATE.format(
-        context=context,
-        count=count,
-        skills=skills,
-        exercise_type=exercise_type,
+        context=rag_knowledge,
+        skill_tags=", ".join(skills),
+        error_types=", ".join(error_types),
+        exercise_number=str(exercise_number)
     )
 
     raw, usage = call_openai_json(
-        model=Config.OPENAI_MODEL_GEN,    # gpt-4o
+        model=Config.OPENAI_MODEL_GEN,   # gpt-4o / gpt-4o-mini
         system_prompt=GEN_SYSTEM,
         user_prompt=user_prompt,
-        temperature=0.5
+        temperature=0.3   # IMPORTANT: low temperature
     )
 
     data = _safe_json_loads(raw)
-    if not isinstance(data, list):
-        raise ValueError("Expected a JSON array from the model.")
+
+    if not isinstance(data, dict):
+        raise ValueError("Expected a single JSON object from the model.")
+
+    # Hard validation (VERY IMPORTANT)
+    assert data["categoryId"] == "z0"
+    assert data["question"]["type"] == "multiple_choice"
+    assert len(data["question"]["options"]) == 4
+
     return data, usage
+

@@ -157,6 +157,27 @@ def get_user_attempts(user_id: str, limit: int = 50):
 
     return attempts
 
+def get_weak_skills_and_errors(user_stats, min_attempts=5, threshold=0.6):
+    weak_skills = []
+
+    for skill, s in user_stats.get("skill_stats", {}).items():
+        if s["attempts"] >= min_attempts and s["accuracy"] < threshold:
+            weak_skills.append(skill)
+
+    error_stats = user_stats.get("error_stats", {})
+    top_errors = sorted(
+        error_stats.keys(),
+        key=lambda k: safe_int(error_stats.get(k)),
+        reverse=True
+    )[:2]
+
+    return weak_skills, top_errors
+
+def safe_int(val):
+    try:
+        return int(val)
+    except (TypeError, ValueError):
+        return 0
 
 def _user_attempts_col():
     return get_collection("user_attempts")
