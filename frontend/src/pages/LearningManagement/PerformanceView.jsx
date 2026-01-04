@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { FaArrowLeft, FaChartLine, FaTrophy, FaCheckCircle, FaClock } from 'react-icons/fa';
 import { userStatAPI } from '../../services/learningAPI';
 import { useAuth } from '../../contexts/AuthContext';
-
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 const PerformanceView = ({ onBack }) => {
   const { user } = useAuth();
-  // Placeholder data - in a real app, this would come from an API
+  const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
     totalLessonsCompleted: undefined,
     totalLessons: undefined,
@@ -29,6 +29,7 @@ const PerformanceView = ({ onBack }) => {
 
   useEffect(() => {
     const userId = user?.id;
+    setIsLoading(true);
     userStatAPI.userDashboard(userId).then((response) => {
       setStats({
         totalLessonsCompleted: response.data.lessons_completed,
@@ -53,8 +54,8 @@ const PerformanceView = ({ onBack }) => {
         word_order_error: response.data.error_stats?.word_order_error ?? 0,
         other: response.data.error_stats?.other ?? 0
       });
-    })
-
+      setIsLoading(false);
+    }).catch(() => setIsLoading(false));
   }, []);
 
   return (
@@ -82,7 +83,13 @@ const PerformanceView = ({ onBack }) => {
               <FaCheckCircle className="text-4xl text-blue-500" />
               <div className="text-right">
                 <p className="text-sm text-gray-600">Lessons</p>
-                <p className="text-3xl font-bold text-gray-800">{stats.totalLessonsCompleted} / {stats.totalLessons}</p>
+                <p className="text-3xl font-bold text-gray-800">
+                  {stats.totalLessonsCompleted !== undefined && stats.totalLessons !== undefined ? (
+                    `${stats.totalLessonsCompleted} / ${stats.totalLessons}`
+                  ) : (
+                    <LoadingSpinner size="lg" />
+                  )}
+                </p>
               </div>
             </div>
             <p className="text-sm text-gray-500">Completed</p>
@@ -94,7 +101,13 @@ const PerformanceView = ({ onBack }) => {
               <FaTrophy className="text-4xl text-orange-500" />
               <div className="text-right">
                 <p className="text-sm text-gray-600">Exercises</p>
-                <p className="text-3xl font-bold text-gray-800">{stats.totalExercisesCompleted} / {stats.totalExercises}</p>
+                <p className="text-3xl font-bold text-gray-800">
+                  {stats.totalExercisesCompleted !== undefined && stats.totalExercises !== undefined ? (
+                    `${stats.totalExercisesCompleted} / ${stats.totalExercises}`
+                  ) : (
+                    <LoadingSpinner size="lg" />
+                  )}
+                </p>
               </div>
             </div>
             <p className="text-sm text-gray-500">Completed</p>
@@ -106,7 +119,13 @@ const PerformanceView = ({ onBack }) => {
               <FaChartLine className="text-4xl text-purple-500" />
               <div className="text-right">
                 <p className="text-sm text-gray-600">Avg Score</p>
-                <p className="text-3xl font-bold text-gray-800">{stats.averageScore}%</p>
+                <p className="text-3xl font-bold text-gray-800">
+                  {stats.averageScore !== undefined ? (
+                    `${stats.averageScore}%`
+                  ) : (
+                    <LoadingSpinner size="lg" />
+                  )}
+                </p>
               </div>
             </div>
             <p className="text-sm text-gray-500">Overall Performance</p>
@@ -118,7 +137,13 @@ const PerformanceView = ({ onBack }) => {
               <FaClock className="text-4xl text-teal-500" />
               <div className="text-right">
                 <p className="text-sm text-gray-600">Streak</p>
-                <p className="text-3xl font-bold text-gray-800">{stats.streak}</p>
+                <p className="text-3xl font-bold text-gray-800">
+                  {stats.streak !== undefined ? (
+                    stats.streak
+                  ) : (
+                    <LoadingSpinner size="lg" />
+                  )}
+                </p>
               </div>
             </div>
             <p className="text-sm text-gray-500">Days in a row</p>
@@ -144,47 +169,59 @@ const PerformanceView = ({ onBack }) => {
                 <p className="font-semibold text-gray-800">Spelling Error</p>
                 <p className="text-sm text-gray-600">Misspelled words</p>
               </div>
-              <div className="text-3xl font-bold text-red-600">{errorData.spelling_error}</div>
+              <div className="text-3xl font-bold text-red-600">
+                {errorData.spelling_error !== undefined ? errorData.spelling_error : <LoadingSpinner size="md" />}
+              </div>
             </div>
-            
+
             <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg hover:shadow-md transition-shadow">
               <div>
                 <p className="font-semibold text-gray-800">Wrong Question Word</p>
                 <p className="text-sm text-gray-600">Incorrect question formation</p>
               </div>
-              <div className="text-3xl font-bold text-blue-600">{errorData.wrong_question_word}</div>
+              <div className="text-3xl font-bold text-blue-600">
+                {errorData.wrong_question_word !== undefined ? errorData.wrong_question_word : <LoadingSpinner size="md" />}
+              </div>
             </div>
-            
+
             <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg hover:shadow-md transition-shadow">
               <div>
                 <p className="font-semibold text-gray-800">Wrong Verb Form</p>
                 <p className="text-sm text-gray-600">Incorrect verb conjugation</p>
               </div>
-              <div className="text-3xl font-bold text-purple-600">{errorData.wrong_verb_form}</div>
+              <div className="text-3xl font-bold text-purple-600">
+                {errorData.wrong_verb_form !== undefined ? errorData.wrong_verb_form : <LoadingSpinner size="md" />}
+              </div>
             </div>
-            
+
             <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-50 to-yellow-100 rounded-lg hover:shadow-md transition-shadow">
               <div>
                 <p className="font-semibold text-gray-800">Missing Word</p>
                 <p className="text-sm text-gray-600">Words omitted</p>
               </div>
-              <div className="text-3xl font-bold text-yellow-600">{errorData.missing_word}</div>
+              <div className="text-3xl font-bold text-yellow-600">
+                {errorData.missing_word !== undefined ? errorData.missing_word : <LoadingSpinner size="md" />}
+              </div>
             </div>
-            
+
             <div className="flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg hover:shadow-md transition-shadow">
               <div>
                 <p className="font-semibold text-gray-800">Word Order Error</p>
                 <p className="text-sm text-gray-600">Incorrect word sequence</p>
               </div>
-              <div className="text-3xl font-bold text-orange-600">{errorData.word_order_error}</div>
+              <div className="text-3xl font-bold text-orange-600">
+                {errorData.word_order_error !== undefined ? errorData.word_order_error : <LoadingSpinner size="md" />}
+              </div>
             </div>
-            
+
             <div className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-lg hover:shadow-md transition-shadow">
               <div>
                 <p className="font-semibold text-gray-800">Other</p>
                 <p className="text-sm text-gray-600">Miscellaneous errors</p>
               </div>
-              <div className="text-3xl font-bold text-gray-600">{errorData.other}</div>
+              <div className="text-3xl font-bold text-gray-600">
+                {errorData.other !== undefined ? errorData.other : <LoadingSpinner size="md" />}
+              </div>
             </div>
           </div>
         </div>
