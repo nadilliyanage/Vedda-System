@@ -57,10 +57,10 @@ const HomePage = () => {
       <div className="container mx-auto px-4 py-16">
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-4">
-            Vedda Language Learning System
+            Vedda Culture Preservation System
           </h1>
           <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto">
-            Preserving and promoting the indigenous Vedda language through
+            Preserving and promoting the indigenous Vedda culture through
             modern technology
           </p>
           <div className="mt-6 w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto rounded-full"></div>
@@ -126,12 +126,12 @@ const HomePage = () => {
         {/* About Section */}
         <div className="mt-20 max-w-4xl mx-auto bg-white rounded-2xl shadow-lg p-8 md:p-12">
           <h2 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-            About the Vedda Language
+            About the Vedda Culture
           </h2>
           <p className="text-gray-600 text-lg leading-relaxed text-center">
-            The Vedda language is the indigenous language of the Vedda people of
+            The Vedda culture is the indigenous culture of the Vedda people of
             Sri Lanka. This platform is dedicated to preserving and promoting
-            this unique language through interactive learning tools, cultural
+            this unique culture through interactive learning tools, cultural
             resources, and modern technology. Explore our features to immerse
             yourself in the rich heritage of the Vedda community.
           </p>
