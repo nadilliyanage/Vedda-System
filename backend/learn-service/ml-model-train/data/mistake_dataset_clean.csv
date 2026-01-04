@@ -1,4 +1,10 @@
 correct_answer,student_answer,error_type
+Meeatto botakanda balanava,Balanawa meeatto botakanda,word_order_error
+Topan irapojja tibenava,Topan tibenava irapojja,word_order_error
+Topan irapojja tibenava,Irapojja topan tibenava,word_order_error
+Topan irapojja tibenava,Irapojja tibenava topan,word_order_error
+Topan irapojja tibenava,Tibenava topan irapojja,word_order_error
+Topan irapojja tibenava,Tibenava irapojja topan,word_order_error
 botakanda,botakandaa,spelling_error
 botakanda,botakundaa,spelling_error
 malia,malai,spelling_error
@@ -192,6 +198,15 @@ Meeatto watura tibenava,koduy? Meeatto diyaracca tibenava,wrong_question_word
 Meeatto koduy balanava?,Meeatto balanava,wrong_question_word
 Topan koduy okma balanava?,Topan okma balanava,wrong_question_word
 Okma balanava koduy?,Okma balanava,wrong_question_word
+Topan irapojja tibenava,Topan irapojja,missing_word
+Topan irapojja tibenava,Topan tibenava,missing_word
+Topan irapojja tibenava,irapojja tibenava,missing_word
+Meeatto pannilaatto tibenava,panilaatto tibenava,missing_word
+Meeatto pannilaatto tibenava,Meeatto tibenava,missing_word
+Meeatto pannilaatto tibenava,Meeatto panilaatto,missing_word
+Meeatto kandaarni balanava,Meeatto kandaarni,missing_word
+Meeatto kandaarni balanava,kandaarni balanava,missing_word
+Meeatto kandaarni balanava,Meeatto balanava,missing_word
 Meeatto kandaarni balanava,Topan kandaarni balanava,other
 Meeatto kandaarni balanava,Meeatto potti balanava,other
 Topan kandaarni balanava,Topan potti balanava,other

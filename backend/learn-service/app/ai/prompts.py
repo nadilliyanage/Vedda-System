@@ -28,26 +28,73 @@ Return JSON exactly with this shape:
 }}
 """
 
-GEN_SYSTEM = """You generate Vadda language exercises.
-Rules:
-- Use ONLY grammar/vocabulary patterns shown in CONTEXT.
-- Do not invent new words outside CONTEXT.
-- Output ONLY valid JSON array. No markdown.
+GEN_SYSTEM = """You are an AI that generates Vedda language learning exercises.
+
+STRICT RULES (DO NOT VIOLATE):
+- Output ONLY valid JSON
+- Do NOT include explanations, comments, or markdown
+- Do NOT include text outside JSON
+- Do NOT change field names
+- Do NOT change JSON structure
+- categoryId MUST always be "z0"
+- Use ONLY Vedda words from CONTEXT
+- Do NOT invent new words
+- Exactly ONE option must be correct
+- correct_answer MUST match the correct option text exactly
 """
 
-GEN_USER_TEMPLATE = """CONTEXT:
+GEN_USER_TEMPLATE = """
+CONTEXT (Vedda vocabulary and examples):
 {context}
 
-Generate {count} exercises targeting these skills: {skills}.
-Exercise type: {exercise_type}
+TARGET SKILL TAGS:
+{skill_tags}
 
-Return JSON array:
-[
-  {{
-    "sentence": "...",
-    "correct_answer": "...",
-    "skill_tags": ["..."],
-    "difficulty": 1
+COMMON LEARNER ERRORS:
+{error_types}
+
+TASK:
+Generate ONE Vedda language multiple-choice vocabulary exercise.
+
+Exercise constraints:
+- Question type: multiple_choice
+- Difficulty: beginner
+- Prompt language: English
+- Ask for the Vedda word of an English term
+- XP = 1
+- Points = 1
+- Time limit = 30 seconds
+- "rest" must be an empty string
+
+Options constraints:
+- Exactly 4 options
+- Only ONE option is correct
+- Incorrect options must be plausible but wrong
+- All option texts must be Vedda words from CONTEXT
+
+Return JSON EXACTLY in this format:
+
+{{
+  "categoryId": "z0",
+  "exerciseNumber": "{exercise_number}",
+  "skillTags": [{skill_tags}],
+  "question": {{
+    "questionNo": "{exercise_number}",
+    "type": "multiple_choice",
+    "prompt": "What is the Vedda word for \\"Honey\\"?",
+    "xp": 1,
+    "points": 1,
+    "timeLimitSec": 30,
+    "rest": "",
+    "options": [
+      {{ "id": "A", "text": "...", "correct": false }},
+      {{ "id": "B", "text": "...", "correct": true }},
+      {{ "id": "C", "text": "...", "correct": false }},
+      {{ "id": "D", "text": "...", "correct": false }}
+    ],
+    "correctOptions": ["B"],
+    "correct_answer": "..."
   }}
-]
+}}
 """
+

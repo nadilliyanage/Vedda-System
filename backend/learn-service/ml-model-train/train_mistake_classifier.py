@@ -24,6 +24,7 @@ ALLOWED_LABELS = [
     "wrong_verb_form",
     "missing_word",
     "word_order_error",
+    "wrong_word",
     "other"
 ]
 
@@ -36,12 +37,13 @@ MODEL_OUT_PATH = "../app/ml/mistake_classifier_lr.joblib"
 
 def build_input_text(correct_answer: str, student_answer: str) -> str:
     """
-    Combine correct + student answer into one string.
-    Char n-grams learn spelling + form differences.
+    Combine correct + student answer into one lowercase string.
+    Makes training and inference case-insensitive.
     """
-    ca = (correct_answer or "").strip()
-    sa = (student_answer or "").strip()
+    ca = (correct_answer or "").strip().lower()
+    sa = (student_answer or "").strip().lower()
     return f"correct: {ca} || student: {sa}"
+
 
 
 def load_and_clean_data(csv_path: str) -> pd.DataFrame:
@@ -55,8 +57,8 @@ def load_and_clean_data(csv_path: str) -> pd.DataFrame:
         raise ValueError(f"CSV must contain columns: {required_cols}")
 
     # Normalize text
-    df["correct_answer"] = df["correct_answer"].fillna("").astype(str).str.strip()
-    df["student_answer"] = df["student_answer"].fillna("").astype(str).str.strip()
+    df["correct_answer"] = df["correct_answer"].fillna("").astype(str).str.strip().str.lower()
+    df["student_answer"] = df["student_answer"].fillna("").astype(str).str.strip().str.lower()
     df["error_type"] = df["error_type"].fillna("").astype(str).str.strip()
 
     # Keep only allowed labels
