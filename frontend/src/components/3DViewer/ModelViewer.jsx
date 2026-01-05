@@ -20,7 +20,7 @@ const ModelViewer = ({ onModelLoad, onMorphTargetsUpdate, xrayMode }) => {
 
     // Scene setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xffffff); // Set background to white
+    scene.background = new THREE.Color(0xf5f7fa); // Set background to a lighter, soft color
     sceneRef.current = scene;
 
     // Camera setup
@@ -49,15 +49,15 @@ const ModelViewer = ({ onModelLoad, onMorphTargetsUpdate, xrayMode }) => {
     controlsRef.current = controls;
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.0); // Brighter ambient light
     scene.add(ambientLight);
 
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5); // Softer directional light
     directionalLight.position.set(5, 5, 5);
     directionalLight.castShadow = true;
     scene.add(directionalLight);
 
-    const fillLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    const fillLight = new THREE.DirectionalLight(0xffffff, 0.2); // Softer fill light
     fillLight.position.set(-5, 0, -5);
     scene.add(fillLight);
 

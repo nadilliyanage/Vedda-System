@@ -40,7 +40,7 @@ const HomePage = () => {
     },
     {
       id: 4,
-      title: "3D Visuals",
+      title: "Interactive 3D Word Explorer",
       description:
         "Experience Vedda words through interactive 3D visualizations",
       icon: FaCube,
