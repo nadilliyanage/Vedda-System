@@ -168,7 +168,7 @@ vedda-system/
 
 ### Databases
 
-- **SQLite**: Dictionary and translation data
+- **SQLite**: Translation data
 - **MongoDB**: User accounts, artifacts, learning progress, 3D models
 
 ### AI & Machine Learning
