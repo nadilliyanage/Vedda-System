@@ -250,8 +250,7 @@ vedda-system/
 
 - ✅ **Artifact Identification**: AI-powered recognition using Keras CNN model
 - ✅ **Artifact Management**: CRUD operations for cultural artifacts
-- ✅ **3D Model Integration**: Visualization of Vedda cultural artifacts
-- ✅ **IPA Pronunciation**: Integration with dictionary for artifact names
+- ✅ **Artifact Image Integration**: Visualization of Vedda cultural artifacts
 - ✅ **MongoDB Storage**: Scalable artifact metadata storage
 
 ### ✅ Phase 7: Learning Platform (Completed)
