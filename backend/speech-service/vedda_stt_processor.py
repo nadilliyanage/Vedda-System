@@ -240,7 +240,7 @@ if __name__ == "__main__":
     
     # Test with some Sinhala text
     test_cases = [
-        "ළමයි ගෙදර ඉන්නවා",  # Should map to: කැකුලෝ ගෙදර ඉන්නවා
+        "ළමයි ගෙදර ඉන්නවා",  # Should map to: කැකුළෝ ගෙදර ඉන්නවා
         "මේ ගස ලොකු",          # Should map to: මේ ගස් ලොකු
         "අම්මා කෑම කරනවා",     # Should map to: අම්මා කෑම කරනවා (some words might stay same)
     ]

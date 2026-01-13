@@ -126,14 +126,16 @@ class DictionaryService:
                 sinhala_ipa='', english_ipa='', word_type='', usage_example=''):
         """Add new word to dictionary"""
         try:
-            # Check if word already exists
+            # Check if word already exists (all three fields must match)
             existing = dictionary_collection().find_one({
                 'vedda_word': vedda_word,
+                'sinhala_word': sinhala_word,
                 'english_word': english_word
             })
             
             if existing:
-                return {'success': False, 'error': 'Word already exists'}
+                # Delete the duplicate and add the new one
+                dictionary_collection().delete_one({'_id': existing['_id']})
             
             # Insert new word
             word_doc = {
@@ -208,10 +210,13 @@ class DictionaryService:
             print(f"❌ Error getting word types: {e}")
             return []
     
-    def get_all_words(self, limit=100, offset=0):
+    def get_all_words(self, limit=0, offset=0):
         """Get all dictionary words with pagination"""
         try:
-            cursor = dictionary_collection().find({}).skip(offset).limit(limit)
+            if limit > 0:
+                cursor = dictionary_collection().find({}).skip(offset).limit(limit)
+            else:
+                cursor = dictionary_collection().find({}).skip(offset)
             results = []
             
             for doc in cursor:
@@ -419,11 +424,16 @@ class DictionaryService:
                     
                     logger.info(f"Processing row {row_num}: vedda='{vedda_word}', sinhala='{sinhala_word}'")
                     
-                    # Check if word exists
-                    existing = dictionary_collection().find_one({'vedda_word': vedda_word})
+                    # Check if word exists (all three fields must match)
+                    existing = dictionary_collection().find_one({
+                        'vedda_word': vedda_word,
+                        'sinhala_word': sinhala_word,
+                        'english_word': english_word
+                    })
                     if existing:
-                        errors.append(f"Row {row_num}: Word '{vedda_word}' already exists")
-                        continue
+                        # Delete the duplicate and insert the new one
+                        dictionary_collection().delete_one({'_id': existing['_id']})
+                        errors.append(f"Row {row_num}: Duplicate removed for '{vedda_word}' + '{sinhala_word}' + '{english_word}'")
                     
                     # Insert word
                     word_doc = {
