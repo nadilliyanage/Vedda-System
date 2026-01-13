@@ -860,7 +860,7 @@ vedda_word,sinhala_word,english_word,vedda_ipa,sinhala_ipa,english_ipa,word_type
 Example:
 
 ```csv
-කැකුලෝ,ලමයි,children,kækulo,ləməi,ˈtʃɪldrən,noun,මේ කැකුලෝ ගෙදර ඉන්නවා - These children are at home
+කැකුළෝ,ලමයි,children,kækulo,ləməi,ˈtʃɪldrən,noun,මේ කැකුළෝ ගෙදර ඉන්නවා - These children are at home
 ```
 
 ## License

@@ -300,7 +300,7 @@ const VeddaSTTPage = () => {
           <div className="mt-4 p-3 bg-blue-100 rounded">
             <p className="text-sm text-blue-700">
               <strong>Tip:</strong> Try speaking words that exist in the Vedda
-              dictionary like: &ldquo;කැකුලෝ ගෙදර ඉන්නවා&rdquo; (children are at
+              dictionary like: &ldquo;කැකුළෝ ගෙදර ඉන්නවා&rdquo; (children are at
               home) or &ldquo;අම්මා කෑම කරනවා&rdquo; (mother is cooking)
             </p>
           </div>

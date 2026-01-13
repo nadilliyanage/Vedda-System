@@ -36,7 +36,7 @@ def test_vedda_processor():
     test_cases = [
         {
             "sinhala": "ළමයි ගෙදර ඉන්නවා",
-            "expected_vedda": "කැකුලෝ ගෙදර ඉන්නවා",
+            "expected_vedda": "කැකුළෝ ගෙදර ඉන්නවා",
             "description": "Children are at home"
         },
         {
@@ -116,7 +116,7 @@ def test_dictionary_loading():
         processor = VeddaSTTProcessor()
         
         # Test if we can access some known dictionary entries
-        test_words = ['කැකුලෝ', 'ගස්', 'වතුර', 'අම්මා', 'තාත්තා']
+        test_words = ['කැකුළෝ', 'ගස්', 'වතුර', 'අම්මා', 'තාත්තා']
         
         found_words = []
         for word in test_words:

@@ -104,7 +104,7 @@ def get_all_words():
     """Get all dictionary words with pagination"""
     try:
         dictionary_service = get_dictionary_service()
-        limit = int(request.args.get('limit', 100))
+        limit = int(request.args.get('limit', 0))
         offset = int(request.args.get('offset', 0))
         
         result = dictionary_service.get_all_words(limit, offset)

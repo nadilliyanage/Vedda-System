@@ -26,7 +26,7 @@ export const LANGUAGES = [
 ];
 
 export const EXAMPLE_PHRASES = [
-  { vedda: "මේ කැකුලෝ", english: "these children" },
+  { vedda: "මේ කැකුළෝ", english: "these children" },
 ];
 
 export const API_BASE_URL =
