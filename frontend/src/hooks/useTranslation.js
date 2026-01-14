@@ -32,6 +32,8 @@ export const useTranslation = () => {
         targetIpaTranscription:
           response.data.target_ipa || response.data.ipa_transcription || "",
         sourceIpaTranscription: response.data.source_ipa || "",
+        targetSinglish: response.data.target_romanization || "",
+        sourceSinglish: response.data.source_romanization || "",
         bridgeTranslation: response.data.bridge_translation || "",
         confidence: response.data.confidence || null,
         sinhalaWordsDetected: response.data.sinhala_words_detected,

@@ -50,9 +50,7 @@ const AdminWords = () => {
 
   const fetchWords = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:5002/api/dictionary/all"
-      );
+      const response = await fetch("http://localhost:5002/api/dictionary/all");
       if (response.ok) {
         const data = await response.json();
         setWords(data.results || []);

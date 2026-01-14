@@ -21,6 +21,8 @@ const TranslationCard = ({
   const [translationMethods, setTranslationMethods] = useState([]);
   const [targetIpaTranscription, setTargetIpaTranscription] = useState("");
   const [sourceIpaTranscription, setSourceIpaTranscription] = useState("");
+  const [targetSinglish, setTargetSinglish] = useState("");
+  const [sourceSinglish, setSourceSinglish] = useState("");
   const [bridgeTranslation, setBridgeTranslation] = useState("");
   const [confidence, setConfidence] = useState(null);
   const [showConversation, setShowConversation] = useState(false);
@@ -35,6 +37,8 @@ const TranslationCard = ({
       setTranslationMethods(result.translationMethods);
       setTargetIpaTranscription(result.targetIpaTranscription);
       setSourceIpaTranscription(result.sourceIpaTranscription);
+      setTargetSinglish(result.targetSinglish);
+      setSourceSinglish(result.sourceSinglish);
       setBridgeTranslation(result.bridgeTranslation);
       setConfidence(result.confidence);
 
@@ -58,6 +62,8 @@ const TranslationCard = ({
       setOutputText("");
       setTargetIpaTranscription("");
       setSourceIpaTranscription("");
+      setTargetSinglish("");
+      setSourceSinglish("");
     }
   };
 
@@ -66,6 +72,8 @@ const TranslationCard = ({
     setOutputText("");
     setTargetIpaTranscription("");
     setSourceIpaTranscription("");
+    setTargetSinglish("");
+    setSourceSinglish("");
     setError("");
   };
 
@@ -95,6 +103,7 @@ const TranslationCard = ({
               inputText={inputText}
               sourceLanguage={sourceLanguage}
               sourceIpaTranscription={sourceIpaTranscription}
+              sourceSinglish={sourceSinglish}
               onInputChange={setInputText}
               onClear={handleClearInput}
             />
@@ -104,11 +113,14 @@ const TranslationCard = ({
           <div>
             <TranslationOutput
               outputText={outputText}
+              sourceLanguage={sourceLanguage}
               targetLanguage={targetLanguage}
               loading={loading}
               error={error}
               sourceIpaTranscription={sourceIpaTranscription}
               targetIpaTranscription={targetIpaTranscription}
+              sourceSinglish={sourceSinglish}
+              targetSinglish={targetSinglish}
               bridgeTranslation={bridgeTranslation}
               confidence={confidence}
               translationMethods={translationMethods}

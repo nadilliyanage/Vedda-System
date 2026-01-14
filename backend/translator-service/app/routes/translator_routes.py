@@ -66,6 +66,8 @@ def translate():
         'methods_used': result.get('methods_used', []),
         'source_ipa': result.get('source_ipa', ''),
         'target_ipa': result.get('target_ipa', ''),
+        'source_romanization': result.get('source_romanization', ''),
+        'target_romanization': result.get('target_romanization', ''),
         'bridge_translation': result.get('bridge_translation', '')
     })
 

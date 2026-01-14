@@ -72,32 +72,85 @@ class VeddaTranslator:
         except Exception as e:
             return ''
     
-    def generate_sinhala_romanization(self, text):
-        """Generate phonetic romanization for Sinhala text"""
+    def generate_vedda_sinhala_ipa(self, text):
+        """Generate IPA phonetic representation for Vedda/Sinhala text"""
         if not SINLING_AVAILABLE or not text:
             return ''
         try:
-            # Simple character-by-character romanization mapping
-            sinhala_to_roman = {
-                'අ': 'a', 'ආ': 'aa', 'ඇ': 'ae', 'ඈ': 'aae', 'ඉ': 'i', 'ඊ': 'ii', 'උ': 'u', 'ඌ': 'uu',
-                'ඍ': 'ru', 'ඎ': 'ruu', 'ඏ': 'lu', 'ඐ': 'luu', 'එ': 'e', 'ඒ': 'ee', 'ඓ': 'ai',
-                'ඔ': 'o', 'ඕ': 'oo', 'ඖ': 'au',
-                'ක': 'ka', 'ඛ': 'kha', 'ග': 'ga', 'ඝ': 'gha', 'ඞ': 'nga',
-                'ච': 'cha', 'ඡ': 'chha', 'ජ': 'ja', 'ඣ': 'jha', 'ඤ': 'nya',
-                'ට': 'ta', 'ඨ': 'tha', 'ඩ': 'da', 'ඪ': 'dha', 'ණ': 'na',
-                'ත': 'tha', 'ථ': 'thha', 'ද': 'dha', 'ධ': 'dhha', 'න': 'na',
-                'ප': 'pa', 'ඵ': 'pha', 'බ': 'ba', 'භ': 'bha', 'ම': 'ma',
-                'ය': 'ya', 'ර': 'ra', 'ල': 'la', 'ව': 'va', 'ශ': 'sha',
-                'ෂ': 'sha', 'ස': 'sa', 'හ': 'ha', 'ළ': 'la', 'ෆ': 'fa',
-                'ං': 'ng', 'ඃ': 'h', '්': '', 'ා': 'aa', 'ැ': 'ae',
-                'ෑ': 'aae', 'ි': 'i', 'ී': 'ii', 'ු': 'u', 'ූ': 'uu',
-                'ෘ': 'ru', 'ෲ': 'ruu', 'ෟ': 'lu', 'ෳ': 'luu', 'ෙ': 'e',
-                'ේ': 'ee', 'ෛ': 'ai', 'ො': 'o', 'ෝ': 'oo', 'ෞ': 'au', 'ෟ': 'lu'
+            # IPA phonetic mapping for Sinhala/Vedda script
+            sinhala_to_ipa = {
+                # Vowels
+                'අ': 'ə', 'ආ': 'aː', 'ඇ': 'æ', 'ඈ': 'æː', 'ඉ': 'i', 'ඊ': 'iː', 'උ': 'u', 'ඌ': 'uː',
+                'ඍ': 'ru', 'ඎ': 'ruː', 'ඏ': 'lu', 'ඐ': 'luː', 'එ': 'e', 'ඒ': 'eː', 'ඓ': 'ai',
+                'ඔ': 'o', 'ඕ': 'oː', 'ඖ': 'au',
+                # Consonants (Velar)
+                'ක': 'ka', 'ඛ': 'kʰa', 'ග': 'ɡa', 'ඝ': 'ɡʰa', 'ඞ': 'ŋa',
+                # Consonants (Palatal)
+                'ච': 't͡ʃa', 'ඡ': 't͡ʃʰa', 'ජ': 'd͡ʒa', 'ඣ': 'd͡ʒʰa', 'ඤ': 'ɲa',
+                # Consonants (Retroflex)
+                'ට': 'ʈa', 'ඨ': 'ʈʰa', 'ඩ': 'ɖa', 'ඪ': 'ɖʰa', 'ණ': 'ɳa',
+                # Consonants (Dental)
+                'ත': 't̪a', 'ථ': 't̪ʰa', 'ද': 'd̪a', 'ධ': 'd̪ʰa', 'න': 'na',
+                # Consonants (Labial)
+                'ප': 'pa', 'ඵ': 'pʰa', 'බ': 'ba', 'භ': 'bʰa', 'ම': 'ma',
+                # Consonants (Approximants)
+                'ය': 'ja', 'ර': 'ra', 'ල': 'la', 'ව': 'ʋa', 
+                # Consonants (Sibilants)
+                'ශ': 'ʃa', 'ෂ': 'ʂa', 'ස': 'sa', 'හ': 'ha', 'ළ': 'ɭa', 'ෆ': 'fa',
+                # Diacritics and modifiers
+                'ං': 'ŋ', 'ඃ': 'h', '්': '', 
+                'ා': 'aː', 'ැ': 'æ', 'ෑ': 'æː', 
+                'ි': 'i', 'ී': 'iː', 'ු': 'u', 'ූ': 'uː',
+                'ෘ': 'ru', 'ෲ': 'ruː', 'ෟ': 'lu', 'ෳ': 'luː', 
+                'ෙ': 'e', 'ේ': 'eː', 'ෛ': 'ai', 
+                'ො': 'o', 'ෝ': 'oː', 'ෞ': 'au'
             }
             
             result = ''
             for char in text:
-                result += sinhala_to_roman.get(char, char)
+                result += sinhala_to_ipa.get(char, char)
+            
+            return result.strip()
+        except Exception as e:
+            return ''
+    
+    def generate_singlish_romanization(self, text):
+        """Generate Singlish romanization for Vedda/Sinhala text"""
+        if not SINLING_AVAILABLE or not text:
+            return ''
+        try:
+            # Singlish romanization mapping
+            sinhala_to_singlish = {
+                # Vowels
+                'අ': 'a', 'ආ': 'aa', 'ඇ': 'ae', 'ඈ': 'aae', 'ඉ': 'i', 'ඊ': 'ii', 'උ': 'u', 'ඌ': 'uu',
+                'ඍ': 'ru', 'ඎ': 'ruu', 'ඏ': 'lu', 'ඐ': 'luu', 'එ': 'e', 'ඒ': 'ee', 'ඓ': 'ai',
+                'ඔ': 'o', 'ඕ': 'oo', 'ඖ': 'au',
+                # Consonants (Velar)
+                'ක': 'ka', 'ඛ': 'kha', 'ග': 'ga', 'ඝ': 'gha', 'ඞ': 'nga',
+                # Consonants (Palatal)
+                'ච': 'cha', 'ඡ': 'chha', 'ජ': 'ja', 'ඣ': 'jha', 'ඤ': 'gna',
+                # Consonants (Retroflex)
+                'ට': 'ta', 'ඨ': 'tha', 'ඩ': 'da', 'ඪ': 'dha', 'ණ': 'na',
+                # Consonants (Dental)
+                'ත': 'tha', 'ථ': 'thha', 'ද': 'dha', 'ධ': 'dhha', 'න': 'na',
+                # Consonants (Labial)
+                'ප': 'pa', 'ඵ': 'pha', 'බ': 'ba', 'භ': 'bha', 'ම': 'ma',
+                # Consonants (Approximants)
+                'ය': 'ya', 'ර': 'ra', 'ල': 'la', 'ව': 'wa', 
+                # Consonants (Sibilants)
+                'ශ': 'sha', 'ෂ': 'sha', 'ස': 'sa', 'හ': 'ha', 'ළ': 'la', 'ෆ': 'fa',
+                # Diacritics and modifiers
+                'ං': 'ng', 'ඃ': 'h', '්': '', 
+                'ා': 'aa', 'ැ': 'ae', 'ෑ': 'aae', 
+                'ි': 'i', 'ී': 'ii', 'ු': 'u', 'ූ': 'uu',
+                'ෘ': 'ru', 'ෲ': 'ruu', 'ෟ': 'lu', 'ෳ': 'luu', 
+                'ෙ': 'e', 'ේ': 'ee', 'ෛ': 'ai', 
+                'ො': 'o', 'ෝ': 'oo', 'ෞ': 'au'
+            }
+            
+            result = ''
+            for char in text:
+                result += sinhala_to_singlish.get(char, char)
             
             return result.strip()
         except Exception as e:
@@ -230,16 +283,25 @@ class VeddaTranslator:
         # Generate source IPA if source is English
         source_ipa = self.generate_english_ipa(text) if source_language == 'english' else ''
         
-        # Build target IPA by combining Vedda dictionary IPA and Sinhala dictionary IPA
+        # Build target IPA and Singlish by combining dictionary and generated versions
         target_ipa_parts = []
+        target_singlish_parts = []
         for i, (source_type, source_data) in enumerate(word_sources):
             if source_type == 'vedda':
-                # Word from Vedda dictionary - use vedda_ipa
+                # Word from Vedda dictionary - use vedda_ipa or generate from vedda word
+                vedda_word = vedda_words[i]
                 vedda_ipa = source_data.get('vedda_ipa', '')
+                if not vedda_ipa:
+                    # Generate IPA for Vedda word
+                    vedda_ipa = self.generate_vedda_sinhala_ipa(vedda_word)
                 if vedda_ipa:
                     target_ipa_parts.append(vedda_ipa)
+                # Generate Singlish
+                singlish = self.generate_singlish_romanization(vedda_word)
+                if singlish:
+                    target_singlish_parts.append(singlish)
             else:
-                # Sinhala fallback word - try to get sinhala_ipa from dictionary
+                # Sinhala fallback word - try dictionary first, then generate
                 sinhala_word = source_data
                 dict_result = self.search_dictionary(sinhala_word, 'sinhala', 'sinhala')
                 if dict_result and dict_result.get('found'):
@@ -247,17 +309,22 @@ class VeddaTranslator:
                     if sinhala_ipa:
                         target_ipa_parts.append(sinhala_ipa)
                     else:
-                        # Use romanization as fallback
-                        romanized = self.generate_sinhala_romanization(sinhala_word)
-                        if romanized:
-                            target_ipa_parts.append(romanized)
+                        # Generate IPA for Sinhala word
+                        generated_ipa = self.generate_vedda_sinhala_ipa(sinhala_word)
+                        if generated_ipa:
+                            target_ipa_parts.append(generated_ipa)
                 else:
-                    # Use romanization as fallback
-                    romanized = self.generate_sinhala_romanization(sinhala_word)
-                    if romanized:
-                        target_ipa_parts.append(romanized)
+                    # Generate IPA for Sinhala word
+                    generated_ipa = self.generate_vedda_sinhala_ipa(sinhala_word)
+                    if generated_ipa:
+                        target_ipa_parts.append(generated_ipa)
+                # Generate Singlish
+                singlish = self.generate_singlish_romanization(sinhala_word)
+                if singlish:
+                    target_singlish_parts.append(singlish)
         
         target_ipa = ' '.join(target_ipa_parts)
+        target_singlish = ' '.join(target_singlish_parts)
         
         return {
             'translated_text': final_text,
@@ -265,6 +332,7 @@ class VeddaTranslator:
             'method': 'sinhala_to_vedda_bridge',
             'source_ipa': source_ipa,
             'target_ipa': target_ipa,
+            'target_romanization': target_singlish,
             'bridge_translation': sinhala_text,
             'methods_used': ['google', 'dictionary', 'sinhala_bridge'],
             'note': f'Translated via Sinhala bridge. Dictionary coverage: {dictionary_hits}/{len(sinhala_words)} words'
@@ -282,28 +350,38 @@ class VeddaTranslator:
                 if not target_ipa:
                     target_ipa = self.generate_english_ipa(translation['english'])
                 
+                # Generate source romanization from vedda word
+                source_romanization = self.generate_singlish_romanization(text.strip())
+                
                 return {
                     'translated_text': translation['english'],
                     'confidence': 0.95,
                     'method': 'vedda_phrase',
                     'source_ipa': translation.get('vedda_ipa', ''),
+                    'source_romanization': source_romanization,
                     'target_ipa': target_ipa,
                     'bridge_translation': translation.get('sinhala', ''),
                     'methods_used': ['dictionary', 'phrase_match'],
                     'note': 'Direct phrase match found in dictionary'
                 }
             elif target_language == 'sinhala' and translation.get('sinhala'):
-                # Get Sinhala IPA from dictionary or generate romanization
+                # Get Sinhala IPA from dictionary or generate IPA
                 target_ipa = translation.get('sinhala_ipa', '')
                 if not target_ipa:
-                    target_ipa = self.generate_sinhala_romanization(translation['sinhala'])
+                    target_ipa = self.generate_vedda_sinhala_ipa(translation['sinhala'])
+                
+                # Generate romanization for both source and target
+                source_romanization = self.generate_singlish_romanization(text.strip())
+                target_romanization = self.generate_singlish_romanization(translation['sinhala'])
                 
                 return {
                     'translated_text': translation['sinhala'],
                     'confidence': 0.95,
                     'method': 'vedda_phrase',
                     'source_ipa': translation.get('vedda_ipa', ''),
+                    'source_romanization': source_romanization,
                     'target_ipa': target_ipa,
+                    'target_romanization': target_romanization,
                     'bridge_translation': translation.get('sinhala', ''),
                     'methods_used': ['dictionary', 'phrase_match'],
                     'note': 'Direct phrase match found in dictionary'
@@ -341,16 +419,25 @@ class VeddaTranslator:
         dict_coverage = dictionary_hits / len(vedda_words) if vedda_words else 0
         final_confidence = dict_coverage * 0.7 + step2_confidence * 0.3
         
-        # Build source IPA by combining Vedda dictionary IPA and Sinhala romanization
+        # Build source IPA and Singlish by combining dictionary and generated versions
         source_ipa_parts = []
+        source_singlish_parts = []
         for i, (source_type, source_data) in enumerate(word_sources):
             if source_type == 'vedda':
-                # Word from Vedda dictionary - use vedda_ipa
+                # Word from Vedda dictionary - use vedda_ipa or generate
+                vedda_word = vedda_words[i]
                 vedda_ipa = source_data.get('vedda_ipa', '')
+                if not vedda_ipa:
+                    # Generate IPA for Vedda word
+                    vedda_ipa = self.generate_vedda_sinhala_ipa(vedda_word)
                 if vedda_ipa:
                     source_ipa_parts.append(vedda_ipa)
+                # Generate Singlish
+                singlish = self.generate_singlish_romanization(vedda_word)
+                if singlish:
+                    source_singlish_parts.append(singlish)
             else:
-                # Sinhala fallback word - try to get sinhala_ipa from dictionary
+                # Sinhala fallback word - try dictionary first, then generate
                 sinhala_word = source_data
                 dict_result = self.search_dictionary(sinhala_word, 'sinhala', 'sinhala')
                 if dict_result and dict_result.get('found'):
@@ -358,23 +445,28 @@ class VeddaTranslator:
                     if sinhala_ipa:
                         source_ipa_parts.append(sinhala_ipa)
                     else:
-                        # Use romanization as fallback
-                        romanized = self.generate_sinhala_romanization(sinhala_word)
-                        if romanized:
-                            source_ipa_parts.append(romanized)
+                        # Generate IPA for Sinhala word
+                        generated_ipa = self.generate_vedda_sinhala_ipa(sinhala_word)
+                        if generated_ipa:
+                            source_ipa_parts.append(generated_ipa)
                 else:
-                    # Use romanization as fallback
-                    romanized = self.generate_sinhala_romanization(sinhala_word)
-                    if romanized:
-                        source_ipa_parts.append(romanized)
+                    # Generate IPA for Sinhala word
+                    generated_ipa = self.generate_vedda_sinhala_ipa(sinhala_word)
+                    if generated_ipa:
+                        source_ipa_parts.append(generated_ipa)
+                # Generate Singlish
+                singlish = self.generate_singlish_romanization(sinhala_word)
+                if singlish:
+                    source_singlish_parts.append(singlish)
         
         source_ipa = ' '.join(source_ipa_parts)
+        source_singlish = ' '.join(source_singlish_parts)
         
         # Generate target IPA based on target language
         if target_language == 'english':
             target_ipa = self.generate_english_ipa(final_text)
         elif target_language == 'sinhala':
-            # For Sinhala, build IPA from dictionary or generate romanization
+            # For Sinhala, build IPA from dictionary or generate
             target_ipa_parts = []
             for sinhala_word in sinhala_words:
                 dict_result = self.search_dictionary(sinhala_word, 'sinhala', 'sinhala')
@@ -383,13 +475,15 @@ class VeddaTranslator:
                     if sinhala_ipa:
                         target_ipa_parts.append(sinhala_ipa)
                     else:
-                        romanized = self.generate_sinhala_romanization(sinhala_word)
-                        if romanized:
-                            target_ipa_parts.append(romanized)
+                        # Generate IPA for Sinhala word
+                        generated_ipa = self.generate_vedda_sinhala_ipa(sinhala_word)
+                        if generated_ipa:
+                            target_ipa_parts.append(generated_ipa)
                 else:
-                    romanized = self.generate_sinhala_romanization(sinhala_word)
-                    if romanized:
-                        target_ipa_parts.append(romanized)
+                    # Generate IPA for Sinhala word
+                    generated_ipa = self.generate_vedda_sinhala_ipa(sinhala_word)
+                    if generated_ipa:
+                        target_ipa_parts.append(generated_ipa)
             target_ipa = ' '.join(target_ipa_parts)
         else:
             target_ipa = ''
@@ -399,6 +493,7 @@ class VeddaTranslator:
             'confidence': final_confidence,
             'method': 'vedda_to_sinhala_bridge',
             'source_ipa': source_ipa,
+            'source_romanization': source_singlish,
             'target_ipa': target_ipa,
             'bridge_translation': sinhala_text,
             'methods_used': ['dictionary', 'google', 'sinhala_bridge'],
@@ -413,11 +508,13 @@ class VeddaTranslator:
             # Generate IPA for English text
             source_ipa = self.generate_english_ipa(text) if source_language == 'english' else ''
             
-            # Generate target IPA based on target language
+            # Generate target IPA and romanization based on target language
+            target_romanization = ''
             if target_language == 'english':
                 target_ipa = self.generate_english_ipa(result)
             elif target_language == 'sinhala':
-                target_ipa = self.generate_sinhala_romanization(result)
+                target_ipa = self.generate_vedda_sinhala_ipa(result)
+                target_romanization = self.generate_singlish_romanization(result)
             else:
                 target_ipa = ''
             
@@ -427,6 +524,7 @@ class VeddaTranslator:
                 'method': 'google_direct',
                 'source_ipa': source_ipa,
                 'target_ipa': target_ipa,
+                'target_romanization': target_romanization,
                 'bridge_translation': '',
                 'methods_used': ['google']
             }
