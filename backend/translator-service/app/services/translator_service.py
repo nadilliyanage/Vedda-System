@@ -156,8 +156,61 @@ class VeddaTranslator:
         except Exception as e:
             return ''
     
+    def batch_translate_dictionary(self, words, source_lang, target_lang):
+        """
+        Batch translate multiple words using dictionary service's batch endpoint.
+        This is much faster than calling search_dictionary multiple times.
+        
+        Args:
+            words: List of words to translate
+            source_lang: Source language (vedda, sinhala, english)
+            target_lang: Target language (vedda, sinhala, english)
+            
+        Returns:
+            Dictionary mapping original words to their translation info
+            Format: {word: {'found': True/False, 'translation': 'translated_word'}}
+        """
+        import time
+        start = time.perf_counter()
+        try:
+            # Call batch translate endpoint
+            req_start = time.perf_counter()
+            response = requests.post(
+                f"{self.dictionary_service_url}/translate/batch",
+                json={
+                    'words': words,
+                    'source': source_lang,
+                    'target': target_lang
+                },
+                timeout=10
+            )
+            req_time = (time.perf_counter() - req_start) * 1000
+            print(f"[PERF] Dictionary batch API call ({len(words)} words): {req_time:.1f}ms")
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success'):
+                    # Convert list of results to dictionary for fast lookup
+                    result_dict = {}
+                    for item in data.get('translations', []):
+                        result_dict[item['word']] = {
+                            'found': item.get('found', False),
+                            'translation': item.get('translation', item['word'])
+                        }
+                    total_time = (time.perf_counter() - start) * 1000
+                    print(f"[PERF] batch_translate_dictionary total: {total_time:.1f}ms")
+                    return result_dict
+            
+            # If batch fails, return empty dict
+            return {}
+            
+        except Exception as e:
+            total_time = (time.perf_counter() - start) * 1000
+            print(f"[PERF] batch_translate_dictionary error after {total_time:.1f}ms: {e}")
+            return {}
+    
     def search_dictionary(self, word, source_lang='vedda', target_lang='english'):
-        """Search dictionary service for word translation"""
+        """Search dictionary service for word translation (LEGACY - use batch_translate_dictionary for better performance)"""
         try:
             response = requests.get(
                 f"{self.dictionary_service_url}/api/dictionary/search",
@@ -211,6 +264,8 @@ class VeddaTranslator:
     
     def google_translate(self, text, source_lang, target_lang):
         """Use Google Translate API for translation"""
+        import time
+        start = time.perf_counter()
         try:
             source_code = self.supported_languages.get(source_lang, source_lang)
             target_code = self.supported_languages.get(target_lang, target_lang)
@@ -228,15 +283,23 @@ class VeddaTranslator:
                 'q': text
             }
             
+            req_start = time.perf_counter()
             response = requests.get(self.google_translate_url, params=params, timeout=10)
+            req_time = (time.perf_counter() - req_start) * 1000
+            print(f"[PERF] Google Translate API call: {req_time:.1f}ms")
+            
             if response.status_code == 200:
                 result = response.json()
                 if result and len(result) > 0 and len(result[0]) > 0:
                     translated_text = result[0][0][0]
+                    total_time = (time.perf_counter() - start) * 1000
+                    print(f"[PERF] google_translate total: {total_time:.1f}ms")
                     return translated_text
             return None
             
         except Exception as e:
+            total_time = (time.perf_counter() - start) * 1000
+            print(f"[PERF] google_translate error after {total_time:.1f}ms: {e}")
             return None
     
     def translate_to_vedda_via_sinhala(self, text, source_language):
@@ -265,12 +328,23 @@ class VeddaTranslator:
         word_sources = []  # Track whether each word came from dictionary or is Sinhala fallback
         dictionary_hits = 0
         
+        # OPTIMIZED: Batch translate all words in ONE API call
+        batch_results = self.batch_translate_dictionary(sinhala_words, 'sinhala', 'vedda')
+        
         for sinhala_word in sinhala_words:
-            dict_result = self.search_dictionary(sinhala_word, 'sinhala', 'vedda')
-            if dict_result and dict_result.get('found'):
-                vedda_word = dict_result['translation'].get('vedda', sinhala_word)
+            if sinhala_word in batch_results and batch_results[sinhala_word]['found']:
+                vedda_word = batch_results[sinhala_word]['translation']
+                # Build full translation dict from batch result
+                translation_dict = {
+                    'vedda': vedda_word,
+                    'sinhala': sinhala_word,
+                    'vedda_ipa': '',  # Batch endpoint returns just translation
+                    'sinhala_ipa': '',
+                    'english': '',
+                    'english_ipa': ''
+                }
                 vedda_words.append(vedda_word)
-                word_sources.append(('vedda', dict_result['translation']))
+                word_sources.append(('vedda', translation_dict))
                 dictionary_hits += 1
             else:
                 vedda_words.append(sinhala_word)
@@ -392,12 +466,23 @@ class VeddaTranslator:
         word_sources = []  # Track whether each word came from dictionary or is fallback
         dictionary_hits = 0
         
+        # OPTIMIZED: Batch translate all words in ONE API call  
+        batch_results = self.batch_translate_dictionary(vedda_words, 'vedda', 'sinhala')
+        
         for vedda_word in vedda_words:
-            dict_result = self.search_dictionary(vedda_word, 'vedda', 'sinhala')
-            if dict_result and dict_result.get('found'):
-                sinhala_word = dict_result['translation'].get('sinhala', vedda_word)
+            if vedda_word in batch_results and batch_results[vedda_word]['found']:
+                sinhala_word = batch_results[vedda_word]['translation']
+                # Build full translation dict from batch result
+                translation_dict = {
+                    'sinhala': sinhala_word,
+                    'vedda': vedda_word,
+                    'vedda_ipa': '',
+                    'sinhala_ipa': '',
+                    'english': '',
+                    'english_ipa': ''
+                }
                 sinhala_words.append(sinhala_word)
-                word_sources.append(('vedda', dict_result['translation']))
+                word_sources.append(('vedda', translation_dict))
                 dictionary_hits += 1
             else:
                 sinhala_words.append(vedda_word)
@@ -562,7 +647,7 @@ class VeddaTranslator:
     
     def save_translation_history(self, input_text, output_text, source_language, 
                                target_language, translation_method, confidence):
-        """Save translation to history service"""
+        """Save translation to history service (non-blocking)"""
         try:
             data = {
                 'input_text': input_text,
@@ -573,12 +658,13 @@ class VeddaTranslator:
                 'confidence_score': confidence
             }
             
+            # Use a very short timeout to avoid blocking translation response
             response = requests.post(
                 f"{self.history_service_url}/api/history",
                 json=data,
-                timeout=5
+                timeout=0.5  # 500ms max, don't block user
             )
             return response.status_code == 201
         except Exception as e:
-            print(f"History service error: {e}")
+            # Silently fail - history is not critical
             return False

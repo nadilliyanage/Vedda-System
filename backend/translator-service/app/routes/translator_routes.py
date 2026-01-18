@@ -42,18 +42,18 @@ def translate():
     # Perform translation
     result = translator.translate_text(text, source_language, target_language)
     
-    # Save to history (async, don't wait for response)
-    try:
-        translator.save_translation_history(
-            input_text=text,
-            output_text=result['translated_text'],
-            source_language=source_language,
-            target_language=target_language,
-            translation_method=result['method'],
-            confidence=result['confidence']
-        )
-    except Exception as e:
-        print(f"Failed to save history: {e}")
+    # Save to history - DISABLED to improve performance (history service not running)
+    # try:
+    #     translator.save_translation_history(
+    #         input_text=text,
+    #         output_text=result['translated_text'],
+    #         source_language=source_language,
+    #         target_language=target_language,
+    #         translation_method=result['method'],
+    #         confidence=result['confidence']
+    #     )
+    # except Exception as e:
+    #     print(f"Failed to save history: {e}")
     
     return jsonify({
         'success': True,

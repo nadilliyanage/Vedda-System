@@ -3,48 +3,96 @@ from datetime import datetime, timezone
 from bson import ObjectId
 from app.db.mongo import get_db, dictionary_collection
 import pandas as pd
+from typing import Dict, List, Optional
+from collections import OrderedDict
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
+class LRUCache:
+    """Simple LRU cache implementation"""
+    def __init__(self, maxsize=1000):
+        self.cache = OrderedDict()
+        self.maxsize = maxsize
+        self.hits = 0
+        self.misses = 0
+    
+    def get(self, key):
+        if key in self.cache:
+            self.hits += 1
+            self.cache.move_to_end(key)
+            return self.cache[key]
+        self.misses += 1
+        return None
+    
+    def put(self, key, value):
+        if key in self.cache:
+            self.cache.move_to_end(key)
+        else:
+            self.cache[key] = value
+            if len(self.cache) > self.maxsize:
+                self.cache.popitem(last=False)
+    
+    def clear(self):
+        self.cache.clear()
+        self.hits = 0
+        self.misses = 0
+    
+    def info(self):
+        return {
+            'hits': self.hits,
+            'misses': self.misses,
+            'size': len(self.cache),
+            'maxsize': self.maxsize
+        }
+
+
 class DictionaryService:
     def __init__(self):
         self.db = get_db()
         self.dictionary = self.load_dictionary()
-        print("Dictionary Service initialized")
+        self.translation_cache = LRUCache(maxsize=1000)
+        self._build_fast_indexes()
+        print(f"✅ Dictionary Service initialized - {len(self.dictionary['all_words'])} entries loaded")
+        print(f"✅ Fast indexes built - O(1) lookup enabled")
     
     def load_dictionary(self):
-        """Load dictionary from MongoDB with reverse lookup support"""
+        """Load dictionary from MongoDB with reverse lookup support - OPTIMIZED"""
         try:
             dictionary = {
                 'vedda_to_english': {},
                 'english_to_vedda': {},
                 'vedda_to_sinhala': {},
                 'sinhala_to_vedda': {},
-                'all_words': []
+                'english_to_sinhala': {},
+                'sinhala_to_english': {},
+                'all_words': [],
+                'word_map': {}  # Fast O(1) lookup by ID
             }
             
-            # Load all dictionary entries
-            cursor = dictionary_collection().find({})
+            # Load all dictionary entries in one batch
+            cursor = dictionary_collection().find({}, {
+                '_id': 1,
+                'vedda_word': 1,
+                'english_word': 1,
+                'sinhala_word': 1,
+                'vedda_ipa': 1,
+                'sinhala_ipa': 1,
+                'english_ipa': 1,
+                'word_type': 1,
+                'usage_example': 1,
+                'frequency_score': 1,
+                'confidence_score': 1
+            })
             
             for doc in cursor:
                 vedda_word = doc.get('vedda_word', '').strip()
                 english_word = doc.get('english_word', '').strip()
                 sinhala_word = doc.get('sinhala_word', '').strip()
                 
-                if vedda_word and english_word:
-                    # Vedda to English mapping
-                    dictionary['vedda_to_english'][vedda_word.lower()] = english_word
-                    dictionary['english_to_vedda'][english_word.lower()] = vedda_word
-                
-                if vedda_word and sinhala_word:
-                    # Vedda to Sinhala mapping
-                    dictionary['vedda_to_sinhala'][vedda_word.lower()] = sinhala_word
-                    dictionary['sinhala_to_vedda'][sinhala_word.lower()] = vedda_word
-                
-                # Add complete word entry
+                # Create complete word entry
                 word_entry = {
                     'id': str(doc['_id']),
                     'vedda_word': vedda_word,
@@ -58,7 +106,28 @@ class DictionaryService:
                     'frequency_score': doc.get('frequency_score', 1.0),
                     'confidence_score': doc.get('confidence_score', 0.95)
                 }
+                
+                # Build fast lookup indexes (lowercase for case-insensitive search)
+                if vedda_word and english_word:
+                    vedda_lower = vedda_word.lower()
+                    english_lower = english_word.lower()
+                    dictionary['vedda_to_english'][vedda_lower] = word_entry
+                    dictionary['english_to_vedda'][english_lower] = word_entry
+                
+                if vedda_word and sinhala_word:
+                    vedda_lower = vedda_word.lower()
+                    sinhala_lower = sinhala_word.lower()
+                    dictionary['vedda_to_sinhala'][vedda_lower] = word_entry
+                    dictionary['sinhala_to_vedda'][sinhala_lower] = word_entry
+                
+                if english_word and sinhala_word:
+                    english_lower = english_word.lower()
+                    sinhala_lower = sinhala_word.lower()
+                    dictionary['english_to_sinhala'][english_lower] = word_entry
+                    dictionary['sinhala_to_english'][sinhala_lower] = word_entry
+                
                 dictionary['all_words'].append(word_entry)
+                dictionary['word_map'][str(doc['_id'])] = word_entry
             
             print(f"Loaded {len(dictionary['all_words'])} dictionary entries from MongoDB")
             return dictionary
@@ -70,53 +139,81 @@ class DictionaryService:
                 'english_to_vedda': {},
                 'vedda_to_sinhala': {},
                 'sinhala_to_vedda': {},
-                'all_words': []
+                'english_to_sinhala': {},
+                'sinhala_to_english': {},
+                'all_words': [],
+                'word_map': {}
             }
     
+    def _build_fast_indexes(self):
+        """Build additional fast lookup indexes for common queries"""
+        self.word_type_index = {}
+        for word in self.dictionary['all_words']:
+            word_type = word.get('word_type', 'unknown')
+            if word_type not in self.word_type_index:
+                self.word_type_index[word_type] = []
+            self.word_type_index[word_type].append(word)
+    
+    def fast_translate(self, word: str, source_lang: str, target_lang: str) -> Optional[Dict]:
+        """Ultra-fast O(1) translation lookup with LRU cache"""
+        word_lower = word.lower().strip()
+        cache_key = f"{word_lower}:{source_lang}:{target_lang}"
+        
+        # Check cache first
+        cached_result = self.translation_cache.get(cache_key)
+        if cached_result is not None:
+            return cached_result
+        
+        # Direct dictionary lookup based on language pair
+        lookup_key = f"{source_lang}_to_{target_lang}"
+        lookup_dict = self.dictionary.get(lookup_key, {})
+        
+        result = lookup_dict.get(word_lower, None)
+        
+        # Cache the result (even if None)
+        self.translation_cache.put(cache_key, result)
+        
+        return result
+    
     def search_dictionary(self, query, source_language='all', target_language='all', limit=50):
-        """Search dictionary entries"""
+        """OPTIMIZED: Memory-based search with fast filtering"""
         try:
-            # Build MongoDB query
-            search_conditions = []
-            
-            if source_language == 'vedda':
-                search_conditions.append({'vedda_word': {'$regex': query, '$options': 'i'}})
-            elif source_language == 'english':
-                search_conditions.append({'english_word': {'$regex': query, '$options': 'i'}})
-            elif source_language == 'sinhala':
-                search_conditions.append({'sinhala_word': {'$regex': query, '$options': 'i'}})
-            else:
-                # Search all languages
-                search_conditions.extend([
-                    {'vedda_word': {'$regex': query, '$options': 'i'}},
-                    {'english_word': {'$regex': query, '$options': 'i'}},
-                    {'sinhala_word': {'$regex': query, '$options': 'i'}},
-                    {'usage_example': {'$regex': query, '$options': 'i'}}
-                ])
-            
-            query_filter = {'$or': search_conditions} if len(search_conditions) > 1 else search_conditions[0]
-            
-            # Execute search
-            cursor = dictionary_collection().find(query_filter).limit(limit)
+            query_lower = query.lower().strip()
             results = []
             
-            for doc in cursor:
-                result = {
-                    'id': str(doc['_id']),
-                    'vedda_word': doc.get('vedda_word', ''),
-                    'english_word': doc.get('english_word', ''),
-                    'sinhala_word': doc.get('sinhala_word', ''),
-                    'vedda_ipa': doc.get('vedda_ipa', ''),
-                    'sinhala_ipa': doc.get('sinhala_ipa', ''),
-                    'english_ipa': doc.get('english_ipa', ''),
-                    'word_type': doc.get('word_type', ''),
-                    'usage_example': doc.get('usage_example', ''),
-                    'frequency_score': doc.get('frequency_score', 1.0),
-                    'confidence_score': doc.get('confidence_score', 0.95)
-                }
-                results.append(result)
+            # Fast exact match first (O(1) lookup)
+            if source_language != 'all':
+                exact_match = self.fast_translate(query, source_language, target_language)
+                if exact_match:
+                    return [exact_match]
             
-            return results
+            # Fast filtering using in-memory dictionary
+            if source_language == 'vedda':
+                results = [entry for entry in self.dictionary['all_words']
+                          if query_lower in entry['vedda_word'].lower()]
+            elif source_language == 'english':
+                results = [entry for entry in self.dictionary['all_words']
+                          if query_lower in entry['english_word'].lower()]
+            elif source_language == 'sinhala':
+                results = [entry for entry in self.dictionary['all_words']
+                          if query_lower in entry['sinhala_word'].lower()]
+            else:
+                # Search all languages
+                results = [entry for entry in self.dictionary['all_words']
+                          if (query_lower in entry['vedda_word'].lower() or
+                              query_lower in entry['english_word'].lower() or
+                              query_lower in entry['sinhala_word'].lower() or
+                              query_lower in entry.get('usage_example', '').lower())]
+            
+            # Sort by relevance (exact match first, then by frequency)
+            results.sort(key=lambda x: (
+                not (x['vedda_word'].lower() == query_lower or
+                     x['english_word'].lower() == query_lower or
+                     x['sinhala_word'].lower() == query_lower),
+                -x['frequency_score']
+            ))
+            
+            return results[:limit]
             
         except Exception as e:
             print(f"❌ Search error: {e}")
@@ -170,36 +267,35 @@ class DictionaryService:
             return {'success': False, 'error': str(e)}
     
     def get_random_words(self, count=10, word_type=None):
-        """Get random words for quiz/learning"""
+        """OPTIMIZED: Get random words using in-memory data"""
         try:
-            pipeline = []
+            import random
             
-            # Filter by word type if specified
             if word_type:
-                pipeline.append({'$match': {'word_type': word_type}})
+                # Use pre-built index
+                words = self.word_type_index.get(word_type, [])
+            else:
+                words = self.dictionary['all_words']
             
-            # Random sample
-            pipeline.append({'$sample': {'size': count}})
+            if not words:
+                return []
             
-            cursor = dictionary_collection().aggregate(pipeline)
-            results = []
-            
-            for doc in cursor:
-                result = {
-                    'id': str(doc['_id']),
-                    'vedda_word': doc.get('vedda_word', ''),
-                    'english_word': doc.get('english_word', ''),
-                    'sinhala_word': doc.get('sinhala_word', ''),
-                    'word_type': doc.get('word_type', ''),
-                    'usage_example': doc.get('usage_example', '')
-                }
-                results.append(result)
-            
-            return results
+            # Fast random sampling
+            sample_size = min(count, len(words))
+            return random.sample(words, sample_size)
             
         except Exception as e:
             print(f"❌ Error getting random words: {e}")
             return []
+    
+    def clear_cache(self):
+        """Clear LRU cache for fast_translate"""
+        self.translation_cache.clear()
+        print("✅ Translation cache cleared")
+    
+    def get_cache_info(self):
+        """Get cache statistics"""
+        return self.translation_cache.info()
     
     def get_word_types(self):
         """Get all available word types"""
