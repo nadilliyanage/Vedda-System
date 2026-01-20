@@ -1,4 +1,6 @@
 import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 try:
     import eng_to_ipa as ipa
     IPA_AVAILABLE = True
@@ -19,6 +21,26 @@ class VeddaTranslator:
         self.dictionary_service_url = dictionary_service_url
         self.history_service_url = history_service_url
         self.google_translate_url = google_translate_url
+        
+        # Create persistent session for connection pooling
+        self.session = requests.Session()
+        
+        # Configure connection pooling with retry strategy
+        retry_strategy = Retry(
+            total=2,
+            status_forcelist=[429, 500, 502, 503, 504],
+            backoff_factor=0.1
+        )
+        adapter = HTTPAdapter(
+            pool_connections=10,
+            pool_maxsize=20,
+            max_retries=retry_strategy
+        )
+        self.session.mount('http://', adapter)
+        self.session.mount('https://', adapter)
+        
+        # Pre-warm connections to services
+        self._prewarm_connections()
         
         self.supported_languages = {
             'vedda': 'vedda',
@@ -62,6 +84,18 @@ class VeddaTranslator:
             'lithuanian': 'lt',
             'estonian': 'et'
         }
+    
+    def _prewarm_connections(self):
+        """Pre-establish connections to frequently used services for faster first request"""
+        try:
+            # Pre-warm dictionary service connection
+            self.session.get(
+                f"{self.dictionary_service_url}/stats",
+                timeout=0.5
+            )
+            print("[PERF] Dictionary service connection pre-warmed")
+        except Exception as e:
+            print(f"[PERF] Pre-warm failed (service may not be ready): {e}")
     
     def generate_english_ipa(self, text):
         """Generate IPA pronunciation for English text"""
@@ -175,7 +209,7 @@ class VeddaTranslator:
         try:
             # Call batch translate endpoint
             req_start = time.perf_counter()
-            response = requests.post(
+            response = self.session.post(
                 f"{self.dictionary_service_url}/translate/batch",
                 json={
                     'words': words,
@@ -212,7 +246,7 @@ class VeddaTranslator:
     def search_dictionary(self, word, source_lang='vedda', target_lang='english'):
         """Search dictionary service for word translation (LEGACY - use batch_translate_dictionary for better performance)"""
         try:
-            response = requests.get(
+            response = self.session.get(
                 f"{self.dictionary_service_url}/api/dictionary/search",
                 params={
                     'q': word,
@@ -284,7 +318,7 @@ class VeddaTranslator:
             }
             
             req_start = time.perf_counter()
-            response = requests.get(self.google_translate_url, params=params, timeout=10)
+            response = self.session.get(self.google_translate_url, params=params, timeout=10)
             req_time = (time.perf_counter() - req_start) * 1000
             print(f"[PERF] Google Translate API call: {req_time:.1f}ms")
             
@@ -647,7 +681,7 @@ class VeddaTranslator:
     
     def save_translation_history(self, input_text, output_text, source_language, 
                                target_language, translation_method, confidence):
-        """Save translation to history service (non-blocking)"""
+        """Save translation to history service (runs in background thread)"""
         try:
             data = {
                 'input_text': input_text,
@@ -658,13 +692,18 @@ class VeddaTranslator:
                 'confidence_score': confidence
             }
             
-            # Use a very short timeout to avoid blocking translation response
-            response = requests.post(
+            # Use reasonable timeout since we're in background thread
+            response = self.session.post(
                 f"{self.history_service_url}/api/history",
                 json=data,
-                timeout=0.5  # 500ms max, don't block user
+                timeout=5  # 5 seconds is fine in background
             )
-            return response.status_code == 201
+            if response.status_code == 201:
+                print(f"[HISTORY] Saved: {input_text[:30]}... → {output_text[:30]}...")
+                return True
+            else:
+                print(f"[HISTORY] Failed to save (status {response.status_code})")
+                return False
         except Exception as e:
-            # Silently fail - history is not critical
+            print(f"[HISTORY] Error saving: {e}")
             return False
