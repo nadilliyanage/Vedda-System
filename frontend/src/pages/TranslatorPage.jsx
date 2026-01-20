@@ -72,6 +72,7 @@ const TranslatorPage = () => {
             <TranslationHistory
               history={translationHistory}
               onSelectHistoryItem={handleHistoryItemSelect}
+              onRefresh={fetchHistory}
             />
           </div>
 

@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from datetime import datetime
+from threading import Thread
 from app.services.translator_service import VeddaTranslator
 
 translator_bp = Blueprint('translator', __name__)
@@ -42,18 +43,22 @@ def translate():
     # Perform translation
     result = translator.translate_text(text, source_language, target_language)
     
-    # Save to history (async, don't wait for response)
-    try:
-        translator.save_translation_history(
-            input_text=text,
-            output_text=result['translated_text'],
-            source_language=source_language,
-            target_language=target_language,
-            translation_method=result['method'],
-            confidence=result['confidence']
-        )
-    except Exception as e:
-        print(f"Failed to save history: {e}")
+    # Save to history asynchronously (non-blocking)
+    def save_history_async():
+        try:
+            translator.save_translation_history(
+                input_text=text,
+                output_text=result['translated_text'],
+                source_language=source_language,
+                target_language=target_language,
+                translation_method=result['method'],
+                confidence=result['confidence']
+            )
+        except Exception as e:
+            print(f"[HISTORY] Failed to save: {e}")
+    
+    # Run in background thread - doesn't block response
+    Thread(target=save_history_async, daemon=True).start()
     
     return jsonify({
         'success': True,
@@ -66,6 +71,8 @@ def translate():
         'methods_used': result.get('methods_used', []),
         'source_ipa': result.get('source_ipa', ''),
         'target_ipa': result.get('target_ipa', ''),
+        'source_romanization': result.get('source_romanization', ''),
+        'target_romanization': result.get('target_romanization', ''),
         'bridge_translation': result.get('bridge_translation', '')
     })
 

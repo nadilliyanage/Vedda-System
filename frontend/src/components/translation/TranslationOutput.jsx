@@ -12,11 +12,14 @@ const Skeleton = ({ width = "100%", height = "1.5rem" }) => (
 
 const TranslationOutput = ({
   outputText,
+  sourceLanguage,
   targetLanguage,
   loading,
   error,
   sourceIpaTranscription,
   targetIpaTranscription,
+  sourceSinglish,
+  targetSinglish,
   confidence,
   translationMethods = [],
   onCopyOutput,
@@ -155,27 +158,48 @@ const TranslationOutput = ({
             {outputText}
           </p>
 
-          {/* IPA Transcriptions */}
-          {targetIpaTranscription && (
-            <div className="bg-gray-50 p-6 rounded-lg mb-4 border border-gray-200">
-              <p className="text-sm font-medium text-gray-600 mb-3">
-                Pronunciations (IPA)
+          {/* Target Pronunciation */}
+          {(targetIpaTranscription || targetSinglish) && (
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg mb-4 border border-blue-200">
+              <p className="text-sm font-semibold text-gray-700 mb-4 flex items-center">
+                <span className="mr-2">🔊</span>
+                {LANGUAGES.find((l) => l.code === targetLanguage)?.name ||
+                  targetLanguage}{" "}
+                Pronunciation
               </p>
 
-              <div className="bg-white p-4 rounded border border-blue-100">
-                <p className="text-xs font-medium text-blue-600 mb-1">
-                  {LANGUAGES.find((l) => l.code === targetLanguage)?.name ||
-                    targetLanguage}
-                </p>
-                <p
-                  className="text-lg text-blue-700 font-normal tracking-wide leading-relaxed break-words"
-                  style={{
-                    fontFamily:
-                      '"Doulos SIL", "Charis SIL", "Times New Roman", serif',
-                  }}
-                >
-                  /{targetIpaTranscription}/
-                </p>
+              <div className="space-y-3">
+                {/* Target Singlish - Only for Vedda/Sinhala */}
+                {targetSinglish &&
+                  (targetLanguage === "vedda" ||
+                    targetLanguage === "sinhala") && (
+                    <div className="bg-white p-4 rounded-lg border border-blue-100 shadow-sm">
+                      <p className="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+                        Singlish
+                      </p>
+                      <p className="text-base text-gray-800 font-medium tracking-wide leading-relaxed break-words">
+                        {targetSinglish}
+                      </p>
+                    </div>
+                  )}
+
+                {/* Target IPA - For all languages */}
+                {targetIpaTranscription && (
+                  <div className="bg-white p-4 rounded-lg border border-blue-100 shadow-sm">
+                    <p className="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+                      IPA (International Phonetic Alphabet)
+                    </p>
+                    <p
+                      className="text-base text-indigo-800 font-normal tracking-wide leading-relaxed break-words"
+                      style={{
+                        fontFamily:
+                          '"Doulos SIL", "Charis SIL", "Times New Roman", serif',
+                      }}
+                    >
+                      /{targetIpaTranscription}/
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           )}

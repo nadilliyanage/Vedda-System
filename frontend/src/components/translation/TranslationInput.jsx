@@ -7,6 +7,7 @@ const TranslationInput = ({
   inputText,
   sourceLanguage,
   sourceIpaTranscription,
+  sourceSinglish,
   onInputChange,
   onClear,
 }) => {
@@ -88,23 +89,46 @@ const TranslationInput = ({
         )}
       </div>
 
-      {/* Source Language IPA Display */}
-      {sourceIpaTranscription && inputText && (
-        <div className="bg-gray-50 p-4 rounded-lg mt-4 border border-gray-200">
-          <p className="text-sm font-medium text-blue-600 mb-2">
+      {/* Source Language Pronunciation Display */}
+      {(sourceIpaTranscription || sourceSinglish) && inputText && (
+        <div className="bg-blue-50 p-4 rounded-lg mt-4 border border-blue-200 space-y-3">
+          <p className="text-sm font-medium text-blue-700 mb-2 flex items-center">
+            <span className="mr-2">🔊</span>
             {LANGUAGES.find((l) => l.code === sourceLanguage)?.name ||
               sourceLanguage}{" "}
-            pronunciation
+            Pronunciation
           </p>
-          <p
-            className="text-xl text-blue-700 font-normal tracking-wide leading-relaxed break-words"
-            style={{
-              fontFamily:
-                '"Doulos SIL", "Charis SIL", "Times New Roman", serif',
-            }}
-          >
-            /{sourceIpaTranscription}/
-          </p>
+
+          {/* Singlish - Only for Vedda/Sinhala */}
+          {sourceSinglish &&
+            (sourceLanguage === "vedda" || sourceLanguage === "sinhala") && (
+              <div className="bg-white p-3 rounded border border-blue-100">
+                <p className="text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+                  Singlish
+                </p>
+                <p className="text-lg text-gray-800 font-medium tracking-wide leading-relaxed break-words">
+                  {sourceSinglish}
+                </p>
+              </div>
+            )}
+
+          {/* IPA - For all languages */}
+          {sourceIpaTranscription && (
+            <div className="bg-white p-3 rounded border border-blue-100">
+              <p className="text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+                IPA (International Phonetic Alphabet)
+              </p>
+              <p
+                className="text-lg text-blue-800 font-normal tracking-wide leading-relaxed break-words"
+                style={{
+                  fontFamily:
+                    '"Doulos SIL", "Charis SIL", "Times New Roman", serif',
+                }}
+              >
+                /{sourceIpaTranscription}/
+              </p>
+            </div>
+          )}
         </div>
       )}
 
