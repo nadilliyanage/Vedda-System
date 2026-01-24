@@ -367,22 +367,29 @@ class VeddaTranslator:
         
         for sinhala_word in sinhala_words:
             if sinhala_word in batch_results and batch_results[sinhala_word]['found']:
-                vedda_word = batch_results[sinhala_word]['translation']
+                vedda_translation = batch_results[sinhala_word]['translation']
+                # Handle multi-word Vedda translations (e.g., "උයනවා" -> "පුච්චා කඩනවා")
+                vedda_phrase_words = [w.strip() for w in vedda_translation.split() if w.strip()]
+                
                 # Build full translation dict from batch result
                 translation_dict = {
-                    'vedda': vedda_word,
+                    'vedda': vedda_translation,
                     'sinhala': sinhala_word,
                     'vedda_ipa': '',  # Batch endpoint returns just translation
                     'sinhala_ipa': '',
                     'english': '',
                     'english_ipa': ''
                 }
-                vedda_words.append(vedda_word)
-                word_sources.append(('vedda', translation_dict))
+                
+                # Add each word from the multi-word translation
+                for vedda_word in vedda_phrase_words:
+                    vedda_words.append(vedda_word)
+                    word_sources.append(('vedda', translation_dict, vedda_word))
+                
                 dictionary_hits += 1
             else:
                 vedda_words.append(sinhala_word)
-                word_sources.append(('sinhala', sinhala_word))
+                word_sources.append(('sinhala', sinhala_word, sinhala_word))
         
         final_text = ' '.join(vedda_words)
         dict_coverage = dictionary_hits / len(sinhala_words) if sinhala_words else 0
@@ -394,13 +401,15 @@ class VeddaTranslator:
         # Build target IPA and Singlish by combining dictionary and generated versions
         target_ipa_parts = []
         target_singlish_parts = []
-        for i, (source_type, source_data) in enumerate(word_sources):
+        for i, word_source in enumerate(word_sources):
+            source_type = word_source[0]
             if source_type == 'vedda':
                 # Word from Vedda dictionary - use vedda_ipa or generate from vedda word
-                vedda_word = vedda_words[i]
+                vedda_word = word_source[2]  # The individual word from multi-word phrase
+                source_data = word_source[1]  # The translation dict
                 vedda_ipa = source_data.get('vedda_ipa', '')
                 if not vedda_ipa:
-                    # Generate IPA for Vedda word
+                    # Generate IPA for individual Vedda word
                     vedda_ipa = self.generate_vedda_sinhala_ipa(vedda_word)
                 if vedda_ipa:
                     target_ipa_parts.append(vedda_ipa)
@@ -409,8 +418,8 @@ class VeddaTranslator:
                 if singlish:
                     target_singlish_parts.append(singlish)
             else:
-                # Sinhala fallback word - try dictionary first, then generate
-                sinhala_word = source_data
+                # Sinhala fallback word
+                sinhala_word = word_source[2]  # The individual word
                 dict_result = self.search_dictionary(sinhala_word, 'sinhala', 'sinhala')
                 if dict_result and dict_result.get('found'):
                     sinhala_ipa = dict_result['translation'].get('sinhala_ipa', '')
@@ -499,28 +508,98 @@ class VeddaTranslator:
         sinhala_words = []
         word_sources = []  # Track whether each word came from dictionary or is fallback
         dictionary_hits = 0
+        processed_indices = set()  # Track which vedda words have been processed
         
-        # OPTIMIZED: Batch translate all words in ONE API call  
-        batch_results = self.batch_translate_dictionary(vedda_words, 'vedda', 'sinhala')
+        # STEP 1: Try to match the entire text as a phrase first using batch endpoint
+        full_text = text.strip()
+        print(f"[TRANSLATE] Attempting to translate Vedda phrase: '{full_text}'")
         
-        for vedda_word in vedda_words:
-            if vedda_word in batch_results and batch_results[vedda_word]['found']:
-                sinhala_word = batch_results[vedda_word]['translation']
-                # Build full translation dict from batch result
-                translation_dict = {
-                    'sinhala': sinhala_word,
-                    'vedda': vedda_word,
-                    'vedda_ipa': '',
-                    'sinhala_ipa': '',
-                    'english': '',
-                    'english_ipa': ''
-                }
-                sinhala_words.append(sinhala_word)
-                word_sources.append(('vedda', translation_dict))
-                dictionary_hits += 1
-            else:
-                sinhala_words.append(vedda_word)
-                word_sources.append(('sinhala', vedda_word))
+        batch_results = self.batch_translate_dictionary([full_text], 'vedda', 'sinhala')
+        if full_text in batch_results and batch_results[full_text]['found']:
+            sinhala_translation = batch_results[full_text]['translation']
+            print(f"[TRANSLATE] ✓ Found phrase match: '{full_text}' → '{sinhala_translation}'")
+            
+            translation = {
+                'sinhala': sinhala_translation,
+                'vedda': full_text,
+                'vedda_ipa': '',
+                'sinhala_ipa': '',
+                'english': '',
+                'english_ipa': ''
+            }
+            sinhala_words.append(sinhala_translation)
+            word_sources.append(('vedda_phrase', translation, full_text, sinhala_translation))
+            dictionary_hits = 1
+            # Mark all words as processed
+            for idx in range(len(vedda_words)):
+                processed_indices.add(idx)
+        else:
+            print(f"[TRANSLATE] No phrase match found for '{full_text}'")
+        
+        # STEP 2: If no full phrase match, try to match multi-word phrases progressively
+        i = 0
+        while i < len(vedda_words):
+            if i in processed_indices:
+                i += 1
+                continue
+                
+            # Try progressively longer phrases (up to 5 words)
+            matched = False
+            for phrase_len in range(min(5, len(vedda_words) - i), 0, -1):
+                phrase = ' '.join(vedda_words[i:i+phrase_len])
+                
+                # Use batch translate endpoint for phrase matching
+                batch_results = self.batch_translate_dictionary([phrase], 'vedda', 'sinhala')
+                
+                if phrase in batch_results and batch_results[phrase]['found']:
+                    sinhala_translation = batch_results[phrase]['translation']
+                    translation = {
+                        'sinhala': sinhala_translation,
+                        'vedda': phrase,
+                        'vedda_ipa': '',
+                        'sinhala_ipa': '',
+                        'english': '',
+                        'english_ipa': ''
+                    }
+                    
+                    # Mark all words in this phrase as processed
+                    for j in range(i, i + phrase_len):
+                        processed_indices.add(j)
+                    
+                    # Add the Sinhala translation
+                    sinhala_words.append(sinhala_translation)
+                    word_sources.append(('vedda_phrase', translation, phrase, sinhala_translation))
+                    dictionary_hits += 1
+                    matched = True
+                    print(f"[TRANSLATE] ✓ Found sub-phrase match: '{phrase}' → '{sinhala_translation}'")
+                    i += phrase_len
+                    break
+            
+            if not matched:
+                # STEP 3: No phrase match, use batch translation for single word
+                vedda_word = vedda_words[i]
+                batch_results = self.batch_translate_dictionary([vedda_word], 'vedda', 'sinhala')
+                
+                if vedda_word in batch_results and batch_results[vedda_word]['found']:
+                    sinhala_word = batch_results[vedda_word]['translation']
+                    translation_dict = {
+                        'sinhala': sinhala_word,
+                        'vedda': vedda_word,
+                        'vedda_ipa': '',
+                        'sinhala_ipa': '',
+                        'english': '',
+                        'english_ipa': ''
+                    }
+                    sinhala_words.append(sinhala_word)
+                    word_sources.append(('vedda_phrase', translation_dict, vedda_word, sinhala_word))
+                    dictionary_hits += 1
+                else:
+                    # Fallback: keep the Vedda word unchanged
+                    sinhala_words.append(vedda_word)
+                    word_sources.append(('sinhala', None, vedda_word, vedda_word))
+                
+                processed_indices.add(i)
+                i += 1
         
         sinhala_text = ' '.join(sinhala_words)
         
@@ -541,40 +620,42 @@ class VeddaTranslator:
         # Build source IPA and Singlish by combining dictionary and generated versions
         source_ipa_parts = []
         source_singlish_parts = []
-        for i, (source_type, source_data) in enumerate(word_sources):
-            if source_type == 'vedda':
-                # Word from Vedda dictionary - use vedda_ipa or generate
-                vedda_word = vedda_words[i]
+        for word_source in word_sources:
+            source_type = word_source[0]
+            if source_type == 'vedda_phrase':
+                # Phrase from Vedda dictionary
+                source_data = word_source[1]  # Translation dict
+                vedda_phrase = word_source[2]  # Original Vedda phrase
                 vedda_ipa = source_data.get('vedda_ipa', '')
                 if not vedda_ipa:
-                    # Generate IPA for Vedda word
-                    vedda_ipa = self.generate_vedda_sinhala_ipa(vedda_word)
+                    # Generate IPA for Vedda phrase
+                    vedda_ipa = self.generate_vedda_sinhala_ipa(vedda_phrase)
                 if vedda_ipa:
                     source_ipa_parts.append(vedda_ipa)
                 # Generate Singlish
-                singlish = self.generate_singlish_romanization(vedda_word)
+                singlish = self.generate_singlish_romanization(vedda_phrase)
                 if singlish:
                     source_singlish_parts.append(singlish)
             else:
-                # Sinhala fallback word - try dictionary first, then generate
-                sinhala_word = source_data
-                dict_result = self.search_dictionary(sinhala_word, 'sinhala', 'sinhala')
+                # Sinhala fallback word
+                vedda_word = word_source[2]  # Original Vedda word (used as Sinhala)
+                dict_result = self.search_dictionary(vedda_word, 'sinhala', 'sinhala')
                 if dict_result and dict_result.get('found'):
                     sinhala_ipa = dict_result['translation'].get('sinhala_ipa', '')
                     if sinhala_ipa:
                         source_ipa_parts.append(sinhala_ipa)
                     else:
-                        # Generate IPA for Sinhala word
-                        generated_ipa = self.generate_vedda_sinhala_ipa(sinhala_word)
+                        # Generate IPA for word
+                        generated_ipa = self.generate_vedda_sinhala_ipa(vedda_word)
                         if generated_ipa:
                             source_ipa_parts.append(generated_ipa)
                 else:
-                    # Generate IPA for Sinhala word
-                    generated_ipa = self.generate_vedda_sinhala_ipa(sinhala_word)
+                    # Generate IPA for word
+                    generated_ipa = self.generate_vedda_sinhala_ipa(vedda_word)
                     if generated_ipa:
                         source_ipa_parts.append(generated_ipa)
                 # Generate Singlish
-                singlish = self.generate_singlish_romanization(sinhala_word)
+                singlish = self.generate_singlish_romanization(vedda_word)
                 if singlish:
                     source_singlish_parts.append(singlish)
         
