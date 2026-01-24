@@ -5,6 +5,7 @@ import AdminCategories from './AdminCategories';
 import TextEditor from './TextEditor';
 import { lessonsAPI, categoriesAPI } from '../../services/learningAPI';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
+import LoadingScreen from '../../components/ui/LoadingScreen';
 
 const AdminLessons = () => {
   const [lessons, setLessons] = useState([]);
@@ -166,9 +167,7 @@ const AdminLessons = () => {
 
         <div className="bg-white rounded-lg shadow-md">
           {loading ? (
-            <div className="text-center py-8">
-              <p className="text-gray-600">Loading lessons...</p>
-            </div>
+            <LoadingScreen />
           ) : lessons.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">No lessons found</p>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { FaBook, FaDumbbell, FaTrophy, FaArrowLeft } from 'react-icons/fa';
+import LoadingScreen from '../../components/ui/LoadingScreen';
 import AdminChallenges from './AdminChallenges';
 import AdminLessons from './AdminLessons';
 import AdminExercises from './AdminExercises';

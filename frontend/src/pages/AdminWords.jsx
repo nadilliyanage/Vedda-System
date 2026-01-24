@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import LoadingScreen from "../components/ui/LoadingScreen";
 
 const AdminWords = () => {
   const [words, setWords] = useState([]);
@@ -9,6 +10,9 @@ const AdminWords = () => {
   const [uploading, setUploading] = useState(false);
   const [statistics, setStatistics] = useState({ word_count: 0 });
   const [searchTerm, setSearchTerm] = useState("");
+  const [addMode, setAddMode] = useState("new"); // "new" or "copy"
+  const [selectedVeddaWord, setSelectedVeddaWord] = useState(null);
+  const [veddaSearchTerm, setVeddaSearchTerm] = useState("");
 
   // Filter words based on search term
   const filteredWords = words.filter((word) => {
@@ -86,11 +90,58 @@ const AdminWords = () => {
     }));
   };
 
+  const handleModeChange = (mode) => {
+    setAddMode(mode);
+    setSelectedVeddaWord(null);
+    setVeddaSearchTerm("");
+    // Reset form when switching modes
+    setFormData({
+      vedda_word: "",
+      sinhala_word: "",
+      english_word: "",
+      vedda_ipa: "",
+      sinhala_ipa: "",
+      english_ipa: "",
+      word_type: "",
+      usage_example: "",
+    });
+  };
+
+  const handleVeddaWordSelect = (word) => {
+    setSelectedVeddaWord(word);
+    setVeddaSearchTerm(word.vedda_word);
+    // Populate form with selected word's data, but clear sinhala_word for new entry
+    setFormData({
+      vedda_word: word.vedda_word,
+      sinhala_word: "", // Clear this so user can add new Sinhala word
+      english_word: word.english_word || "",
+      vedda_ipa: word.vedda_ipa || "",
+      sinhala_ipa: "", // Clear this too since it's specific to Sinhala word
+      english_ipa: word.english_ipa || "",
+      word_type: word.word_type || "",
+      usage_example: "", // Clear this as it might be specific to the Sinhala translation
+    });
+  };
+
+  // Get unique Vedda words for the dropdown
+  const uniqueVeddaWords = Array.from(
+    new Map(words.map((word) => [word.vedda_word, word])).values(),
+  ).filter(
+    (word) =>
+      !veddaSearchTerm ||
+      word.vedda_word.toLowerCase().includes(veddaSearchTerm.toLowerCase()),
+  );
+
   const handleAddWord = async (e) => {
     e.preventDefault();
 
     if (!formData.vedda_word.trim()) {
       toast.error("Vedda word is required");
+      return;
+    }
+
+    if (addMode === "copy" && !formData.sinhala_word.trim()) {
+      toast.error("Sinhala word is required when copying existing Vedda word");
       return;
     }
 
@@ -104,7 +155,11 @@ const AdminWords = () => {
       });
 
       if (response.ok) {
-        toast.success("Word added successfully!");
+        const successMsg =
+          addMode === "copy"
+            ? `New Sinhala translation added for "${formData.vedda_word}"!`
+            : "Word added successfully!";
+        toast.success(successMsg);
         setFormData({
           vedda_word: "",
           sinhala_word: "",
@@ -115,6 +170,9 @@ const AdminWords = () => {
           word_type: "",
           usage_example: "",
         });
+        setAddMode("new");
+        setSelectedVeddaWord(null);
+        setVeddaSearchTerm("");
         setShowAddForm(false);
         fetchWords();
         fetchStatistics();
@@ -163,7 +221,7 @@ const AdminWords = () => {
         {
           method: "POST",
           body: formData,
-        }
+        },
       );
 
       const result = await response.json();
@@ -189,7 +247,7 @@ const AdminWords = () => {
         const errorMsg = result.error || "Failed to upload file";
         if (errorMsg.includes("encoding") || errorMsg.includes("decode")) {
           toast.error(
-            "Encoding error: Please save your CSV file as UTF-8 encoding. In Excel: File > Save As > CSV UTF-8"
+            "Encoding error: Please save your CSV file as UTF-8 encoding. In Excel: File > Save As > CSV UTF-8",
           );
         } else {
           toast.error(errorMsg);
@@ -243,7 +301,7 @@ const AdminWords = () => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(editFormData),
-        }
+        },
       );
 
       if (response.ok) {
@@ -272,7 +330,7 @@ const AdminWords = () => {
         `http://localhost:5002/api/dictionary/${wordId}`,
         {
           method: "DELETE",
-        }
+        },
       );
 
       if (response.ok) {
@@ -344,6 +402,80 @@ const AdminWords = () => {
           <h3 className="text-lg font-semibold text-gray-800 mb-4">
             Add New Word
           </h3>
+
+          {/* Mode Selection */}
+          <div className="mb-6 flex gap-4 p-4 bg-gray-50 rounded-lg">
+            <button
+              type="button"
+              onClick={() => handleModeChange("new")}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                addMode === "new"
+                  ? "bg-blue-600 text-white"
+                  : "bg-white text-gray-600 hover:bg-gray-100"
+              }`}
+            >
+              Add New Word
+            </button>
+            <button
+              type="button"
+              onClick={() => handleModeChange("copy")}
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${
+                addMode === "copy"
+                  ? "bg-blue-600 text-white"
+                  : "bg-white text-gray-600 hover:bg-gray-100"
+              }`}
+            >
+              Existing Vedda Word
+            </button>
+          </div>
+
+          {/* Vedda Word Selection (Copy Mode) */}
+          {addMode === "copy" && (
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Select Existing Vedda Word
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={veddaSearchTerm}
+                  onChange={(e) => setVeddaSearchTerm(e.target.value)}
+                  placeholder="Search for Vedda word..."
+                  className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                {veddaSearchTerm && uniqueVeddaWords.length > 0 && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                    {uniqueVeddaWords.map((word) => (
+                      <button
+                        key={word.id}
+                        type="button"
+                        onClick={() => handleVeddaWordSelect(word)}
+                        className="w-full text-left px-4 py-2 hover:bg-blue-50 transition-colors"
+                      >
+                        <div className="font-medium text-gray-900">
+                          {word.vedda_word}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {word.sinhala_word} - {word.english_word}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {selectedVeddaWord && (
+                <div className="mt-2 p-3 bg-green-50 rounded-md">
+                  <p className="text-sm text-green-800">
+                    Selected: <strong>{selectedVeddaWord.vedda_word}</strong>
+                  </p>
+                  <p className="text-xs text-green-600 mt-1">
+                    Now add a new Sinhala translation for this Vedda word
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
           <form
             onSubmit={handleAddWord}
             className="grid grid-cols-1 md:grid-cols-2 gap-4"
@@ -359,11 +491,22 @@ const AdminWords = () => {
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
+                readOnly={addMode === "copy" && selectedVeddaWord}
+                title={
+                  addMode === "copy" && selectedVeddaWord
+                    ? "Vedda word is copied from existing entry"
+                    : ""
+                }
               />
+              {addMode === "copy" && selectedVeddaWord && (
+                <p className="text-xs text-blue-600 mt-1">
+                  Using existing Vedda word
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Sinhala Word
+                Sinhala Word {addMode === "copy" ? "*" : ""}
               </label>
               <input
                 type="text"
@@ -371,7 +514,16 @@ const AdminWords = () => {
                 value={formData.sinhala_word}
                 onChange={handleInputChange}
                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                required={addMode === "copy"}
+                placeholder={
+                  addMode === "copy" ? "Enter new Sinhala translation" : ""
+                }
               />
+              {addMode === "copy" && (
+                <p className="text-xs text-orange-600 mt-1">
+                  Enter a different Sinhala word for this Vedda word
+                </p>
+              )}
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -582,9 +734,7 @@ const AdminWords = () => {
         </div>
 
         {loading ? (
-          <div className="text-center py-8">
-            <p className="text-gray-600">Loading words...</p>
-          </div>
+          <LoadingScreen />
         ) : filteredWords.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full table-auto">
