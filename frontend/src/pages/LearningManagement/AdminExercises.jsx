@@ -4,6 +4,7 @@ import { FaEye, FaEdit, FaTrash, FaPlus, FaSave } from 'react-icons/fa';
 import { exercisesAPI, lessonsAPI, categoriesAPI } from '../../services/learningAPI';
 import { SKILL_TAGS, TAG_COLORS } from '../../constants/skillTags';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
+import LoadingScreen from '../../components/ui/LoadingScreen';
 
 const AdminExercises = () => {
   const [exercises, setExercises] = useState([]);
@@ -395,9 +396,7 @@ const AdminExercises = () => {
 
         <div className="bg-white rounded-lg shadow-md">
           {loading ? (
-            <div className="text-center py-8">
-              <p className="text-gray-600">Loading exercises...</p>
-            </div>
+            <LoadingScreen />
           ) : exercises.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">No exercises found</p>

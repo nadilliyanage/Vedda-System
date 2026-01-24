@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import LoadingScreen from '../components/ui/LoadingScreen';
 
 const AdminUsers = () => {
   const { user } = useAuth();
@@ -96,11 +97,7 @@ const AdminUsers = () => {
   };
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="text-xl text-gray-600">Loading...</div>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   return (

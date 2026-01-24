@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import LoadingScreen from "../components/ui/LoadingScreen";
 
 const AdminWords = () => {
   const [words, setWords] = useState([]);
@@ -733,9 +734,7 @@ const AdminWords = () => {
         </div>
 
         {loading ? (
-          <div className="text-center py-8">
-            <p className="text-gray-600">Loading words...</p>
-          </div>
+          <LoadingScreen />
         ) : filteredWords.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="w-full table-auto">

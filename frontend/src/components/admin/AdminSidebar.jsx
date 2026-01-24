@@ -7,10 +7,15 @@ import {
   HiCollection
 } from 'react-icons/hi';
 import { useAuth } from '../../contexts/AuthContext';
+import LoadingScreen from '../ui/LoadingScreen';
 
 const AdminSidebar = () => {
   const location = useLocation();
   const { user } = useAuth();
+
+  if (!user) {
+    return <LoadingScreen />;
+  }
 
   const menuItems = [
     {

@@ -5,6 +5,7 @@ import AdminArtifactCard from '../components/artifacts/AdminArtifactCard';
 import ArtifactFormModal from '../components/artifacts/ArtifactFormModal';
 import ArtifactDetailModal from '../components/artifacts/ArtifactDetailModal';
 import { getArtifacts, deleteArtifact } from '../services/artifactService';
+import LoadingScreen from '../components/ui/LoadingScreen';
 
 const AdminArtifacts = () => {
   const [artifacts, setArtifacts] = useState([]);
@@ -215,9 +216,7 @@ const AdminArtifacts = () => {
 
       {/* Artifacts Grid */}
       {loading ? (
-        <div className="flex items-center justify-center py-20">
-          <Loader2 size={48} className="text-blue-600 animate-spin" />
-        </div>
+        <LoadingScreen />
       ) : artifacts.length > 0 ? (
         <>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

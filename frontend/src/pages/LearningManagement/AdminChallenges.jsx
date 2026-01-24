@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { FaPlus, FaEdit, FaTrash, FaEye } from 'react-icons/fa';
 import { challengesAPI } from '../../services/learningAPI';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
+import LoadingScreen from '../../components/ui/LoadingScreen';
 
 const AdminChallenges = () => {
   const [challenges, setChallenges] = useState([]);
@@ -247,9 +248,7 @@ const AdminChallenges = () => {
       </div>
 
       {loading ? (
-        <div className="text-center py-8">
-          <p className="text-gray-600">Loading challenges...</p>
-        </div>
+        <LoadingScreen />
       ) : challenges.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-gray-500 text-lg">No challenges found</p>
