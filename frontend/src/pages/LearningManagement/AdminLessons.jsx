@@ -1,36 +1,39 @@
-import { useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
-import { FaEye, FaEdit, FaTrash, FaPlus, FaList } from 'react-icons/fa';
-import AdminCategories from './AdminCategories';
-import TextEditor from './TextEditor';
-import { lessonsAPI, categoriesAPI } from '../../services/learningAPI';
-import ConfirmDialog from '../../components/common/ConfirmDialog';
-import LoadingScreen from '../../components/ui/LoadingScreen';
+import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
+import { FaEye, FaEdit, FaTrash, FaPlus, FaList } from "react-icons/fa";
+import AdminCategories from "./AdminCategories";
+import TextEditor from "./TextEditor";
+import { lessonsAPI, categoriesAPI } from "../../services/learningAPI";
+import ConfirmDialog from "../../components/common/ConfirmDialog";
+import LoadingScreen from "../../components/ui/LoadingScreen";
 
 const AdminLessons = () => {
   const [lessons, setLessons] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeView, setActiveView] = useState('list'); // 'list', 'add', 'edit', 'view', 'categories'
+  const [activeView, setActiveView] = useState("list"); // 'list', 'add', 'edit', 'view', 'categories'
   const [currentLesson, setCurrentLesson] = useState(null);
-  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, lessonId: null });
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    lessonId: null,
+  });
   const [formData, setFormData] = useState({
-    id: '',
-    categoryId: '',
-    topic: '',
-    description: '',
-    content: '',
+    id: "",
+    categoryId: "",
+    topic: "",
+    description: "",
+    content: "",
     xp: 10,
     coins: 5,
-    imageUrl: '',
-    audioUrl: ''
+    imageUrl: "",
+    audioUrl: "",
   });
 
   useEffect(() => {
-    if (activeView === 'list') {
+    if (activeView === "list") {
       fetchLessons();
       fetchCategories();
-    } else if (activeView === 'add' || activeView === 'edit') {
+    } else if (activeView === "add" || activeView === "edit") {
       fetchCategories();
     }
   }, [activeView]);
@@ -41,7 +44,7 @@ const AdminLessons = () => {
       const response = await lessonsAPI.getAll();
       setLessons(response.data);
     } catch (error) {
-      toast.error('Failed to fetch lessons');
+      toast.error("Failed to fetch lessons");
       console.error(error);
     } finally {
       setLoading(false);
@@ -53,68 +56,68 @@ const AdminLessons = () => {
       const response = await categoriesAPI.getAll();
       setCategories(response.data);
     } catch (error) {
-      console.error('Failed to fetch categories:', error);
+      console.error("Failed to fetch categories:", error);
     }
   };
 
   const openAddForm = () => {
     setFormData({
-      id: '',
-      categoryId: '',
-      topic: '',
-      description: '',
-      content: '',
+      id: "",
+      categoryId: "",
+      topic: "",
+      description: "",
+      content: "",
       xp: 10,
       coins: 5,
-      imageUrl: '',
-      audioUrl: ''
+      imageUrl: "",
+      audioUrl: "",
     });
     setCurrentLesson(null);
-    setActiveView('add');
+    setActiveView("add");
   };
 
   const openEditForm = (lesson) => {
     setFormData({
       id: lesson.id,
-      categoryId: lesson.categoryId || '',
-      topic: lesson.topic || '',
-      description: lesson.description || '',
-      content: lesson.content || '',
+      categoryId: lesson.categoryId || "",
+      topic: lesson.topic || "",
+      description: lesson.description || "",
+      content: lesson.content || "",
       xp: lesson.xp || 10,
       coins: lesson.coins || 5,
-      imageUrl: lesson.imageUrl || '',
-      audioUrl: lesson.audioUrl || ''
+      imageUrl: lesson.imageUrl || "",
+      audioUrl: lesson.audioUrl || "",
     });
     setCurrentLesson(lesson);
-    setActiveView('edit');
+    setActiveView("edit");
   };
 
   const openViewForm = (lesson) => {
     setCurrentLesson(lesson);
-    setActiveView('view');
+    setActiveView("view");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
       const submitData = {
         ...formData,
         xp: parseInt(formData.xp),
-        coins: parseInt(formData.coins)
+        coins: parseInt(formData.coins),
       };
 
-      if (activeView === 'add') {
+      if (activeView === "add") {
         await lessonsAPI.create(submitData);
-        toast.success('Lesson created successfully');
-      } else if (activeView === 'edit') {
+        toast.success("Lesson created successfully");
+      } else if (activeView === "edit") {
         await lessonsAPI.update(formData.id, submitData);
-        toast.success('Lesson updated successfully');
+        toast.success("Lesson updated successfully");
       }
 
-      setActiveView('list');
+      setActiveView("list");
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Failed to save lesson');
+      toast.error(error.response?.data?.error || "Failed to save lesson");
       console.error(error);
     }
   };
@@ -122,36 +125,38 @@ const AdminLessons = () => {
   const handleDelete = async () => {
     try {
       await lessonsAPI.delete(confirmDialog.lessonId);
-      toast.success('Lesson deleted successfully');
+      toast.success("Lesson deleted successfully");
       fetchLessons();
     } catch (error) {
-      toast.error('Failed to delete lesson');
+      toast.error("Failed to delete lesson");
       console.error(error);
     }
   };
 
   const getCategoryName = (categoryId) => {
-    const category = categories.find(c => c.id === categoryId);
-    return category ? category.name : 'N/A';
+    const category = categories.find((c) => c.id === categoryId);
+    return category ? category.name : "N/A";
   };
 
   // Categories Management View
-  if (activeView === 'categories') {
-    return <AdminCategories onBack={() => setActiveView('list')} />;
+  if (activeView === "categories") {
+    return <AdminCategories onBack={() => setActiveView("list")} />;
   }
 
   // List View
-  if (activeView === 'list') {
+  if (activeView === "list") {
     return (
       <div>
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-800"></h1>
-            <p className="text-gray-600 mt-2">Create and organize learning lessons</p>
+            <p className="text-gray-600 mt-2">
+              Create and organize learning lessons
+            </p>
           </div>
           <div className="flex gap-3">
             <button
-              onClick={() => setActiveView('categories')}
+              onClick={() => setActiveView("categories")}
               className="bg-white border-2 border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-2"
             >
               <FaList /> Manage Category
@@ -171,32 +176,52 @@ const AdminLessons = () => {
           ) : lessons.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">No lessons found</p>
-              <p className="text-gray-400 mt-2">Create your first lesson to get started</p>
+              <p className="text-gray-400 mt-2">
+                Create your first lesson to get started
+              </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Topic</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rewards</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      ID
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Category
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Topic
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Description
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Rewards
+                    </th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                      Actions
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {lessons.map((lesson) => (
                     <tr key={lesson.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{lesson.id}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        {lesson.id}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <span className="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
                           {getCategoryName(lesson.categoryId)}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">{lesson.topic}</td>
-                      <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">{lesson.description}</td>
+                      <td className="px-6 py-4 text-sm text-gray-900">
+                        {lesson.topic}
+                      </td>
+                      <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+                        {lesson.description}
+                      </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {lesson.xp} XP
                       </td>
@@ -217,7 +242,12 @@ const AdminLessons = () => {
                             <FaEdit />
                           </button>
                           <button
-                            onClick={() => setConfirmDialog({ isOpen: true, lessonId: lesson.id })}
+                            onClick={() =>
+                              setConfirmDialog({
+                                isOpen: true,
+                                lessonId: lesson.id,
+                              })
+                            }
                             className="text-red-600 hover:text-red-900"
                             title="Delete"
                           >
@@ -247,7 +277,7 @@ const AdminLessons = () => {
   }
 
   // View Form
-  if (activeView === 'view' && currentLesson) {
+  if (activeView === "view" && currentLesson) {
     return (
       <div>
         <div className="mb-6">
@@ -257,22 +287,34 @@ const AdminLessons = () => {
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
-              <p className="text-gray-900">{getCategoryName(currentLesson.categoryId)}</p>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Category
+              </label>
+              <p className="text-gray-900">
+                {getCategoryName(currentLesson.categoryId)}
+              </p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Topic</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Topic
+              </label>
               <p className="text-gray-900">{currentLesson.topic}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Description
+              </label>
               <p className="text-gray-900">{currentLesson.description}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Content</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Content
+              </label>
               <div className="border rounded-lg p-4 bg-gray-50 prose max-w-none">
                 {currentLesson.content ? (
-                  <div dangerouslySetInnerHTML={{ __html: currentLesson.content }} />
+                  <div
+                    dangerouslySetInnerHTML={{ __html: currentLesson.content }}
+                  />
                 ) : (
                   <p className="text-gray-500">No content available</p>
                 )}
@@ -280,13 +322,21 @@ const AdminLessons = () => {
             </div>
             {currentLesson.imageUrl && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Image</label>
-                <img src={currentLesson.imageUrl} alt="Lesson" className="max-w-md rounded-lg" />
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Image
+                </label>
+                <img
+                  src={currentLesson.imageUrl}
+                  alt="Lesson"
+                  className="max-w-md rounded-lg"
+                />
               </div>
             )}
             {currentLesson.audioUrl && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Audio</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Audio
+                </label>
                 <audio controls className="w-full max-w-md">
                   <source src={currentLesson.audioUrl} type="audio/mpeg" />
                   Your browser does not support the audio element.
@@ -295,11 +345,15 @@ const AdminLessons = () => {
             )}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">XP Reward</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  XP Reward
+                </label>
                 <p className="text-gray-900">{currentLesson.xp}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Coins Reward</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Coins Reward
+                </label>
                 <p className="text-gray-900">{currentLesson.coins}</p>
               </div>
             </div>
@@ -307,7 +361,7 @@ const AdminLessons = () => {
 
           <div className="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
             <button
-              onClick={() => setActiveView('list')}
+              onClick={() => setActiveView("list")}
               className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
             >
               Back to List
@@ -323,20 +377,24 @@ const AdminLessons = () => {
     <div>
       <div className="mb-6">
         <h1 className="text-3xl font-bold text-gray-800">
-          {activeView === 'add' ? 'Add Lesson' : 'Edit Lesson'}
+          {activeView === "add" ? "Add Lesson" : "Edit Lesson"}
         </h1>
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
-            {activeView === 'add' && (
+            {activeView === "add" && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Lesson ID</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Lesson ID
+                </label>
                 <input
                   type="text"
                   value={formData.id}
-                  onChange={(e) => setFormData({ ...formData, id: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, id: e.target.value })
+                  }
                   className="w-full border rounded-lg px-3 py-2"
                   placeholder="e.g., lesson1"
                   required
@@ -345,10 +403,14 @@ const AdminLessons = () => {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Select Category</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Select Category
+              </label>
               <select
                 value={formData.categoryId}
-                onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, categoryId: e.target.value })
+                }
                 className="w-full border rounded-lg px-3 py-2"
                 required
               >
@@ -362,11 +424,15 @@ const AdminLessons = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Topic</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Topic
+              </label>
               <input
                 type="text"
                 value={formData.topic}
-                onChange={(e) => setFormData({ ...formData, topic: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, topic: e.target.value })
+                }
                 className="w-full border rounded-lg px-3 py-2"
                 placeholder="Enter lesson topic"
                 required
@@ -374,10 +440,14 @@ const AdminLessons = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Description
+              </label>
               <textarea
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 className="w-full border rounded-lg px-3 py-2"
                 rows="3"
                 placeholder="Brief description of the lesson"
@@ -386,9 +456,11 @@ const AdminLessons = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Lesson Content</label>
-              <TextEditor 
-                key={`${activeView}-${formData.id || 'new'}`}
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Lesson Content
+              </label>
+              <TextEditor
+                key={`${activeView}-${formData.id || "new"}`}
                 value={formData.content}
                 onChange={(content) => setFormData({ ...formData, content })}
               />
@@ -419,22 +491,30 @@ const AdminLessons = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">XP Reward</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  XP Reward
+                </label>
                 <input
                   type="number"
                   value={formData.xp}
-                  onChange={(e) => setFormData({ ...formData, xp: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, xp: e.target.value })
+                  }
                   className="w-full border rounded-lg px-3 py-2"
                   min="0"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Coins Reward</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Coins Reward
+                </label>
                 <input
                   type="number"
                   value={formData.coins}
-                  onChange={(e) => setFormData({ ...formData, coins: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, coins: e.target.value })
+                  }
                   className="w-full border rounded-lg px-3 py-2"
                   min="0"
                   required
@@ -447,15 +527,17 @@ const AdminLessons = () => {
             <button
               type="button"
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
-              onClick={() => toast.info('Exercise attachment feature coming soon')}
+              onClick={() =>
+                toast.info("Exercise attachment feature coming soon")
+              }
             >
               <FaPlus /> Add Exercise
             </button>
-            
+
             <div className="flex gap-3">
               <button
                 type="button"
-                onClick={() => setActiveView('list')}
+                onClick={() => setActiveView("list")}
                 className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
               >
                 Cancel
@@ -470,8 +552,6 @@ const AdminLessons = () => {
           </div>
         </form>
       </div>
-
-      
     </div>
   );
 };
