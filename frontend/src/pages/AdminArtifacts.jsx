@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { Plus, Search, Filter, Loader2, RefreshCw } from 'lucide-react';
-import toast from 'react-hot-toast';
-import AdminArtifactCard from '../components/artifacts/AdminArtifactCard';
-import ArtifactFormModal from '../components/artifacts/ArtifactFormModal';
-import ArtifactDetailModal from '../components/artifacts/ArtifactDetailModal';
-import { getArtifacts, deleteArtifact } from '../services/artifactService';
-import LoadingScreen from '../components/ui/LoadingScreen';
+import { useState, useEffect } from "react";
+import { Plus, Search, Filter, Loader2, RefreshCw } from "lucide-react";
+import toast from "react-hot-toast";
+import AdminArtifactCard from "../components/artifacts/AdminArtifactCard";
+import ArtifactFormModal from "../components/artifacts/ArtifactFormModal";
+import ArtifactDetailModal from "../components/artifacts/ArtifactDetailModal";
+import { getArtifacts, deleteArtifact } from "../services/artifactService";
+import LoadingScreen from "../components/ui/LoadingScreen";
 
 const AdminArtifacts = () => {
   const [artifacts, setArtifacts] = useState([]);
@@ -13,9 +13,9 @@ const AdminArtifacts = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingArtifact, setEditingArtifact] = useState(null);
   const [viewingArtifact, setViewingArtifact] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [categoryFilter, setCategoryFilter] = useState('');
-  const [statusFilter, setStatusFilter] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [artifactToDelete, setArtifactToDelete] = useState(null);
   const [pagination, setPagination] = useState({
@@ -39,7 +39,7 @@ const AdminArtifacts = () => {
         if (statusFilter) params.status = statusFilter;
 
         const response = await getArtifacts(params);
-        
+
         if (response.success) {
           setArtifacts(response.artifacts);
           setPagination((prev) => ({
@@ -49,15 +49,21 @@ const AdminArtifacts = () => {
           }));
         }
       } catch (error) {
-        console.error('Fetch error:', error);
-        toast.error('Failed to load artifacts');
+        console.error("Fetch error:", error);
+        toast.error("Failed to load artifacts");
       } finally {
         setLoading(false);
       }
     };
 
     fetchArtifacts();
-  }, [pagination.page, pagination.limit, categoryFilter, statusFilter, searchTerm]);
+  }, [
+    pagination.page,
+    pagination.limit,
+    categoryFilter,
+    statusFilter,
+    searchTerm,
+  ]);
 
   const handleDelete = (artifact) => {
     setArtifactToDelete(artifact);
@@ -68,15 +74,15 @@ const AdminArtifacts = () => {
     try {
       const response = await deleteArtifact(artifactToDelete._id);
       if (response.success) {
-        toast.success('Artifact deleted successfully');
+        toast.success("Artifact deleted successfully");
         setShowDeleteConfirm(false);
         setArtifactToDelete(null);
         // Force refresh by updating pagination
         setPagination((prev) => ({ ...prev, page: prev.page }));
       }
     } catch (error) {
-      console.error('Delete error:', error);
-      toast.error('Failed to delete artifact');
+      console.error("Delete error:", error);
+      toast.error("Failed to delete artifact");
       setShowDeleteConfirm(false);
     }
   };
@@ -104,10 +110,12 @@ const AdminArtifacts = () => {
   const handleSuccess = (artifactData, isUpdate = false) => {
     if (isUpdate) {
       // Update existing artifact in the list
-      setArtifacts((prev) => 
-        prev.map((item) => (item._id === artifactData._id ? artifactData : item))
+      setArtifacts((prev) =>
+        prev.map((item) =>
+          item._id === artifactData._id ? artifactData : item,
+        ),
       );
-      toast.success('Artifact list updated');
+      toast.success("Artifact list updated");
     } else {
       // Add the new artifact to the beginning of the list
       setArtifacts((prev) => [artifactData, ...prev]);
@@ -120,8 +128,12 @@ const AdminArtifacts = () => {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">Artifact Management</h1>
-        <p className="text-gray-600 mt-2">Manage cultural artifacts with AI-powered metadata tagging</p>
+        <h1 className="text-3xl font-bold text-gray-800">
+          Artifact Management
+        </h1>
+        <p className="text-gray-600 mt-2">
+          Manage cultural artifacts with AI-powered metadata tagging
+        </p>
       </div>
 
       {/* Filters & Actions */}
@@ -140,7 +152,10 @@ const AdminArtifacts = () => {
                 placeholder="Search artifacts..."
                 className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
-              <Search className="absolute left-3 top-2.5 text-gray-400" size={20} />
+              <Search
+                className="absolute left-3 top-2.5 text-gray-400"
+                size={20}
+              />
             </div>
           </div>
 
@@ -178,7 +193,9 @@ const AdminArtifacts = () => {
           {/* Buttons */}
           <div className="flex gap-2">
             <button
-              onClick={() => setPagination((prev) => ({ ...prev, page: prev.page }))}
+              onClick={() =>
+                setPagination((prev) => ({ ...prev, page: prev.page }))
+              }
               className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
             >
               <RefreshCw size={20} />
@@ -196,14 +213,15 @@ const AdminArtifacts = () => {
         {/* Stats */}
         <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-600">
           <span>
-            Showing <strong>{artifacts.length}</strong> of <strong>{pagination.total}</strong> artifacts
+            Showing <strong>{artifacts.length}</strong> of{" "}
+            <strong>{pagination.total}</strong> artifacts
           </span>
           {(searchTerm || categoryFilter || statusFilter) && (
             <button
               onClick={() => {
-                setSearchTerm('');
-                setCategoryFilter('');
-                setStatusFilter('');
+                setSearchTerm("");
+                setCategoryFilter("");
+                setStatusFilter("");
                 setPagination((prev) => ({ ...prev, page: 1 }));
               }}
               className="text-blue-600 hover:text-blue-700 font-medium"
@@ -235,21 +253,28 @@ const AdminArtifacts = () => {
           {pagination.pages > 1 && (
             <div className="mt-8 flex justify-center gap-2">
               <button
-                onClick={() => setPagination((prev) => ({ ...prev, page: Math.max(1, prev.page - 1) }))}
+                onClick={() =>
+                  setPagination((prev) => ({
+                    ...prev,
+                    page: Math.max(1, prev.page - 1),
+                  }))
+                }
                 disabled={pagination.page === 1}
                 className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Previous
               </button>
-              
+
               {[...Array(pagination.pages)].map((_, i) => (
                 <button
                   key={i + 1}
-                  onClick={() => setPagination((prev) => ({ ...prev, page: i + 1 }))}
+                  onClick={() =>
+                    setPagination((prev) => ({ ...prev, page: i + 1 }))
+                  }
                   className={`px-4 py-2 rounded-lg ${
                     pagination.page === i + 1
-                      ? 'bg-blue-600 text-white'
-                      : 'border border-gray-300 hover:bg-gray-50'
+                      ? "bg-blue-600 text-white"
+                      : "border border-gray-300 hover:bg-gray-50"
                   }`}
                 >
                   {i + 1}
@@ -257,7 +282,12 @@ const AdminArtifacts = () => {
               ))}
 
               <button
-                onClick={() => setPagination((prev) => ({ ...prev, page: Math.min(prev.pages, prev.page + 1) }))}
+                onClick={() =>
+                  setPagination((prev) => ({
+                    ...prev,
+                    page: Math.min(prev.pages, prev.page + 1),
+                  }))
+                }
                 disabled={pagination.page === pagination.pages}
                 className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
@@ -271,11 +301,13 @@ const AdminArtifacts = () => {
           <div className="text-gray-400 mb-4">
             <Filter size={64} className="mx-auto" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">No artifacts found</h3>
+          <h3 className="text-xl font-semibold text-gray-700 mb-2">
+            No artifacts found
+          </h3>
           <p className="text-gray-500 mb-6">
             {searchTerm || categoryFilter || statusFilter
-              ? 'Try adjusting your filters'
-              : 'Get started by adding your first artifact'}
+              ? "Try adjusting your filters"
+              : "Get started by adding your first artifact"}
           </p>
           <button
             onClick={() => setIsModalOpen(true)}
@@ -309,25 +341,39 @@ const AdminArtifacts = () => {
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && artifactToDelete && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm"
           onClick={handleBackdropClick}
         >
           <div className="bg-white rounded-2xl p-8 shadow-2xl transform transition-all duration-200 scale-100 max-w-md w-full mx-4">
             <div className="flex flex-col items-center space-y-6">
               <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
-                <svg className="w-8 h-8 text-red-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                <svg
+                  className="w-8 h-8 text-red-600"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </div>
-              
+
               <div className="text-center">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Delete Artifact</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Delete Artifact
+                </h3>
                 <p className="text-gray-600">
-                  Are you sure you want to delete <span className="font-semibold text-gray-900">&ldquo;{artifactToDelete.name}&rdquo;</span>? This action cannot be undone.
+                  Are you sure you want to delete{" "}
+                  <span className="font-semibold text-gray-900">
+                    &ldquo;{artifactToDelete.name}&rdquo;
+                  </span>
+                  ? This action cannot be undone.
                 </p>
               </div>
-              
+
               <div className="flex space-x-4 w-full">
                 <button
                   onClick={cancelDelete}

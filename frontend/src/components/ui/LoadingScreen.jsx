@@ -10,7 +10,7 @@ const LoadingScreen = () => {
             className="w-32 h-32 mx-auto object-contain"
           />
         </div>
-        
+
         {/* Loading spinner */}
         <div className="flex justify-center mb-4">
           <div className="relative">
@@ -18,9 +18,11 @@ const LoadingScreen = () => {
             <div className="w-16 h-16 border-4 border-blue-600 rounded-full animate-spin border-t-transparent absolute top-0 left-0"></div>
           </div>
         </div>
-        
+
         {/* Loading text */}
-        <p className="text-gray-700 text-lg font-medium">Loading Vedda System...</p>
+        <p className="text-gray-700 text-lg font-medium">
+          Loading Vedda System...
+        </p>
         <p className="text-gray-500 text-sm mt-2">Please wait</p>
       </div>
     </div>
