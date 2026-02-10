@@ -12,7 +12,6 @@ const DICTIONARY_API_URL = import.meta.env.VITE_DICTIONARY_SERVICE_URL || 'http:
  */
 export const translateWord = async (word, source, target) => {
   try {
-    console.log(`Translating: "${word}" from ${source} to ${target}`);
     const response = await axios.get(`${DICTIONARY_API_URL}/api/dictionary/translate`, {
       params: { word, source, target }
     });
