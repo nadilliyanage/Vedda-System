@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { X, Upload, Sparkles, Loader2, TrendingUp } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { identifyArtifact } from '../../services/artifactService';
+import { translateWord } from '../../services/dictionaryService';
 
 const IdentifyArtifactModal = ({ isOpen, onClose }) => {
   const [imageFile, setImageFile] = useState(null);
@@ -65,8 +66,62 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
         ? result.tags.split(',').map(tag => tag.trim()).filter(Boolean)
         : result.tags || [];
       
+      // Try to get Vedda translation for the artifact name
+      let veddaWord = null;
+      
+      // Try exact match first
+      try {
+        const translation = await translateWord(result.artifact_name, 'english', 'vedda');
+        
+        if (translation.success && translation.translation) {
+          veddaWord = translation.translation;
+        }
+      } catch (error) {
+        console.error('Exact match not found, trying alternatives...');
+      }
+      
+      // If no exact match, try removing "vedda" prefix and search for the base word
+      if (!veddaWord) {
+        const artifactNameLower = result.artifact_name.toLowerCase();
+        const words = artifactNameLower.split(' ').filter(w => w !== 'vedda');
+        
+        if (words.length > 0) {
+          const baseWord = words.join(' ');
+          
+          try {
+            const translation = await translateWord(baseWord, 'english', 'vedda');
+            
+            if (translation.success && translation.translation) {
+              veddaWord = translation.translation;
+            }
+          } catch (error) {
+            console.error('Base word not found, trying individual words...');
+          }
+        }
+        
+        // If still no match, try each individual word
+        if (!veddaWord && words.length > 1) {
+          for (const word of words) {
+            try {
+              const translation = await translateWord(word, 'english', 'vedda');
+              if (translation.success && translation.translation) {
+                veddaWord = translation.translation;
+                break;
+              }
+            } catch (error) {
+              console.error(`Word "${word}" not found, continuing...`);
+            }
+          }
+        }
+      }
+      
+      if (!veddaWord) {
+        console.log('No Vedda translation found for:', result.artifact_name);
+      }
+      
       setIdentifiedData({
         name: result.artifact_name,
+        veddaWord: veddaWord,
         description: result.description,
         category: result.category,
         tags: tags,
@@ -209,7 +264,14 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
                         Artifact Name
                       </label>
                       <div className="flex items-center justify-between">
-                        <p className="text-lg font-bold text-gray-800 capitalize">{identifiedData.name}</p>
+                        <div>
+                          <p className="text-lg font-bold text-gray-800 capitalize">{identifiedData.name}</p>
+                          {identifiedData.veddaWord && (
+                            <p className="text-md text-purple-600 font-semibold mt-1">
+                              {identifiedData.veddaWord} <span className="text-xs text-gray-500">(Vedda)</span>
+                            </p>
+                          )}
+                        </div>
                         <div className="flex items-center gap-1 bg-green-100 text-green-800 px-3 py-1 rounded-full">
                           <TrendingUp size={14} />
                           <span className="text-sm font-semibold">
