@@ -35,15 +35,12 @@ const ArtifactPage = () => {
       }
 
       const response = await getArtifacts(params);
-      console.log('API Response:', response);
       
       if (response.success) {
         // The artifacts are directly on the response object
         const artifacts = response.artifacts || [];
-        console.log('Artifacts found:', artifacts.length, artifacts);
         setFilteredArtifacts(artifacts);
       } else {
-        console.log('No artifacts in response');
         setFilteredArtifacts([]);
       }
     } catch (error) {
