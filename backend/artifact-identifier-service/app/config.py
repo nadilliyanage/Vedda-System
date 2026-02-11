@@ -12,11 +12,21 @@ class Config:
     # Use local path if running locally, docker path if in container
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     DATA_DIR = os.path.join(BASE_DIR, 'data')
-    MODEL_PATH = os.getenv("MODEL_PATH", os.path.join(DATA_DIR, "vedda_artifacts_model.keras"))
-    METADATA_PATH = os.getenv("METADATA_PATH", os.path.join(DATA_DIR, "artifact_metadata.xlsx"))
+    
+    # Hybrid model paths (CNN + SVM)
+    FEATURE_EXTRACTOR_PATH = os.getenv("FEATURE_EXTRACTOR_PATH", 
+                                       os.path.join(DATA_DIR, "vedda_feature_extractor.keras"))
+    SVM_PATH = os.getenv("SVM_PATH", 
+                        os.path.join(DATA_DIR, "vedda_svm_classifier.pkl"))
+    SCALER_PATH = os.getenv("SCALER_PATH", 
+                           os.path.join(DATA_DIR, "vedda_feature_scaler.pkl"))
+    METADATA_PATH = os.getenv("METADATA_PATH", 
+                             os.path.join(DATA_DIR, "artifact_metadata.xlsx"))
     
     # Download URLs
-    MODEL_URL = os.getenv("MODEL_URL", "")
+    FEATURE_EXTRACTOR_URL = os.getenv("FEATURE_EXTRACTOR_URL", "")
+    SVM_URL = os.getenv("SVM_URL", "")
+    SCALER_URL = os.getenv("SCALER_URL", "")
     METADATA_URL = os.getenv("METADATA_URL", "")
     
     # Image processing configuration

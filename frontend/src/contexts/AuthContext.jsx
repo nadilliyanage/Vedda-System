@@ -33,7 +33,6 @@ export const AuthProvider = ({ children }) => {
           'Authorization': `Bearer ${storedToken}`
         }
       });
-      console.log('Token verification response:', response.data);
       if (response.data.success) {
         setUser(response.data.user);
       } else {

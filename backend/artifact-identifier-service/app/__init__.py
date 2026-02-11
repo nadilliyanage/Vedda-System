@@ -21,10 +21,13 @@ def create_app():
     from app.services.identifier_service import get_identifier_service
     with app.app_context():
         try:
-            get_identifier_service()
+            service = get_identifier_service()
             print("✅ Artifact Identifier Service initialized successfully")
         except Exception as e:
             print(f"⚠️  Warning: Could not initialize identifier service: {e}")
+            print(f"   Error type: {type(e).__name__}")
+            import traceback
+            traceback.print_exc()
             print("   Make sure the model and metadata files are in the data/ directory")
 
     return app

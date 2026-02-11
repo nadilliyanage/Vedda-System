@@ -167,40 +167,97 @@ def ensure_required_files():
     # Ensure data directory exists
     os.makedirs(Config.DATA_DIR, exist_ok=True)
     
-    model_path = Config.MODEL_PATH
+    # Hybrid model file paths
+    feature_extractor_path = Config.FEATURE_EXTRACTOR_PATH
+    svm_path = Config.SVM_PATH
+    scaler_path = Config.SCALER_PATH
     metadata_path = Config.METADATA_PATH
-    model_url = Config.MODEL_URL
+    
+    # Download URLs
+    feature_extractor_url = Config.FEATURE_EXTRACTOR_URL
+    svm_url = Config.SVM_URL
+    scaler_url = Config.SCALER_URL
     metadata_url = Config.METADATA_URL
     
     files_ok = True
     
-    # Check and download model file
-    if not os.path.exists(model_path) or os.path.getsize(model_path) < 1024:
-        if os.path.exists(model_path):
-            print(f"⚠️  Model file is too small, re-downloading...")
-            os.remove(model_path)
+    # Check and download feature extractor
+    if not os.path.exists(feature_extractor_path) or os.path.getsize(feature_extractor_path) < 1024:
+        if os.path.exists(feature_extractor_path):
+            print(f"⚠️  Feature extractor file is too small, re-downloading...")
+            os.remove(feature_extractor_path)
         else:
-            print(f"⚠️  Model file not found at: {model_path}")
+            print(f"⚠️  Feature extractor not found at: {feature_extractor_path}")
         
-        if model_url:
+        if feature_extractor_url:
             try:
-                download_google_drive_file(model_url, model_path)
-                # Verify the downloaded file
-                if os.path.getsize(model_path) < 1024:
-                    print("❌ Downloaded model file appears to be invalid")
+                download_google_drive_file(feature_extractor_url, feature_extractor_path)
+                if os.path.getsize(feature_extractor_path) < 1024:
+                    print("❌ Downloaded feature extractor appears to be invalid")
                     files_ok = False
             except Exception as e:
-                print(f"❌ Failed to download model file: {e}")
-                print(f"   Please manually download from: {model_url}")
-                print(f"   And save to: {model_path}")
+                print(f"❌ Failed to download feature extractor: {e}")
+                print(f"   Please manually download and save to: {feature_extractor_path}")
                 files_ok = False
         else:
-            print("❌ MODEL_URL not configured in .env file")
-            print(f"   Please download the model and place it at: {model_path}")
+            print("❌ FEATURE_EXTRACTOR_URL not configured in .env file")
+            print(f"   Please download the feature extractor and place it at: {feature_extractor_path}")
             files_ok = False
     else:
-        file_size = os.path.getsize(model_path) / (1024 * 1024)  # MB
-        print(f"✅ Model file found: {model_path} ({file_size:.2f} MB)")
+        file_size = os.path.getsize(feature_extractor_path) / (1024 * 1024)  # MB
+        print(f"✅ Feature extractor found: {feature_extractor_path} ({file_size:.2f} MB)")
+    
+    # Check and download SVM classifier
+    if not os.path.exists(svm_path) or os.path.getsize(svm_path) < 100:
+        if os.path.exists(svm_path):
+            print(f"⚠️  SVM classifier file is too small, re-downloading...")
+            os.remove(svm_path)
+        else:
+            print(f"⚠️  SVM classifier not found at: {svm_path}")
+        
+        if svm_url:
+            try:
+                download_google_drive_file(svm_url, svm_path)
+                if os.path.getsize(svm_path) < 100:
+                    print("❌ Downloaded SVM classifier appears to be invalid")
+                    files_ok = False
+            except Exception as e:
+                print(f"❌ Failed to download SVM classifier: {e}")
+                print(f"   Please manually download and save to: {svm_path}")
+                files_ok = False
+        else:
+            print("❌ SVM_URL not configured in .env file")
+            print(f"   Please download the SVM classifier and place it at: {svm_path}")
+            files_ok = False
+    else:
+        file_size = os.path.getsize(svm_path) / 1024  # KB
+        print(f"✅ SVM classifier found: {svm_path} ({file_size:.2f} KB)")
+    
+    # Check and download feature scaler
+    if not os.path.exists(scaler_path) or os.path.getsize(scaler_path) < 100:
+        if os.path.exists(scaler_path):
+            print(f"⚠️  Feature scaler file is too small, re-downloading...")
+            os.remove(scaler_path)
+        else:
+            print(f"⚠️  Feature scaler not found at: {scaler_path}")
+        
+        if scaler_url:
+            try:
+                download_google_drive_file(scaler_url, scaler_path)
+                if os.path.getsize(scaler_path) < 100:
+                    print("❌ Downloaded feature scaler appears to be invalid")
+                    files_ok = False
+            except Exception as e:
+                print(f"❌ Failed to download feature scaler: {e}")
+                print(f"   Please manually download and save to: {scaler_path}")
+                files_ok = False
+        else:
+            print("❌ SCALER_URL not configured in .env file")
+            print(f"   Please download the feature scaler and place it at: {scaler_path}")
+            files_ok = False
+    else:
+        file_size = os.path.getsize(scaler_path) / 1024  # KB
+        print(f"✅ Feature scaler found: {scaler_path} ({file_size:.2f} KB)")
     
     # Check and download metadata file
     if not os.path.exists(metadata_path) or os.path.getsize(metadata_path) < 100:
@@ -230,13 +287,18 @@ def ensure_required_files():
         file_size = os.path.getsize(metadata_path) / 1024  # KB
         print(f"✅ Metadata file found: {metadata_path} ({file_size:.2f} KB)")
     
-    # Verify both files exist and have reasonable sizes
-    if not os.path.exists(model_path) or not os.path.exists(metadata_path):
+    # Verify all files exist and have reasonable sizes
+    if not (os.path.exists(feature_extractor_path) and os.path.exists(svm_path) and 
+            os.path.exists(scaler_path) and os.path.exists(metadata_path)):
         print("\n⚠️  Warning: Required files are missing. Service may not work properly.")
         print("\nTroubleshooting:")
-        print("1. Ensure Google Drive/Sheets files are publicly accessible")
-        print("2. Check that MODEL_URL and METADATA_URL in .env are correct")
-        print("3. Manually download and place files in the data/ directory")
+        print("1. Ensure Google Drive files are publicly accessible")
+        print("2. Check that URLs in .env are correct (FEATURE_EXTRACTOR_URL, SVM_URL, SCALER_URL, METADATA_URL)")
+        print("3. Manually download and place files in the data/ directory:")
+        print(f"   - {feature_extractor_path}")
+        print(f"   - {svm_path}")
+        print(f"   - {scaler_path}")
+        print(f"   - {metadata_path}")
         return False
     
     if not files_ok:

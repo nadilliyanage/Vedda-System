@@ -2,30 +2,43 @@ import os
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+import joblib
 from tensorflow.keras.preprocessing import image
 from flask import current_app
 from werkzeug.utils import secure_filename
 
 
 class ArtifactIdentifierService:
-    """Service for identifying Vedda artifacts using a trained TensorFlow model."""
+    """Service for identifying Vedda artifacts using a hybrid CNN + SVM model."""
     
     _instance = None
     
     def __init__(self):
-        self.model = None
+        self.feature_extractor = None
+        self.svm = None
+        self.scaler = None
         self.artifact_info = {}
         self.class_names = []
         self.img_size = (224, 224)
         self.initialized = False
         
-    def initialize(self, model_path, metadata_path, class_names, img_size):
-        """Load the model and metadata."""
+    def initialize(self, feature_extractor_path, svm_path, scaler_path, metadata_path, class_names, img_size):
+        """Load the hybrid model components and metadata."""
         try:
-            # Load the trained model
-            print(f"Loading model from: {model_path}")
-            self.model = tf.keras.models.load_model(model_path)
-            print("✅ Model loaded successfully")
+            # Load the feature extractor (CNN)
+            print(f"Loading feature extractor from: {feature_extractor_path}")
+            self.feature_extractor = tf.keras.models.load_model(feature_extractor_path)
+            print("✅ Feature extractor loaded successfully")
+            
+            # Load the SVM classifier
+            print(f"Loading SVM classifier from: {svm_path}")
+            self.svm = joblib.load(svm_path)
+            print("✅ SVM classifier loaded successfully")
+            
+            # Load the feature scaler
+            print(f"Loading feature scaler from: {scaler_path}")
+            self.scaler = joblib.load(scaler_path)
+            print("✅ Feature scaler loaded successfully")
             
             # Load metadata
             print(f"Loading metadata from: {metadata_path}")
@@ -53,7 +66,7 @@ class ArtifactIdentifierService:
     
     def predict_artifact(self, img_path):
         """
-        Predict the artifact from an image file.
+        Predict the artifact from an image file using hybrid CNN + SVM model.
         
         Args:
             img_path: Path to the image file
@@ -70,26 +83,37 @@ class ArtifactIdentifierService:
             img_array = image.img_to_array(img)
             img_array = np.expand_dims(img_array, axis=0)
             
-            # Make prediction
-            predictions = self.model.predict(img_array)[0]
-            class_index = np.argmax(predictions)
+            # Extract deep features using CNN feature extractor
+            features = self.feature_extractor.predict(img_array, verbose=0)
+            
+            # Scale features (same as during training)
+            features_scaled = self.scaler.transform(features)
+            
+            # Predict with SVM
+            class_index = self.svm.predict(features_scaled)[0]
             artifact_name = self.class_names[class_index]
-            confidence = float(predictions[class_index])
+            
+            # Approximate confidence using decision function + softmax
+            decision_scores = self.svm.decision_function(features_scaled)[0]
+            probs = np.exp(decision_scores) / np.sum(np.exp(decision_scores))
+            confidence = float(probs[class_index])
             
             # Get artifact metadata
             artifact_metadata = self.artifact_info.get(artifact_name, {})
             
-            # Build result
+            # Build result with all class probabilities
+            all_predictions = {
+                self.class_names[i]: float(probs[i])
+                for i in range(len(self.class_names))
+            }
+            
             result = {
                 "artifact_name": artifact_name,
                 "category": artifact_metadata.get("category", "Unknown"),
                 "description": artifact_metadata.get("description", "No description available"),
                 "tags": artifact_metadata.get("tags", ""),
                 "confidence": confidence,
-                "all_predictions": {
-                    self.class_names[i]: float(predictions[i])
-                    for i in range(len(self.class_names))
-                }
+                "all_predictions": all_predictions
             }
             
             return result
@@ -115,13 +139,18 @@ def get_identifier_service():
     
     if _service_instance is None:
         _service_instance = ArtifactIdentifierService()
-        
+    
+    # Initialize if not already initialized
+    if not _service_instance.initialized:
         # Initialize with config
-        model_path = current_app.config.get('MODEL_PATH')
+        feature_extractor_path = current_app.config.get('FEATURE_EXTRACTOR_PATH')
+        svm_path = current_app.config.get('SVM_PATH')
+        scaler_path = current_app.config.get('SCALER_PATH')
         metadata_path = current_app.config.get('METADATA_PATH')
         class_names = current_app.config.get('CLASS_NAMES')
         img_size = current_app.config.get('IMG_SIZE')
         
-        _service_instance.initialize(model_path, metadata_path, class_names, img_size)
+        _service_instance.initialize(feature_extractor_path, svm_path, scaler_path, 
+                                     metadata_path, class_names, img_size)
     
     return _service_instance
