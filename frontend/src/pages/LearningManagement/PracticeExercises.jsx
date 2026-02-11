@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { FaArrowLeft, FaSpinner, FaChevronDown, FaChevronRight, FaDumbbell } from 'react-icons/fa';
+import { FaArrowLeft, FaSpinner, FaChevronDown, FaChevronRight, FaDumbbell, FaMagic, FaStar } from 'react-icons/fa';
 import { categoriesAPI, lessonsAPI, exercisesAPI } from '../../services/learningAPI';
 
 const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBack, onStartExercise }) => {
   const [categories, setCategories] = useState([]);
   const [lessons, setLessons] = useState([]);
   const [exercises, setExercises] = useState([]);
+  const [personalizedExercises, setPersonalizedExercises] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expandedCategories, setExpandedCategories] = useState(new Set());
   const [expandedLessons, setExpandedLessons] = useState(new Set());
+  const [expandedPersonalized, setExpandedPersonalized] = useState(true);
 
   // Color palette for categories
   const categoryColors = [
@@ -47,6 +49,29 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
       setCategories(categoriesRes.data);
       setLessons(lessonsRes.data);
       setExercises(exercisesRes.data);
+      
+      // TODO: Fetch personalized exercises from API
+      // For now, using mock data structure
+      setPersonalizedExercises([
+        {
+          id: 'personalized-1',
+          title: 'Mixed Review: Week 1',
+          type: 'mixed_review',
+          difficulty: 'medium',
+          questionsCount: 5,
+          xp: 50,
+          topics: ['Basic Vocabulary', 'Common Phrases']
+        },
+        {
+          id: 'personalized-2',
+          title: 'Weak Areas Practice',
+          type: 'adaptive',
+          difficulty: 'easy',
+          questionsCount: 3,
+          xp: 30,
+          topics: ['Grammar Basics']
+        }
+      ]);
     } catch (error) {
       toast.error('Failed to load practice exercises');
       console.error(error);
@@ -103,6 +128,21 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
     }, 0);
   };
 
+  const handleStartPersonalizedExercise = (exercise) => {
+    console.log('Starting personalized exercise:', exercise);
+    toast.success(`Starting ${exercise.title}!`);
+    // TODO: Integrate with onStartExercise or create dedicated handler
+  };
+
+  const getDifficultyColor = (difficulty) => {
+    switch (difficulty) {
+      case 'easy': return 'text-green-600 bg-green-100';
+      case 'medium': return 'text-yellow-600 bg-yellow-100';
+      case 'hard': return 'text-red-600 bg-red-100';
+      default: return 'text-gray-600 bg-gray-100';
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 pt-16">
@@ -137,6 +177,112 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
             <p className="text-lg text-gray-600">
               Test your knowledge with interactive exercises
             </p>
+          </div>
+        </div>
+
+        {/* Personalized Exercises Card - Fixed Section */}
+        <div className="mb-6">
+          <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 rounded-2xl shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div
+              onClick={() => setExpandedPersonalized(!expandedPersonalized)}
+              className="p-6 cursor-pointer hover:shadow-3xl transition-all"
+            >
+              <div className="flex items-center justify-between text-white">
+                <div className="flex items-center gap-4">
+                  <div className="bg-white/20 p-3 rounded-xl">
+                    <FaMagic className="text-3xl" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h2 className="text-2xl font-bold">Your Personalized Practice</h2>
+                      <FaStar className="text-yellow-300 text-xl animate-pulse" />
+                    </div>
+                    <p className="text-white/90 text-sm">
+                      AI-generated exercises tailored just for you based on your progress
+                    </p>
+                  </div>
+                </div>
+                <div className="text-2xl">
+                  {expandedPersonalized ? <FaChevronDown /> : <FaChevronRight />}
+                </div>
+              </div>
+            </div>
+
+            {/* Personalized Exercises List */}
+            {expandedPersonalized && (
+              <div className="p-4 bg-white/10 backdrop-blur-sm">
+                {personalizedExercises.length === 0 ? (
+                  <div className="bg-white/90 rounded-xl p-8 text-center">
+                    <FaMagic className="text-4xl text-purple-500 mx-auto mb-3" />
+                    <p className="text-gray-700 font-semibold mb-2">
+                      No personalized exercises yet
+                    </p>
+                    <p className="text-gray-500 text-sm">
+                      Complete more lessons to unlock AI-generated practice exercises
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {personalizedExercises.map((exercise) => (
+                      <div
+                        key={exercise.id}
+                        onClick={() => handleStartPersonalizedExercise(exercise)}
+                        className="group bg-white rounded-xl p-5 cursor-pointer hover:shadow-2xl transition-all transform hover:scale-102"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <h3 className="text-xl font-bold text-gray-800">
+                                {exercise.title}
+                              </h3>
+                              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getDifficultyColor(exercise.difficulty)}`}>
+                                {exercise.difficulty}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-4 text-sm text-gray-600">
+                              <span className="flex items-center gap-1">
+                                <FaDumbbell className="text-purple-500" />
+                                {exercise.questionsCount} Questions
+                              </span>
+                              <span className="text-gray-400">•</span>
+                              <span className="font-semibold text-purple-600">
+                                +{exercise.xp} XP
+                              </span>
+                            </div>
+                            <div className="mt-2 flex flex-wrap gap-2">
+                              {exercise.topics.map((topic, idx) => (
+                                <span
+                                  key={idx}
+                                  className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full"
+                                >
+                                  {topic}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                          <div className="ml-4">
+                            <svg
+                              className="w-8 h-8 text-purple-500 transform group-hover:translate-x-2 transition-transform"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
