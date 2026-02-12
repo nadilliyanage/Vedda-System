@@ -7,6 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier
 from sklearn.metrics import (
     accuracy_score,
     f1_score,
@@ -138,40 +139,88 @@ def train_model(df: pd.DataFrame, test_size=0.2, random_state=42):
             stratify=y
         )
 
-    # Pipeline: TF-IDF char ngrams + Logistic Regression
+    # TF-IDF Vectorizer (shared across all classifiers)
+    tfidf = TfidfVectorizer(
+        analyzer="char",
+        ngram_range=(3, 6),
+        sublinear_tf=True,
+        max_features=50000
+    )
+    
+    # Transform features once
+    print("\nTransforming features with TF-IDF...")
+    X_train_tfidf = tfidf.fit_transform(X_train)
+    X_test_tfidf = tfidf.transform(X_test)
+    
+    # Define individual classifiers for the ensemble
+    print("\n===== BUILDING HYBRID ENSEMBLE MODEL =====")
+    print("Combining: Logistic Regression + Random Forest + Gradient Boosting")
+    
+    lr_clf = LogisticRegression(
+        max_iter=3000,
+        solver="lbfgs",
+        class_weight="balanced",
+        random_state=42
+    )
+    
+    rf_clf = RandomForestClassifier(
+        n_estimators=100,
+        max_depth=20,
+        min_samples_split=5,
+        class_weight="balanced",
+        random_state=42,
+        n_jobs=-1
+    )
+    
+    gb_clf = GradientBoostingClassifier(
+        n_estimators=100,
+        max_depth=5,
+        learning_rate=0.1,
+        random_state=42
+    )
+    
+    # Create ensemble with soft voting (uses probability estimates)
+    ensemble = VotingClassifier(
+        estimators=[
+            ('lr', lr_clf),
+            ('rf', rf_clf),
+            ('gb', gb_clf)
+        ],
+        voting='soft',
+        n_jobs=-1
+    )
+    
+    print("\nTraining ensemble model...")
+    ensemble.fit(X_train_tfidf, y_train)
+    
+    # Create pipeline wrapper for consistent interface
     pipeline = Pipeline([
-        (
-            "tfidf",
-            TfidfVectorizer(
-                analyzer="char",
-                ngram_range=(3, 6),
-                sublinear_tf=True,
-                max_features=50000
-            )
-        ),
-        (
-            "clf",
-            LogisticRegression(
-                max_iter=3000,
-                solver="lbfgs",
-                class_weight="balanced"
-            )
-
-        )
+        ('tfidf', tfidf),
+        ('ensemble', ensemble)
     ])
-
-    print("\nTraining Logistic Regression...")
-    pipeline.fit(X_train, y_train)
-
-    # Evaluation
-    y_pred = pipeline.predict(X_test)
+    
+    # Note: We already trained on tfidf features, so we'll use the trained ensemble
+    # Update pipeline with trained components
+    pipeline.named_steps['ensemble'] = ensemble
+    
+    # Evaluation on ensemble
+    y_pred = ensemble.predict(X_test_tfidf)
+    
+    # Also evaluate individual models for comparison
+    print("\n===== INDIVIDUAL MODEL PERFORMANCE =====")
+    for name, clf in [('Logistic Regression', lr_clf), ('Random Forest', rf_clf), ('Gradient Boosting', gb_clf)]:
+        clf.fit(X_train_tfidf, y_train)
+        y_pred_individual = clf.predict(X_test_tfidf)
+        acc_individual = accuracy_score(y_test, y_pred_individual)
+        f1_individual = f1_score(y_test, y_pred_individual, average="macro")
+        print(f"{name:25s} - Accuracy: {acc_individual:.4f}, Macro F1: {f1_individual:.4f}")
 
     acc = accuracy_score(y_test, y_pred)
     macro_f1 = f1_score(y_test, y_pred, average="macro")
 
-    print("\n===== EVALUATION RESULTS =====")
-    print(f"Accuracy : {acc:.4f}")
-    print(f"Macro F1 : {macro_f1:.4f}")
+    print("\n===== HYBRID ENSEMBLE RESULTS =====")
+    print(f"Ensemble Accuracy : {acc:.4f}")
+    print(f"Ensemble Macro F1 : {macro_f1:.4f}")
 
     print("\n===== CLASSIFICATION REPORT =====")
     print(
