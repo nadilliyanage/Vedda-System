@@ -16,9 +16,10 @@ const VisualsPage = () => {
 
   const [search, setSearch] = useState('');          // applied search
   const [searchInput, setSearchInput] = useState(''); // typing state
+  const [onlyWithIPA, setOnlyWithIPA] = useState(false); // filter toggle
 
   const fetchWords = useCallback(
-    async (pageToFetch = page, searchValue = search) => {
+    async (pageToFetch = page, searchValue = search, filterIPA = onlyWithIPA) => {
       setIsLoading(true);
       setError(null);
 
@@ -26,7 +27,7 @@ const VisualsPage = () => {
         const params = {
           limit: ITEMS_PER_PAGE,
           skip: (pageToFetch - 1) * ITEMS_PER_PAGE,
-          hasVeddaIpa: true,
+          hasVeddaIpa: filterIPA,
         };
 
         if (searchValue.trim()) {
@@ -51,19 +52,13 @@ const VisualsPage = () => {
             sinhalaWord: item.sinhala_word || '',
             sinhalaIpa: item.sinhala_ipa || '',
             englishWord: item.english_word || '',
-          }))
-          .filter(item => item.word && item.ipa);
+          }));
 
-        // Exact English-word match when searching
-        if (searchValue.trim()) {
-          const q = searchValue.trim().toLowerCase();
-          normalized = normalized.filter(
-            item => item.englishWord.toLowerCase() === q
-          );
-          setTotalCount(normalized.length);
-        } else {
-          setTotalCount(result.metadata?.total || normalized.length);
-        }
+        // Filter out words without vedda_word
+        normalized = normalized.filter(item => item.word);
+
+        // Set total count from backend metadata
+        setTotalCount(result.metadata?.total || 0);
 
         setWords(normalized);
       } catch (err) {
@@ -78,12 +73,12 @@ const VisualsPage = () => {
         setIsLoading(false);
       }
     },
-    [page, search]
+    [page, search, onlyWithIPA]
   );
 
   useEffect(() => {
-    fetchWords(page, search);
-  }, [page, search, fetchWords]);
+    fetchWords(page, search, onlyWithIPA);
+  }, [page, search, onlyWithIPA, fetchWords]);
 
   const handleSearchSubmit = e => {
     e.preventDefault();
@@ -94,6 +89,11 @@ const VisualsPage = () => {
   const handleClearSearch = () => {
     setSearchInput('');
     setSearch('');
+    setPage(1);
+  };
+
+  const handleToggleIPA = () => {
+    setOnlyWithIPA(!onlyWithIPA);
     setPage(1);
   };
 
@@ -118,8 +118,28 @@ const VisualsPage = () => {
           <div className="flex-1">
             <h1 className="text-3xl font-bold text-black mb-2">Word Library</h1>
             <p className="text-gray-400">
-              Select a word to view its lip-sync animation
+              {onlyWithIPA 
+                ? 'Showing only words with IPA data for animation'
+                : 'Showing all words (some may not have animation data)'}
             </p>
+          </div>
+
+          {/* IPA Filter Toggle */}
+          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
+            <label className="text-sm text-gray-700 font-medium">Only with IPA:</label>
+            <button
+              onClick={handleToggleIPA}
+              disabled={isLoading}
+              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                onlyWithIPA ? 'bg-blue-600' : 'bg-gray-400'
+              }`}
+            >
+              <span
+                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  onlyWithIPA ? 'translate-x-6' : 'translate-x-1'
+                }`}
+              />
+            </button>
           </div>
 
           {/* Search */}
@@ -215,7 +235,11 @@ const VisualsPage = () => {
                   <h3 className="text-lg font-semibold text-black">
                     {word.word}
                   </h3>
-                  <p className="text-blue-400 font-mono">/{word.ipa}/</p>
+                  {word.ipa ? (
+                    <p className="text-blue-400 font-mono">/{word.ipa}/</p>
+                  ) : (
+                    <p className="text-red-400 text-xs">No IPA data available</p>
+                  )}
                   {word.sinhalaWord && (
                     <p className="text-xs text-gray-500">{word.sinhalaWord}</p>
                   )}
@@ -225,9 +249,14 @@ const VisualsPage = () => {
 
                   <button
                     onClick={() => handleAnimateWord(word)}
-                    className="mt-3 w-full bg-blue-600 text-white py-2 rounded-lg"
+                    disabled={!word.ipa}
+                    className={`mt-3 w-full py-2 rounded-lg ${
+                      word.ipa 
+                        ? 'bg-blue-600 text-white hover:bg-blue-700' 
+                        : 'bg-gray-400 text-gray-200 cursor-not-allowed'
+                    }`}
                   >
-                    View Animation
+                    {word.ipa ? 'View Animation' : 'No Animation Available'}
                   </button>
                 </div>
               ))}
