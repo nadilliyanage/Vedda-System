@@ -187,7 +187,43 @@ class ModelService:
             print(f"Error getting words with IPA: {e}")
             raise
     
-    def get_ipa_and_words_only(self, limit=100, skip=0, has_vedda_ipa=False):
+    def get_word_stats(self):
+        """
+        Get statistics about words in the database
+        
+        Returns:
+            dict: Statistics including total words, words with IPA, etc.
+        """
+        try:
+            collection = self._get_collection()
+            
+            total_words = collection.count_documents({})
+            words_with_vedda_ipa = collection.count_documents({
+                'vedda_ipa': {'$exists': True, '$ne': ''}
+            })
+            words_with_sinhala_ipa = collection.count_documents({
+                'sinhala_ipa': {'$exists': True, '$ne': ''}
+            })
+            words_with_english_ipa = collection.count_documents({
+                'english_ipa': {'$exists': True, '$ne': ''}
+            })
+            
+            return {
+                'success': True,
+                'data': {
+                    'total_words': total_words,
+                    'words_with_vedda_ipa': words_with_vedda_ipa,
+                    'words_with_sinhala_ipa': words_with_sinhala_ipa,
+                    'words_with_english_ipa': words_with_english_ipa,
+                    'percentage_with_vedda_ipa': round((words_with_vedda_ipa / total_words * 100), 2) if total_words > 0 else 0
+                }
+            }
+            
+        except Exception as e:
+            print(f"Error getting word stats: {e}")
+            raise
+    
+    def get_ipa_and_words_only(self, limit=100, skip=0, has_vedda_ipa=False, english_word=None):
         """
         Get only vedda_ipa, sinhala_ipa and words (minimal response)
         
@@ -195,6 +231,7 @@ class ModelService:
             limit: Maximum number of results
             skip: Number of results to skip for pagination
             has_vedda_ipa: If True, only return words with vedda_ipa defined
+            english_word: Filter by English word (case-insensitive)
             
         Returns:
             dict: Response with minimal word data (only IPAs and words)
@@ -206,6 +243,8 @@ class ModelService:
             query = {}
             if has_vedda_ipa:
                 query['vedda_ipa'] = {'$exists': True, '$ne': ''}
+            if english_word:
+                query['english_word'] = {'$regex': f'^{english_word}$', '$options': 'i'}
             
             # Get total count
             total = collection.count_documents(query)
