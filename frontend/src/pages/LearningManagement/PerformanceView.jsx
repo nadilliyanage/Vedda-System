@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaArrowLeft, FaChartLine, FaTrophy, FaCheckCircle, FaClock } from 'react-icons/fa';
 import { userStatAPI } from '../../services/learningAPI';
 import { useAuth } from '../../contexts/AuthContext';
@@ -26,6 +26,9 @@ const PerformanceView = ({ onBack }) => {
     word_order_error: undefined,
     other: undefined
   });
+
+  const [leaderboard, setLeaderboard] = useState([]);
+  const currentUserRef = useRef(null);
 
   useEffect(() => {
     const userId = user?.id;
@@ -56,7 +59,44 @@ const PerformanceView = ({ onBack }) => {
       });
       setIsLoading(false);
     }).catch(() => setIsLoading(false));
-  }, []);
+
+    // Fetch leaderboard data
+    // TODO: Replace with actual API call when endpoint is ready
+    // userStatAPI.getLeaderboard().then((response) => {
+    //   setLeaderboard(response.data);
+    // });
+    
+    // Mock data for now
+    const mockLeaderboard = [
+      { user_id: "sdaskjdsauiwjkwsjs5as5das75d", name: "Sasanka", rank: 1 },
+      { user_id: "sdaskjdsa555uiwjkwsjs5as5das75d", name: "Kasun", rank: 2 },
+      { user_id: "sdaskjdsa555uiwjkwsjs5adfgas75d", name: "Kasun2", rank: 6 },
+      { user_id: "sdaskjdsaui554wjkwsjs5as5das75d", name: "Dasun", rank: 3 },
+      { user_id: "68ff3189f74e8f05180b17e7", name: "Nimal", rank: 4 },
+      { user_id: "sdaskjdsauiwjkwsj58852s5as5das75d", name: "Kamal", rank: 5 }
+
+    ];
+    setLeaderboard([...mockLeaderboard].sort((a, b) => a.rank - b.rank));
+  }, [user?.id]);
+
+  // Auto-scroll to current user within the leaderboard container only
+  useEffect(() => {
+    if (currentUserRef.current) {
+      const element = currentUserRef.current;
+      const container = element.closest('.h-80');
+      
+      if (container) {
+        const elementTop = element.offsetTop;
+        const containerHeight = container.clientHeight;
+        const scrollPosition = elementTop - (containerHeight / 2) + (element.clientHeight / 2);
+        
+        container.scrollTo({
+          top: scrollPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+  }, [leaderboard, user?.id]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-teal-50 py-8 px-4 pt-24">
@@ -163,7 +203,7 @@ const PerformanceView = ({ onBack }) => {
         {/* Mistake Types Section */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Common Mistake Types</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
             <div className="flex items-center justify-between p-4 bg-gradient-to-r from-red-50 to-red-100 rounded-lg hover:shadow-md transition-shadow">
               <div>
                 <p className="font-semibold text-gray-800">Spelling Error</p>
@@ -171,26 +211,6 @@ const PerformanceView = ({ onBack }) => {
               </div>
               <div className="text-3xl font-bold text-red-600">
                 {errorData.spelling_error !== undefined ? errorData.spelling_error : <LoadingSpinner size="md" />}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg hover:shadow-md transition-shadow">
-              <div>
-                <p className="font-semibold text-gray-800">Wrong Question Word</p>
-                <p className="text-sm text-gray-600">Incorrect question formation</p>
-              </div>
-              <div className="text-3xl font-bold text-blue-600">
-                {errorData.wrong_question_word !== undefined ? errorData.wrong_question_word : <LoadingSpinner size="md" />}
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg hover:shadow-md transition-shadow">
-              <div>
-                <p className="font-semibold text-gray-800">Wrong Verb Form</p>
-                <p className="text-sm text-gray-600">Incorrect verb conjugation</p>
-              </div>
-              <div className="text-3xl font-bold text-purple-600">
-                {errorData.wrong_verb_form !== undefined ? errorData.wrong_verb_form : <LoadingSpinner size="md" />}
               </div>
             </div>
 
@@ -226,40 +246,80 @@ const PerformanceView = ({ onBack }) => {
           </div>
         </div>
 
-        {/* Recent Activities */}
+        {/* Leaderboard */}
         <div className="bg-white rounded-xl shadow-lg p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">Recent Activities</h2>
-          <div className="space-y-4">
-            {stats.recentActivities.length > 0 ? (
-              stats.recentActivities.map((activity, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between p-4 bg-gradient-to-r from-purple-50 to-teal-50 rounded-lg hover:shadow-md transition-shadow"
-                >
-                  <div className="flex items-center">
-                    <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-4 ${
-                      activity.type === 'lesson' ? 'bg-blue-100' :
-                      activity.type === 'exercise' ? 'bg-orange-100' :
-                      'bg-green-100'
+          <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+            <FaTrophy className="mr-3 text-yellow-500" />
+            Leaderboard
+          </h2>
+          <div className="h-80 overflow-y-auto overflow-x-hidden space-y-3 scroll-smooth">
+            {leaderboard.length > 0 ? (
+              leaderboard.map((player, index) => {
+                const isCurrentUser = player.user_id === user?.id;
+                const isTopThree = player.rank <= 3;
+                
+                return (
+                  <div
+                    key={player.user_id}
+                    ref={isCurrentUser ? currentUserRef : null}
+                    className={`mt-0 mb-2 ml-8 me-8 flex items-center justify-between p-2 rounded-lg transition-all ${
+                      isCurrentUser
+                        ? 'bg-gradient-to-r from-purple-100 to-teal-100 border-2 border-purple-400 shadow-md scale-105'
+                        : 'bg-gradient-to-r from-gray-50 to-gray-100 hover:shadow-md'
+                    }`}
+                  >
+                    <div className="flex items-center flex-1">
+                      {/* Rank Badge */}
+                      <div className={`w-10 h-12 rounded-full flex items-center justify-center mr-4 font-bold text-lg ${
+                        player.rank === 1 ? 'bg-gradient-to-br from-yellow-400 to-yellow-600 text-white' :
+                        player.rank === 2 ? 'bg-gradient-to-br from-gray-300 to-gray-500 text-white' :
+                        player.rank === 3 ? 'bg-gradient-to-br from-amber-600 to-amber-800 text-white' :
+                        'bg-gray-200 text-gray-700'
+                      }`}>
+                        {isTopThree ? (
+                          player.rank === 1 ? '🥇' :
+                          player.rank === 2 ? '🥈' :
+                          '🥉'
+                        ) : (
+                          '🙍‍♂️'
+                        )}
+                      </div>
+                      
+                      {/* User Info */}
+                      <div>
+                        <p className={`font-semibold ${
+                          isCurrentUser ? 'text-purple-800 text-lg' : 'text-gray-800'
+                        }`}>
+                          {player.name}
+                          {isCurrentUser && (
+                            <span className="ml-2 text-xs bg-purple-600 text-white px-2 py-1 rounded-full">
+                              You
+                            </span>
+                          )}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {player.rank === 1 ? '👑 Champion' :
+                           player.rank === 2 ? '⭐ Runner Up' :
+                           player.rank === 3 ? '🌟 Top Performer' :
+                           'Keep learning!'}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Rank Number */}
+                    <div className={`text-right ${
+                      isCurrentUser ? 'font-bold text-purple-700' : 'text-gray-600'
                     }`}>
-                      {activity.type === 'lesson' ? '📚' :
-                       activity.type === 'exercise' ? '💪' :
-                       '🏆'}
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-800">{activity.title}</p>
-                      <p className="text-sm text-gray-600">{activity.date}</p>
+                      <p className="text-2xl font-bold">#{player.rank}</p>
+                      <p className="text-xs">Rank</p>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-purple-600">{activity.score}%</p>
-                    <p className="text-sm text-gray-600">Score</p>
-                  </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <div className="text-center py-8 text-gray-500">
-                <p>No recent activities yet. Start learning to see your progress!</p>
+                <FaTrophy className="text-6xl mx-auto mb-4 text-gray-300" />
+                <p>No leaderboard data available yet.</p>
               </div>
             )}
           </div>
