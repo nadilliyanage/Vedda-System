@@ -1,0 +1,3436 @@
+{
+  "data": [
+    {
+      "audio_path": "data\\processed\\vedda_110_20260211_231344_476c8be5.wav",
+      "transcription": "හොච්ච දික්කා",
+      "translation": "",
+      "duration": 1.28,
+      "sample_rate": 16000,
+      "speaker_id": "110",
+      "original_path": "data\\raw\\vedda_110_20260211_231344_476c8be5.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_378_20260212_021138_0961ecb2.wav",
+      "transcription": "ගැට මන්දා",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "378",
+      "original_path": "data\\raw\\vedda_378_20260212_021138_0961ecb2.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_128_20260211_232656_2fe948b2.wav",
+      "transcription": "චප්පිල ඇත්තන්ගේ ගෙඩි පොජ්ජ",
+      "translation": "",
+      "duration": 1.984,
+      "sample_rate": 16000,
+      "speaker_id": "128",
+      "original_path": "data\\raw\\vedda_128_20260211_232656_2fe948b2.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_324_20260212_014114_32736b8e.wav",
+      "transcription": "ඔය ඇත්තන්නේ නම් පොජ්ජ මොන්නෙක",
+      "translation": "",
+      "duration": 2.72,
+      "sample_rate": 16000,
+      "speaker_id": "324",
+      "original_path": "data\\raw\\vedda_324_20260212_014114_32736b8e.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_023_20260211_094349_e86d25ff.wav",
+      "transcription": "හොට පොජ්ජ",
+      "translation": "",
+      "duration": 0.992,
+      "sample_rate": 16000,
+      "speaker_id": "023",
+      "original_path": "data\\raw\\vedda_023_20260211_094349_e86d25ff.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_032_20260211_095301_147e1fd7.wav",
+      "transcription": "හඳුන්පොත",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "032",
+      "original_path": "data\\raw\\vedda_032_20260211_095301_147e1fd7.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_240_20260212_005900_22c48eea.wav",
+      "transcription": "ලැක බොක පොජ්ජ මන්දෝ වෙනචා",
+      "translation": "",
+      "duration": 2.112,
+      "sample_rate": 16000,
+      "speaker_id": "240",
+      "original_path": "data\\raw\\vedda_240_20260212_005900_22c48eea.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_371_20260212_020818_4f0a5e6c.wav",
+      "transcription": "රුකුල් පොජ්ජ",
+      "translation": "",
+      "duration": 1.056,
+      "sample_rate": 16000,
+      "speaker_id": "371",
+      "original_path": "data\\raw\\vedda_371_20260212_020818_4f0a5e6c.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_345_20260212_015542_ac76a074.wav",
+      "transcription": "සන්තෝස පොජ්ජක් මන්දො වෙනවා",
+      "translation": "",
+      "duration": 2.368,
+      "sample_rate": 16000,
+      "speaker_id": "345",
+      "original_path": "data\\raw\\vedda_345_20260212_015542_ac76a074.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_031_20260211_095227_055963af.wav",
+      "transcription": "බෙලි පොජ්ජ",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "031",
+      "original_path": "data\\raw\\vedda_031_20260211_095227_055963af.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_058_20260211_101112_aaac871a.wav",
+      "transcription": "එකමයි",
+      "translation": "",
+      "duration": 0.672,
+      "sample_rate": 16000,
+      "speaker_id": "058",
+      "original_path": "data\\raw\\vedda_058_20260211_101112_aaac871a.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_296_20260212_012337_2bfd728b.wav",
+      "transcription": "චප්පිල ඇත්තන්ට",
+      "translation": "",
+      "duration": 1.28,
+      "sample_rate": 16000,
+      "speaker_id": "296",
+      "original_path": "data\\raw\\vedda_296_20260212_012337_2bfd728b.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_086_20260211_102659_3d09e9aa.wav",
+      "transcription": "වැඩි තැනක්‌",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "086",
+      "original_path": "data\\raw\\vedda_086_20260211_102659_3d09e9aa.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_310_20260212_013349_6d788ef1.wav",
+      "transcription": "කැකුළො ගුටි පොජ්ජ මන්දො කරගන්න කොදොයි",
+      "translation": "",
+      "duration": 2.816,
+      "sample_rate": 16000,
+      "speaker_id": "310",
+      "original_path": "data\\raw\\vedda_310_20260212_013349_6d788ef1.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_328_20260212_014414_4d772217.wav",
+      "transcription": "මේ කැලෑ පොජ්ජ මේ ඇත්තන්නේ කට්ටි පොජ්ජට හොඳමයි",
+      "translation": "",
+      "duration": 4.352,
+      "sample_rate": 16000,
+      "speaker_id": "328",
+      "original_path": "data\\raw\\vedda_328_20260212_014414_4d772217.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_370_20260212_020753_15a4b860.wav",
+      "transcription": "තේරුම් පොජ්ජ කොදුයි",
+      "translation": "",
+      "duration": 1.184,
+      "sample_rate": 16000,
+      "speaker_id": "370",
+      "original_path": "data\\raw\\vedda_370_20260212_020753_15a4b860.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_315_20260212_013623_91d253cb.wav",
+      "transcription": "කැකුලා කරකුරු ගච්චන රුකුල් පොජ්ජට මංගැච්චුවා",
+      "translation": "",
+      "duration": 3.712,
+      "sample_rate": 16000,
+      "speaker_id": "315",
+      "original_path": "data\\raw\\vedda_315_20260212_013623_91d253cb.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_006_20260211_092651_baaacaaf.wav",
+      "transcription": "අම්මිලැත්තෝ",
+      "translation": "",
+      "duration": 1.312,
+      "sample_rate": 16000,
+      "speaker_id": "006",
+      "original_path": "data\\raw\\vedda_006_20260211_092651_baaacaaf.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_174_20260211_235033_df298a86.wav",
+      "transcription": "චන්නියලැත්තෝ",
+      "translation": "",
+      "duration": 1.12,
+      "sample_rate": 16000,
+      "speaker_id": "174",
+      "original_path": "data\\raw\\vedda_174_20260211_235033_df298a86.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_046_20260211_100410_8ff948eb.wav",
+      "transcription": "නෑනලාත්තෝ",
+      "translation": "",
+      "duration": 1.216,
+      "sample_rate": 16000,
+      "speaker_id": "046",
+      "original_path": "data\\raw\\vedda_046_20260211_100410_8ff948eb.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_246_20260212_010145_40d5e3c2.wav",
+      "transcription": "මංගච්චමු",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "246",
+      "original_path": "data\\raw\\vedda_246_20260212_010145_40d5e3c2.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_120_20260211_232019_4f614b83.wav",
+      "transcription": "දිය මැච්චී",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "120",
+      "original_path": "data\\raw\\vedda_120_20260211_232019_4f614b83.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_075_20260211_102106_cb4f38de.wav",
+      "transcription": "බෙදුම්තැන මන්දු කරන ලකුණු පොජ්ජ",
+      "translation": "",
+      "duration": 2.144,
+      "sample_rate": 16000,
+      "speaker_id": "075",
+      "original_path": "data\\raw\\vedda_075_20260211_102106_cb4f38de.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_229_20260212_005213_78c8dc7b.wav",
+      "transcription": "කං රැකුලට මන්දෝ වෙනවා",
+      "translation": "",
+      "duration": 1.664,
+      "sample_rate": 16000,
+      "speaker_id": "229",
+      "original_path": "data\\raw\\vedda_229_20260212_005213_78c8dc7b.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_112_20260211_231509_a2532fd6.wav",
+      "transcription": "හොට වලුමඤ්ඤා",
+      "translation": "",
+      "duration": 1.312,
+      "sample_rate": 16000,
+      "speaker_id": "112",
+      "original_path": "data\\raw\\vedda_112_20260211_231509_a2532fd6.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_106_20260211_231115_cf9d5294.wav",
+      "transcription": "පිටගැටයා",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "106",
+      "original_path": "data\\raw\\vedda_106_20260211_231115_cf9d5294.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_353_20260212_020049_851520a4.wav",
+      "transcription": "පොතු පොජ්ජක්",
+      "translation": "",
+      "duration": 0.544,
+      "sample_rate": 16000,
+      "speaker_id": "353",
+      "original_path": "data\\raw\\vedda_353_20260212_020049_851520a4.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_074_20260211_102045_814ccb48.wav",
+      "transcription": "බෙදුම්තැන මන්දෝ කරන ලකුණු පොජ්ජ",
+      "translation": "",
+      "duration": 2.208,
+      "sample_rate": 16000,
+      "speaker_id": "074",
+      "original_path": "data\\raw\\vedda_074_20260211_102045_814ccb48.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_210_20260212_004320_3f948ad8.wav",
+      "transcription": "හිත්‌ පොජ්ජ හොද කොදොයි",
+      "translation": "",
+      "duration": 1.248,
+      "sample_rate": 16000,
+      "speaker_id": "210",
+      "original_path": "data\\raw\\vedda_210_20260212_004320_3f948ad8.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_004_20260211_092511_a5c99029.wav",
+      "transcription": "බුද්ධිලඇත්තෝ",
+      "translation": "",
+      "duration": 1.632,
+      "sample_rate": 16000,
+      "speaker_id": "004",
+      "original_path": "data\\raw\\vedda_004_20260211_092511_a5c99029.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_019_20260211_093750_995df3e5.wav",
+      "transcription": "දෙකමෙක්",
+      "translation": "",
+      "duration": 0.608,
+      "sample_rate": 16000,
+      "speaker_id": "019",
+      "original_path": "data\\raw\\vedda_019_20260211_093750_995df3e5.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_320_20260212_013832_c8fac246.wav",
+      "transcription": "මේ ඇත්තොන්ට ලෙඩ පොජ්ජ මන්දොවෙලා",
+      "translation": "",
+      "duration": 2.24,
+      "sample_rate": 16000,
+      "speaker_id": "320",
+      "original_path": "data\\raw\\vedda_320_20260212_013832_c8fac246.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_241_20260212_005922_190519cd.wav",
+      "transcription": "දිය දමනවා",
+      "translation": "",
+      "duration": 0.704,
+      "sample_rate": 16000,
+      "speaker_id": "241",
+      "original_path": "data\\raw\\vedda_241_20260212_005922_190519cd.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_319_20260212_013810_9c63edf8.wav",
+      "transcription": "මේ ඇත්තෝ තැනමක් කතා දාමු",
+      "translation": "",
+      "duration": 1.824,
+      "sample_rate": 16000,
+      "speaker_id": "319",
+      "original_path": "data\\raw\\vedda_319_20260212_013810_9c63edf8.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_064_20260211_101419_7a47ff98.wav",
+      "transcription": "හතමයි",
+      "translation": "",
+      "duration": 0.64,
+      "sample_rate": 16000,
+      "speaker_id": "064",
+      "original_path": "data\\raw\\vedda_064_20260211_101419_7a47ff98.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_231_20260212_005315_2627d2ff.wav",
+      "transcription": "තියෙනවා",
+      "translation": "",
+      "duration": 0.512,
+      "sample_rate": 16000,
+      "speaker_id": "231",
+      "original_path": "data\\raw\\vedda_231_20260212_005315_2627d2ff.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_084_20260211_102611_db52c65d.wav",
+      "transcription": "රිදී පෝරු",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "084",
+      "original_path": "data\\raw\\vedda_084_20260211_102611_db52c65d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_096_20260211_230556_a13c2526.wav",
+      "transcription": "කටු කැච්චා",
+      "translation": "",
+      "duration": 0.896,
+      "sample_rate": 16000,
+      "speaker_id": "096",
+      "original_path": "data\\raw\\vedda_096_20260211_230556_a13c2526.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_079_20260211_102411_83b2fad7.wav",
+      "transcription": "මුළු තැනේ රූපතැන",
+      "translation": "",
+      "duration": 1.472,
+      "sample_rate": 16000,
+      "speaker_id": "079",
+      "original_path": "data\\raw\\vedda_079_20260211_102411_83b2fad7.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_222_20260212_004859_1eaf633d.wav",
+      "transcription": "ඔටා දමනවා",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "222",
+      "original_path": "data\\raw\\vedda_222_20260212_004859_1eaf633d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_300_20260212_012709_b069eaac.wav",
+      "transcription": "ලාබච්චාගනයි ඉඳින්නේ",
+      "translation": "",
+      "duration": 1.6,
+      "sample_rate": 16000,
+      "speaker_id": "300",
+      "original_path": "data\\raw\\vedda_300_20260212_012709_b069eaac.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_115_20260211_231733_d40a04f2.wav",
+      "transcription": "එළු මඤ්ඤා",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "115",
+      "original_path": "data\\raw\\vedda_115_20260211_231733_d40a04f2.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_204_20260212_003931_bf31341f.wav",
+      "transcription": "බාසා පොජ්ජ",
+      "translation": "",
+      "duration": 1.216,
+      "sample_rate": 16000,
+      "speaker_id": "204",
+      "original_path": "data\\raw\\vedda_204_20260212_003931_bf31341f.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_116_20260211_231754_b8867c9b.wav",
+      "transcription": "පන්නි",
+      "translation": "",
+      "duration": 0.576,
+      "sample_rate": 16000,
+      "speaker_id": "116",
+      "original_path": "data\\raw\\vedda_116_20260211_231754_b8867c9b.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_227_20260212_005113_3cca7b93.wav",
+      "transcription": "ඇහි රුකුලට මන්දෝ කරනවා",
+      "translation": "",
+      "duration": 1.632,
+      "sample_rate": 16000,
+      "speaker_id": "227",
+      "original_path": "data\\raw\\vedda_227_20260212_005113_3cca7b93.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_357_20260212_020236_451538b3.wav",
+      "transcription": "වළ පොජ්ජක්",
+      "translation": "",
+      "duration": 0.832,
+      "sample_rate": 16000,
+      "speaker_id": "357",
+      "original_path": "data\\raw\\vedda_357_20260212_020236_451538b3.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_302_20260212_012823_a2aff0cd.wav",
+      "transcription": "ඉච්චර කාල මැච්චේ",
+      "translation": "",
+      "duration": 1.6,
+      "sample_rate": 16000,
+      "speaker_id": "302",
+      "original_path": "data\\raw\\vedda_302_20260212_012823_a2aff0cd.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_077_20260211_102206_d1832b09.wav",
+      "transcription": "කොටු පොජ්ජ",
+      "translation": "",
+      "duration": 0.8,
+      "sample_rate": 16000,
+      "speaker_id": "077",
+      "original_path": "data\\raw\\vedda_077_20260211_102206_d1832b09.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_095_20260211_230526_fe3194fe.wav",
+      "transcription": "කංකුනා",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "095",
+      "original_path": "data\\raw\\vedda_095_20260211_230526_fe3194fe.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_247_20260212_010207_e73fc3e8.wav",
+      "transcription": "විට පොජ්ජක්",
+      "translation": "",
+      "duration": 0.8,
+      "sample_rate": 16000,
+      "speaker_id": "247",
+      "original_path": "data\\raw\\vedda_247_20260212_010207_e73fc3e8.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_017_20260211_093603_d140eda2.wav",
+      "transcription": "මාම කැච්චක්‌ හොඳමැයි",
+      "translation": "",
+      "duration": 1.664,
+      "sample_rate": 16000,
+      "speaker_id": "017",
+      "original_path": "data\\raw\\vedda_017_20260211_093603_d140eda2.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_068_20260211_101656_2da6ab75.wav",
+      "transcription": "එකතු තැන මන්දෝ කරන ලකුණු පොජ්ජ",
+      "translation": "",
+      "duration": 2.24,
+      "sample_rate": 16000,
+      "speaker_id": "068",
+      "original_path": "data\\raw\\vedda_068_20260211_101656_2da6ab75.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_140_20260211_233510_06b53cc9.wav",
+      "transcription": "කළු කෝමන්තැන වටාපු හූරා",
+      "translation": "",
+      "duration": 2.528,
+      "sample_rate": 16000,
+      "speaker_id": "140",
+      "original_path": "data\\raw\\vedda_140_20260211_233510_06b53cc9.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_008_20260211_092841_b79fbf6b.wav",
+      "transcription": "දෙයියලැත්තෝ",
+      "translation": "",
+      "duration": 1.344,
+      "sample_rate": 16000,
+      "speaker_id": "008",
+      "original_path": "data\\raw\\vedda_008_20260211_092841_b79fbf6b.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_176_20260211_235130_b640c221.wav",
+      "transcription": "කැකුළියෙක්‌ ඇන්න මංගච්චනවා",
+      "translation": "",
+      "duration": 2.016,
+      "sample_rate": 16000,
+      "speaker_id": "176",
+      "original_path": "data\\raw\\vedda_176_20260211_235130_b640c221.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_233_20260212_005403_2ba0433e.wav",
+      "transcription": "පටාරිනවා",
+      "translation": "",
+      "duration": 0.736,
+      "sample_rate": 16000,
+      "speaker_id": "233",
+      "original_path": "data\\raw\\vedda_233_20260212_005403_2ba0433e.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_339_20260212_015326_12116088.wav",
+      "transcription": "ලංකා පොජ්ජ",
+      "translation": "",
+      "duration": 1.28,
+      "sample_rate": 16000,
+      "speaker_id": "339",
+      "original_path": "data\\raw\\vedda_339_20260212_015326_12116088.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_372_20260212_020838_ef71134c.wav",
+      "transcription": "රුකුල් පොජ්ජ කොදුයි",
+      "translation": "",
+      "duration": 1.504,
+      "sample_rate": 16000,
+      "speaker_id": "372",
+      "original_path": "data\\raw\\vedda_372_20260212_020838_ef71134c.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_111_20260211_231439_e5a4253a.wav",
+      "transcription": "කුක්කා",
+      "translation": "",
+      "duration": 0.64,
+      "sample_rate": 16000,
+      "speaker_id": "111",
+      "original_path": "data\\raw\\vedda_111_20260211_231439_e5a4253a.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_355_20260212_020137_33780529.wav",
+      "transcription": "පටෑරගන්නවා",
+      "translation": "",
+      "duration": 1.184,
+      "sample_rate": 16000,
+      "speaker_id": "355",
+      "original_path": "data\\raw\\vedda_355_20260212_020137_33780529.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_374_20260212_021002_13d9aab4.wav",
+      "transcription": "කන්කුනා",
+      "translation": "",
+      "duration": 0.8,
+      "sample_rate": 16000,
+      "speaker_id": "374",
+      "original_path": "data\\raw\\vedda_374_20260212_021002_13d9aab4.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_285_20260212_011926_fddca2fa.wav",
+      "transcription": "ගම් පොජ්ජට",
+      "translation": "",
+      "duration": 1.056,
+      "sample_rate": 16000,
+      "speaker_id": "285",
+      "original_path": "data\\raw\\vedda_285_20260212_011926_fddca2fa.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_061_20260211_101248_77ca6376.wav",
+      "transcription": "හතරමයි",
+      "translation": "",
+      "duration": 0.544,
+      "sample_rate": 16000,
+      "speaker_id": "061",
+      "original_path": "data\\raw\\vedda_061_20260211_101248_77ca6376.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_251_20260212_010358_f46d4af7.wav",
+      "transcription": "කැකුළො",
+      "translation": "",
+      "duration": 0.704,
+      "sample_rate": 16000,
+      "speaker_id": "251",
+      "original_path": "data\\raw\\vedda_251_20260212_010358_f46d4af7.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_365_20260212_020559_e6d22296.wav",
+      "transcription": "රුකම් පොජ්ජක් පටෑරිලා",
+      "translation": "",
+      "duration": 1.472,
+      "sample_rate": 16000,
+      "speaker_id": "365",
+      "original_path": "data\\raw\\vedda_365_20260212_020559_e6d22296.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_159_20260211_234351_5d02885e.wav",
+      "transcription": "ඉර පොජ්ජ",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "159",
+      "original_path": "data\\raw\\vedda_159_20260211_234351_5d02885e.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_249_20260212_010314_5a1b2adf.wav",
+      "transcription": "කැවිල්ලාන්න",
+      "translation": "",
+      "duration": 1.184,
+      "sample_rate": 16000,
+      "speaker_id": "249",
+      "original_path": "data\\raw\\vedda_249_20260212_010314_5a1b2adf.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_146_20260211_233808_a9fd8800.wav",
+      "transcription": "මලා ලීය",
+      "translation": "",
+      "duration": 0.928,
+      "sample_rate": 16000,
+      "speaker_id": "146",
+      "original_path": "data\\raw\\vedda_146_20260211_233808_a9fd8800.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_018_20260211_093709_485e07d8.wav",
+      "transcription": "එකමෙක්",
+      "translation": "",
+      "duration": 0.544,
+      "sample_rate": 16000,
+      "speaker_id": "018",
+      "original_path": "data\\raw\\vedda_018_20260211_093709_485e07d8.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_297_20260212_012447_640bc9d5.wav",
+      "transcription": "වන්නියලැත්තෝ පරම්පරා පොජ්ජේ",
+      "translation": "",
+      "duration": 1.464,
+      "sample_rate": 16000,
+      "speaker_id": "297",
+      "original_path": "data\\raw\\vedda_297_20260212_012447_640bc9d5.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_025_20260211_094519_a51ecadb.wav",
+      "transcription": "ඇහි රැකුල",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "025",
+      "original_path": "data\\raw\\vedda_025_20260211_094519_a51ecadb.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_138_20260211_233328_b9ad39e6.wav",
+      "transcription": "රජාකාරී",
+      "translation": "",
+      "duration": 1.088,
+      "sample_rate": 16000,
+      "speaker_id": "138",
+      "original_path": "data\\raw\\vedda_138_20260211_233328_b9ad39e6.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_335_20260212_015019_d6ee0f2a.wav",
+      "transcription": "ඉච්චර කාල මැච්චේ බුද්දලැත්තො මංගැච්චුවා මහියංගන පෝරුගම් පොජ්ජට ඒ තැනේදී ඉඩ තැන මන්දොකරගත්තා",
+      "translation": "",
+      "duration": 9.6,
+      "sample_rate": 16000,
+      "speaker_id": "335",
+      "original_path": "data\\raw\\vedda_335_20260212_015019_d6ee0f2a.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_354_20260212_020117_5de0b327.wav",
+      "transcription": "පටෑරගෙන",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "354",
+      "original_path": "data\\raw\\vedda_354_20260212_020117_5de0b327.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_313_20260212_013523_9488772f.wav",
+      "transcription": "අල පොජ්ජ තැනමක්‌ කැවිල්ලාන්න",
+      "translation": "",
+      "duration": 2.24,
+      "sample_rate": 16000,
+      "speaker_id": "313",
+      "original_path": "data\\raw\\vedda_313_20260212_013523_9488772f.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_168_20260211_234735_5947ccd6.wav",
+      "transcription": "මඳු පොජ්ජ",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "168",
+      "original_path": "data\\raw\\vedda_168_20260211_234735_5947ccd6.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_337_20260212_015236_46282498.wav",
+      "transcription": "ව්‍යාධ",
+      "translation": "",
+      "duration": 0.64,
+      "sample_rate": 16000,
+      "speaker_id": "337",
+      "original_path": "data\\raw\\vedda_337_20260212_015236_46282498.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_344_20260212_015520_fe21a2aa.wav",
+      "transcription": "හිත් පොජ්ජ මන්දො වෙනවා",
+      "translation": "",
+      "duration": 1.696,
+      "sample_rate": 16000,
+      "speaker_id": "344",
+      "original_path": "data\\raw\\vedda_344_20260212_015520_fe21a2aa.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_377_20260212_021118_03201222.wav",
+      "transcription": "මුන්දි",
+      "translation": "",
+      "duration": 0.672,
+      "sample_rate": 16000,
+      "speaker_id": "377",
+      "original_path": "data\\raw\\vedda_377_20260212_021118_03201222.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_293_20260212_012226_bfaed3b1.wav",
+      "transcription": "උඩතැනට",
+      "translation": "",
+      "duration": 0.8,
+      "sample_rate": 16000,
+      "speaker_id": "293",
+      "original_path": "data\\raw\\vedda_293_20260212_012226_bfaed3b1.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_225_20260212_005014_0e192575.wav",
+      "transcription": "කතා දමනවා",
+      "translation": "",
+      "duration": 0.928,
+      "sample_rate": 16000,
+      "speaker_id": "225",
+      "original_path": "data\\raw\\vedda_225_20260212_005014_0e192575.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_164_20260211_234539_7e94ea29.wav",
+      "transcription": "ඉර පොජ්ජ උඩ තැනට මන්දෝ වුනා",
+      "translation": "",
+      "duration": 2.432,
+      "sample_rate": 16000,
+      "speaker_id": "164",
+      "original_path": "data\\raw\\vedda_164_20260211_234539_7e94ea29.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_126_20260211_232609_2c65eabd.wav",
+      "transcription": "දෙපටුල්ලංතැන",
+      "translation": "",
+      "duration": 1.248,
+      "sample_rate": 16000,
+      "speaker_id": "126",
+      "original_path": "data\\raw\\vedda_126_20260211_232609_2c65eabd.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_280_20260212_011730_f8a0f335.wav",
+      "transcription": "හූරා",
+      "translation": "",
+      "duration": 0.576,
+      "sample_rate": 16000,
+      "speaker_id": "280",
+      "original_path": "data\\raw\\vedda_280_20260212_011730_f8a0f335.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_121_20260211_232101_850e49e3.wav",
+      "transcription": "කඳඅරණි",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "121",
+      "original_path": "data\\raw\\vedda_121_20260211_232101_850e49e3.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_197_20260212_003631_36a5f9cf.wav",
+      "transcription": "රට පොජ්ජ",
+      "translation": "",
+      "duration": 0.832,
+      "sample_rate": 16000,
+      "speaker_id": "197",
+      "original_path": "data\\raw\\vedda_197_20260212_003631_36a5f9cf.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_166_20260211_234700_367114ad.wav",
+      "transcription": "හබක්‌ පොජ්ජ",
+      "translation": "",
+      "duration": 1.312,
+      "sample_rate": 16000,
+      "speaker_id": "166",
+      "original_path": "data\\raw\\vedda_166_20260211_234700_367114ad.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_020_20260211_093821_6e61e8eb.wav",
+      "transcription": "තුනමෙක්",
+      "translation": "",
+      "duration": 0.832,
+      "sample_rate": 16000,
+      "speaker_id": "020",
+      "original_path": "data\\raw\\vedda_020_20260211_093821_6e61e8eb.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_156_20260211_234251_f74c089d.wav",
+      "transcription": "ඇල්‌ පොජ්ජ",
+      "translation": "",
+      "duration": 0.832,
+      "sample_rate": 16000,
+      "speaker_id": "156",
+      "original_path": "data\\raw\\vedda_156_20260211_234251_f74c089d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_081_20260211_102505_40daf414.wav",
+      "transcription": "කාල තැනයි",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "081",
+      "original_path": "data\\raw\\vedda_081_20260211_102505_40daf414.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_133_20260211_232955_67c1551c.wav",
+      "transcription": "විට පොජ්ජ",
+      "translation": "",
+      "duration": 0.992,
+      "sample_rate": 16000,
+      "speaker_id": "133",
+      "original_path": "data\\raw\\vedda_133_20260211_232955_67c1551c.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_141_20260211_233601_198b4b13.wav",
+      "transcription": "බෙහෙත්තැන ඇනුකලන හූරා",
+      "translation": "",
+      "duration": 2.208,
+      "sample_rate": 16000,
+      "speaker_id": "141",
+      "original_path": "data\\raw\\vedda_141_20260211_233601_198b4b13.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_295_20260212_012302_676fd1e4.wav",
+      "transcription": "කැකුළෙක්‌",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "295",
+      "original_path": "data\\raw\\vedda_295_20260212_012302_676fd1e4.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_038_20260211_095704_a1b04e27.wav",
+      "transcription": "අක්කිලැත්තෝ",
+      "translation": "",
+      "duration": 1.248,
+      "sample_rate": 16000,
+      "speaker_id": "038",
+      "original_path": "data\\raw\\vedda_038_20260211_095704_a1b04e27.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_360_20260212_020334_a23907b4.wav",
+      "transcription": "කඳුළු පොජ්ජක්",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "360",
+      "original_path": "data\\raw\\vedda_360_20260212_020334_a23907b4.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_359_20260212_020314_8d7c2943.wav",
+      "transcription": "වළ පොජ්ජක් පටෑරිලා",
+      "translation": "",
+      "duration": 1.856,
+      "sample_rate": 16000,
+      "speaker_id": "359",
+      "original_path": "data\\raw\\vedda_359_20260212_020314_8d7c2943.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_182_20260211_235345_44ba8524.wav",
+      "transcription": "කඳ අරනී",
+      "translation": "",
+      "duration": 0.832,
+      "sample_rate": 16000,
+      "speaker_id": "182",
+      "original_path": "data\\raw\\vedda_182_20260211_235345_44ba8524.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_183_20260211_235408_133586c4.wav",
+      "transcription": "රුකුල් පොජ්ජ",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "183",
+      "original_path": "data\\raw\\vedda_183_20260211_235408_133586c4.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_060_20260211_101224_40e728e0.wav",
+      "transcription": "තුනමයි",
+      "translation": "",
+      "duration": 0.64,
+      "sample_rate": 16000,
+      "speaker_id": "060",
+      "original_path": "data\\raw\\vedda_060_20260211_101224_40e728e0.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_113_20260211_231553_4c29271e.wav",
+      "transcription": "රැකූල්‌ පොප්ජේ පොල්ලැච්චා",
+      "translation": "",
+      "duration": 1.984,
+      "sample_rate": 16000,
+      "speaker_id": "113",
+      "original_path": "data\\raw\\vedda_113_20260211_231553_4c29271e.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_153_20260211_234155_6880d8c5.wav",
+      "transcription": "උඩ තැනෙං මංගච්චන දඬු කැච්ච",
+      "translation": "",
+      "duration": 2.304,
+      "sample_rate": 16000,
+      "speaker_id": "153",
+      "original_path": "data\\raw\\vedda_153_20260211_234155_6880d8c5.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_007_20260211_092734_0ea9d704.wav",
+      "transcription": "අප්පිලැත්තෝ",
+      "translation": "",
+      "duration": 1.408,
+      "sample_rate": 16000,
+      "speaker_id": "007",
+      "original_path": "data\\raw\\vedda_007_20260211_092734_0ea9d704.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_336_20260212_015207_3028b600.wav",
+      "transcription": "ඒ කාල පොජ්ජේ එක්ක ඉඳ තබව්වේ යක්‌ වරිග පොජ්ජේ මිනිගජ්ජු",
+      "translation": "",
+      "duration": 4.32,
+      "sample_rate": 16000,
+      "speaker_id": "336",
+      "original_path": "data\\raw\\vedda_336_20260212_015207_3028b600.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_287_20260212_012017_4ba88d74.wav",
+      "transcription": "දියරැච්චාවත්",
+      "translation": "",
+      "duration": 0.928,
+      "sample_rate": 16000,
+      "speaker_id": "287",
+      "original_path": "data\\raw\\vedda_287_20260212_012017_4ba88d74.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_011_20260211_093044_cdfa46da.wav",
+      "transcription": "පය පොජ්ජ",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "011",
+      "original_path": "data\\raw\\vedda_011_20260211_093044_cdfa46da.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_178_20260211_235222_619b20c8.wav",
+      "transcription": "දෙබාජකාරිලා ඇත්තෝ",
+      "translation": "",
+      "duration": 1.6,
+      "sample_rate": 16000,
+      "speaker_id": "178",
+      "original_path": "data\\raw\\vedda_178_20260211_235222_619b20c8.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_105_20260211_231041_c6a67dd1.wav",
+      "transcription": "චප්පි",
+      "translation": "",
+      "duration": 0.704,
+      "sample_rate": 16000,
+      "speaker_id": "105",
+      "original_path": "data\\raw\\vedda_105_20260211_231041_c6a67dd1.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_083_20260211_102546_2360d895.wav",
+      "transcription": "තඹ පෝරු",
+      "translation": "",
+      "duration": 0.896,
+      "sample_rate": 16000,
+      "speaker_id": "083",
+      "original_path": "data\\raw\\vedda_083_20260211_102546_2360d895.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_334_20260212_014854_1822afc5.wav",
+      "transcription": "වන්නියලැත්තෝ පරම්පරා පොජ්ජේ මිනිග්ගජ්ජු ගල් රැක්කී කරපොජ්ජේ ලාබච්චාගනයි ඉඳින්නේ",
+      "translation": "",
+      "duration": 7.872,
+      "sample_rate": 16000,
+      "speaker_id": "334",
+      "original_path": "data\\raw\\vedda_334_20260212_014854_1822afc5.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_224_20260212_004948_2cc8f2f5.wav",
+      "transcription": "කරකුරු ගච්චනවා",
+      "translation": "",
+      "duration": 1.312,
+      "sample_rate": 16000,
+      "speaker_id": "224",
+      "original_path": "data\\raw\\vedda_224_20260212_004948_2cc8f2f5.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_193_20260212_003433_0d93c0ad.wav",
+      "transcription": "කතා පෙට්ට්‌ පොජ්ජ",
+      "translation": "",
+      "duration": 1.504,
+      "sample_rate": 16000,
+      "speaker_id": "193",
+      "original_path": "data\\raw\\vedda_193_20260212_003433_0d93c0ad.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_211_20260212_004222_e15ff940.wav",
+      "transcription": "මේ තැන මේ",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "211",
+      "original_path": "data\\raw\\vedda_211_20260212_004222_e15ff940.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_305_20260212_013124_740c09ed.wav",
+      "transcription": "ඒ කාල පොජ්ජේ",
+      "translation": "",
+      "duration": 1.312,
+      "sample_rate": 16000,
+      "speaker_id": "305",
+      "original_path": "data\\raw\\vedda_305_20260212_013124_740c09ed.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_154_20260211_234211_a9e058fb.wav",
+      "transcription": "කැලෑ පොජ්ජ",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "154",
+      "original_path": "data\\raw\\vedda_154_20260211_234211_a9e058fb.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_091_20260211_230310_5c0e9f28.wav",
+      "transcription": "තැනක්‌ නියක්‌",
+      "translation": "",
+      "duration": 1.056,
+      "sample_rate": 16000,
+      "speaker_id": "091",
+      "original_path": "data\\raw\\vedda_091_20260211_230310_5c0e9f28.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_177_20260211_235158_4f8b10f7.wav",
+      "transcription": "හිංගිලා ඇත්තෝ",
+      "translation": "",
+      "duration": 0.992,
+      "sample_rate": 16000,
+      "speaker_id": "177",
+      "original_path": "data\\raw\\vedda_177_20260211_235158_4f8b10f7.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_148_20260211_233859_0ed1088d.wav",
+      "transcription": "කපා කන යමකෙ",
+      "translation": "",
+      "duration": 1.056,
+      "sample_rate": 16000,
+      "speaker_id": "148",
+      "original_path": "data\\raw\\vedda_148_20260211_233859_0ed1088d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_212_20260212_004355_04a1abda.wav",
+      "transcription": "ඒ තැන මේ",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "212",
+      "original_path": "data\\raw\\vedda_212_20260212_004355_04a1abda.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_094_20260211_230451_672dda58.wav",
+      "transcription": "කලුමඤ්ඤා",
+      "translation": "",
+      "duration": 0.832,
+      "sample_rate": 16000,
+      "speaker_id": "094",
+      "original_path": "data\\raw\\vedda_094_20260211_230451_672dda58.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_071_20260211_101906_47dc9ae8.wav",
+      "transcription": "අඩුතැන මන්දු කරන ලකුණු පොජ්ජ",
+      "translation": "",
+      "duration": 2.016,
+      "sample_rate": 16000,
+      "speaker_id": "071",
+      "original_path": "data\\raw\\vedda_071_20260211_101906_47dc9ae8.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_125_20260211_232449_47bab790.wav",
+      "transcription": "ගුලි පොජ්ජ",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "125",
+      "original_path": "data\\raw\\vedda_125_20260211_232449_47bab790.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_098_20260211_230643_0d46a996.wav",
+      "transcription": "බොක්කි",
+      "translation": "",
+      "duration": 0.608,
+      "sample_rate": 16000,
+      "speaker_id": "098",
+      "original_path": "data\\raw\\vedda_098_20260211_230643_0d46a996.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_144_20260211_233722_528e5cf9.wav",
+      "transcription": "ගල්‌ රැක්ක",
+      "translation": "",
+      "duration": 0.928,
+      "sample_rate": 16000,
+      "speaker_id": "144",
+      "original_path": "data\\raw\\vedda_144_20260211_233722_528e5cf9.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_291_20260212_012140_01bfffab.wav",
+      "transcription": "කැකුළී",
+      "translation": "",
+      "duration": 0.64,
+      "sample_rate": 16000,
+      "speaker_id": "291",
+      "original_path": "data\\raw\\vedda_291_20260212_012140_01bfffab.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_099_20260211_230718_bf8ffc89.wav",
+      "transcription": "පොල්ලැච්චා",
+      "translation": "",
+      "duration": 0.928,
+      "sample_rate": 16000,
+      "speaker_id": "099",
+      "original_path": "data\\raw\\vedda_099_20260211_230718_bf8ffc89.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_274_20260212_011526_47111065.wav",
+      "transcription": "ලෙඩ පොජ්ජ මන්දොවෙලා",
+      "translation": "",
+      "duration": 1.504,
+      "sample_rate": 16000,
+      "speaker_id": "274",
+      "original_path": "data\\raw\\vedda_274_20260212_011526_47111065.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_070_20260211_101823_93fd37a8.wav",
+      "transcription": "අඩුතැන මන්දෝ කරන ලකුණු පොජ්ජ",
+      "translation": "",
+      "duration": 2.272,
+      "sample_rate": 16000,
+      "speaker_id": "070",
+      "original_path": "data\\raw\\vedda_070_20260211_101823_93fd37a8.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_024_20260211_094437_2729dd9d.wav",
+      "transcription": "නලල්‌ පොජ්ජ",
+      "translation": "",
+      "duration": 1.312,
+      "sample_rate": 16000,
+      "speaker_id": "024",
+      "original_path": "data\\raw\\vedda_024_20260211_094437_2729dd9d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_037_20260211_095833_c3dfc017.wav",
+      "transcription": "අයියලැත්තෝ",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "037",
+      "original_path": "data\\raw\\vedda_037_20260211_095833_c3dfc017.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_145_20260211_233747_7313dcd1.wav",
+      "transcription": "බිම්‌ පොජ්ජ පටාරින යමකේ",
+      "translation": "",
+      "duration": 2.016,
+      "sample_rate": 16000,
+      "speaker_id": "145",
+      "original_path": "data\\raw\\vedda_145_20260211_233747_7313dcd1.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_124_20260211_232312_47987994.wav",
+      "transcription": "අල පොජ්ජ",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "124",
+      "original_path": "data\\raw\\vedda_124_20260211_232312_47987994.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_069_20260211_101726_d7388163.wav",
+      "transcription": "එකතු තැන මන්දු කරන ලකුණු පොජ්ජ",
+      "translation": "",
+      "duration": 2.208,
+      "sample_rate": 16000,
+      "speaker_id": "069",
+      "original_path": "data\\raw\\vedda_069_20260211_101726_d7388163.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_173_20260211_235005_8f47c155.wav",
+      "transcription": "මහ හූරා",
+      "translation": "",
+      "duration": 0.928,
+      "sample_rate": 16000,
+      "speaker_id": "173",
+      "original_path": "data\\raw\\vedda_173_20260211_235005_8f47c155.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_199_20260212_003728_099fa2c0.wav",
+      "transcription": "බඩ උච්චා දමනවා",
+      "translation": "",
+      "duration": 1.28,
+      "sample_rate": 16000,
+      "speaker_id": "199",
+      "original_path": "data\\raw\\vedda_199_20260212_003728_099fa2c0.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_203_20260212_003911_018a7a47.wav",
+      "transcription": "පණ පොජ්ජ",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "203",
+      "original_path": "data\\raw\\vedda_203_20260212_003911_018a7a47.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_303_20260212_012845_61112b07.wav",
+      "transcription": "මහියංගන පෝරුගම් පොජ්ජට",
+      "translation": "",
+      "duration": 2.24,
+      "sample_rate": 16000,
+      "speaker_id": "303",
+      "original_path": "data\\raw\\vedda_303_20260212_012845_61112b07.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_181_20260211_235320_7cde3e8b.wav",
+      "transcription": "කඳ පල්ලී",
+      "translation": "",
+      "duration": 0.64,
+      "sample_rate": 16000,
+      "speaker_id": "181",
+      "original_path": "data\\raw\\vedda_181_20260211_235320_7cde3e8b.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_127_20260211_232631_7798e31f.wav",
+      "transcription": "කිරි ගෙජ්ජ",
+      "translation": "",
+      "duration": 0.832,
+      "sample_rate": 16000,
+      "speaker_id": "127",
+      "original_path": "data\\raw\\vedda_127_20260211_232631_7798e31f.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_147_20260211_233836_d7a1387e.wav",
+      "transcription": "මොරියං කැච්ච",
+      "translation": "",
+      "duration": 1.152,
+      "sample_rate": 16000,
+      "speaker_id": "147",
+      "original_path": "data\\raw\\vedda_147_20260211_233836_d7a1387e.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_220_20260212_004814_39067c8e.wav",
+      "transcription": "කැවිල්ලානවා",
+      "translation": "",
+      "duration": 1.216,
+      "sample_rate": 16000,
+      "speaker_id": "220",
+      "original_path": "data\\raw\\vedda_220_20260212_004814_39067c8e.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_088_20260211_102823_3d87f0b5.wav",
+      "transcription": "කොයිතැනක්‌",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "088",
+      "original_path": "data\\raw\\vedda_088_20260211_102823_3d87f0b5.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_343_20260212_015456_ed5e8f07.wav",
+      "transcription": "වැව් පොජ්ජ",
+      "translation": "",
+      "duration": 0.992,
+      "sample_rate": 16000,
+      "speaker_id": "343",
+      "original_path": "data\\raw\\vedda_343_20260212_015456_ed5e8f07.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_277_20260212_011630_04e344ec.wav",
+      "transcription": "ඔය ඇත්තන්නේ",
+      "translation": "",
+      "duration": 1.12,
+      "sample_rate": 16000,
+      "speaker_id": "277",
+      "original_path": "data\\raw\\vedda_277_20260212_011630_04e344ec.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_323_20260212_013954_6471827f.wav",
+      "transcription": "කැකුලෝ ඔටා දමනවා",
+      "translation": "",
+      "duration": 1.664,
+      "sample_rate": 16000,
+      "speaker_id": "323",
+      "original_path": "data\\raw\\vedda_323_20260212_013954_6471827f.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_194_20260212_003451_d823ada1.wav",
+      "transcription": "රූප පෙට්ට්‌ පොජ්ජ",
+      "translation": "",
+      "duration": 1.376,
+      "sample_rate": 16000,
+      "speaker_id": "194",
+      "original_path": "data\\raw\\vedda_194_20260212_003451_d823ada1.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_289_20260212_012100_13db65bd.wav",
+      "transcription": "මේ ඇත්තන්නේ",
+      "translation": "",
+      "duration": 1.12,
+      "sample_rate": 16000,
+      "speaker_id": "289",
+      "original_path": "data\\raw\\vedda_289_20260212_012100_13db65bd.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_184_20260212_002956_44149ace.wav",
+      "transcription": "චාලාව",
+      "translation": "",
+      "duration": 0.736,
+      "sample_rate": 16000,
+      "speaker_id": "184",
+      "original_path": "data\\raw\\vedda_184_20260212_002956_44149ace.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_299_20260212_012552_a9411c4f.wav",
+      "transcription": "කරපොජ්ජේ",
+      "translation": "",
+      "duration": 0.896,
+      "sample_rate": 16000,
+      "speaker_id": "299",
+      "original_path": "data\\raw\\vedda_299_20260212_012552_a9411c4f.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_271_20260212_011432_3c33f0df.wav",
+      "transcription": "මේ ඇත්තෝ",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "271",
+      "original_path": "data\\raw\\vedda_271_20260212_011432_3c33f0df.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_196_20260212_003536_62f673b6.wav",
+      "transcription": "පෝරුගං පොජ්ජ",
+      "translation": "",
+      "duration": 1.248,
+      "sample_rate": 16000,
+      "speaker_id": "196",
+      "original_path": "data\\raw\\vedda_196_20260212_003536_62f673b6.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_281_20260212_011746_7c4b04f2.wav",
+      "transcription": "කොයිබට",
+      "translation": "",
+      "duration": 0.672,
+      "sample_rate": 16000,
+      "speaker_id": "281",
+      "original_path": "data\\raw\\vedda_281_20260212_011746_7c4b04f2.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_130_20260211_232838_a6b93acf.wav",
+      "transcription": "උණු දිය රැච්ච",
+      "translation": "",
+      "duration": 1.152,
+      "sample_rate": 16000,
+      "speaker_id": "130",
+      "original_path": "data\\raw\\vedda_130_20260211_232838_a6b93acf.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_039_20260211_095938_bcfa3e1a.wav",
+      "transcription": "මුත්තිලැත්තෝ",
+      "translation": "",
+      "duration": 1.184,
+      "sample_rate": 16000,
+      "speaker_id": "039",
+      "original_path": "data\\raw\\vedda_039_20260211_095938_bcfa3e1a.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_012_20260211_093140_0bfdf15a.wav",
+      "transcription": "රුක පොජ්ජ",
+      "translation": "",
+      "duration": 1.088,
+      "sample_rate": 16000,
+      "speaker_id": "012",
+      "original_path": "data\\raw\\vedda_012_20260211_093140_0bfdf15a.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_257_20260212_010847_461390ba.wav",
+      "transcription": "කඳඅරනිග දියතැන",
+      "translation": "",
+      "duration": 1.568,
+      "sample_rate": 16000,
+      "speaker_id": "257",
+      "original_path": "data\\raw\\vedda_257_20260212_010847_461390ba.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_186_20260212_003055_d8f57b08.wav",
+      "transcription": "සිරංගිය",
+      "translation": "",
+      "duration": 0.928,
+      "sample_rate": 16000,
+      "speaker_id": "186",
+      "original_path": "data\\raw\\vedda_186_20260212_003055_d8f57b08.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_326_20260212_014259_0f243cdd.wav",
+      "transcription": "මේ කැකුළා මාමකැච්චක් හොදමයි",
+      "translation": "",
+      "duration": 2.784,
+      "sample_rate": 16000,
+      "speaker_id": "326",
+      "original_path": "data\\raw\\vedda_326_20260212_014259_0f243cdd.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_114_20260211_231658_2e9ba76b.wav",
+      "transcription": "රුකුල්‌ පොජ්ජේ පිටගැටයා",
+      "translation": "",
+      "duration": 1.888,
+      "sample_rate": 16000,
+      "speaker_id": "114",
+      "original_path": "data\\raw\\vedda_114_20260211_231658_2e9ba76b.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_180_20260211_235304_32f8e964.wav",
+      "transcription": "වරිග පොජ්ජ",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "180",
+      "original_path": "data\\raw\\vedda_180_20260211_235304_32f8e964.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_255_20260212_010750_da25fae0.wav",
+      "transcription": "කතාදමන්න",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "255",
+      "original_path": "data\\raw\\vedda_255_20260212_010750_da25fae0.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_332_20260212_014626_529c559c.wav",
+      "transcription": "මාම්ලැත්තෝ රැකං පොජ්ජ උඩතැනට මංගච්චනවා",
+      "translation": "",
+      "duration": 3.584,
+      "sample_rate": 16000,
+      "speaker_id": "332",
+      "original_path": "data\\raw\\vedda_332_20260212_014626_529c559c.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_119_20260211_231936_4c721c22.wav",
+      "transcription": "චමනලයා",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "119",
+      "original_path": "data\\raw\\vedda_119_20260211_231936_4c721c22.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_352_20260212_020020_c89b0a83.wav",
+      "transcription": "භාර පොජ්ජක්",
+      "translation": "",
+      "duration": 1.248,
+      "sample_rate": 16000,
+      "speaker_id": "352",
+      "original_path": "data\\raw\\vedda_352_20260212_020020_c89b0a83.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_368_20260212_020711_c1498f49.wav",
+      "transcription": "මංගච්චන්න කොදුයි",
+      "translation": "",
+      "duration": 1.184,
+      "sample_rate": 16000,
+      "speaker_id": "368",
+      "original_path": "data\\raw\\vedda_368_20260212_020711_c1498f49.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_275_20260212_011547_e631c66a.wav",
+      "transcription": "ඒ ඇත්තෝ",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "275",
+      "original_path": "data\\raw\\vedda_275_20260212_011547_e631c66a.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_363_20260212_020509_d1acf1e5.wav",
+      "transcription": "කෝනම් පොජ්ජක් පටෑරිලා",
+      "translation": "",
+      "duration": 1.92,
+      "sample_rate": 16000,
+      "speaker_id": "363",
+      "original_path": "data\\raw\\vedda_363_20260212_020509_d1acf1e5.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_165_20260211_234621_7092ba38.wav",
+      "transcription": "ඉර පොජ්ජ බිම්‌ පොජ්ජට ගමංගැච්චුවා",
+      "translation": "",
+      "duration": 2.304,
+      "sample_rate": 16000,
+      "speaker_id": "165",
+      "original_path": "data\\raw\\vedda_165_20260211_234621_7092ba38.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_235_20260212_005514_906588e6.wav",
+      "transcription": "මන්දෝ කරනවා",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "235",
+      "original_path": "data\\raw\\vedda_235_20260212_005514_906588e6.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_137_20260211_233159_919bbce2.wav",
+      "transcription": "වේචා කොළ",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "137",
+      "original_path": "data\\raw\\vedda_137_20260211_233159_919bbce2.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_155_20260211_234231_0ea57a71.wav",
+      "transcription": "රුකං පොජ්ජ",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "155",
+      "original_path": "data\\raw\\vedda_155_20260211_234231_0ea57a71.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_200_20260212_003748_2cac15e0.wav",
+      "transcription": "බඩ රුජා දමනවා",
+      "translation": "",
+      "duration": 1.216,
+      "sample_rate": 16000,
+      "speaker_id": "200",
+      "original_path": "data\\raw\\vedda_200_20260212_003748_2cac15e0.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_198_20260212_003651_cb63fe8d.wav",
+      "transcription": "මත් දිය රැච්ච",
+      "translation": "",
+      "duration": 1.28,
+      "sample_rate": 16000,
+      "speaker_id": "198",
+      "original_path": "data\\raw\\vedda_198_20260212_003651_cb63fe8d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_375_20260212_021023_ca9bee38.wav",
+      "transcription": "හොච්චදික්කා",
+      "translation": "",
+      "duration": 1.056,
+      "sample_rate": 16000,
+      "speaker_id": "375",
+      "original_path": "data\\raw\\vedda_375_20260212_021023_ca9bee38.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_003_20260211_092419_7262a092.wav",
+      "transcription": "මැච්ච",
+      "translation": "",
+      "duration": 0.896,
+      "sample_rate": 16000,
+      "speaker_id": "003",
+      "original_path": "data\\raw\\vedda_003_20260211_092419_7262a092.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_205_20260212_003949_6361df33.wav",
+      "transcription": "කවි තැන",
+      "translation": "",
+      "duration": 0.736,
+      "sample_rate": 16000,
+      "speaker_id": "205",
+      "original_path": "data\\raw\\vedda_205_20260212_003949_6361df33.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_117_20260211_231825_4cde91ea.wav",
+      "transcription": "එල මඤ්ඤා",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "117",
+      "original_path": "data\\raw\\vedda_117_20260211_231825_4cde91ea.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_338_20260212_015258_5d4d2705.wav",
+      "transcription": "ගම් පොජ්ජ",
+      "translation": "",
+      "duration": 0.992,
+      "sample_rate": 16000,
+      "speaker_id": "338",
+      "original_path": "data\\raw\\vedda_338_20260212_015258_5d4d2705.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_221_20260212_004840_58d4dbf1.wav",
+      "transcription": "මංගච්චනවා",
+      "translation": "",
+      "duration": 1.056,
+      "sample_rate": 16000,
+      "speaker_id": "221",
+      "original_path": "data\\raw\\vedda_221_20260212_004840_58d4dbf1.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_027_20260211_094649_81b28eaa.wav",
+      "transcription": "නාස්‌ පොජ්ජ",
+      "translation": "",
+      "duration": 1.152,
+      "sample_rate": 16000,
+      "speaker_id": "027",
+      "original_path": "data\\raw\\vedda_027_20260211_094649_81b28eaa.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_122_20260211_232120_4422e80d.wav",
+      "transcription": "පැණි පොජ්ජ",
+      "translation": "",
+      "duration": 0.896,
+      "sample_rate": 16000,
+      "speaker_id": "122",
+      "original_path": "data\\raw\\vedda_122_20260211_232120_4422e80d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_294_20260212_012243_a186bc34.wav",
+      "transcription": "උඩතැනට මංගච්චනවා",
+      "translation": "",
+      "duration": 1.376,
+      "sample_rate": 16000,
+      "speaker_id": "294",
+      "original_path": "data\\raw\\vedda_294_20260212_012243_a186bc34.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_226_20260212_005030_c68e12ff.wav",
+      "transcription": "බය දමනවා",
+      "translation": "",
+      "duration": 0.832,
+      "sample_rate": 16000,
+      "speaker_id": "226",
+      "original_path": "data\\raw\\vedda_226_20260212_005030_c68e12ff.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_301_20260212_012759_78130af3.wav",
+      "transcription": "ලාබච්චාගන",
+      "translation": "",
+      "duration": 1.216,
+      "sample_rate": 16000,
+      "speaker_id": "301",
+      "original_path": "data\\raw\\vedda_301_20260212_012759_78130af3.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_329_20260212_014456_6a6b2e0e.wav",
+      "transcription": "ඒ ඇත්ති මේ ඇත්තන්නේ මහ කැකුළි",
+      "translation": "",
+      "duration": 2.88,
+      "sample_rate": 16000,
+      "speaker_id": "329",
+      "original_path": "data\\raw\\vedda_329_20260212_014456_6a6b2e0e.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_128_20260211_232726_8070f052.wav",
+      "transcription": "ගයි ගත්‌ කරල්‌ පොජ්ජ",
+      "translation": "",
+      "duration": 1.6,
+      "sample_rate": 16000,
+      "speaker_id": "128",
+      "original_path": "data\\raw\\vedda_128_20260211_232726_8070f052.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_076_20260211_102134_d7e70e31.wav",
+      "transcription": "රවුම්‌ තැනක්‌",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "076",
+      "original_path": "data\\raw\\vedda_076_20260211_102134_d7e70e31.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_308_20260212_013249_e3cea4f1.wav",
+      "transcription": "කඳපල්ලි පටාරන්න මංගච්චමු",
+      "translation": "",
+      "duration": 2.464,
+      "sample_rate": 16000,
+      "speaker_id": "308",
+      "original_path": "data\\raw\\vedda_308_20260212_013249_e3cea4f1.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_030_20260211_095200_74ec5851.wav",
+      "transcription": "බුච්ච",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "030",
+      "original_path": "data\\raw\\vedda_030_20260211_095200_74ec5851.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_085_20260211_102630_f37beab9.wav",
+      "transcription": "අඩු තැනක්‌",
+      "translation": "",
+      "duration": 0.704,
+      "sample_rate": 16000,
+      "speaker_id": "085",
+      "original_path": "data\\raw\\vedda_085_20260211_102630_f37beab9.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_358_20260212_020253_3b658457.wav",
+      "transcription": "පටෑරිලා",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "358",
+      "original_path": "data\\raw\\vedda_358_20260212_020253_3b658457.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_109_20260211_231327_a5abb216.wav",
+      "transcription": "මැච්චි",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "109",
+      "original_path": "data\\raw\\vedda_109_20260211_231327_a5abb216.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_250_20260212_010342_0253a838.wav",
+      "transcription": "මංගච්චප",
+      "translation": "",
+      "duration": 0.992,
+      "sample_rate": 16000,
+      "speaker_id": "250",
+      "original_path": "data\\raw\\vedda_250_20260212_010342_0253a838.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_239_20260212_005810_25b91114.wav",
+      "transcription": "වෙනකට මන්දෝ වෙනවා",
+      "translation": "",
+      "duration": 1.28,
+      "sample_rate": 16000,
+      "speaker_id": "239",
+      "original_path": "data\\raw\\vedda_239_20260212_005810_25b91114.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_134_20260211_233011_3ede3203.wav",
+      "transcription": "ගයිගැට",
+      "translation": "",
+      "duration": 0.608,
+      "sample_rate": 16000,
+      "speaker_id": "134",
+      "original_path": "data\\raw\\vedda_134_20260211_233011_3ede3203.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_185_20260212_003027_1155a738.wav",
+      "transcription": "කඳේ කොටන යමකේ",
+      "translation": "",
+      "duration": 1.312,
+      "sample_rate": 16000,
+      "speaker_id": "185",
+      "original_path": "data\\raw\\vedda_185_20260212_003027_1155a738.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_278_20260212_011649_94db9818.wav",
+      "transcription": "නම්  පොජ්ජ",
+      "translation": "",
+      "duration": 0.992,
+      "sample_rate": 16000,
+      "speaker_id": "278",
+      "original_path": "data\\raw\\vedda_278_20260212_011649_94db9818.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_045_20260211_100332_be5d4aab.wav",
+      "transcription": "කැකුළී",
+      "translation": "",
+      "duration": 0.672,
+      "sample_rate": 16000,
+      "speaker_id": "045",
+      "original_path": "data\\raw\\vedda_045_20260211_100332_be5d4aab.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_380_20260212_021241_6472f510.wav",
+      "transcription": "ඔත්කයි",
+      "translation": "",
+      "duration": 0.736,
+      "sample_rate": 16000,
+      "speaker_id": "380",
+      "original_path": "data\\raw\\vedda_380_20260212_021241_6472f510.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_067_20260211_101556_166b058e.wav",
+      "transcription": "දහමයි",
+      "translation": "",
+      "duration": 0.672,
+      "sample_rate": 16000,
+      "speaker_id": "067",
+      "original_path": "data\\raw\\vedda_067_20260211_101556_166b058e.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_284_20260212_011846_270932a2.wav",
+      "transcription": "මේ කැකුළෝ",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "284",
+      "original_path": "data\\raw\\vedda_284_20260212_011846_270932a2.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_087_20260211_102741_c86e9fbf.wav",
+      "transcription": "තැනමයි",
+      "translation": "",
+      "duration": 0.608,
+      "sample_rate": 16000,
+      "speaker_id": "087",
+      "original_path": "data\\raw\\vedda_087_20260211_102741_c86e9fbf.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_187_20260212_003124_3ce746f8.wav",
+      "transcription": "කෝමං තැන",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "187",
+      "original_path": "data\\raw\\vedda_187_20260212_003124_3ce746f8.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_072_20260211_101937_4290d8ad.wav",
+      "transcription": "වැඩි තැන මන්දෝ කරන ලකුණු පොජීජ",
+      "translation": "",
+      "duration": 1.856,
+      "sample_rate": 16000,
+      "speaker_id": "072",
+      "original_path": "data\\raw\\vedda_072_20260211_101937_4290d8ad.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_160_20260211_234409_fc9e24c4.wav",
+      "transcription": "හඳ පොජ්ජ",
+      "translation": "",
+      "duration": 0.896,
+      "sample_rate": 16000,
+      "speaker_id": "160",
+      "original_path": "data\\raw\\vedda_160_20260211_234409_fc9e24c4.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_013_20260211_093318_80af616e.wav",
+      "transcription": "ලය පොජ්ජ",
+      "translation": "",
+      "duration": 1.088,
+      "sample_rate": 16000,
+      "speaker_id": "013",
+      "original_path": "data\\raw\\vedda_013_20260211_093318_80af616e.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_036_20260211_095459_56a0aee5.wav",
+      "transcription": "පය පොජ්ජ",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "036",
+      "original_path": "data\\raw\\vedda_036_20260211_095459_56a0aee5.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_029_20260211_095130_a277d3ca.wav",
+      "transcription": "කං රුකුල",
+      "translation": "",
+      "duration": 1.088,
+      "sample_rate": 16000,
+      "speaker_id": "029",
+      "original_path": "data\\raw\\vedda_029_20260211_095130_a277d3ca.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_171_20260211_234852_47bd904d.wav",
+      "transcription": "සකලයෝ ඇල්ලුම්‌ පොජ්ජ මන්දු කරන උගුල්‌ පොජ්ජ",
+      "translation": "",
+      "duration": 3.392,
+      "sample_rate": 16000,
+      "speaker_id": "171",
+      "original_path": "data\\raw\\vedda_171_20260211_234852_47bd904d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_143_20260211_233647_ea845564.wav",
+      "transcription": "ගුරු හූරා",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "143",
+      "original_path": "data\\raw\\vedda_143_20260211_233647_ea845564.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_304_20260212_013013_fc8188ce.wav",
+      "transcription": "ඒ තැනේදී ඉඩ තැන මන්දොකරගත්තා",
+      "translation": "",
+      "duration": 2.976,
+      "sample_rate": 16000,
+      "speaker_id": "304",
+      "original_path": "data\\raw\\vedda_304_20260212_013013_fc8188ce.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_364_20260212_020542_5cd2c508.wav",
+      "transcription": "රුකම් පොජ්ජක්",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "364",
+      "original_path": "data\\raw\\vedda_364_20260212_020542_5cd2c508.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_151_20260211_234047_1b67268d.wav",
+      "transcription": "මහ දඬු කැච්ච",
+      "translation": "",
+      "duration": 1.248,
+      "sample_rate": 16000,
+      "speaker_id": "151",
+      "original_path": "data\\raw\\vedda_151_20260211_234047_1b67268d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_230_20260212_005259_bb9002d7.wav",
+      "transcription": "තිබෙනවා",
+      "translation": "",
+      "duration": 0.608,
+      "sample_rate": 16000,
+      "speaker_id": "230",
+      "original_path": "data\\raw\\vedda_230_20260212_005259_bb9002d7.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_223_20260212_004925_b2d036df.wav",
+      "transcription": "වැතිරෙනවා",
+      "translation": "",
+      "duration": 1.952,
+      "sample_rate": 16000,
+      "speaker_id": "223",
+      "original_path": "data\\raw\\vedda_223_20260212_004925_b2d036df.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_132_20260211_232923_cbcf9a3f.wav",
+      "transcription": "තල ඇට පොජ්ජ",
+      "translation": "",
+      "duration": 1.312,
+      "sample_rate": 16000,
+      "speaker_id": "132",
+      "original_path": "data\\raw\\vedda_132_20260211_232923_cbcf9a3f.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_097_20260211_230621_f61b3c4e.wav",
+      "transcription": "ඉරි මයිරා",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "097",
+      "original_path": "data\\raw\\vedda_097_20260211_230621_f61b3c4e.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_356_20260212_020206_328071f2.wav",
+      "transcription": "පොතු පොජ්ජක් පටෑරගෙන",
+      "translation": "",
+      "duration": 1.824,
+      "sample_rate": 16000,
+      "speaker_id": "356",
+      "original_path": "data\\raw\\vedda_356_20260212_020206_328071f2.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_052_20260211_100707_316c558d.wav",
+      "transcription": "එකම",
+      "translation": "",
+      "duration": 0.576,
+      "sample_rate": 16000,
+      "speaker_id": "052",
+      "original_path": "data\\raw\\vedda_052_20260211_100707_316c558d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_242_20260212_005941_72284964.wav",
+      "transcription": "ලාබච්චනවා",
+      "translation": "",
+      "duration": 0.672,
+      "sample_rate": 16000,
+      "speaker_id": "242",
+      "original_path": "data\\raw\\vedda_242_20260212_005941_72284964.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_286_20260212_011949_071c5f03.wav",
+      "transcription": "කැවිල්ලාන",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "286",
+      "original_path": "data\\raw\\vedda_286_20260212_011949_071c5f03.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_292_20260212_012200_4ec96411.wav",
+      "transcription": "ඇන්න මංගච්චනවා",
+      "translation": "",
+      "duration": 1.344,
+      "sample_rate": 16000,
+      "speaker_id": "292",
+      "original_path": "data\\raw\\vedda_292_20260212_012200_4ec96411.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_179_20260211_235245_85408ef9.wav",
+      "transcription": "සුදු හූරා",
+      "translation": "",
+      "duration": 0.992,
+      "sample_rate": 16000,
+      "speaker_id": "179",
+      "original_path": "data\\raw\\vedda_179_20260211_235245_85408ef9.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_042_20260211_100158_c3ad3d67.wav",
+      "transcription": "මයහූරා",
+      "translation": "",
+      "duration": 0.736,
+      "sample_rate": 16000,
+      "speaker_id": "042",
+      "original_path": "data\\raw\\vedda_042_20260211_100158_c3ad3d67.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_369_20260212_020734_b34335ba.wav",
+      "transcription": "කැවිල්ලන්නේ කොදුයි",
+      "translation": "",
+      "duration": 1.312,
+      "sample_rate": 16000,
+      "speaker_id": "369",
+      "original_path": "data\\raw\\vedda_369_20260212_020734_b34335ba.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_207_20260212_004028_246520b0.wav",
+      "transcription": "දින පොජ්ජ",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "207",
+      "original_path": "data\\raw\\vedda_207_20260212_004028_246520b0.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_256_20260212_010815_0fa11549.wav",
+      "transcription": "මේ කාල මැච්චේ",
+      "translation": "",
+      "duration": 1.248,
+      "sample_rate": 16000,
+      "speaker_id": "256",
+      "original_path": "data\\raw\\vedda_256_20260212_010815_0fa11549.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_317_20260212_013722_c5c57f7d.wav",
+      "transcription": "ඔය ඇත්තන්ට කොයි හැටිමටද",
+      "translation": "",
+      "duration": 2.08,
+      "sample_rate": 16000,
+      "speaker_id": "317",
+      "original_path": "data\\raw\\vedda_317_20260212_013722_c5c57f7d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_005_20260211_092605_d6756fe0.wav",
+      "transcription": "කපුවලැත්තෝ",
+      "translation": "",
+      "duration": 1.376,
+      "sample_rate": 16000,
+      "speaker_id": "005",
+      "original_path": "data\\raw\\vedda_005_20260211_092605_d6756fe0.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_258_20260212_010921_2070006d.wav",
+      "transcription": "අල පොජ්ජ",
+      "translation": "",
+      "duration": 0.832,
+      "sample_rate": 16000,
+      "speaker_id": "258",
+      "original_path": "data\\raw\\vedda_258_20260212_010921_2070006d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_342_20260212_015436_2c1dbf75.wav",
+      "transcription": "අත් පොජ්ජ",
+      "translation": "",
+      "duration": 0.928,
+      "sample_rate": 16000,
+      "speaker_id": "342",
+      "original_path": "data\\raw\\vedda_342_20260212_015436_2c1dbf75.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_102_20260211_230857_66a45cbc.wav",
+      "transcription": "මුන්දි",
+      "translation": "",
+      "duration": 0.672,
+      "sample_rate": 16000,
+      "speaker_id": "102",
+      "original_path": "data\\raw\\vedda_102_20260211_230857_66a45cbc.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_228_20260212_005149_4401d263.wav",
+      "transcription": "කං රුකුලට මන්දෝ කරනවා",
+      "translation": "",
+      "duration": 1.536,
+      "sample_rate": 16000,
+      "speaker_id": "228",
+      "original_path": "data\\raw\\vedda_228_20260212_005149_4401d263.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_327_20260212_014324_e1e71d85.wav",
+      "transcription": "මේ ගම්‌ පොජ්ජට කැවිල්ලාන දියරැචිචාවත්‌ කොදොයි",
+      "translation": "",
+      "duration": 3.232,
+      "sample_rate": 16000,
+      "speaker_id": "327",
+      "original_path": "data\\raw\\vedda_327_20260212_014324_e1e71d85.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_214_20260212_004451_c5461dbe.wav",
+      "transcription": "හිත්ලානවා",
+      "translation": "",
+      "duration": 1.12,
+      "sample_rate": 16000,
+      "speaker_id": "214",
+      "original_path": "data\\raw\\vedda_214_20260212_004451_c5461dbe.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_172_20260211_234936_7d6a26b8.wav",
+      "transcription": "කඳං තලන්නග හබක්‌ පොජිජ",
+      "translation": "",
+      "duration": 2.208,
+      "sample_rate": 16000,
+      "speaker_id": "172",
+      "original_path": "data\\raw\\vedda_172_20260211_234936_7d6a26b8.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_100_20260211_230745_24cb9250.wav",
+      "transcription": "මයිරා",
+      "translation": "",
+      "duration": 0.704,
+      "sample_rate": 16000,
+      "speaker_id": "100",
+      "original_path": "data\\raw\\vedda_100_20260211_230745_24cb9250.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_217_20260212_004720_ff8b9263.wav",
+      "transcription": "මෙයැත්තෝ",
+      "translation": "",
+      "duration": 0.832,
+      "sample_rate": 16000,
+      "speaker_id": "217",
+      "original_path": "data\\raw\\vedda_217_20260212_004720_ff8b9263.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_062_20260211_101337_1169b4c7.wav",
+      "transcription": "පහමයි",
+      "translation": "",
+      "duration": 0.672,
+      "sample_rate": 16000,
+      "speaker_id": "062",
+      "original_path": "data\\raw\\vedda_062_20260211_101337_1169b4c7.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_048_20260211_100503_98c80dc5.wav",
+      "transcription": "බෑනලැත්තෝ",
+      "translation": "",
+      "duration": 0.992,
+      "sample_rate": 16000,
+      "speaker_id": "048",
+      "original_path": "data\\raw\\vedda_048_20260211_100503_98c80dc5.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_033_20260211_095337_c680c332.wav",
+      "transcription": "බඩ පොජ්ජ",
+      "translation": "",
+      "duration": 0.896,
+      "sample_rate": 16000,
+      "speaker_id": "033",
+      "original_path": "data\\raw\\vedda_033_20260211_095337_c680c332.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_270_20260212_011407_b557e6fa.wav",
+      "transcription": "එකමක්",
+      "translation": "",
+      "duration": 0.512,
+      "sample_rate": 16000,
+      "speaker_id": "270",
+      "original_path": "data\\raw\\vedda_270_20260212_011407_b557e6fa.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_201_20260212_003809_a28ffc07.wav",
+      "transcription": "කැකුළෙක්‌ මන්දෝ වෙනවා",
+      "translation": "",
+      "duration": 1.408,
+      "sample_rate": 16000,
+      "speaker_id": "201",
+      "original_path": "data\\raw\\vedda_201_20260212_003809_a28ffc07.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_340_20260212_015350_9905dc14.wav",
+      "transcription": "රුකම් පොජ්ජ",
+      "translation": "",
+      "duration": 1.184,
+      "sample_rate": 16000,
+      "speaker_id": "340",
+      "original_path": "data\\raw\\vedda_340_20260212_015350_9905dc14.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_028_20260211_094944_b207c1b4.wav",
+      "transcription": "කට පොජ්ජ",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "028",
+      "original_path": "data\\raw\\vedda_028_20260211_094944_b207c1b4.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_307_20260212_013223_6c45c3cc.wav",
+      "transcription": "යක්‌ වරිග පොජ්ජේ",
+      "translation": "",
+      "duration": 1.248,
+      "sample_rate": 16000,
+      "speaker_id": "307",
+      "original_path": "data\\raw\\vedda_307_20260212_013223_6c45c3cc.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_232_20260212_005341_c89e88cb.wav",
+      "transcription": "ඇනුකලනවා",
+      "translation": "",
+      "duration": 0.832,
+      "sample_rate": 16000,
+      "speaker_id": "232",
+      "original_path": "data\\raw\\vedda_232_20260212_005341_c89e88cb.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_263_20260212_011103_fbee4654.wav",
+      "transcription": "හොඳවාගේ",
+      "translation": "",
+      "duration": 0.8,
+      "sample_rate": 16000,
+      "speaker_id": "263",
+      "original_path": "data\\raw\\vedda_263_20260212_011103_fbee4654.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_163_20260211_234513_d9a63696.wav",
+      "transcription": "උඩතැනෙන්‌ දිය රැච්චා මන්දෝ වුනා",
+      "translation": "",
+      "duration": 2.304,
+      "sample_rate": 16000,
+      "speaker_id": "163",
+      "original_path": "data\\raw\\vedda_163_20260211_234513_d9a63696.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_325_20260212_014220_343252fc.wav",
+      "transcription": "හූර කොයිබට මංගච්චන්නේ",
+      "translation": "",
+      "duration": 2.24,
+      "sample_rate": 16000,
+      "speaker_id": "325",
+      "original_path": "data\\raw\\vedda_325_20260212_014220_343252fc.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_139_20260211_233425_d60d0158.wav",
+      "transcription": "ජීචාකාරී",
+      "translation": "",
+      "duration": 0.832,
+      "sample_rate": 16000,
+      "speaker_id": "139",
+      "original_path": "data\\raw\\vedda_139_20260211_233425_d60d0158.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_063_20260211_101359_f224f41c.wav",
+      "transcription": "හයමයි",
+      "translation": "",
+      "duration": 0.672,
+      "sample_rate": 16000,
+      "speaker_id": "063",
+      "original_path": "data\\raw\\vedda_063_20260211_101359_f224f41c.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_136_20260211_233121_124956ec.wav",
+      "transcription": "ගල් මඳ",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "136",
+      "original_path": "data\\raw\\vedda_136_20260211_233121_124956ec.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_129_20260211_232808_d317f5c3.wav",
+      "transcription": "ගලේ ලා කරකුරු ගච්චන ඇටපොජ්ජ",
+      "translation": "",
+      "duration": 2.976,
+      "sample_rate": 16000,
+      "speaker_id": "129",
+      "original_path": "data\\raw\\vedda_129_20260211_232808_d317f5c3.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_009_20260211_092925_4368fcd0.wav",
+      "transcription": "නැන්දම්මිලැත්තෝ",
+      "translation": "",
+      "duration": 1.504,
+      "sample_rate": 16000,
+      "speaker_id": "009",
+      "original_path": "data\\raw\\vedda_009_20260211_092925_4368fcd0.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_066_20260211_101508_9e583567.wav",
+      "transcription": "නමයමයි",
+      "translation": "",
+      "duration": 0.704,
+      "sample_rate": 16000,
+      "speaker_id": "066",
+      "original_path": "data\\raw\\vedda_066_20260211_101508_9e583567.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_015_20260211_093438_a03e0167.wav",
+      "transcription": "හෙට දින මැච්ච",
+      "translation": "",
+      "duration": 1.568,
+      "sample_rate": 16000,
+      "speaker_id": "015",
+      "original_path": "data\\raw\\vedda_015_20260211_093438_a03e0167.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_157_20260211_234309_eeb44eda.wav",
+      "transcription": "දිය ගං ඇල්ල",
+      "translation": "",
+      "duration": 1.056,
+      "sample_rate": 16000,
+      "speaker_id": "157",
+      "original_path": "data\\raw\\vedda_157_20260211_234309_eeb44eda.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_041_20260211_100106_cea74a24.wav",
+      "transcription": "තුන්නලැත්තෝ",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "041",
+      "original_path": "data\\raw\\vedda_041_20260211_100106_cea74a24.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_350_20260212_015829_c4c27118.wav",
+      "transcription": "රුකුල් පොජ්ජ",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "350",
+      "original_path": "data\\raw\\vedda_350_20260212_015829_c4c27118.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_341_20260212_015406_5ed4ddf5.wav",
+      "transcription": "කෝනම් පොජ්ජ",
+      "translation": "",
+      "duration": 1.184,
+      "sample_rate": 16000,
+      "speaker_id": "341",
+      "original_path": "data\\raw\\vedda_341_20260212_015406_5ed4ddf5.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_218_20260212_004740_efd75c6e.wav",
+      "transcription": "එයිබ",
+      "translation": "",
+      "duration": 0.64,
+      "sample_rate": 16000,
+      "speaker_id": "218",
+      "original_path": "data\\raw\\vedda_218_20260212_004740_efd75c6e.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_282_20260212_011805_a1900fff.wav",
+      "transcription": "මංගච්චන්නේ",
+      "translation": "",
+      "duration": 1.12,
+      "sample_rate": 16000,
+      "speaker_id": "282",
+      "original_path": "data\\raw\\vedda_282_20260212_011805_a1900fff.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_330_20260212_014529_6c1c26f3.wav",
+      "transcription": "අම්මිලැත්තෝ දියරැචිච ඇන්න මංගච්චනවා",
+      "translation": "",
+      "duration": 3.296,
+      "sample_rate": 16000,
+      "speaker_id": "330",
+      "original_path": "data\\raw\\vedda_330_20260212_014529_6c1c26f3.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_238_20260212_005749_3d1065ae.wav",
+      "transcription": "ගච්චනවා",
+      "translation": "",
+      "duration": 0.896,
+      "sample_rate": 16000,
+      "speaker_id": "238",
+      "original_path": "data\\raw\\vedda_238_20260212_005749_3d1065ae.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_208_20260212_004106_2520a09a.wav",
+      "transcription": "හොර තැන",
+      "translation": "",
+      "duration": 0.512,
+      "sample_rate": 16000,
+      "speaker_id": "208",
+      "original_path": "data\\raw\\vedda_208_20260212_004106_2520a09a.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_213_20260212_004422_8f0d5278.wav",
+      "transcription": "හොඳමයි",
+      "translation": "",
+      "duration": 0.544,
+      "sample_rate": 16000,
+      "speaker_id": "213",
+      "original_path": "data\\raw\\vedda_213_20260212_004422_8f0d5278.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_298_20260212_012524_001e4522.wav",
+      "transcription": "මිනිග්ගජ්ජු",
+      "translation": "",
+      "duration": 0.896,
+      "sample_rate": 16000,
+      "speaker_id": "298",
+      "original_path": "data\\raw\\vedda_298_20260212_012524_001e4522.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_348_20260212_015735_df20f238.wav",
+      "transcription": "භාර පොජ්ජක් මන්දො වෙනවා",
+      "translation": "",
+      "duration": 2.016,
+      "sample_rate": 16000,
+      "speaker_id": "348",
+      "original_path": "data\\raw\\vedda_348_20260212_015735_df20f238.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_254_20260212_010612_88d6af1b.wav",
+      "transcription": "ඔය ඇත්තෝ",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "254",
+      "original_path": "data\\raw\\vedda_254_20260212_010612_88d6af1b.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_373_20260212_020930_687b7fa8.wav",
+      "transcription": "කරකුරු ගච්චන යමෙක",
+      "translation": "",
+      "duration": 0.896,
+      "sample_rate": 16000,
+      "speaker_id": "373",
+      "original_path": "data\\raw\\vedda_373_20260212_020930_687b7fa8.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_349_20260212_015756_0b8a5559.wav",
+      "transcription": "සන්තෝස පොජ්ජක්",
+      "translation": "",
+      "duration": 1.408,
+      "sample_rate": 16000,
+      "speaker_id": "349",
+      "original_path": "data\\raw\\vedda_349_20260212_015756_0b8a5559.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_306_20260212_013144_ea0d8506.wav",
+      "transcription": "එක්ක ඉද තබව්වේ",
+      "translation": "",
+      "duration": 1.44,
+      "sample_rate": 16000,
+      "speaker_id": "306",
+      "original_path": "data\\raw\\vedda_306_20260212_013144_ea0d8506.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_272_20260212_011449_3e07570c.wav",
+      "transcription": "කතාදාමු",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "272",
+      "original_path": "data\\raw\\vedda_272_20260212_011449_3e07570c.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_202_20260212_003851_d771e183.wav",
+      "transcription": "මිනිග්ගජ්ජා",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "202",
+      "original_path": "data\\raw\\vedda_202_20260212_003851_d771e183.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_162_20260211_234439_960e0983.wav",
+      "transcription": "දිය රැච්ච",
+      "translation": "",
+      "duration": 0.96,
+      "sample_rate": 16000,
+      "speaker_id": "162",
+      "original_path": "data\\raw\\vedda_162_20260211_234439_960e0983.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_044_20260211_100309_74735f3d.wav",
+      "transcription": "කැකුළා",
+      "translation": "",
+      "duration": 0.608,
+      "sample_rate": 16000,
+      "speaker_id": "044",
+      "original_path": "data\\raw\\vedda_044_20260211_100309_74735f3d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_219_20260212_004755_b6c21abc.wav",
+      "transcription": "කොයිබ",
+      "translation": "",
+      "duration": 2.048,
+      "sample_rate": 16000,
+      "speaker_id": "219",
+      "original_path": "data\\raw\\vedda_219_20260212_004755_b6c21abc.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_191_20260212_003314_b5d2bd88.wav",
+      "transcription": "පය ලාන යමකේ",
+      "translation": "",
+      "duration": 1.312,
+      "sample_rate": 16000,
+      "speaker_id": "191",
+      "original_path": "data\\raw\\vedda_191_20260212_003314_b5d2bd88.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_312_20260212_013456_35cec3a7.wav",
+      "transcription": "මේ කාල මැච්චේ කඳඅරනිග දියතැන කොදොයි",
+      "translation": "",
+      "duration": 3.424,
+      "sample_rate": 16000,
+      "speaker_id": "312",
+      "original_path": "data\\raw\\vedda_312_20260212_013456_35cec3a7.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_262_20260212_011041_dbee9c25.wav",
+      "transcription": "කැකුළා",
+      "translation": "",
+      "duration": 0.64,
+      "sample_rate": 16000,
+      "speaker_id": "262",
+      "original_path": "data\\raw\\vedda_262_20260212_011041_dbee9c25.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_107_20260211_231134_af497928.wav",
+      "transcription": "පිලිපොත්තා",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "107",
+      "original_path": "data\\raw\\vedda_107_20260211_231134_af497928.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_054_20260211_100750_092816da.wav",
+      "transcription": "තුනම",
+      "translation": "",
+      "duration": 0.64,
+      "sample_rate": 16000,
+      "speaker_id": "054",
+      "original_path": "data\\raw\\vedda_054_20260211_100750_092816da.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_002_20260211_092113_bc0966ed.wav",
+      "transcription": "ඉච්චර",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "002",
+      "original_path": "data\\raw\\vedda_002_20260211_092113_bc0966ed.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_050_20260211_100617_4c7d0aa4.wav",
+      "transcription": "මාමිලැත්තෝ",
+      "translation": "",
+      "duration": 1.152,
+      "sample_rate": 16000,
+      "speaker_id": "050",
+      "original_path": "data\\raw\\vedda_050_20260211_100617_4c7d0aa4.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_082_20260211_102527_9d12d3fd.wav",
+      "transcription": "කොල පොජ්ජ",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "082",
+      "original_path": "data\\raw\\vedda_082_20260211_102527_9d12d3fd.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_206_20260212_004008_c762c3b0.wav",
+      "transcription": "කෝණ පොජ්ජ",
+      "translation": "",
+      "duration": 0.992,
+      "sample_rate": 16000,
+      "speaker_id": "206",
+      "original_path": "data\\raw\\vedda_206_20260212_004008_c762c3b0.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_035_20260211_095422_33be5321.wav",
+      "transcription": "ඇඟිලි පොජ්ජ",
+      "translation": "",
+      "duration": 1.184,
+      "sample_rate": 16000,
+      "speaker_id": "035",
+      "original_path": "data\\raw\\vedda_035_20260211_095422_33be5321.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_266_20260212_011220_ff577420.wav",
+      "transcription": "කරකුරු ගච්චන රුකුල් පොජ්ජට",
+      "translation": "",
+      "duration": 2.08,
+      "sample_rate": 16000,
+      "speaker_id": "266",
+      "original_path": "data\\raw\\vedda_266_20260212_011220_ff577420.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_093_20260211_230426_87b4d045.wav",
+      "transcription": "කබරා",
+      "translation": "",
+      "duration": 0.576,
+      "sample_rate": 16000,
+      "speaker_id": "093",
+      "original_path": "data\\raw\\vedda_093_20260211_230426_87b4d045.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_053_20260211_100726_d304ba9c.wav",
+      "transcription": "දෙකම",
+      "translation": "",
+      "duration": 0.64,
+      "sample_rate": 16000,
+      "speaker_id": "053",
+      "original_path": "data\\raw\\vedda_053_20260211_100726_d304ba9c.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_267_20260212_011258_78201dbb.wav",
+      "transcription": "මංගැච්චුවා",
+      "translation": "",
+      "duration": 1.056,
+      "sample_rate": 16000,
+      "speaker_id": "267",
+      "original_path": "data\\raw\\vedda_267_20260212_011258_78201dbb.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_243_20260212_010011_e413b3da.wav",
+      "transcription": "පුච්චා කඩනවා",
+      "translation": "",
+      "duration": 1.28,
+      "sample_rate": 16000,
+      "speaker_id": "243",
+      "original_path": "data\\raw\\vedda_243_20260212_010011_e413b3da.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_014_20260211_093350_744cb290.wav",
+      "transcription": "අද දින මැච්ච",
+      "translation": "",
+      "duration": 1.408,
+      "sample_rate": 16000,
+      "speaker_id": "014",
+      "original_path": "data\\raw\\vedda_014_20260211_093350_744cb290.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_318_20260212_013749_b221c528.wav",
+      "transcription": "උණුදිය රැච්ච එකමක් කැවිල්ලාමු",
+      "translation": "",
+      "duration": 2.592,
+      "sample_rate": 16000,
+      "speaker_id": "318",
+      "original_path": "data\\raw\\vedda_318_20260212_013749_b221c528.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_090_20260211_230237_b483c64d.wav",
+      "transcription": "මාම කැච්චයි",
+      "translation": "",
+      "duration": 1.12,
+      "sample_rate": 16000,
+      "speaker_id": "090",
+      "original_path": "data\\raw\\vedda_090_20260211_230237_b483c64d.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_276_20260212_011610_fe3f1e50.wav",
+      "transcription": "මෙයිබ කොදොයි",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "276",
+      "original_path": "data\\raw\\vedda_276_20260212_011610_fe3f1e50.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_167_20260211_234717_4599b355.wav",
+      "transcription": "ලූල් පොජ්ජ",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "167",
+      "original_path": "data\\raw\\vedda_167_20260211_234717_4599b355.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_331_20260212_014557_20312fd6.wav",
+      "transcription": "අප්පිලැත්තෝ කැලෑ පොජ්ජේ මංගච්චනවා",
+      "translation": "",
+      "duration": 3.008,
+      "sample_rate": 16000,
+      "speaker_id": "331",
+      "original_path": "data\\raw\\vedda_331_20260212_014557_20312fd6.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_375_20260212_021043_61a6081c.wav",
+      "transcription": "කුක්කා",
+      "translation": "",
+      "duration": 0.672,
+      "sample_rate": 16000,
+      "speaker_id": "375",
+      "original_path": "data\\raw\\vedda_375_20260212_021043_61a6081c.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_135_20260211_233050_dc0cbaa8.wav",
+      "transcription": "පැඟිරි කොළ",
+      "translation": "",
+      "duration": 0.928,
+      "sample_rate": 16000,
+      "speaker_id": "135",
+      "original_path": "data\\raw\\vedda_135_20260211_233050_dc0cbaa8.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_309_20260212_013326_c4e84616.wav",
+      "transcription": "විට පොජ්ජක් කැවිල්ලාන්න මංගච්චප",
+      "translation": "",
+      "duration": 2.368,
+      "sample_rate": 16000,
+      "speaker_id": "309",
+      "original_path": "data\\raw\\vedda_309_20260212_013326_c4e84616.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_367_20260212_020651_fa3d198b.wav",
+      "transcription": "මංගච්චන්න",
+      "translation": "",
+      "duration": 1.056,
+      "sample_rate": 16000,
+      "speaker_id": "367",
+      "original_path": "data\\raw\\vedda_367_20260212_020651_fa3d198b.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_322_20260212_013924_0f135445.wav",
+      "transcription": "ඒ ඇත්තෝ මෙයිබ කොදොයි",
+      "translation": "",
+      "duration": 2.048,
+      "sample_rate": 16000,
+      "speaker_id": "322",
+      "original_path": "data\\raw\\vedda_322_20260212_013924_0f135445.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_245_20260212_010116_780e00e8.wav",
+      "transcription": "පටාරින්න",
+      "translation": "",
+      "duration": 0.672,
+      "sample_rate": 16000,
+      "speaker_id": "245",
+      "original_path": "data\\raw\\vedda_245_20260212_010116_780e00e8.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_055_20260211_100810_6a8db3e3.wav",
+      "transcription": "හතරම",
+      "translation": "",
+      "duration": 0.704,
+      "sample_rate": 16000,
+      "speaker_id": "055",
+      "original_path": "data\\raw\\vedda_055_20260211_100810_6a8db3e3.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_051_20260211_100643_34146093.wav",
+      "transcription": "කුඩප්පිලැත්තෝ",
+      "translation": "",
+      "duration": 1.216,
+      "sample_rate": 16000,
+      "speaker_id": "051",
+      "original_path": "data\\raw\\vedda_051_20260211_100643_34146093.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_175_20260211_235102_f9b9d778.wav",
+      "transcription": "මහ කැකුළියක්‌ මන්දෝ වෙනවා",
+      "translation": "",
+      "duration": 1.888,
+      "sample_rate": 16000,
+      "speaker_id": "175",
+      "original_path": "data\\raw\\vedda_175_20260211_235102_f9b9d778.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_190_20260212_003241_296ed65c.wav",
+      "transcription": "කරුකුරු ගච්චන මහ රුකුල පොජ්ජ",
+      "translation": "",
+      "duration": 2.432,
+      "sample_rate": 16000,
+      "speaker_id": "190",
+      "original_path": "data\\raw\\vedda_190_20260212_003241_296ed65c.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_379_20260212_021221_41ce36ec.wav",
+      "transcription": "එත්කයි",
+      "translation": "",
+      "duration": 0.672,
+      "sample_rate": 16000,
+      "speaker_id": "379",
+      "original_path": "data\\raw\\vedda_379_20260212_021221_41ce36ec.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_188_20260212_003144_523be7d8.wav",
+      "transcription": "දිය කෝමං තැන",
+      "translation": "",
+      "duration": 1.312,
+      "sample_rate": 16000,
+      "speaker_id": "188",
+      "original_path": "data\\raw\\vedda_188_20260212_003144_523be7d8.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_170_20260211_234820_8e9ade6e.wav",
+      "transcription": "උගුල් පොජ්ජ",
+      "translation": "",
+      "duration": 1.088,
+      "sample_rate": 16000,
+      "speaker_id": "170",
+      "original_path": "data\\raw\\vedda_170_20260211_234820_8e9ade6e.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_059_20260211_101136_4ed38ae3.wav",
+      "transcription": "දෙකමයි",
+      "translation": "",
+      "duration": 0.576,
+      "sample_rate": 16000,
+      "speaker_id": "059",
+      "original_path": "data\\raw\\vedda_059_20260211_101136_4ed38ae3.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_049_20260211_100544_fb86db06.wav",
+      "transcription": "නැන්දම්මිලැත්තො",
+      "translation": "",
+      "duration": 1.376,
+      "sample_rate": 16000,
+      "speaker_id": "049",
+      "original_path": "data\\raw\\vedda_049_20260211_100544_fb86db06.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_347_20260212_015700_b5434959.wav",
+      "transcription": "ගෑනියෙක් මන්දො කර ගන්නවා",
+      "translation": "",
+      "duration": 1.92,
+      "sample_rate": 16000,
+      "speaker_id": "347",
+      "original_path": "data\\raw\\vedda_347_20260212_015700_b5434959.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_237_20260212_005726_921fc87f.wav",
+      "transcription": "වටනවා",
+      "translation": "",
+      "duration": 0.8,
+      "sample_rate": 16000,
+      "speaker_id": "237",
+      "original_path": "data\\raw\\vedda_237_20260212_005726_921fc87f.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_259_20260212_010656_d6d1de4c.wav",
+      "transcription": "කවිතැන",
+      "translation": "",
+      "duration": 0.64,
+      "sample_rate": 16000,
+      "speaker_id": "259",
+      "original_path": "data\\raw\\vedda_259_20260212_010656_d6d1de4c.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_022_20260211_094303_0d0936b5.wav",
+      "transcription": "ඉච්‌ ගෙජ්ජේ බුච්ච",
+      "translation": "",
+      "duration": 1.696,
+      "sample_rate": 16000,
+      "speaker_id": "022",
+      "original_path": "data\\raw\\vedda_022_20260211_094303_0d0936b5.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_316_20260212_013653_e39c9647.wav",
+      "transcription": "මංගච්චල රදන්න",
+      "translation": "",
+      "duration": 1.536,
+      "sample_rate": 16000,
+      "speaker_id": "316",
+      "original_path": "data\\raw\\vedda_316_20260212_013653_e39c9647.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_161_20260211_234423_a1c66b09.wav",
+      "transcription": "ගිනි රැච්ච",
+      "translation": "",
+      "duration": 0.864,
+      "sample_rate": 16000,
+      "speaker_id": "161",
+      "original_path": "data\\raw\\vedda_161_20260211_234423_a1c66b09.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_279_20260212_011710_3a0ebc72.wav",
+      "transcription": "මොන්නෙක",
+      "translation": "",
+      "duration": 0.8,
+      "sample_rate": 16000,
+      "speaker_id": "279",
+      "original_path": "data\\raw\\vedda_279_20260212_011710_3a0ebc72.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_192_20260212_003359_4a2f39ac.wav",
+      "transcription": "කරකුරැ ගච්චන යමකේ",
+      "translation": "",
+      "duration": 1.728,
+      "sample_rate": 16000,
+      "speaker_id": "192",
+      "original_path": "data\\raw\\vedda_192_20260212_003359_4a2f39ac.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_267_20260212_012422_d14d3555.wav",
+      "transcription": "චප්පිල ඇත්තන්",
+      "translation": "",
+      "duration": 1.28,
+      "sample_rate": 16000,
+      "speaker_id": "267",
+      "original_path": "data\\raw\\vedda_267_20260212_012422_d14d3555.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_346_20260212_015634_9b4b7eeb.wav",
+      "transcription": "රුකල් පොජ්ජක් මන්දො කරනවා",
+      "translation": "",
+      "duration": 1.984,
+      "sample_rate": 16000,
+      "speaker_id": "346",
+      "original_path": "data\\raw\\vedda_346_20260212_015634_9b4b7eeb.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_260_20260212_010942_6c659a85.wav",
+      "transcription": "තැනමක්‌",
+      "translation": "",
+      "duration": 0.736,
+      "sample_rate": 16000,
+      "speaker_id": "260",
+      "original_path": "data\\raw\\vedda_260_20260212_010942_6c659a85.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_311_20260212_013421_21a9d228.wav",
+      "transcription": "ඔය ඇත්තෝ කවිතැන කතාදමන්න",
+      "translation": "",
+      "duration": 2.304,
+      "sample_rate": 16000,
+      "speaker_id": "311",
+      "original_path": "data\\raw\\vedda_311_20260212_013421_21a9d228.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_150_20260211_234005_d77a41be.wav",
+      "transcription": "පය පොජ්ජෙං මංගච්චන දඬු කැච්ච",
+      "translation": "",
+      "duration": 2.72,
+      "sample_rate": 16000,
+      "speaker_id": "150",
+      "original_path": "data\\raw\\vedda_150_20260211_234005_d77a41be.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_131_20260211_232859_19a26c71.wav",
+      "transcription": "පැණි ඇට පොජ්ජ",
+      "translation": "",
+      "duration": 1.152,
+      "sample_rate": 16000,
+      "speaker_id": "131",
+      "original_path": "data\\raw\\vedda_131_20260211_232859_19a26c71.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_152_20260211_234108_efb54c75.wav",
+      "transcription": "හුටු හුටු දඬු කැච්ච",
+      "translation": "",
+      "duration": 1.312,
+      "sample_rate": 16000,
+      "speaker_id": "152",
+      "original_path": "data\\raw\\vedda_152_20260211_234108_efb54c75.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_362_20260212_020448_7ae0e491.wav",
+      "transcription": "කෝනම් පොජ්ජක්",
+      "translation": "",
+      "duration": 1.344,
+      "sample_rate": 16000,
+      "speaker_id": "362",
+      "original_path": "data\\raw\\vedda_362_20260212_020448_7ae0e491.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_101_20260211_230831_d29d881b.wav",
+      "transcription": "උඩ කෙලිඤ්ඤා",
+      "translation": "",
+      "duration": 0.992,
+      "sample_rate": 16000,
+      "speaker_id": "101",
+      "original_path": "data\\raw\\vedda_101_20260211_230831_d29d881b.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_089_20260211_102903_473ef6fb.wav",
+      "transcription": "මෙත්තයි",
+      "translation": "",
+      "duration": 0.672,
+      "sample_rate": 16000,
+      "speaker_id": "089",
+      "original_path": "data\\raw\\vedda_089_20260211_102903_473ef6fb.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_333_20260212_014654_4c07bfdb.wav",
+      "transcription": "කැකුළෙක්‌ චප්පිල ඇත්තන්ට ගච්චනවා",
+      "translation": "",
+      "duration": 2.56,
+      "sample_rate": 16000,
+      "speaker_id": "333",
+      "original_path": "data\\raw\\vedda_333_20260212_014654_4c07bfdb.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_216_20260212_004623_39fba1b2.wav",
+      "transcription": "තොපන්‌",
+      "translation": "",
+      "duration": 0.512,
+      "sample_rate": 16000,
+      "speaker_id": "216",
+      "original_path": "data\\raw\\vedda_216_20260212_004623_39fba1b2.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_123_20260211_232216_d57d2451.wav",
+      "transcription": "මස් පොජ්ජ",
+      "translation": "",
+      "duration": 0.928,
+      "sample_rate": 16000,
+      "speaker_id": "123",
+      "original_path": "data\\raw\\vedda_123_20260211_232216_d57d2451.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_381_20260212_021301_6bec8a15.wav",
+      "transcription": "ඇත්තකයි",
+      "translation": "",
+      "duration": 0.896,
+      "sample_rate": 16000,
+      "speaker_id": "381",
+      "original_path": "data\\raw\\vedda_381_20260212_021301_6bec8a15.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_021_20260211_094214_7f7521aa.wav",
+      "transcription": "ඉච්‌ ගෙජ්ජ",
+      "translation": "",
+      "duration": 1.088,
+      "sample_rate": 16000,
+      "speaker_id": "021",
+      "original_path": "data\\raw\\vedda_021_20260211_094214_7f7521aa.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_189_20260212_003205_8c2dd2c1.wav",
+      "transcription": "කරකුරු ගච්චන රුකුල්පොජ්ජ",
+      "translation": "",
+      "duration": 2.016,
+      "sample_rate": 16000,
+      "speaker_id": "189",
+      "original_path": "data\\raw\\vedda_189_20260212_003205_8c2dd2c1.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_073_20260211_102013_bbe72fb7.wav",
+      "transcription": "වැඩි තැන මන්දු කරන ලකුණු පොජීජ",
+      "translation": "",
+      "duration": 2.112,
+      "sample_rate": 16000,
+      "speaker_id": "073",
+      "original_path": "data\\raw\\vedda_073_20260211_102013_bbe72fb7.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_108_20260211_231305_3c6ab90b.wav",
+      "transcription": "පෙඟිචා",
+      "translation": "",
+      "duration": 0.704,
+      "sample_rate": 16000,
+      "speaker_id": "108",
+      "original_path": "data\\raw\\vedda_108_20260211_231305_3c6ab90b.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_273_20260212_011507_25d39ae2.wav",
+      "transcription": "මේ ඇත්තොන්ට",
+      "translation": "",
+      "duration": 1.024,
+      "sample_rate": 16000,
+      "speaker_id": "273",
+      "original_path": "data\\raw\\vedda_273_20260212_011507_25d39ae2.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_351_20260212_015848_302f1240.wav",
+      "transcription": "ගෑනියෙක්",
+      "translation": "",
+      "duration": 0.768,
+      "sample_rate": 16000,
+      "speaker_id": "351",
+      "original_path": "data\\raw\\vedda_351_20260212_015848_302f1240.wav",
+      "noise_cancelled": true
+    },
+    {
+      "audio_path": "data\\processed\\vedda_104_20260211_230942_fda22824.wav",
+      "transcription": "පාට චප්පි",
+      "translation": "",
+      "duration": 1.12,
+      "sample_rate": 16000,
+      "speaker_id": "104",
+      "original_path": "data\\raw\\vedda_104_20260211_230942_fda22824.wav",
+      "noise_cancelled": true
+    }
+  ],
+  "metadata": {
+    "total_samples": 342,
+    "total_duration": 446.104,
+    "split": "train",
+    "preprocessing": {
+      "sample_rate": 16000,
+      "noise_cancellation": true,
+      "normalization": true,
+      "silence_removal": true,
+      "pre_emphasis": true
+    }
+  }
+}

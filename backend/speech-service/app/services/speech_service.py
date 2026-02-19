@@ -7,6 +7,14 @@ import uuid
 
 logger = logging.getLogger(__name__)
 
+# Import Vedda ASR service
+try:
+    from vedda_asr_service import get_vedda_asr_service
+    VEDDA_ASR_AVAILABLE = True
+except ImportError:
+    VEDDA_ASR_AVAILABLE = False
+    logger.warning("Vedda ASR service not available")
+
 # Language code mapping for gTTS
 GTTS_LANGUAGE_MAP = {
     'english': 'en',
@@ -134,13 +142,8 @@ class SpeechService:
             return {'success': False, 'error': str(e)}
     
     def speech_to_text(self, audio_file, language='english'):
-        """Convert speech to text using Google Speech Recognition"""
+        """Convert speech to text using appropriate service"""
         try:
-            # Map language to Google Speech Recognition code
-            google_lang = GOOGLE_STT_LANGUAGE_MAP.get(language, 'en-US')
-            
-            logger.info(f"STT request: {language} ({google_lang})")
-            
             # Create temporary file
             temp_dir = tempfile.gettempdir()
             audio_filename = f"stt_{uuid.uuid4()}.wav"
@@ -149,6 +152,46 @@ class SpeechService:
             try:
                 # Save uploaded file
                 audio_file.save(audio_path)
+                
+                # ===== VEDDA ASR INTEGRATION =====
+                if language.lower() == 'vedda' and VEDDA_ASR_AVAILABLE:
+                    logger.info(f"STT request: {language} - using Vedda ASR")
+                    
+                    try:
+                        vedda_service = get_vedda_asr_service()
+                        
+                        if vedda_service.is_ready:
+                            result = vedda_service.transcribe(audio_path)
+                            
+                            if 'error' not in result or result.get('error') is None:
+                                logger.info(f"Vedda STT successful: '{result['text']}'")
+                                return {
+                                    'success': True,
+                                    'text': result['text'],
+                                    'language': 'vedda',
+                                    'confidence': result.get('confidence', 0.85),
+                                    'method': 'vedda_whisper'
+                                }
+                            else:
+                                logger.error(f"Vedda ASR error: {result.get('error')}")
+                                return {
+                                    'success': False,
+                                    'error': result.get('error', 'Vedda ASR error'),
+                                    'text': '',
+                                    'language': 'vedda'
+                                }
+                        else:
+                            logger.warning("Vedda ASR model not ready, falling back to Google STT")
+                    
+                    except Exception as e:
+                        logger.error(f"Vedda ASR exception: {str(e)}")
+                        logger.info("Falling back to Google STT")
+                
+                # ===== DEFAULT: Google STT =====
+                # Map language to Google Speech Recognition code
+                google_lang = GOOGLE_STT_LANGUAGE_MAP.get(language, 'en-US')
+                
+                logger.info(f"STT request: {language} ({google_lang})")
                 
                 # Load audio file for recognition
                 with sr.AudioFile(audio_path) as source:
