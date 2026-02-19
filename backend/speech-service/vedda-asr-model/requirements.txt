@@ -1,0 +1,37 @@
+# Training Requirements for Custom Vedda ASR Model
+
+# Core ML frameworks
+torch>=2.0.0
+torchaudio>=2.0.0
+transformers>=4.30.0
+datasets>=2.14.0
+accelerate>=0.20.0
+
+# Audio processing
+librosa>=0.10.0
+soundfile>=0.12.0
+sounddevice>=0.4.6
+
+# Evaluation metrics
+evaluate>=0.4.0
+jiwer>=3.0.0
+
+# Data processing
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+
+# Progress bars and utilities
+tqdm>=4.65.0
+
+# Optional: Noise reduction and augmentation
+noisereduce>=3.0.0
+audiomentations>=0.32.0
+
+# Optional: For visualization
+matplotlib>=3.7.0
+tensorboard>=2.13.0
+
+# Optional: For production deployment
+onnx>=1.14.0
+onnxruntime>=1.15.0

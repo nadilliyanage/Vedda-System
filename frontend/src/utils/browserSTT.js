@@ -68,7 +68,7 @@ export class BrowserSpeechRecognition {
     this.recognition.onstart = () => {
       this.isRecording = true;
       console.log(
-        `Speech recognition started for ${language} (${this.recognition.lang})`
+        `Speech recognition started for ${language} (${this.recognition.lang})`,
       );
 
       if (this.onStart) {
@@ -77,11 +77,13 @@ export class BrowserSpeechRecognition {
     };
 
     this.recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
+      const transcript = event.results[0][0].transcript
+        .replace(/\.+$/, "")
+        .trim();
       const confidence = event.results[0][0].confidence || 0.9;
 
       console.log(
-        `Speech recognized: "${transcript}" (confidence: ${confidence})`
+        `Speech recognized: "${transcript}" (confidence: ${confidence})`,
       );
 
       if (this.onResult) {
