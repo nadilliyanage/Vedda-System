@@ -1,248 +1,143 @@
-# Custom Vedda ASR Model Training Pipeline
+# Vedda ASR Model — Fine-tuned Whisper Pipeline
 
-## 🎯 Overview
-Train a custom speech recognition model specifically for Vedda language using fine-tuned Whisper or Wav2Vec2 models.
+A custom Automatic Speech Recognition (ASR) pipeline for the Vedda language, built by fine-tuning OpenAI Whisper on a collected Vedda audio dataset. Outputs Sinhala-script transcriptions.
 
-## 📋 Approach Options
+---
 
-### Option 1: Fine-tune Whisper (Recommended)
-**Best for:** Low-resource languages, fastest to get working results  
-**Requirements:** 1-2 hours of high-quality Vedda audio with transcriptions  
-**Model:** OpenAI Whisper (small/base/medium)
+## Technologies Used
 
-### Option 2: Fine-tune Wav2Vec2
-**Best for:** Languages similar to pre-trained language (Sinhala)  
-**Requirements:** 10+ hours of audio  
-**Model:** facebook/wav2vec2-large-xlsr-53
+| Technology                | Version        | Purpose                                                                           |
+| ------------------------- | -------------- | --------------------------------------------------------------------------------- |
+| Python                    | 3.10+          | Runtime                                                                           |
+| PyTorch                   | 2.x            | Deep learning framework                                                           |
+| Hugging Face Transformers | 4.x            | Whisper model fine-tuning (`WhisperForConditionalGeneration`, `WhisperProcessor`) |
+| Hugging Face Datasets     | 2.x            | Dataset loading and batching for training                                         |
+| OpenAI Whisper            | `whisper-tiny` | Base pre-trained ASR model (39M parameters)                                       |
+| librosa                   | 0.10+          | Audio loading and resampling to 16 kHz mono                                       |
+| soundfile                 | —              | WAV file I/O                                                                      |
+| jiwer                     | —              | Word Error Rate (WER) and Character Error Rate (CER) computation                  |
+| pydub                     | —              | Audio augmentation (pitch/speed/noise)                                            |
+| numpy                     | —              | Numerical operations                                                              |
 
-### Option 3: Train from Scratch
-**Best for:** Large datasets available  
-**Requirements:** 100+ hours of audio  
-**Not recommended** for Vedda due to data scarcity
+---
 
-## 📁 Project Structure
+## Model Architecture
+
+- **Base model:** `openai/whisper-tiny` (39M parameters)
+- **Encoder:** Frozen (weights not updated during fine-tuning)
+- **Decoder:** Fine-tuned on Vedda transcription data (29.5M trainable parameters)
+- **Output script:** Sinhala Unicode (`si` language token)
+- **Forced decoder tokens:** `[<|si|>, <|transcribe|>]`
+
+---
+
+## Current Best Model
+
+| Model                     | WER         | CER    | Exact Matches | Notes                            |
+| ------------------------- | ----------- | ------ | ------------- | -------------------------------- |
+| `whisper-frozen-v2/final` | 88.60%      | 85.40% | 12 / 38       | Current production model         |
+| `whisper-frozen-v4/final` | in training | —      | —             | Continues from v2, WER-optimised |
+
+---
+
+## Project Structure
 
 ```
 vedda-asr-model/
 ├── data/
-│   ├── raw/              # Raw audio recordings
-│   ├── processed/        # Processed WAV files (16kHz mono)
-│   ├── transcriptions/   # Text transcriptions
-│   └── dataset.json      # Training dataset metadata
+│   ├── raw/                          # Original recordings
+│   ├── processed/                    # Resampled 16kHz mono WAVs
+│   ├── transcriptions/               # Per-file transcription text
+│   ├── transcriptions.json           # Transcription index
+│   ├── dataset.json                  # Full labelled dataset
+│   ├── train_dataset.json            # Training split
+│   ├── train_dataset_augmented.json  # Augmented training set (1368 samples)
+│   └── test_dataset.json             # Evaluation split (38 samples)
 ├── models/
-│   ├── checkpoints/      # Training checkpoints
-│   ├── final/           # Final trained model
-│   └── whisper-vedda/   # Fine-tuned Whisper model
+│   ├── whisper-frozen-v2/            # Best stable model (12 exact matches)
+│   └── whisper-frozen-v4/            # Current training run (WER-optimised)
 ├── scripts/
-│   ├── 1_collect_data.py        # Data collection helper
-│   ├── 2_prepare_dataset.py     # Prepare training data
-│   ├── 3_train_whisper.py       # Train Whisper model
-│   ├── 4_evaluate_model.py      # Evaluate model
-│   └── 5_export_model.py        # Export for production
-└── notebooks/
-    └── vedda_asr_training.ipynb # Interactive training notebook
-
+│   ├── 1_collect_data.py             # Audio collection helper
+│   ├── 2_prepare_dataset.py          # Preprocessing and dataset preparation
+│   ├── 3_train_whisper.py            # Whisper fine-tuning pipeline
+│   └── 4_evaluate_model.py           # Model evaluation
+├── logs/                             # Training logs (stdout + tqdm progress)
+├── demo_vedda.py                     # Quick inference demo
+├── extract_transcriptions.py         # Utility to extract transcriptions from dataset
+├── verify_against_dataset.py         # Verify model output against ground truth
+├── verify_transcriptions.py          # Check transcription file consistency
+├── vedda_transcriptions.json         # Master transcription list
+├── Vedda_ASR_Colab_Training.ipynb    # Google Colab training notebook
+└── requirements.txt
 ```
 
-## 🎤 Step 1: Data Collection (CRITICAL)
+---
 
-### Minimum Requirements
-- **Duration:** 1-2 hours of clean audio
-- **Speakers:** 5-10 native Vedda speakers (diverse ages/genders)
-- **Environment:** Quiet recordings, no background noise
-- **Format:** WAV, 16kHz sample rate, mono channel
-- **Transcriptions:** Accurate Vedda text for each audio
+## Training Configuration (v4)
 
-### Recording Guidelines
-1. **Content diversity:**
-   - Common phrases and greetings
-   - Daily conversation
-   - Traditional stories/songs
-   - Dictionary words in sentences
-   
-2. **Audio quality:**
-   - Use good microphone (or smartphone close to speaker)
-   - Quiet room, no echo
-   - Consistent volume
-   - 3-10 seconds per recording
-   
-3. **Transcription accuracy:**
-   - Native speaker verification
-   - Consistent orthography
-   - Mark unclear sections
-
-### Data Collection Script
-Use `scripts/1_collect_data.py` to:
-- Record audio directly
-- Import existing recordings
-- Create transcription templates
-- Organize dataset structure
-
-## 🔧 Step 2: Dataset Preparation
-
-### Audio Preprocessing
-```python
-# Automatic preprocessing:
-# - Convert to 16kHz mono WAV
-# - Normalize volume
-# - Remove silence
-# - Split long recordings
-# - Quality checks
+```
+Base model:      whisper-frozen-v2/final  (continues from best checkpoint)
+Learning rate:   5e-6
+Batch size:      8
+Max epochs:      5
+Early stopping:  patience = 2 (metric = WER)
+Train samples:   1368 (342 original × 4 augmentations)
+Eval samples:    38
+Optimiser:       AdamW  (weight_decay=0.01)
 ```
 
-### Dataset Format
-```json
-{
-  "data": [
-    {
-      "audio_path": "data/processed/vedda_001.wav",
-      "transcription": "හෙලෝ මේ ඇත්තෝ",
-      "duration": 2.5,
-      "speaker_id": "speaker_01",
-      "validated": true
-    }
-  ]
-}
-```
+---
 
-Run: `python scripts/2_prepare_dataset.py`
-
-## 🎓 Step 3: Model Training
-
-### Fine-tune Whisper (Recommended)
-
-```bash
-# Install dependencies
-pip install openai-whisper transformers datasets
-
-# Start training
-python scripts/3_train_whisper.py \
-    --model_size small \
-    --train_data data/dataset.json \
-    --epochs 10 \
-    --batch_size 8 \
-    --learning_rate 1e-5
-```
-
-**Training time:** 1-6 hours (depending on GPU)  
-**GPU required:** 8GB+ VRAM (or use Google Colab free GPU)
-
-### Training Parameters
-- **Model size:** `tiny` (39M) / `small` (244M) / `base` (74M)
-- **Epochs:** 5-15 (more data = fewer epochs needed)
-- **Batch size:** 4-16 (depending on GPU memory)
-- **Learning rate:** 1e-5 to 3e-5
-
-## 📊 Step 4: Evaluation
-
-```bash
-# Evaluate on test set
-python scripts/4_evaluate_model.py \
-    --model models/whisper-vedda \
-    --test_data data/test_dataset.json
-```
-
-**Metrics:**
-- Word Error Rate (WER): Target < 20%
-- Character Error Rate (CER): Target < 10%
-- Real-time factor (RTF): Target < 0.5
-
-## 🚀 Step 5: Production Deployment
-
-```bash
-# Export optimized model
-python scripts/5_export_model.py \
-    --input models/whisper-vedda \
-    --output models/final/vedda-asr.pt \
-    --quantize
-```
-
-### Integration with Speech Service
+## Inference Parameters
 
 ```python
-# Load custom Vedda model
-from vedda_asr import VeddaASR
-
-vedda_model = VeddaASR('models/final/vedda-asr.pt')
-
-# Use in speech service
-def speech_to_text(audio_file, language='vedda'):
-    if language == 'vedda':
-        return vedda_model.transcribe(audio_file)
-    else:
-        return google_stt.recognize(audio_file, language)
+forced_decoder_ids = [[1, si_token_id], [2, transcribe_token_id]]
+num_beams          = 5
+repetition_penalty = 1.5
+no_repeat_ngram_size = 4
+length_penalty     = 0.8
+max_new_tokens     = 100
 ```
 
-## 💡 Quick Start with Limited Data
+---
 
-### Scenario: Only have 10-20 Vedda recordings
+## Setup
 
-**Solution: Hybrid Approach**
-1. Use Sinhala Whisper model as base (already understands similar phonetics)
-2. Fine-tune on your 10-20 Vedda recordings
-3. Use dictionary post-processing for OOV words
-
-```python
-# Load Sinhala-adapted model
-model = WhisperForConditionalGeneration.from_pretrained("openai/whisper-small")
-# Fine-tune on Vedda data
-train(model, vedda_recordings, epochs=20)
-# Lower learning rate for small datasets
+```bash
+pip install -r requirements.txt
 ```
 
-## 🔥 Using Google Colab (Free GPU)
+---
 
-1. Open `notebooks/vedda_asr_training.ipynb` in Colab
-2. Upload your Vedda audio + transcriptions
-3. Run all cells (training takes ~30 min)
-4. Download trained model
-5. Deploy in your speech service
+## Evaluate a Model
 
-## 📈 Expected Results
+```bash
+# Test v2 (current best)
+python ../test_frozen_model.py
 
-### With 1 hour of data:
-- WER: 15-25%
-- Better than Sinhala STT for Vedda-specific words
-- Good for common phrases
+# Test v4 (after training completes)
+python ../test_frozen_model_v3.py
 
-### With 10 hours of data:
-- WER: 5-15%
-- Production-ready quality
-- Handles diverse speakers
+# Verify accuracy metrics
+python ../verify_accuracy.py
 
-### With 50+ hours of data:
-- WER: 2-8%
-- Near-human accuracy
-- Robust to noise and accents
+# Analyse the accuracy report
+python ../analyze_report.py
+```
 
-## 🎯 Next Steps
+---
 
-1. **Immediate:** Collect 10 Vedda recordings (see `scripts/1_collect_data.py`)
-2. **Week 1:** Record 1 hour of diverse Vedda speech
-3. **Week 2:** Train initial model, evaluate
-4. **Week 3:** Collect feedback, improve dataset
-5. **Month 2:** Deploy production model, continue collecting data
+## Re-train
 
-## 📚 Resources
+```bash
+# From speech-service directory
+python retrain_v3_balanced.py
+```
 
-- **Whisper documentation:** https://github.com/openai/whisper
-- **Hugging Face ASR:** https://huggingface.co/docs/transformers/tasks/asr
-- **Mozilla Common Voice:** Contribute Vedda data for community
-- **Tutorial:** `notebooks/vedda_asr_training.ipynb`
+Training logs are written to `logs/train_v4.log` (stdout) and `logs/train_v4_err.log` (progress).
 
-## ⚠️ Important Notes
+---
 
-1. **Data privacy:** Get consent from speakers before recording
-2. **Cultural sensitivity:** Work with Vedda community elders
-3. **Validation:** Have native speakers verify transcriptions
-4. **Iterative:** Start small, improve continuously
-5. **Backup:** Keep raw data backed up safely
+## Data Augmentation
 
-## 🤝 Community Contribution
-
-Consider contributing your Vedda ASR model to:
-- Hugging Face Model Hub
-- Mozilla Common Voice
-- Academic research initiatives
-
-This helps preserve and promote the Vedda language!
+The training set uses 4 augmented variants per original recording (pitch shift, speed, noise injection) via `augment_data.py`, expanding 342 samples to 1368.

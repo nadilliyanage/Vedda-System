@@ -1,0 +1,67 @@
+# ============================================================
+# speech-service .gitignore
+# ============================================================
+
+# --- Environment / Secrets ---
+.env
+.env.*
+
+# --- Python cache ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# --- Virtual environments ---
+venv/
+.venv/
+env/
+
+# --- Runtime logs ---
+logs/
+*.log
+speech_service.log
+
+# --- Temporary audio files (uploaded by users at runtime) ---
+audio_data/
+temp/
+tmp/
+
+# --- Generated test / evaluation outputs ---
+accuracy_report.json
+test_results.json
+spot_check_cp342.txt
+diagnosis_results.txt
+
+# ============================================================
+# vedda-asr-model — large binary / generated files
+# ============================================================
+
+# Trained model weights (each checkpoint is ~150 MB)
+vedda-asr-model/models/
+
+# Raw and processed audio recordings (large WAV files)
+vedda-asr-model/data/raw/
+vedda-asr-model/data/processed/
+vedda-asr-model/data/augmented/
+
+# Training logs
+vedda-asr-model/logs/
+
+# Jupyter notebook checkpoints
+vedda-asr-model/.ipynb_checkpoints/
+vedda-asr-model/**/.ipynb_checkpoints/
+
+# Keep dataset JSON files (text metadata, not audio)
+!vedda-asr-model/data/dataset.json
+!vedda-asr-model/data/train_dataset.json
+!vedda-asr-model/data/train_dataset_augmented.json
+!vedda-asr-model/data/test_dataset.json
+!vedda-asr-model/data/transcriptions.json
+!vedda-asr-model/data/transcriptions/
+
+# ============================================================
+# Local model directory (if any old models stored here)
+# ============================================================
+models/

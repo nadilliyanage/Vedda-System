@@ -12,6 +12,13 @@ import numpy as np
 from pathlib import Path
 from tqdm import tqdm
 
+try:
+    import noisereduce as nr
+    HAS_NOISEREDUCE = True
+except ImportError:
+    HAS_NOISEREDUCE = False
+    print("⚠️  Warning: noisereduce not installed. Install with: pip install noisereduce")
+
 class DatasetPreparator:
     def __init__(self, data_dir='data'):
         self.data_dir = data_dir
@@ -41,9 +48,10 @@ class DatasetPreparator:
         """
         Preprocess audio file:
         - Convert to 16kHz mono
+        - Apply noise reduction (stationary noise removal)
         - Normalize volume
         - Remove silence
-        - Apply noise reduction
+        - Apply pre-emphasis to boost high frequencies
         """
         try:
             # Load audio
@@ -57,14 +65,44 @@ class DatasetPreparator:
             if sr != self.target_sr:
                 audio = librosa.resample(audio, orig_sr=sr, target_sr=self.target_sr)
             
-            # Normalize volume
+            # ========== NOISE CANCELLATION ==========
+            if HAS_NOISEREDUCE:
+                # Use noisereduce for stationary noise removal
+                # This works best for consistent background noise (AC hum, fan noise, etc.)
+                audio = nr.reduce_noise(
+                    y=audio,
+                    sr=self.target_sr,
+                    stationary=True,          # Works on stationary noise
+                    prop_decrease=1.0,        # Aggressiveness (0-1, higher = more aggressive)
+                    chunk_size=600000,        # Process in chunks for memory efficiency
+                    padding=30000,
+                    freq_mask_smooth_hz=500,  # Smooth the frequency mask
+                    time_mask_smooth_ms=50    # Smooth the time mask
+                )
+            else:
+                # Fallback: Spectral gating (lighter noise reduction)
+                # Reduces energy in low-SNR regions of the spectrogram
+                S = librosa.feature.melspectrogram(y=audio, sr=self.target_sr)
+                S = librosa.power_to_db(S, ref=np.max)
+                # Apply noise gate: suppress frequencies below -40dB
+                S = np.where(S > -40, S, -40)
+                mask = librosa.power_to_db(np.abs(librosa.feature.melspectrogram(y=audio, sr=self.target_sr)), ref=np.max) > -40
+                audio = librosa.istft(librosa.feature.inverse.mel_to_stft(
+                    librosa.core.db_to_power(S) ** 0.5,
+                    sr=self.target_sr
+                ))
+            
+            # Normalize volume (after noise reduction)
             audio = librosa.util.normalize(audio)
             
-            # Trim silence from beginning and end
-            audio, _ = librosa.effects.trim(audio, top_db=30)
+            # Trim silence from beginning and end (more aggressive after noise cancellation)
+            audio, _ = librosa.effects.trim(audio, top_db=25, ref=np.max)
             
-            # Apply pre-emphasis to boost high frequencies
+            # Apply pre-emphasis to boost high frequencies (helps with consonants)
             audio = librosa.effects.preemphasis(audio)
+            
+            # Final normalization
+            audio = librosa.util.normalize(audio)
             
             # Check duration (skip if too short)
             duration = len(audio) / self.target_sr
@@ -78,7 +116,8 @@ class DatasetPreparator:
             return {
                 'duration': duration,
                 'sample_rate': self.target_sr,
-                'samples': len(audio)
+                'samples': len(audio),
+                'noise_cancelled': HAS_NOISEREDUCE
             }
             
         except Exception as e:
@@ -128,7 +167,8 @@ class DatasetPreparator:
                     'duration': audio_info['duration'],
                     'sample_rate': audio_info['sample_rate'],
                     'speaker_id': entry.get('speaker_id', 'unknown'),
-                    'original_path': audio_path
+                    'original_path': audio_path,
+                    'noise_cancelled': audio_info.get('noise_cancelled', False)
                 }
                 processed_entries.append(processed_entry)
             else:
@@ -137,6 +177,14 @@ class DatasetPreparator:
         print(f"\n✅ Processed: {len(processed_entries)}/{len(raw_entries)} files")
         if failed > 0:
             print(f"⚠️  Failed: {failed} files")
+        
+        # Check noise cancellation status
+        if processed_entries:
+            noise_cancelled = processed_entries[0].get('noise_cancelled', False)
+            if noise_cancelled:
+                print(f"🔇 Noise cancellation: ENABLED (noisereduce)")
+            else:
+                print(f"🔊 Noise cancellation: Using fallback (spectral gating)")
         
         # Split into train/test sets (90/10 split)
         from sklearn.model_selection import train_test_split
@@ -167,7 +215,14 @@ class DatasetPreparator:
             'metadata': {
                 'total_samples': len(train_data),
                 'total_duration': train_duration,
-                'split': 'train'
+                'split': 'train',
+                'preprocessing': {
+                    'sample_rate': self.target_sr,
+                    'noise_cancellation': HAS_NOISEREDUCE,
+                    'normalization': True,
+                    'silence_removal': True,
+                    'pre_emphasis': True
+                }
             }
         }
         
@@ -176,7 +231,14 @@ class DatasetPreparator:
             'metadata': {
                 'total_samples': len(test_data),
                 'total_duration': test_duration,
-                'split': 'test'
+                'split': 'test',
+                'preprocessing': {
+                    'sample_rate': self.target_sr,
+                    'noise_cancellation': HAS_NOISEREDUCE,
+                    'normalization': True,
+                    'silence_removal': True,
+                    'pre_emphasis': True
+                }
             }
         }
         
