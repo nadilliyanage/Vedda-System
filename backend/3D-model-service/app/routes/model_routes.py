@@ -106,6 +106,19 @@ def get_words_with_ipa():
         }), 500
 
 
+@model_bp.route('/words/stats', methods=['GET'])
+def get_word_stats():
+    """Get statistics about words in the database"""
+    try:
+        result = model_service.get_word_stats()
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': f'Server error: {str(e)}'
+        }), 500
+
+
 @model_bp.route('/words/ipa-only', methods=['GET'])
 def get_ipa_and_words_only():
     """
@@ -114,16 +127,19 @@ def get_ipa_and_words_only():
     - limit: Number of results to return (default: 100)
     - skip: Number of results to skip (default: 0)
     - has_vedda_ipa: Filter only words with vedda_ipa (default: false)
+    - english_word: Filter by English word (optional)
     """
     try:
         limit = int(request.args.get('limit', 100))
         skip = int(request.args.get('skip', 0))
         has_vedda_ipa = request.args.get('has_vedda_ipa', 'false').lower() == 'true'
+        english_word = request.args.get('english_word')
         
         result = model_service.get_ipa_and_words_only(
             limit=limit,
             skip=skip,
-            has_vedda_ipa=has_vedda_ipa
+            has_vedda_ipa=has_vedda_ipa,
+            english_word=english_word
         )
         
         return jsonify(result), 200
