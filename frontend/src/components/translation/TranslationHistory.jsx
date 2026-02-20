@@ -11,7 +11,7 @@ const TranslationHistory = ({ history, onSelectHistoryItem, onRefresh }) => {
   };
 
   return (
-    <div className="card">
+    <div className="card h-full">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center">
           <HiClock className="w-5 h-5 mr-2" />
@@ -29,7 +29,9 @@ const TranslationHistory = ({ history, onSelectHistoryItem, onRefresh }) => {
           }`}
           title="Refresh history"
         >
-          <HiRefresh className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`} />
+          <HiRefresh
+            className={`w-4 h-4 ${isRefreshing ? "animate-spin" : ""}`}
+          />
           Refresh
         </button>
       </div>
