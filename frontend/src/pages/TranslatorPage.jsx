@@ -66,9 +66,9 @@ const TranslatorPage = () => {
         />
 
         {/* Recent Translations & Examples */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 items-stretch">
           {/* Recent Translations */}
-          <div>
+          <div className="h-full">
             <TranslationHistory
               history={translationHistory}
               onSelectHistoryItem={handleHistoryItemSelect}
@@ -77,7 +77,7 @@ const TranslatorPage = () => {
           </div>
 
           {/* Example Phrases */}
-          <div>
+          <div className="h-full">
             <ExamplePhrases onSelectExample={handleExampleSelect} />
           </div>
         </div>
