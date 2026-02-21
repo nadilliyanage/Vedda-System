@@ -48,6 +48,7 @@ const AdminCategories = ({ onBack }) => {
   const openEditForm = (category) => {
     setFormData({
       id: category.id,
+      _id: category._id,
       name: category.name || '',
       description: category.description || ''
     });
@@ -68,7 +69,7 @@ const AdminCategories = ({ onBack }) => {
         await categoriesAPI.create(formData);
         toast.success('Category created successfully');
       } else if (activeView === 'edit') {
-        await categoriesAPI.update(formData.id, formData);
+        await categoriesAPI.update(formData._id, formData);
         toast.success('Category updated successfully');
       }
 
@@ -234,19 +235,17 @@ const AdminCategories = ({ onBack }) => {
       <div className="bg-white rounded-lg shadow-md p-6">
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
-            {activeView === 'add' && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category ID</label>
-                <input
-                  type="text"
-                  value={formData.id}
-                  onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-                  className="w-full border rounded-lg px-3 py-2"
-                  placeholder="e.g., cat1"
-                  required
-                />
-              </div>
-            )}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Category ID</label>
+              <input
+                type="text"
+                value={formData.id}
+                onChange={(e) => setFormData({ ...formData, id: e.target.value })}
+                className="w-full border rounded-lg px-3 py-2"
+                placeholder="e.g., cat1"
+                required
+              />
+            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>

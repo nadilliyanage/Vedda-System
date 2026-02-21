@@ -1,3 +1,4 @@
+from bson import ObjectId
 from app.db.mongo import get_collection
 from app.models.common import serialize_mongo_doc
 from flask import g
@@ -101,13 +102,12 @@ def admin_get_category(category_id: str):
 def admin_update_category(category_id: str, data: dict):
     col = get_collection("categories")
 
-    if not col.find_one({"id": category_id}):
+
+    if not col.find_one({"_id": ObjectId(category_id)}):
         return {"success": False, "error": "Category not found"}, 404
 
-    if "id" in data and data["id"] != category_id:
-        return {"success": False, "error": "Cannot change category ID"}, 400
-
-    result = col.update_one({"id": category_id}, {"$set": data})
+    data.pop("_id", None)
+    result = col.update_one({"_id": ObjectId(category_id)}, {"$set": data})
 
     if result.modified_count > 0:
         return {"success": True, "message": "Category updated successfully"}, 200
@@ -161,13 +161,13 @@ def admin_get_lesson(lesson_id: str):
 def admin_update_lesson(lesson_id: str, data: dict):
     col = get_collection("lessons")
 
-    if not col.find_one({"id": lesson_id}):
+    if not col.find_one({"_id": ObjectId(lesson_id)}):
         return {"success": False, "error": "Lesson not found"}, 404
 
-    if "id" in data and data["id"] != lesson_id:
-        return {"success": False, "error": "Cannot change lesson ID"}, 400
+    # Remove _id from data to prevent attempting to update immutable field
+    data.pop("_id", None)
 
-    result = col.update_one({"id": lesson_id}, {"$set": data})
+    result = col.update_one({"_id": ObjectId(lesson_id)}, {"$set": data})
 
     if result.modified_count > 0:
         return {"success": True, "message": "Lesson updated successfully"}, 200
