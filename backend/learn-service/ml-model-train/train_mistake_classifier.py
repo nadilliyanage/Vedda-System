@@ -29,7 +29,7 @@ ALLOWED_LABELS = [
     "other"
 ]
 
-MODEL_OUT_PATH = "../app/ml/mistake_classifier_lr.joblib"
+MODEL_OUT_PATH = "../app/ml/mistake_classifier_llr.joblib"
 
 
 # =========================
