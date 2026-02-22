@@ -1,0 +1,267 @@
+# System Architecture Diagram
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                    VEDDA LANGUAGE LEARNING PLATFORM                            ║
+║                        ADVANCED HYBRID RAG SYSTEM                              ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                              USER INTERACTION                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                    ┌───────────────┼───────────────┐
+                    │               │               │
+            ┌───────▼────┐   ┌──────▼──────┐   ┌──▼──────────┐
+            │Submit      │   │Generate     │   │Admin        │
+            │Answer      │   │Exercise     │   │Dashboard    │
+            └───────┬────┘   └──────┬──────┘   └──┬──────────┘
+                    │               │               │
+┌───────────────────┼───────────────┼───────────────┼──────────────────────────┐
+│                   │  FLASK ROUTES │               │                          │
+│  ┌────────────────▼───────┐  ┌───▼───────────────▼─────────┐                │
+│  │ ai_routes.py           │  │ rag_admin_routes.py         │                │
+│  │  /submit-answer        │  │  /system-stats              │                │
+│  │  /generate-exercise    │  │  /performance-report        │                │
+│  └────────────┬───────────┘  │  /retrieval-metrics         │                │
+│               │              │  /knowledge/most-effective  │                │
+│               │              │  /error-reduction           │                │
+│               │              └─────────────┬───────────────┘                │
+└───────────────┼──────────────────────────────┼─────────────────────────────┘
+                │                              │
+┌───────────────▼──────────────────────────────▼─────────────────────────────┐
+│                           AI SERVICE LAYER                                  │
+│  ┌────────────────────────────────────────────────────────────────────┐    │
+│  │ service.py                                                          │    │
+│  │  • get_feedback_with_rag()                                         │    │
+│  │  • generate_exercise_with_rag()                                    │    │
+│  └────────────────┬───────────────────────────────────────────────────┘    │
+│                   │                                                         │
+│  ┌────────────────▼────────────────────────────────────────────────────┐   │
+│  │                    HYBRID RAG CORE ENGINE                           │   │
+│  │                      rag_hybrid.py                                  │   │
+│  │                                                                     │   │
+│  │  ┌──────────────────────────────────────────────────────────────┐  │   │
+│  │  │ STEP 1: SYMBOLIC FILTERING                                   │  │   │
+│  │  │  • Filter by skill_tags                                      │  │   │
+│  │  │  • Filter by difficulty                                      │  │   │
+│  │  │  • Filter by error_types                                     │  │   │
+│  │  └──────────────────────┬───────────────────────────────────────┘  │   │
+│  │                         │                                           │   │
+│  │  ┌──────────────────────▼───────────────────────────────────────┐  │   │
+│  │  │ STEP 2: SEMANTIC SCORING                                     │  │   │
+│  │  │  • Generate query embedding ──────────┐                      │  │   │
+│  │  │  • Compute cosine similarities        │                      │  │   │
+│  │  └──────────────────────┬────────────────┼──────────────────────┘  │   │
+│  │                         │                │                         │   │
+│  │  ┌──────────────────────▼────────────────┼──────────────────────┐  │   │
+│  │  │ STEP 3: RE-RANKING WITH BOOSTS        │                      │  │   │
+│  │  │  • Semantic similarity × 5            │                      │  │   │
+│  │  │  • Error type match: +3               │                      │  │   │
+│  │  │  • Exercise type match: +2            │                      │  │   │
+│  │  │  • Weak skill match: +2               │                      │  │   │
+│  │  │  • Priority: +value                   │                      │  │   │
+│  │  │  • Effectiveness: +help_rate×1.5      │                      │  │   │
+│  │  └──────────────────────┬────────────────┼──────────────────────┘  │   │
+│  │                         │                │                         │   │
+│  │  ┌──────────────────────▼────────────────┼──────────────────────┐  │   │
+│  │  │ STEP 4: SORT BY TOTAL SCORE           │                      │  │   │
+│  │  └──────────────────────┬────────────────┼──────────────────────┘  │   │
+│  │                         │                │                         │   │
+│  │  ┌──────────────────────▼────────────────┼──────────────────────┐  │   │
+│  │  │ STEP 5: RETURN TOP-K DOCUMENTS        │                      │  │   │
+│  │  └──────────────────────┬────────────────┘                      │  │   │
+│  └─────────────────────────┼─────────────────────────────────────────┘   │
+│                            │                │                            │
+│  ┌─────────────────────────▼────────────────┼──────────────────────┐    │
+│  │ context_builder.py                       │                      │    │
+│  │  • build_context_for_feedback()          │                      │    │
+│  │  • build_context_for_exercise()          │                      │    │
+│  └──────────────────────────────────────────┼──────────────────────┘    │
+│                                             │                            │
+│  ┌──────────────────────────────────────────▼──────────────────────┐    │
+│  │ embedding_service.py    <────────────────┘                      │    │
+│  │  • generate_embedding()                                         │    │
+│  │  • generate_embeddings_batch()                                  │    │
+│  └──────────────────────────┬──────────────────────────────────────┘    │
+│                             │                                            │
+│  ┌──────────────────────────▼──────────────────────────────────────┐    │
+│  │ similarity.py                                                    │    │
+│  │  • cosine_similarity()                                          │    │
+│  │  • cosine_similarity_batch()                                    │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+┌───────────────────────────────────▼─────────────────────────────────────┐
+│                         LEARNING LOOP & TRACKING                         │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ effectiveness_tracker.py                                        │    │
+│  │  • update_knowledge_effectiveness()                             │    │
+│  │  • track_knowledge_usage()                                      │    │
+│  │  • get_most_effective_knowledge()                               │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │ rag_evaluation.py                                               │    │
+│  │  • compute_retrieval_match_rate()                               │    │
+│  │  • compute_error_reduction_rate()                               │    │
+│  │  • compute_skill_improvement_rate()                             │    │
+│  │  • generate_rag_performance_report()                            │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+┌───────────────────────────────────▼─────────────────────────────────────┐
+│                              DATA LAYER                                  │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐      │
+│  │ vadda_knowledge  │  │ user_stats       │  │ user_attempts    │      │
+│  │                  │  │                  │  │                  │      │
+│  │ • skill_tags     │  │ • skill_stats    │  │ • exercise_id    │      │
+│  │ • error_types    │  │ • error_stats    │  │ • is_correct     │      │
+│  │ • content        │  │ • weak_skills    │  │ • timestamp      │      │
+│  │ • embedding[]    │  │ • accuracy       │  └──────────────────┘      │
+│  │ • effectiveness  │  └──────────────────┘                            │
+│  │   - times_used   │  ┌──────────────────┐                            │
+│  │   - helped_correct│ │ knowledge_usage  │                            │
+│  │   - help_rate    │  │                  │                            │
+│  └──────────────────┘  │ • knowledge_ids  │                            │
+│                        │ • was_helpful    │                            │
+│                        │ • timestamp      │                            │
+│                        └──────────────────┘                            │
+│                              MongoDB                                    │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+┌───────────────────────────────────▼─────────────────────────────────────┐
+│                          EXTERNAL SERVICES                               │
+│  ┌──────────────────────────────────────────────────────────────────┐   │
+│  │ OpenAI API                                                       │   │
+│  │  • text-embedding-3-small (embeddings)                          │   │
+│  │  • gpt-4o-mini (feedback generation)                            │   │
+│  │  • gpt-4o (exercise generation)                                 │   │
+│  └──────────────────────────────────────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                          DATA FLOW EXAMPLE                                 ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+1. Student submits wrong answer: "Koheda karanne?"
+   Correct answer: "Mokadda karanne?"
+
+2. System extracts from user_stats:
+   - Weak skills: ["question_forms"]
+   - Common errors: ["wrong_question_word"]
+
+3. Hybrid retrieval executes:
+   Query: "Student confused 'koheda' and 'mokadda'"
+
+   a) Symbolic filter: skill_tags IN ["question_forms"]
+   b) Generate embedding for query
+   c) Compute similarities with knowledge embeddings
+   d) Apply boosts:
+      - Doc A: error_types match → +3
+      - Doc B: weak_skills match → +2
+      - Doc C: high help_rate (0.85) → +1.28
+   e) Sort and select top 5
+
+4. Context builder formats retrieved knowledge
+
+5. LLM generates personalized feedback using context
+
+6. Background thread:
+   - Updates effectiveness.times_used++
+   - If student learns → effectiveness.helped_correct++
+
+7. Future retrievals:
+   - Docs with high help_rate get effectiveness boost
+   - System learns which knowledge works best
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                         UTILITY SCRIPTS FLOW                               ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+┌─────────────────┐     ┌──────────────────┐     ┌─────────────────┐
+│ Initial Setup   │────▶│ Schema Migration │────▶│ Generate        │
+│                 │     │                  │     │ Embeddings      │
+│ setup_hybrid    │     │ migrate_knowledge│     │                 │
+│ _rag.py         │     │ _schema.py       │     │ populate_       │
+│                 │     │                  │     │ embeddings.py   │
+│ • Check MongoDB │     │ • Add fields     │     │                 │
+│ • Check API key │     │ • Set defaults   │     │ • Generate all  │
+│ • Create indexes│     │ • Verify schema  │     │ • Batch process │
+│ • Sample data   │     │                  │     │ • Verify 100%   │
+└─────────────────┘     └──────────────────┘     └─────────────────┘
+                                                            │
+                                                            ▼
+                                                  ┌─────────────────┐
+                                                  │ Test System     │
+                                                  │                 │
+                                                  │ test_hybrid_    │
+                                                  │ rag.py          │
+                                                  │                 │
+                                                  │ • 8 tests       │
+                                                  │ • Validation    │
+                                                  │ • Report        │
+                                                  └─────────────────┘
+                                                            │
+                                                            ▼
+                                                  ┌─────────────────┐
+                                                  │ Production      │
+                                                  │ Deployment      │
+                                                  │                 │
+                                                  │ python run.py   │
+                                                  └─────────────────┘
+
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                      MONITORING & ANALYTICS FLOW                           ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+
+Daily:
+  GET /admin/rag/retrieval-metrics
+       ↓
+  [ Match Rate: 84.7% ]
+       ↓
+  Python populate_embeddings.py --verify
+       ↓
+  [ Coverage: 100% ]
+
+Weekly:
+  GET /admin/rag/performance-report?days=7
+       ↓
+  [ Error Reduction: 12.3% ]
+  [ Top Knowledge: ... ]
+  [ Usage Stats: ... ]
+       ↓
+  GET /admin/rag/knowledge/least-effective
+       ↓
+  [ Identify weak content ]
+       ↓
+  [ Update knowledge base ]
+
+Monthly:
+  Python test_hybrid_rag.py --all
+       ↓
+  [ 8/8 Tests Pass ]
+       ↓
+  Full system analysis
+       ↓
+  Adjust boost factors if needed
+
+
+═══════════════════════════════════════════════════════════════════════════
+
+                         🎯 SYSTEM GOALS ACHIEVED
+
+✅ Hybrid retrieval combining symbolic + semantic search
+✅ Intelligent re-ranking with 6 boost factors
+✅ Personalization based on user patterns
+✅ Learning loop tracking effectiveness
+✅ Comprehensive evaluation metrics
+✅ Production-ready code with error handling
+✅ Full monitoring and analytics
+✅ Scalable architecture
+
+═══════════════════════════════════════════════════════════════════════════
+```
+

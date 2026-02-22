@@ -54,7 +54,14 @@ COMMON LEARNER ERRORS:
 {error_types}
 
 TASK:
-Generate ONE Vedda language multiple-choice vocabulary exercise.
+Generate ONE unique Vedda language multiple-choice vocabulary exercise.
+
+IMPORTANT - CREATE VARIETY:
+- Each exercise MUST be different from previous ones
+- Vary the English word being asked about
+- Use different Vedda words from the CONTEXT
+- Mix up the order of correct answers (A, B, C, or D)
+- Use exercise number {exercise_number} as inspiration for variety
 
 Exercise constraints:
 - Question type: multiple_choice
@@ -68,9 +75,10 @@ Exercise constraints:
 
 Options constraints:
 - Exactly 4 options
-- Only ONE option is correct
+- Only ONE option is correct (can be A, B, C, or D - vary the position!)
 - Incorrect options must be plausible but wrong
 - All option texts must be Vedda words from CONTEXT
+- Shuffle the correct answer position for variety
 
 Return JSON EXACTLY in this format:
 
@@ -81,18 +89,18 @@ Return JSON EXACTLY in this format:
   "question": {{
     "questionNo": "{exercise_number}",
     "type": "multiple_choice",
-    "prompt": "What is the Vedda word for \\"Honey\\"?",
+    "prompt": "What is the Vedda word for \\"[CHOOSE DIFFERENT WORD EACH TIME]\\"?",
     "xp": 1,
     "points": 1,
     "timeLimitSec": 30,
     "rest": "",
     "options": [
-      {{ "id": "A", "text": "...", "correct": false }},
-      {{ "id": "B", "text": "...", "correct": true }},
-      {{ "id": "C", "text": "...", "correct": false }},
-      {{ "id": "D", "text": "...", "correct": false }}
+      {{ "id": "A", "text": "...", "correct": true/false }},
+      {{ "id": "B", "text": "...", "correct": true/false }},
+      {{ "id": "C", "text": "...", "correct": true/false }},
+      {{ "id": "D", "text": "...", "correct": true/false }}
     ],
-    "correctOptions": ["B"],
+    "correctOptions": ["A" or "B" or "C" or "D"],
     "correct_answer": "..."
   }}
 }}

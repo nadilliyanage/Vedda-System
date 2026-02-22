@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 
-from app.services import admin_service
+from ..services import admin_service
 
 admin_bp = Blueprint("admin", __name__)
 

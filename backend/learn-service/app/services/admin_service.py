@@ -1,6 +1,6 @@
 from bson import ObjectId
-from app.db.mongo import get_collection
-from app.models.common import serialize_mongo_doc
+from ..db.mongo import get_collection
+from ..models.common import serialize_mongo_doc
 from flask import g
 
 # ---------- Challenges ----------

@@ -1,7 +1,7 @@
 from datetime import datetime
-from app.db.mongo import get_collection
-from app.models.user_attempt_model import UserAttempt
-from app.ml.predictor import classify_mistake
+from ..db.mongo import get_collection
+from ..models.user_attempt_model import UserAttempt
+from ..ml.predictor import classify_mistake
 
 def add_user_attempt_and_update_stat(user_id: str, exercise_id: str, skill_tags: list,
                      is_correct: bool, correct_answer: str = None, student_answer: str = None):
