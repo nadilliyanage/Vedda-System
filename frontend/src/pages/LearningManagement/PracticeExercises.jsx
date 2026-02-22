@@ -2,13 +2,15 @@ import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { FaArrowLeft, FaSpinner, FaChevronDown, FaChevronRight, FaDumbbell, FaMagic, FaStar } from 'react-icons/fa';
 import { categoriesAPI, lessonsAPI, exercisesAPI } from '../../services/learningAPI';
+import { useAuth } from '../../contexts/AuthContext';
 
 const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBack, onStartExercise }) => {
+  const { user } = useAuth();
   const [categories, setCategories] = useState([]);
   const [lessons, setLessons] = useState([]);
   const [exercises, setExercises] = useState([]);
-  const [personalizedExercises, setPersonalizedExercises] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingPersonalized, setLoadingPersonalized] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState(new Set());
   const [expandedLessons, setExpandedLessons] = useState(new Set());
   const [expandedPersonalized, setExpandedPersonalized] = useState(true);
@@ -49,29 +51,6 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
       setCategories(categoriesRes.data);
       setLessons(lessonsRes.data);
       setExercises(exercisesRes.data);
-      
-      // TODO: Fetch personalized exercises from API
-      // For now, using mock data structure
-      setPersonalizedExercises([
-        {
-          id: 'personalized-1',
-          title: 'Mixed Review: Week 1',
-          type: 'mixed_review',
-          difficulty: 'medium',
-          questionsCount: 5,
-          xp: 50,
-          topics: ['Basic Vocabulary', 'Common Phrases']
-        },
-        {
-          id: 'personalized-2',
-          title: 'Weak Areas Practice',
-          type: 'adaptive',
-          difficulty: 'easy',
-          questionsCount: 3,
-          xp: 30,
-          topics: ['Grammar Basics']
-        }
-      ]);
     } catch (error) {
       toast.error('Failed to load practice exercises');
       console.error(error);
@@ -128,18 +107,56 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
     }, 0);
   };
 
-  const handleStartPersonalizedExercise = (exercise) => {
-    console.log('Starting personalized exercise:', exercise);
-    toast.success(`Starting ${exercise.title}!`);
-    // TODO: Integrate with onStartExercise or create dedicated handler
+  const fetchPersonalizedExercise = async () => {
+    const userId = user?.id;
+    if (!userId) {
+      toast.error('Please log in to access personalized exercises');
+      return;
+    }
+
+    try {
+      setLoadingPersonalized(true);
+      const response = await exercisesAPI.generatePersonalized(userId);
+      const exercise = response.data;
+      
+      // Format the exercise with title and topics
+      const formattedExercise = {
+        ...exercise,
+        title: `Personalized Practice`,
+        difficulty: exercise.difficulty || 'medium',
+        topics: exercise.skillTags || ['Personalized Review']
+      };
+      
+      // Directly start the exercise
+      handleStartPersonalizedExercise(formattedExercise);
+    } catch (error) {
+      console.error('Failed to generate personalized exercise:', error);
+      toast.error('Failed to generate personalized exercise');
+    } finally {
+      setLoadingPersonalized(false);
+    }
   };
 
-  const getDifficultyColor = (difficulty) => {
-    switch (difficulty) {
-      case 'easy': return 'text-green-600 bg-green-100';
-      case 'medium': return 'text-yellow-600 bg-yellow-100';
-      case 'hard': return 'text-red-600 bg-red-100';
-      default: return 'text-gray-600 bg-gray-100';
+  const handleStartPersonalizedExercise = (exercise) => {
+    // Create mock lesson and category for AI-generated exercises
+    const aiLesson = {
+      id: 'ai-generated',
+      topic: 'Personalized Practice',
+      description: 'AI-generated personalized practice'
+    };
+    
+    const aiCategory = {
+      id: 'ai-personalized',
+      name: 'Personalized Practice',
+      description: 'AI-generated exercises tailored for you'
+    };
+    
+    // Use the same handler as regular exercises
+    if (onStartExercise) {
+      onStartExercise(exercise, aiLesson, aiCategory);
+    } else {
+      console.log('Starting personalized exercise:', exercise);
+      toast.success(`Starting personalized exercise!`);
     }
   };
 
@@ -209,78 +226,51 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
               </div>
             </div>
 
-            {/* Personalized Exercises List */}
+            {/* Personalized Exercise Button */}
             {expandedPersonalized && (
               <div className="p-4 bg-white/10 backdrop-blur-sm">
-                {personalizedExercises.length === 0 ? (
-                  <div className="bg-white/90 rounded-xl p-8 text-center">
-                    <FaMagic className="text-4xl text-purple-500 mx-auto mb-3" />
-                    <p className="text-gray-700 font-semibold mb-2">
-                      No personalized exercises yet
-                    </p>
-                    <p className="text-gray-500 text-sm">
-                      Complete more lessons to unlock AI-generated practice exercises
-                    </p>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    {personalizedExercises.map((exercise) => (
-                      <div
-                        key={exercise.id}
-                        onClick={() => handleStartPersonalizedExercise(exercise)}
-                        className="group bg-white rounded-xl p-5 cursor-pointer hover:shadow-2xl transition-all transform hover:scale-102"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-3 mb-2">
-                              <h3 className="text-xl font-bold text-gray-800">
-                                {exercise.title}
-                              </h3>
-                              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getDifficultyColor(exercise.difficulty)}`}>
-                                {exercise.difficulty}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-4 text-sm text-gray-600">
-                              <span className="flex items-center gap-1">
-                                <FaDumbbell className="text-purple-500" />
-                                {exercise.questionsCount} Questions
-                              </span>
-                              <span className="text-gray-400">•</span>
-                              <span className="font-semibold text-purple-600">
-                                +{exercise.xp} XP
-                              </span>
-                            </div>
-                            <div className="mt-2 flex flex-wrap gap-2">
-                              {exercise.topics.map((topic, idx) => (
-                                <span
-                                  key={idx}
-                                  className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full"
-                                >
-                                  {topic}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                          <div className="ml-4">
-                            <svg
-                              className="w-8 h-8 text-purple-500 transform group-hover:translate-x-2 transition-transform"
-                              fill="none"
-                              stroke="currentColor"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                                d="M9 5l7 7-7 7"
-                              />
-                            </svg>
-                          </div>
+                <div
+                  onClick={fetchPersonalizedExercise}
+                  className="group bg-white rounded-xl p-6 cursor-pointer hover:shadow-2xl transition-all transform hover:scale-102"
+                >
+                  {loadingPersonalized ? (
+                    <div className="flex items-center justify-center gap-3">
+                      <FaSpinner className="text-2xl text-purple-500 animate-spin" />
+                      <span className="text-lg text-gray-700 font-semibold">
+                        Generating personalized exercise...
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <FaMagic className="text-3xl text-purple-500" />
+                          <h3 className="text-2xl font-bold text-gray-800">
+                            Start Personalized Practice
+                          </h3>
                         </div>
+                        <p className="text-gray-600 ml-12">
+                          Get an AI-generated exercise tailored to your learning progress and weak areas
+                        </p>
                       </div>
-                    ))}
-                  </div>
-                )}
+                      <div className="ml-4">
+                        <svg
+                          className="w-10 h-10 text-purple-500 transform group-hover:translate-x-2 transition-transform"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             )}
           </div>
