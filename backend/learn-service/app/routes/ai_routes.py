@@ -36,10 +36,18 @@ def generate_personalized_exercise():
         exercise_number=exercise_number
     )
 
-    return jsonify({
-        "exercise": exercise,
-        "token_usage": usage
-    })
+    exercise["type"] = "AI_GENERATED"
+    exercise["user_id"] = user_id
+    exercise["created_at"] = datetime.utcnow()
+
+    result = get_collection("exercises").insert_one(exercise)
+    exercise["_id"] = str(result.inserted_id)
+
+    # return jsonify({
+    #     "exercise": exercise,
+    #     "token_usage": usage
+    # })
+    return exercise
 
 @ai_bp.post("/classify-mistake")
 def classify_mistakes():

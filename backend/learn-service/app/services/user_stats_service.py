@@ -157,6 +157,21 @@ def get_user_attempts(user_id: str, limit: int = 50):
 
     return attempts
 
+def get_completed_exercise_ids(user_id: str):
+    """
+    Return a list of unique exercise_id values for correct attempts by the user.
+    Uses MongoDB's distinct() to efficiently get unique IDs.
+    """
+    col = _user_attempts_col()
+
+    # Use distinct to get unique exercise_ids directly from MongoDB
+    result = col.distinct("exercise_id", {"user_id": user_id, "is_correct": True})
+
+    print(f"[DEBUG] get_completed_exercise_ids for user {user_id}: found {len(result)} unique completed exercises")
+    print(f"[DEBUG] Completed exercise IDs: {result}")
+
+    return result
+
 def get_weak_skills_and_errors(user_stats, min_attempts=5, threshold=0.6):
     weak_skills = []
 

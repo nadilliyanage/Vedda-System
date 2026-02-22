@@ -1,6 +1,7 @@
 from bson import ObjectId
 from ..db.mongo import get_collection
 from ..models.common import serialize_mongo_doc
+from ..services.user_stats_service import get_completed_exercise_ids
 from flask import g
 
 # ---------- Challenges ----------
@@ -192,9 +193,17 @@ def admin_list_exercises():
     print(f"current user: {current_user}")
     col = get_collection("exercises")
     exercises = list(col.find({}))
+    completedExList = get_completed_exercise_ids(current_user.id) if current_user else []
+    completed_ids = set(completedExList)  # Already strings from user_attempts
+    print(f"Completed IDs: {completed_ids}")
+
     for exercise in exercises:
         if "_id" in exercise:
-            exercise["_id"] = str(exercise["_id"])
+            exercise_id_str = str(exercise["_id"])
+            exercise["_id"] = exercise_id_str
+            exercise["completed"] = exercise_id_str in completed_ids
+        else:
+            exercise["completed"] = False
     return exercises
 
 
@@ -207,16 +216,26 @@ def admin_create_exercise(data: dict):
 
     if col.find_one({"id": data["id"]}):
         return {"success": False, "error": "Exercise with this ID already exists"}, 400
-
+    data["type"] = "MANUAL"
     col.insert_one(data)
     return {"success": True, "message": "Exercise created successfully"}, 201
 
 
 def admin_get_exercise(exercise_id: str):
     col = get_collection("exercises")
-    exercise = col.find_one({"id": exercise_id}, {"_id": 0})
+    exercise = col.find_one({"id": exercise_id})
+
+    current_user = g.current_user
+    completedExList = get_completed_exercise_ids(current_user.id) if current_user else []
+    completed_ids = set(completedExList)  # Already strings from user_attempts
 
     if exercise:
+        if "_id" in exercise:
+            exercise_id_str = str(exercise["_id"])
+            exercise["_id"] = exercise_id_str
+            exercise["completed"] = exercise_id_str in completed_ids
+        else:
+            exercise["completed"] = False
         return {"success": True, "exercise": exercise}, 200
     else:
         return {"success": False, "error": "Exercise not found"}, 404
