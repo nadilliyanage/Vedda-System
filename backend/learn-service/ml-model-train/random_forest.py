@@ -6,8 +6,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import LogisticRegression
-from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier, VotingClassifier
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (
     accuracy_score,
     f1_score,
@@ -29,7 +28,7 @@ ALLOWED_LABELS = [
     "other"
 ]
 
-MODEL_OUT_PATH = "../app/ml/mistake_classifier_llr.joblib"
+MODEL_OUT_PATH = "../app/ml/mistake_classifier_lr.joblib"
 
 
 # =========================
@@ -139,88 +138,60 @@ def train_model(df: pd.DataFrame, test_size=0.2, random_state=42):
             stratify=y
         )
 
-    # TF-IDF Vectorizer (shared across all classifiers)
-    tfidf = TfidfVectorizer(
-        analyzer="char",
-        ngram_range=(3, 6),
-        sublinear_tf=True,
-        max_features=50000
-    )
-    
-    # Transform features once
-    print("\nTransforming features with TF-IDF...")
-    X_train_tfidf = tfidf.fit_transform(X_train)
-    X_test_tfidf = tfidf.transform(X_test)
-    
-    # Define individual classifiers for the ensemble
-    print("\n===== BUILDING HYBRID ENSEMBLE MODEL =====")
-    print("Combining: Logistic Regression + Random Forest + Gradient Boosting")
-    
-    lr_clf = LogisticRegression(
-        max_iter=3000,
-        solver="lbfgs",
-        class_weight="balanced",
-        random_state=42
-    )
-    
-    rf_clf = RandomForestClassifier(
-        n_estimators=100,
-        max_depth=20,
-        min_samples_split=5,
-        class_weight="balanced",
-        random_state=42,
-        n_jobs=-1
-    )
-    
-    gb_clf = GradientBoostingClassifier(
-        n_estimators=100,
-        max_depth=5,
-        learning_rate=0.1,
-        random_state=42
-    )
-    
-    # Create ensemble with soft voting (uses probability estimates)
-    ensemble = VotingClassifier(
-        estimators=[
-            ('lr', lr_clf),
-            ('rf', rf_clf),
-            ('gb', gb_clf)
-        ],
-        voting='soft',
-        n_jobs=-1
-    )
-    
-    print("\nTraining ensemble model...")
-    ensemble.fit(X_train_tfidf, y_train)
-    
-    # Create pipeline wrapper for consistent interface
+    # Pipeline: TF-IDF char ngrams + Random Forest
     pipeline = Pipeline([
-        ('tfidf', tfidf),
-        ('ensemble', ensemble)
+        (
+            "tfidf",
+            TfidfVectorizer(
+                analyzer="char",
+                ngram_range=(3, 6),
+                sublinear_tf=True,
+                max_features=50000
+            )
+        ),
+        (
+            "rf",
+            RandomForestClassifier(
+                n_estimators=150,
+                max_depth=25,
+                min_samples_split=4,
+                min_samples_leaf=2,
+                class_weight="balanced",
+                random_state=42,
+                n_jobs=-1,
+                warm_start=False,
+                max_features="sqrt"
+            )
+        )
     ])
+
+    print("\n===== TRAINING RANDOM FOREST MODEL =====")
+    print("Using 150 decision trees with optimized hyperparameters")
+    print("Training Random Forest classifier...")
+    pipeline.fit(X_train, y_train)
     
-    # Note: We already trained on tfidf features, so we'll use the trained ensemble
-    # Update pipeline with trained components
-    pipeline.named_steps['ensemble'] = ensemble
-    
-    # Evaluation on ensemble
-    y_pred = ensemble.predict(X_test_tfidf)
-    
-    # Also evaluate individual models for comparison
-    print("\n===== INDIVIDUAL MODEL PERFORMANCE =====")
-    for name, clf in [('Logistic Regression', lr_clf), ('Random Forest', rf_clf), ('Gradient Boosting', gb_clf)]:
-        clf.fit(X_train_tfidf, y_train)
-        y_pred_individual = clf.predict(X_test_tfidf)
-        acc_individual = accuracy_score(y_test, y_pred_individual)
-        f1_individual = f1_score(y_test, y_pred_individual, average="macro")
-        print(f"{name:25s} - Accuracy: {acc_individual:.4f}, Macro F1: {f1_individual:.4f}")
+    # Evaluation
+    y_pred = pipeline.predict(X_test)
 
     acc = accuracy_score(y_test, y_pred)
     macro_f1 = f1_score(y_test, y_pred, average="macro")
 
-    print("\n===== HYBRID ENSEMBLE RESULTS =====")
-    print(f"Ensemble Accuracy : {acc:.4f}")
-    print(f"Ensemble Macro F1 : {macro_f1:.4f}")
+    print("\n===== RANDOM FOREST EVALUATION RESULTS =====")
+    print(f"Accuracy : {acc:.4f}")
+    print(f"Macro F1 : {macro_f1:.4f}")
+    
+    # Feature importance (top 10 features)
+    rf_model = pipeline.named_steps['rf']
+    tfidf = pipeline.named_steps['tfidf']
+    
+    if hasattr(rf_model, 'feature_importances_'):
+        feature_names = tfidf.get_feature_names_out()
+        importances = rf_model.feature_importances_
+        indices = importances.argsort()[-10:][::-1]
+        
+        print("\n===== TOP 10 IMPORTANT FEATURES =====")
+        for i, idx in enumerate(indices, 1):
+            print(f"{i:2d}. {feature_names[idx]:15s} - Importance: {importances[idx]:.6f}")
 
     print("\n===== CLASSIFICATION REPORT =====")
     print(

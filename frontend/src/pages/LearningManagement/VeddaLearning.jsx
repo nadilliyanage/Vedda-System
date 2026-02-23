@@ -6,7 +6,7 @@ import LessonContentPlayer from './LessonContentPlayer';
 import PracticeExercises from './PracticeExercises';
 import ExerciseQuizRunner from './ExerciseQuizRunner';
 import PerformanceView from './PerformanceView';
-// import LearningChallenges from './LearningChallenges';
+import LearningChallenges from './LearningChallenges';
 
 
 const VeddaLearning = () => {
@@ -277,20 +277,9 @@ const VeddaLearning = () => {
   // Challenges view
   if (activeView === 'challenges') {
     return (
-        <div className="min-h-screen bg-gray-50 pt-16">
-          <div className="bg-white shadow-sm border-b border-gray-200 py-4 px-6 mb-6">
-            <button
-                onClick={() => setActiveView('main')}
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors"
-            >
-              <FaArrowLeft /> Back to Learning Hub
-            </button>
-          </div>
-          <div className="text-center py-12">
-            <h2 className="text-2xl font-bold text-gray-800">Learning Challenges</h2>
-            <p className="text-gray-600 mt-2">Coming soon...</p>
-          </div>
-        </div>
+        <LearningChallenges
+            onBack={() => setActiveView('main')}
+        />
     );
   }
 

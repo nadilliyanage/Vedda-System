@@ -1,18 +1,40 @@
 import os
 import joblib
 
+from app.ml.model_classes import (
+    WordOrderFeatureExtractor,
+    MistakeClassifierModel,
+    compute_word_order_features
+)
+
 _MODEL = None
 MODEL_PATH = os.path.join(
     os.path.dirname(__file__),
     "mistake_classifier_lr.joblib"
 )
 
+
 def load_model():
     global _MODEL
     if _MODEL is None:
         if not os.path.exists(MODEL_PATH):
             raise FileNotFoundError("Mistake classifier model not found.")
-        _MODEL = joblib.load(MODEL_PATH)
+
+        loaded = joblib.load(MODEL_PATH)
+
+        # Handle both old (wrapper class) and new (dictionary) formats
+        if isinstance(loaded, dict) and 'char_tfidf' in loaded:
+            # New dictionary format - create wrapper locally
+            _MODEL = MistakeClassifierModel(
+                char_tfidf=loaded['char_tfidf'],
+                word_tfidf=loaded['word_tfidf'],
+                word_order_extractor=loaded['word_order_extractor'],
+                ensemble=loaded['ensemble']
+            )
+        else:
+            # Old format - already a MistakeClassifierModel instance
+            _MODEL = loaded
+
     return _MODEL
 
 

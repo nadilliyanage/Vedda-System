@@ -1,7 +1,7 @@
 from datetime import datetime
-from app.db.mongo import get_collection
-from app.models.user_attempt_model import UserAttempt
-from app.ml.predictor import classify_mistake
+from ..db.mongo import get_collection
+from ..models.user_attempt_model import UserAttempt
+from ..ml.predictor import classify_mistake
 
 def add_user_attempt_and_update_stat(user_id: str, exercise_id: str, skill_tags: list,
                      is_correct: bool, correct_answer: str = None, student_answer: str = None):
@@ -156,6 +156,21 @@ def get_user_attempts(user_id: str, limit: int = 50):
         attempt["_id"] = str(attempt["_id"])
 
     return attempts
+
+def get_completed_exercise_ids(user_id: str):
+    """
+    Return a list of unique exercise_id values for correct attempts by the user.
+    Uses MongoDB's distinct() to efficiently get unique IDs.
+    """
+    col = _user_attempts_col()
+
+    # Use distinct to get unique exercise_ids directly from MongoDB
+    result = col.distinct("exercise_id", {"user_id": user_id, "is_correct": True})
+
+    print(f"[DEBUG] get_completed_exercise_ids for user {user_id}: found {len(result)} unique completed exercises")
+    print(f"[DEBUG] Completed exercise IDs: {result}")
+
+    return result
 
 def get_weak_skills_and_errors(user_stats, min_attempts=5, threshold=0.6):
     weak_skills = []

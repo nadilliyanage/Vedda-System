@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 
-from app.services import admin_service
+from ..services import admin_service
 
 admin_bp = Blueprint("admin", __name__)
 
@@ -8,8 +8,7 @@ admin_bp = Blueprint("admin", __name__)
 
 @admin_bp.get("/challenges")
 def admin_list_challenges():
-    ctype = request.args.get("type")
-    data = admin_service.admin_list_challenges(ctype)
+    data = admin_service.admin_list_challenges()
     return jsonify(data), 200
 
 

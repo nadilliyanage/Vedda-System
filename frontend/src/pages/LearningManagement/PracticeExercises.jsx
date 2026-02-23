@@ -1,15 +1,19 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { FaArrowLeft, FaSpinner, FaChevronDown, FaChevronRight, FaDumbbell } from 'react-icons/fa';
+import { FaArrowLeft, FaSpinner, FaChevronDown, FaChevronRight, FaDumbbell, FaMagic, FaStar } from 'react-icons/fa';
 import { categoriesAPI, lessonsAPI, exercisesAPI } from '../../services/learningAPI';
+import { useAuth } from '../../contexts/AuthContext';
 
 const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBack, onStartExercise }) => {
+  const { user } = useAuth();
   const [categories, setCategories] = useState([]);
   const [lessons, setLessons] = useState([]);
   const [exercises, setExercises] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingPersonalized, setLoadingPersonalized] = useState(false);
   const [expandedCategories, setExpandedCategories] = useState(new Set());
   const [expandedLessons, setExpandedLessons] = useState(new Set());
+  const [expandedPersonalized, setExpandedPersonalized] = useState(true);
 
   // Color palette for categories
   const categoryColors = [
@@ -103,6 +107,59 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
     }, 0);
   };
 
+  const fetchPersonalizedExercise = async () => {
+    const userId = user?.id;
+    if (!userId) {
+      toast.error('Please log in to access personalized exercises');
+      return;
+    }
+
+    try {
+      setLoadingPersonalized(true);
+      const response = await exercisesAPI.generatePersonalized(userId);
+      const exercise = response.data;
+      
+      // Format the exercise with title and topics
+      const formattedExercise = {
+        ...exercise,
+        title: `Personalized Practice`,
+        difficulty: exercise.difficulty || 'medium',
+        topics: exercise.skillTags || ['Personalized Review']
+      };
+      
+      // Directly start the exercise
+      handleStartPersonalizedExercise(formattedExercise);
+    } catch (error) {
+      console.error('Failed to generate personalized exercise:', error);
+      toast.error('Failed to generate personalized exercise');
+    } finally {
+      setLoadingPersonalized(false);
+    }
+  };
+
+  const handleStartPersonalizedExercise = (exercise) => {
+    // Create mock lesson and category for AI-generated exercises
+    const aiLesson = {
+      id: 'ai-generated',
+      topic: 'Personalized Practice',
+      description: 'AI-generated personalized practice'
+    };
+    
+    const aiCategory = {
+      id: 'ai-personalized',
+      name: 'Personalized Practice',
+      description: 'AI-generated exercises tailored for you'
+    };
+    
+    // Use the same handler as regular exercises
+    if (onStartExercise) {
+      onStartExercise(exercise, aiLesson, aiCategory);
+    } else {
+      console.log('Starting personalized exercise:', exercise);
+      toast.success(`Starting personalized exercise!`);
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 pt-16">
@@ -137,6 +194,85 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
             <p className="text-lg text-gray-600">
               Test your knowledge with interactive exercises
             </p>
+          </div>
+        </div>
+
+        {/* Personalized Exercises Card - Fixed Section */}
+        <div className="mb-6">
+          <div className="bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 rounded-2xl shadow-2xl overflow-hidden">
+            {/* Header */}
+            <div
+              onClick={() => setExpandedPersonalized(!expandedPersonalized)}
+              className="p-6 cursor-pointer hover:shadow-3xl transition-all"
+            >
+              <div className="flex items-center justify-between text-white">
+                <div className="flex items-center gap-4">
+                  <div className="bg-white/20 p-3 rounded-xl">
+                    <FaMagic className="text-3xl" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h2 className="text-2xl font-bold">Your Personalized Practice</h2>
+                      <FaStar className="text-yellow-300 text-xl animate-pulse" />
+                    </div>
+                    <p className="text-white/90 text-sm">
+                      AI-generated exercises tailored just for you based on your progress
+                    </p>
+                  </div>
+                </div>
+                <div className="text-2xl">
+                  {expandedPersonalized ? <FaChevronDown /> : <FaChevronRight />}
+                </div>
+              </div>
+            </div>
+
+            {/* Personalized Exercise Button */}
+            {expandedPersonalized && (
+              <div className="p-4 bg-white/10 backdrop-blur-sm">
+                <div
+                  onClick={fetchPersonalizedExercise}
+                  className="group bg-white rounded-xl p-6 cursor-pointer hover:shadow-2xl transition-all transform hover:scale-102"
+                >
+                  {loadingPersonalized ? (
+                    <div className="flex items-center justify-center gap-3">
+                      <FaSpinner className="text-2xl text-purple-500 animate-spin" />
+                      <span className="text-lg text-gray-700 font-semibold">
+                        Generating personalized exercise...
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <FaMagic className="text-3xl text-purple-500" />
+                          <h3 className="text-2xl font-bold text-gray-800">
+                            Start Personalized Practice
+                          </h3>
+                        </div>
+                        <p className="text-gray-600 ml-12">
+                          Get an AI-generated exercise tailored to your learning progress and weak areas
+                        </p>
+                      </div>
+                      <div className="ml-4">
+                        <svg
+                          className="w-10 h-10 text-purple-500 transform group-hover:translate-x-2 transition-transform"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

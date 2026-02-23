@@ -1,62 +1,55 @@
-from app.db.mongo import get_collection
-from app.models.common import serialize_mongo_doc
+from bson import ObjectId
+from ..db.mongo import get_collection
+from ..models.common import serialize_mongo_doc
+from ..services.user_stats_service import get_completed_exercise_ids
 from flask import g
 
 # ---------- Challenges ----------
 
-def admin_list_challenges(challenge_type: str | None):
+def admin_list_challenges():
+    current_user = g.current_user
+    print(f"current user: {current_user}")
     col = get_collection("challenges")
-    query = {"type": challenge_type} if challenge_type else {}
-    challenges = list(col.find(query))
-    return [serialize_mongo_doc(c) for c in challenges]
+    challenges = list(col.find({}))
+    for challenge in challenges:
+        if "_id" in challenge:
+            challenge["_id"] = str(challenge["_id"])
+    return challenges
 
 
 def admin_create_challenge(data: dict):
     col = get_collection("challenges")
 
-    if not data.get("id"):
-        return {"success": False, "error": "Challenge ID is required"}, 400
-    if not data.get("type"):
-        return {"success": False, "error": "Challenge type is required"}, 400
-    if not data.get("prompt"):
-        return {"success": False, "error": "Prompt is required"}, 400
+    required = ["id", "lessonId", "categoryId", "challengeNumber", "question"]
+    if not all(field in data for field in required):
+        return {"success": False, "error": "Missing required fields"}, 400
 
     if col.find_one({"id": data["id"]}):
-        return {"success": False, "error": "Challenge ID already exists"}, 400
-
-    ctype = data["type"]
-    if ctype == "fill_blank":
-        if not data.get("answers") or not isinstance(data["answers"], list):
-            return {"success": False, "error": "Answers array is required for fill_blank"}, 400
-    elif ctype == "multiple_choice":
-        if not data.get("options") or not isinstance(data["options"], list):
-            return {"success": False, "error": "Options array is required for multiple_choice"}, 400
-        if not data.get("correct") or not isinstance(data["correct"], list):
-            return {"success": False, "error": "Correct answers array is required for multiple_choice"}, 400
-    elif ctype == "match_pairs":
-        if not data.get("pairs") or not isinstance(data["pairs"], list):
-            return {"success": False, "error": "Pairs array is required for match_pairs"}, 400
+        return {"success": False, "error": "Challenge with this ID already exists"}, 400
 
     col.insert_one(data)
-    return {"success": True, "message": "Challenge created successfully", "id": data["id"]}, 201
+    return {"success": True, "message": "Challenge created successfully"}, 201
 
 
 def admin_get_challenge(challenge_id: str):
     col = get_collection("challenges")
-    challenge = col.find_one({"id": challenge_id})
-    if not challenge:
-        return {"error": "Challenge not found"}, 404
-    return serialize_mongo_doc(challenge), 200
+    challenge = col.find_one({"id": challenge_id}, {"_id": 0})
+
+    if challenge:
+        return {"success": True, "challenge": challenge}, 200
+    else:
+        return {"success": False, "error": "Challenge not found"}, 404
 
 
 def admin_update_challenge(challenge_id: str, data: dict):
     col = get_collection("challenges")
-    existing = col.find_one({"id": challenge_id})
-    if not existing:
-        return {"success": False, "error": "Challenge not found"}, 404
 
-    if "id" in data and data["id"] != challenge_id:
-        return {"success": False, "error": "Cannot change challenge ID"}, 400
+    data.pop("id", None)
+    data.pop("_id", None)
+
+    required = ["lessonId", "categoryId", "challengeNumber", "question"]
+    if not all(field in data for field in required):
+        return {"success": False, "error": "Missing required fields"}, 400
 
     result = col.update_one({"id": challenge_id}, {"$set": data})
 
@@ -110,13 +103,12 @@ def admin_get_category(category_id: str):
 def admin_update_category(category_id: str, data: dict):
     col = get_collection("categories")
 
-    if not col.find_one({"id": category_id}):
+
+    if not col.find_one({"_id": ObjectId(category_id)}):
         return {"success": False, "error": "Category not found"}, 404
 
-    if "id" in data and data["id"] != category_id:
-        return {"success": False, "error": "Cannot change category ID"}, 400
-
-    result = col.update_one({"id": category_id}, {"$set": data})
+    data.pop("_id", None)
+    result = col.update_one({"_id": ObjectId(category_id)}, {"$set": data})
 
     if result.modified_count > 0:
         return {"success": True, "message": "Category updated successfully"}, 200
@@ -170,13 +162,13 @@ def admin_get_lesson(lesson_id: str):
 def admin_update_lesson(lesson_id: str, data: dict):
     col = get_collection("lessons")
 
-    if not col.find_one({"id": lesson_id}):
+    if not col.find_one({"_id": ObjectId(lesson_id)}):
         return {"success": False, "error": "Lesson not found"}, 404
 
-    if "id" in data and data["id"] != lesson_id:
-        return {"success": False, "error": "Cannot change lesson ID"}, 400
+    # Remove _id from data to prevent attempting to update immutable field
+    data.pop("_id", None)
 
-    result = col.update_one({"id": lesson_id}, {"$set": data})
+    result = col.update_one({"_id": ObjectId(lesson_id)}, {"$set": data})
 
     if result.modified_count > 0:
         return {"success": True, "message": "Lesson updated successfully"}, 200
@@ -201,9 +193,17 @@ def admin_list_exercises():
     print(f"current user: {current_user}")
     col = get_collection("exercises")
     exercises = list(col.find({}))
+    completedExList = get_completed_exercise_ids(current_user.id) if current_user else []
+    completed_ids = set(completedExList)  # Already strings from user_attempts
+    print(f"Completed IDs: {completed_ids}")
+
     for exercise in exercises:
         if "_id" in exercise:
-            exercise["_id"] = str(exercise["_id"])
+            exercise_id_str = str(exercise["_id"])
+            exercise["_id"] = exercise_id_str
+            exercise["completed"] = exercise_id_str in completed_ids
+        else:
+            exercise["completed"] = False
     return exercises
 
 
@@ -216,16 +216,26 @@ def admin_create_exercise(data: dict):
 
     if col.find_one({"id": data["id"]}):
         return {"success": False, "error": "Exercise with this ID already exists"}, 400
-
+    data["type"] = "MANUAL"
     col.insert_one(data)
     return {"success": True, "message": "Exercise created successfully"}, 201
 
 
 def admin_get_exercise(exercise_id: str):
     col = get_collection("exercises")
-    exercise = col.find_one({"id": exercise_id}, {"_id": 0})
+    exercise = col.find_one({"id": exercise_id})
+
+    current_user = g.current_user
+    completedExList = get_completed_exercise_ids(current_user.id) if current_user else []
+    completed_ids = set(completedExList)  # Already strings from user_attempts
 
     if exercise:
+        if "_id" in exercise:
+            exercise_id_str = str(exercise["_id"])
+            exercise["_id"] = exercise_id_str
+            exercise["completed"] = exercise_id_str in completed_ids
+        else:
+            exercise["completed"] = False
         return {"success": True, "exercise": exercise}, 200
     else:
         return {"success": False, "error": "Exercise not found"}, 404

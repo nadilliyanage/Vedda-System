@@ -1,5 +1,5 @@
 from openai import OpenAI
-from app.config import Config
+from ..config import Config
 # from app.ai.service import generate_exercises_with_rag
 
 _client = OpenAI(api_key=Config.OPENAI_API_KEY)

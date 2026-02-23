@@ -2,11 +2,14 @@ from flask import Blueprint, request, jsonify
 from datetime import datetime
 from bson import ObjectId
 from threading import Thread
+import random
+import time
 
-from app.db.mongo import ( get_collection, get_db)
-from app.ai.service import ( get_feedback_with_rag, generate_exercise_with_rag )
-from app.ml.predictor import classify_mistake
-from app.services.user_stats_service import (add_user_attempt_and_update_stat, get_weak_skills_and_errors)
+from ..db.mongo import ( get_collection, get_db)
+from ..ai.service import ( get_feedback_with_rag, generate_exercise_with_rag )
+from ..ai.effectiveness_tracker import update_knowledge_effectiveness, track_knowledge_usage
+from ..ml.predictor import classify_mistake
+from ..services.user_stats_service import (add_user_attempt_and_update_stat, get_weak_skills_and_errors)
 
 ai_bp = Blueprint("ai", __name__)
 
@@ -25,15 +28,26 @@ def generate_personalized_exercise():
     data = request.get_json()
     user_id = data["user_id"]
 
+    # Use timestamp-based exercise number for variety
+    exercise_number = int(time.time()) % 1000  # Changes every second
+
     exercise, usage = generate_personalized_exercise_for_user(
         user_id=user_id,
-        exercise_number=1
+        exercise_number=exercise_number
     )
 
-    return jsonify({
-        "exercise": exercise,
-        "token_usage": usage
-    })
+    exercise["type"] = "AI_GENERATED"
+    exercise["user_id"] = user_id
+    exercise["created_at"] = datetime.utcnow()
+
+    result = get_collection("exercises").insert_one(exercise)
+    exercise["_id"] = str(result.inserted_id)
+
+    # return jsonify({
+    #     "exercise": exercise,
+    #     "token_usage": usage
+    # })
+    return exercise
 
 @ai_bp.post("/classify-mistake")
 def classify_mistakes():
@@ -64,7 +78,39 @@ def submit_answer():
     correct_answer = question.get("correct_answer", "")
     is_correct = student_answer.strip().lower() == correct_answer.strip().lower()
 
-    # store attempt in background
+    # Classify mistake if incorrect
+    error_type = None
+    if not is_correct:
+        error_type = classify_mistake(correct_answer, student_answer)
+
+    # Get feedback with RAG (now includes user_id for personalization)
+    feedback, usage = get_feedback_with_rag(
+        sentence=sentence,
+        correct_answer=correct_answer,
+        student_answer=student_answer,
+        skill_tags=skill_tags,
+        error_type=error_type,
+        user_id=user_id  # NEW: Pass user_id for personalization
+    )
+
+    # Extract retrieved knowledge IDs for effectiveness tracking
+    knowledge_ids = feedback.pop("_retrieved_knowledge_ids", [])
+
+    # Track knowledge effectiveness in background
+    if knowledge_ids:
+        db = get_db()
+        Thread(
+            target=lambda: update_knowledge_effectiveness(db, knowledge_ids, is_correct),
+            daemon=True
+        ).start()
+
+        # Also track detailed usage
+        Thread(
+            target=lambda: track_knowledge_usage(db, user_id, exercise_id, knowledge_ids, is_correct),
+            daemon=True
+        ).start()
+
+    # Store attempt in background
     Thread(
         target=run_add_user_attempt,
         kwargs={
@@ -78,16 +124,6 @@ def submit_answer():
         daemon=True
     ).start()
 
-    feedback, usage = get_feedback_with_rag(
-        sentence=sentence,
-        correct_answer=correct_answer,
-        student_answer=student_answer,
-        skill_tags=skill_tags,
-        error_type=None,  # later: plug your mistake classifier here
-    )
-
-    # update stats
-    # _update_user_stats(user_id, skill_tags, bool(feedback.get("is_correct", False)))
 
     return jsonify({"feedback": feedback, "usage": usage})
 
@@ -115,23 +151,60 @@ def generate_personalized_exercise_for_user(user_id: str, exercise_number: int =
     # 1. Fetch user stats
     user_stats = db.user_stats.find_one({"user_id": user_id})
     if not user_stats:
-        raise ValueError("User stats not found")
+        # Create default stats for new user
+        user_stats = {
+            "user_id": user_id,
+            "skill_stats": {},
+            "error_stats": {}
+        }
 
     # 2. Extract weak skills + error types
     weak_skills, top_errors = get_weak_skills_and_errors(user_stats)
 
-    # 3. Fallbacks (IMPORTANT)
-    if not weak_skills:
-        weak_skills = ["basic_vocabulary"]
+    # 3. Get all available skills from knowledge base
+    knowledge_coll = db["vedda_knowledge"]
+    all_skill_tags = knowledge_coll.distinct("skill_tags")
 
+    # 4. Add variety by rotating through skills
+    if not weak_skills:
+        # If no weak skills, pick random skills from available
+        available_skills = [s for s in all_skill_tags if s]
+        if available_skills:
+            # Pick 1-2 random skills
+            num_skills = min(2, len(available_skills))
+            weak_skills = random.sample(available_skills, num_skills)
+        else:
+            weak_skills = ["basic_vocabulary"]
+    else:
+        # Mix weak skills with random skill for variety
+        if len(weak_skills) > 1:
+            # Sometimes pick subset of weak skills
+            num_to_pick = random.randint(1, len(weak_skills))
+            weak_skills = random.sample(weak_skills, num_to_pick)
+
+        # Occasionally add a random skill
+        if random.random() < 0.3 and all_skill_tags:  # 30% chance
+            random_skill = random.choice([s for s in all_skill_tags if s and s not in weak_skills])
+            weak_skills.append(random_skill)
+
+    # 5. Rotate error types for variety
     if not top_errors:
         top_errors = ["spelling_error"]
+    elif len(top_errors) > 1:
+        # Randomly pick subset
+        num_errors = random.randint(1, min(2, len(top_errors)))
+        top_errors = random.sample(top_errors, num_errors)
 
-    # 4. Call AI exercise generator
+    # 6. Vary difficulty randomly for more variety
+    difficulty_levels = ["beginner", "beginner", "intermediate"]  # Weight toward beginner
+    difficulty = random.choice(difficulty_levels)
+
+    # 7. Call AI exercise generator with varied parameters
     exercise, usage = generate_exercise_with_rag(
         skills=weak_skills,
         error_types=top_errors,
-        exercise_number=exercise_number
+        exercise_number=exercise_number,
+        difficulty=difficulty
     )
 
     return exercise, usage

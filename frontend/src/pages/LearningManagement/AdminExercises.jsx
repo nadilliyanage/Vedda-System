@@ -606,33 +606,12 @@ const AdminExercises = () => {
           <div className="grid grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Select Lesson
-              </label>
-              <select
-                value={formData.lessonId}
-                onChange={(e) =>
-                  setFormData({ ...formData, lessonId: e.target.value })
-                }
-                className="w-full border rounded-lg px-3 py-2"
-                required
-              >
-                <option value="">Choose a lesson...</option>
-                {lessons.map((lesson) => (
-                  <option key={lesson.id} value={lesson.id}>
-                    {lesson.topic}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Category
               </label>
               <select
                 value={formData.categoryId}
                 onChange={(e) =>
-                  setFormData({ ...formData, categoryId: e.target.value })
+                  setFormData({ ...formData, categoryId: e.target.value, lessonId: "" })
                 }
                 className="w-full border rounded-lg px-3 py-2"
               >
@@ -642,6 +621,30 @@ const AdminExercises = () => {
                     {category.name}
                   </option>
                 ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Select Lesson
+              </label>
+              <select
+                value={formData.lessonId}
+                onChange={(e) =>
+                  setFormData({ ...formData, lessonId: e.target.value })
+                }
+                className="w-full border rounded-lg px-3 py-2"
+                required
+                disabled={!formData.categoryId}
+              >
+                <option value="">Choose a lesson...</option>
+                {lessons
+                  .filter(lesson => !formData.categoryId || lesson.categoryId === formData.categoryId)
+                  .map((lesson) => (
+                    <option key={lesson.id} value={lesson.id}>
+                      {lesson.topic}
+                    </option>
+                  ))}
               </select>
             </div>
 
