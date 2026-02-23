@@ -84,7 +84,16 @@ class ArtifactIdentifierService:
             img_array = np.expand_dims(img_array, axis=0)
             
             # Extract deep features using CNN feature extractor
-            features = self.feature_extractor.predict(img_array, verbose=0)
+            # Use layer-by-layer inference to avoid Sequential.call() compatibility
+            # issues across different TensorFlow versions (e.g., macOS vs Windows)
+            try:
+                x = tf.constant(img_array)
+                for layer in self.feature_extractor.layers:
+                    x = layer(x)
+                features = x.numpy()
+            except Exception:
+                # Fallback to standard predict if layer iteration fails
+                features = self.feature_extractor.predict(img_array, verbose=0)
             
             # Scale features (same as during training)
             features_scaled = self.scaler.transform(features)
