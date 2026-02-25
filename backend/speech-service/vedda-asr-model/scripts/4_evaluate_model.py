@@ -21,7 +21,7 @@ class VeddaASREvaluator:
         print(f"\n🖥️  Using device: {self.device}")
         
         # Load model and processor
-        print(f"🤖 Loading model from: {model_path}")
+        print(f"Loading model from: {model_path}")
         self.processor = WhisperProcessor.from_pretrained(model_path)
         self.model = WhisperForConditionalGeneration.from_pretrained(model_path)
         self.model = self.model.to(self.device)

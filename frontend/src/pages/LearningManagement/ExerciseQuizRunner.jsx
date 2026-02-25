@@ -414,7 +414,7 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
         {submitted && (
           <div className="bg-white border-2 border-dashed border-blue-400 rounded-xl p-6 mb-6">
             <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <span>🤖</span> AI Summary
+              <span></span> AI Summary
             </h3>
             {isGeneratingSummary ? (
               <div className="flex items-center gap-3 text-gray-600">

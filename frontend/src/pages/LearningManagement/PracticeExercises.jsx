@@ -213,7 +213,6 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <h2 className="text-2xl font-bold">Your Personalized Practice</h2>
-                      <FaStar className="text-yellow-300 text-xl animate-pulse" />
                     </div>
                     <p className="text-white/90 text-sm">
                       AI-generated exercises tailored just for you based on your progress
@@ -244,14 +243,10 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <FaMagic className="text-3xl text-purple-500" />
                           <h3 className="text-2xl font-bold text-gray-800">
                             Start Personalized Practice
                           </h3>
                         </div>
-                        <p className="text-gray-600 ml-12">
-                          Get an AI-generated exercise tailored to your learning progress and weak areas
-                        </p>
                       </div>
                       <div className="ml-4">
                         <svg
