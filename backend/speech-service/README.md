@@ -110,9 +110,11 @@ speech-service/
 The service auto-selects the best available model at startup (priority order):
 
 1. `VEDDA_ASR_MODEL_PATH` environment variable (if set and path exists)
-2. `vedda-asr-model/models/whisper-vedda-final` ← **active** (Colab-trained whisper-small)
-3. `vedda-asr-model/models/whisper-frozen-v4/final` (frozen-encoder fine-tune, trained Feb 2026)
-4. `vedda-asr-model/models/whisper-frozen-v2/final` (legacy fallback — no longer on disk)
+2. `vedda-asr-model/models/whisper-vedda-final` ← current priority (loads first)
+3. `vedda-asr-model/models/whisper-frozen-v4/final` ← **best results** (52/385 exact, WER 71.66%)
+4. `vedda-asr-model/models/whisper-frozen-v2/final` (legacy — no longer on disk)
+
+> **Note:** To activate v4 (better accuracy), set `VEDDA_ASR_MODEL_PATH=vedda-asr-model/models/whisper-frozen-v4/final` in `.env`.
 
 ---
 
@@ -140,7 +142,7 @@ python verify_accuracy.py
 python analyze_report.py
 ```
 
-| Model | WER | CER | Exact (20 samples) | Status |
-|---|---|---|---|---|
-| `whisper-vedda-final` | 78.75% | 39.26% | 0 / 20 | active (loaded at startup) |
-| `whisper-frozen-v4/final` | pending eval | — | — | trained Feb 2026, awaiting eval |
+| Model | WER | CER | Exact | Samples | Status |
+|---|---|---|---|---|---|
+| `whisper-frozen-v4/final` | 71.66% | 34.84% | 52/385 | 385 | trained Feb 2026, **best model** |
+| `whisper-vedda-final` | 78.75% | 39.26% | 0/20 | 20 | active at startup (loaded by default) |

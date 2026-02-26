@@ -114,6 +114,9 @@ class VeddaASRService:
             ).input_features.to(self.device)
 
             # Force Sinhala + transcribe using modern language/task API
+            # Clear max_length from generation_config to avoid conflict with max_new_tokens
+            if hasattr(self.model, 'generation_config'):
+                self.model.generation_config.max_length = None
             with torch.no_grad():
                 predicted_ids = self.model.generate(
                     input_features,

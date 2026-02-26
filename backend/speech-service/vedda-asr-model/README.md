@@ -12,7 +12,7 @@ A custom Automatic Speech Recognition (ASR) pipeline for the Vedda language, bui
 | PyTorch                   | 2.x            | Deep learning framework                                                           |
 | Hugging Face Transformers | 4.x            | Whisper model fine-tuning (`WhisperForConditionalGeneration`, `WhisperProcessor`) |
 | Hugging Face Datasets     | 2.x            | Dataset loading and batching for training                                         |
-| OpenAI Whisper            | `whisper-tiny` | Base pre-trained ASR model (39M parameters)                                       |
+| OpenAI Whisper            | `whisper-small` | Base pre-trained ASR model (241.7M parameters)                                   |
 | librosa                   | 0.10+          | Audio loading and resampling to 16 kHz mono                                       |
 | soundfile                 | —              | WAV file I/O                                                                      |
 | jiwer                     | —              | Word Error Rate (WER) and Character Error Rate (CER) computation                  |
@@ -33,11 +33,11 @@ A custom Automatic Speech Recognition (ASR) pipeline for the Vedda language, bui
 
 ## Models
 
-| Model | WER | CER | Exact | Notes |
-|---|---|---|---|---|
-| `whisper-vedda-final` | 78.75% | 39.26% | 0/20 | Colab full fine-tune; **active model** |
-| `whisper-frozen-v4/final` | pending eval | — | — | Frozen-encoder fine-tune from above; trained Feb 2026 |
-| `whisper-frozen-v2/final` | 88.60% | 85.40% | 12/38 | Legacy — no longer on disk |
+| Model | WER | CER | Exact | Samples | Notes |
+|---|---|---|---|---|---|
+| `whisper-frozen-v4/final` | 71.66% | 34.84% | 52/385 | 385 | Frozen-encoder fine-tune; **active model** |
+| `whisper-vedda-final` | 78.75% | 39.26% | 0/20 | 20 | Colab full fine-tune (baseline) |
+| `whisper-frozen-v2/final` | 88.60% | 85.40% | 12/38 | 38 | Legacy — no longer on disk |
 
 ---
 
@@ -55,8 +55,8 @@ vedda-asr-model/
 │   ├── train_dataset_augmented.json  # Augmented training set (1368 samples)
 │   └── test_dataset.json             # Evaluation split (38 samples)
 ├── models/
-│   ├── whisper-frozen-v2/            # Best stable model (12 exact matches)
-│   └── whisper-frozen-v4/            # Current training run (WER-optimised)
+│   ├── whisper-vedda-final/          # Colab full fine-tune (241.7M whisper-small)
+│   └── whisper-frozen-v4/            # Frozen-encoder fine-tune; current best (52/385 exact)
 ├── scripts/
 │   ├── 1_collect_data.py             # Audio collection helper
 │   ├── 2_prepare_dataset.py          # Preprocessing and dataset preparation
@@ -102,7 +102,7 @@ num_beams            = 5
 repetition_penalty   = 1.5
 no_repeat_ngram_size = 4
 length_penalty       = 0.8
-max_new_tokens       = 100
+max_new_tokens       = 100   # remove max_length from generation_config to avoid conflict
 ```
 
 ---
