@@ -1,8 +1,8 @@
 from datetime import datetime
 from random import choice as rand_choice
 
-from app.db.mongo import get_collection
-from app.models.challenge_model import normalize_text, sanitize_challenge_public
+from ..db.mongo import get_collection
+from ..models.challenge_model import normalize_text, sanitize_challenge_public
 
 def _challenges_col():
     return get_collection("challenges")

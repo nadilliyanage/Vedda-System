@@ -62,7 +62,9 @@ export const exercisesAPI = {
 
   submitAnswer: (data) => axios.post(`${API_BASE}/api/learn/ai/submit-answer`, data),
 
-  startExercise: (data) => axios.post(`${API_BASE}/api/learn/lesson-progress`, data)
+  startExercise: (data) => axios.post(`${API_BASE}/api/learn/lesson-progress`, data),
+
+  generatePersonalized: (userId) => axios.post(`${API_BASE}/api/learn/ai/generate-personalized-exercise`, { user_id: userId })
 };
 
 // ========== Challenges API ==========

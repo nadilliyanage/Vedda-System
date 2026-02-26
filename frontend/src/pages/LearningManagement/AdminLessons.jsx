@@ -19,6 +19,7 @@ const AdminLessons = () => {
   });
   const [formData, setFormData] = useState({
     id: "",
+    _id: "",
     categoryId: "",
     topic: "",
     description: "",
@@ -79,6 +80,7 @@ const AdminLessons = () => {
   const openEditForm = (lesson) => {
     setFormData({
       id: lesson.id,
+      _id: lesson._id,
       categoryId: lesson.categoryId || "",
       topic: lesson.topic || "",
       description: lesson.description || "",
@@ -111,7 +113,7 @@ const AdminLessons = () => {
         await lessonsAPI.create(submitData);
         toast.success("Lesson created successfully");
       } else if (activeView === "edit") {
-        await lessonsAPI.update(formData.id, submitData);
+        await lessonsAPI.update(formData._id, submitData);
         toast.success("Lesson updated successfully");
       }
 
@@ -384,23 +386,21 @@ const AdminLessons = () => {
       <div className="bg-white rounded-lg shadow-md p-6">
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
-            {activeView === "add" && (
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Lesson ID
-                </label>
-                <input
-                  type="text"
-                  value={formData.id}
-                  onChange={(e) =>
-                    setFormData({ ...formData, id: e.target.value })
-                  }
-                  className="w-full border rounded-lg px-3 py-2"
-                  placeholder="e.g., lesson1"
-                  required
-                />
-              </div>
-            )}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Lesson ID
+              </label>
+              <input
+                type="text"
+                value={formData.id}
+                onChange={(e) =>
+                  setFormData({ ...formData, id: e.target.value })
+                }
+                className="w-full border rounded-lg px-3 py-2"
+                placeholder="e.g., lesson1"
+                required
+              />
+            </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">

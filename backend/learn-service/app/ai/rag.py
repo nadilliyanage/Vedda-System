@@ -1,6 +1,6 @@
 import re
 
-from app.db.mongo import get_collection
+from ..db.mongo import get_collection
 
 def build_rag_context(
     skill_tags: list[str],

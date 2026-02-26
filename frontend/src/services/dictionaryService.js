@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios from "axios";
 
 // Dictionary service runs on port 5002 (not 5003)
-const DICTIONARY_API_URL = import.meta.env.VITE_DICTIONARY_SERVICE_URL || 'http://localhost:5002';
+const DICTIONARY_API_URL =
+  import.meta.env.VITE_DICTIONARY_SERVICE_URL || "http://localhost:5002";
 
 /**
  * Translate a single word
@@ -12,13 +13,16 @@ const DICTIONARY_API_URL = import.meta.env.VITE_DICTIONARY_SERVICE_URL || 'http:
  */
 export const translateWord = async (word, source, target) => {
   try {
-    const response = await axios.get(`${DICTIONARY_API_URL}/api/dictionary/translate`, {
-      params: { word, source, target }
-    });
+    const response = await axios.get(
+      `${DICTIONARY_API_URL}/api/dictionary/translate`,
+      {
+        params: { word, source, target },
+      },
+    );
     return response.data;
   } catch (error) {
-    console.error('Translation error:', error.response?.data || error.message);
-    throw error.response?.data || { error: 'Failed to translate word' };
+    console.error("Translation error:", error.response?.data || error.message);
+    throw error.response?.data || { error: "Failed to translate word" };
   }
 };
 
@@ -29,14 +33,42 @@ export const translateWord = async (word, source, target) => {
  * @param {string} targetLanguage - Target language filter
  * @returns {Promise<Array>} Search results
  */
-export const searchDictionary = async (query, sourceLanguage = 'all', targetLanguage = 'all') => {
+/**
+ * Get random words from dictionary
+ * @param {number} count - Number of random words to get
+ * @param {string|null} wordType - Optional word type filter
+ * @returns {Promise<Array>} Random words
+ */
+export const getRandomWords = async (count = 5, wordType = null) => {
   try {
-    const response = await axios.get(`${DICTIONARY_API_URL}/api/dictionary/search`, {
-      params: { q: query, source: sourceLanguage, target: targetLanguage }
-    });
+    const params = { count };
+    if (wordType) params.type = wordType;
+    const response = await axios.get(
+      `${DICTIONARY_API_URL}/api/dictionary/random`,
+      { params },
+    );
+    return response.data.words || [];
+  } catch (error) {
+    console.error("Random words error:", error);
+    throw error.response?.data || { error: "Failed to get random words" };
+  }
+};
+
+export const searchDictionary = async (
+  query,
+  sourceLanguage = "all",
+  targetLanguage = "all",
+) => {
+  try {
+    const response = await axios.get(
+      `${DICTIONARY_API_URL}/api/dictionary/search`,
+      {
+        params: { q: query, source: sourceLanguage, target: targetLanguage },
+      },
+    );
     return response.data.results || [];
   } catch (error) {
-    console.error('Dictionary search error:', error);
-    throw error.response?.data || { error: 'Failed to search dictionary' };
+    console.error("Dictionary search error:", error);
+    throw error.response?.data || { error: "Failed to search dictionary" };
   }
 };

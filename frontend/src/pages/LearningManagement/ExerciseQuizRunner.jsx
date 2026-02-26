@@ -248,7 +248,7 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
         {/* Question Header */}
         <div className="flex items-start justify-between mb-4">
           <h3 className="text-lg font-bold text-gray-800">
-            Q{index + 1}. {question.prompt}
+            {question.prompt}
           </h3>
           {submitted && (
             <div className="ml-4">
@@ -398,13 +398,7 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
       <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <h1 className="text-3xl font-bold text-gray-800">{lesson.topic}</h1>
-            <span className="text-xl text-gray-600">({category.name})</span>
-          </div>
-          <h2 className="text-2xl font-semibold text-blue-600">
-            Exercise {exercise.exerciseNumber}
-          </h2>
+          <h1 className="text-3xl font-bold text-gray-800">{lesson.topic}</h1>
         </div>
 
         {/* Questions */}

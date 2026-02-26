@@ -65,10 +65,9 @@ if [ -d "$SCRIPT_DIR/3D-model-service" ]; then
   sleep 3
 fi
 
-# Start Artifact Identifier Service (Port 5009)
 echo "Starting Artifact Identifier Service on port 5009..."
 if [ -d "$SCRIPT_DIR/artifact-identifier-service" ]; then
-  cd "$SCRIPT_DIR/artifact-identifier-service" && python3 run.py > "$SCRIPT_DIR/logs/artifact-identifier.log" 2>&1 &
+  cd "$SCRIPT_DIR/artifact-identifier-service" && /Users/heshan/Downloads/Projects/Vedda-System/.venv/bin/python run.py > "$SCRIPT_DIR/logs/artifact-identifier.log" 2>&1 &
   sleep 3
 fi
 
