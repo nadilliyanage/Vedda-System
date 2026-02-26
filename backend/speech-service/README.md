@@ -142,7 +142,7 @@ python verify_accuracy.py
 python analyze_report.py
 ```
 
-| Model | WER | CER | Exact | Samples | Status |
-|---|---|---|---|---|---|
-| `whisper-frozen-v4/final` | 71.66% | 34.84% | 52/385 | 385 | trained Feb 2026, **best model** |
-| `whisper-vedda-final` | 78.75% | 39.26% | 0/20 | 20 | active at startup (loaded by default) |
+| Model                     | WER    | CER    | Exact  | Samples | Status                                |
+| ------------------------- | ------ | ------ | ------ | ------- | ------------------------------------- |
+| `whisper-frozen-v4/final` | 71.66% | 34.84% | 52/385 | 385     | trained Feb 2026, **best model**      |
+| `whisper-vedda-final`     | 78.75% | 39.26% | 0/20   | 20      | active at startup (loaded by default) |

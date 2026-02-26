@@ -6,18 +6,18 @@ A custom Automatic Speech Recognition (ASR) pipeline for the Vedda language, bui
 
 ## Technologies Used
 
-| Technology                | Version        | Purpose                                                                           |
-| ------------------------- | -------------- | --------------------------------------------------------------------------------- |
-| Python                    | 3.10+          | Runtime                                                                           |
-| PyTorch                   | 2.x            | Deep learning framework                                                           |
-| Hugging Face Transformers | 4.x            | Whisper model fine-tuning (`WhisperForConditionalGeneration`, `WhisperProcessor`) |
-| Hugging Face Datasets     | 2.x            | Dataset loading and batching for training                                         |
-| OpenAI Whisper            | `whisper-small` | Base pre-trained ASR model (241.7M parameters)                                   |
-| librosa                   | 0.10+          | Audio loading and resampling to 16 kHz mono                                       |
-| soundfile                 | —              | WAV file I/O                                                                      |
-| jiwer                     | —              | Word Error Rate (WER) and Character Error Rate (CER) computation                  |
-| pydub                     | —              | Audio augmentation (pitch/speed/noise)                                            |
-| numpy                     | —              | Numerical operations                                                              |
+| Technology                | Version         | Purpose                                                                           |
+| ------------------------- | --------------- | --------------------------------------------------------------------------------- |
+| Python                    | 3.10+           | Runtime                                                                           |
+| PyTorch                   | 2.x             | Deep learning framework                                                           |
+| Hugging Face Transformers | 4.x             | Whisper model fine-tuning (`WhisperForConditionalGeneration`, `WhisperProcessor`) |
+| Hugging Face Datasets     | 2.x             | Dataset loading and batching for training                                         |
+| OpenAI Whisper            | `whisper-small` | Base pre-trained ASR model (241.7M parameters)                                    |
+| librosa                   | 0.10+           | Audio loading and resampling to 16 kHz mono                                       |
+| soundfile                 | —               | WAV file I/O                                                                      |
+| jiwer                     | —               | Word Error Rate (WER) and Character Error Rate (CER) computation                  |
+| pydub                     | —               | Audio augmentation (pitch/speed/noise)                                            |
+| numpy                     | —               | Numerical operations                                                              |
 
 ---
 
@@ -33,11 +33,11 @@ A custom Automatic Speech Recognition (ASR) pipeline for the Vedda language, bui
 
 ## Models
 
-| Model | WER | CER | Exact | Samples | Notes |
-|---|---|---|---|---|---|
-| `whisper-frozen-v4/final` | 71.66% | 34.84% | 52/385 | 385 | Frozen-encoder fine-tune; **active model** |
-| `whisper-vedda-final` | 78.75% | 39.26% | 0/20 | 20 | Colab full fine-tune (baseline) |
-| `whisper-frozen-v2/final` | 88.60% | 85.40% | 12/38 | 38 | Legacy — no longer on disk |
+| Model                     | WER    | CER    | Exact  | Samples | Notes                                      |
+| ------------------------- | ------ | ------ | ------ | ------- | ------------------------------------------ |
+| `whisper-frozen-v4/final` | 71.66% | 34.84% | 52/385 | 385     | Frozen-encoder fine-tune; **active model** |
+| `whisper-vedda-final`     | 78.75% | 39.26% | 0/20   | 20      | Colab full fine-tune (baseline)            |
+| `whisper-frozen-v2/final` | 88.60% | 85.40% | 12/38  | 38      | Legacy — no longer on disk                 |
 
 ---
 
