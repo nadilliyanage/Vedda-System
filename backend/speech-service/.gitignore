@@ -22,6 +22,7 @@ env/
 logs/
 *.log
 speech_service.log
+eval_log.txt
 
 # --- Temporary audio files (uploaded by users at runtime) ---
 audio_data/
@@ -29,10 +30,10 @@ temp/
 tmp/
 
 # --- Generated test / evaluation outputs ---
-accuracy_report.json
 test_results.json
 spot_check_cp342.txt
 diagnosis_results.txt
+train_v4_log.txt
 
 # ============================================================
 # vedda-asr-model — large binary / generated files

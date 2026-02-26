@@ -15,9 +15,15 @@ import re
 sys.path.insert(0, os.path.dirname(__file__))
 
 class VeddaAccuracyVerifier:
+    # Results files, tried in order
+    RESULTS_FILES = [
+        'test_results.json',
+        'eval_vedda_final_results.json',
+    ]
+
     def __init__(self):
         self.reference_file = 'vedda-asr-model/data/transcriptions.json'
-        self.test_results_file = 'test_results.json'
+        self.test_results_file = None
         self.references = {}
         self.predictions = {}
         self.accuracy_results = []
@@ -48,73 +54,68 @@ class VeddaAccuracyVerifier:
             return False
     
     def load_predictions(self):
-        """Load predicted transcriptions from test results"""
-        if not os.path.exists(self.test_results_file):
-            print(f"❌ Test results file not found: {self.test_results_file}")
+        """Load predicted transcriptions from test results (tries multiple files)"""
+        # Find the first available results file
+        for candidate in self.RESULTS_FILES:
+            if os.path.exists(candidate):
+                self.test_results_file = candidate
+                break
+
+        if self.test_results_file is None:
+            print(f"❌ No results file found. Run inference first:")
+            print(f"   python eval_vedda_final.py --limit 50")
             return False
-        
+
+        print(f"📂 Using results file: {self.test_results_file}")
         try:
             with open(self.test_results_file, 'r', encoding='utf-8') as f:
                 test_data = json.load(f)
-            
-            # Extract predictions from test results
+
             for result in test_data.get('results', []):
-                if result['status'] == 'success':
-                    # Extract file ID from filename
+                if result.get('status') == 'success':
                     filename = result['file']
-                    # vedda_001_20260211_091413_d1dd712e.wav -> vedda_001_20260211_091413_d1dd712e
                     file_id = filename.replace('.wav', '').replace('.mp3', '')
-                    self.predictions[file_id] = result.get('transcription', '')
-            
+                    # support both field names: 'transcription' (test_frozen_model_v3)
+                    # and 'predicted' (eval_vedda_final)
+                    pred = result.get('transcription') or result.get('predicted', '')
+                    self.predictions[file_id] = pred
+
             print(f"✅ Loaded {len(self.predictions)} predictions")
             return True
         except Exception as e:
             print(f"❌ Error loading predictions: {e}")
             return False
     
+    @staticmethod
+    def _edit_distance(a, b):
+        """True Levenshtein edit distance"""
+        m, n = len(a), len(b)
+        dp = list(range(n + 1))
+        for i in range(1, m + 1):
+            prev, dp[0] = dp[0], i
+            for j in range(1, n + 1):
+                tmp = dp[j]
+                dp[j] = prev if a[i-1] == b[j-1] else 1 + min(prev, dp[j], dp[j-1])
+                prev = tmp
+        return dp[n]
+
     def calculate_wer(self, reference, prediction):
-        """Calculate Word Error Rate"""
+        """Calculate Word Error Rate (proper Levenshtein on word sequences)"""
         ref_words = reference.split()
         pred_words = prediction.split()
-        
-        # Simple WER: count different words
         if len(ref_words) == 0 and len(pred_words) == 0:
             return 0.0
         if len(ref_words) == 0:
             return 1.0
-        
-        # Levenshtein-like distance for word sequences
-        differences = 0
-        max_len = max(len(ref_words), len(pred_words))
-        
-        for i in range(max_len):
-            ref_word = ref_words[i] if i < len(ref_words) else ""
-            pred_word = pred_words[i] if i < len(pred_words) else ""
-            
-            if ref_word != pred_word:
-                differences += 1
-        
-        wer = differences / max_len if max_len > 0 else 0.0
-        return min(wer, 1.0)
+        return min(self._edit_distance(ref_words, pred_words) / len(ref_words), 1.0)
     
     def calculate_cer(self, reference, prediction):
-        """Calculate Character Error Rate"""
+        """Calculate Character Error Rate (proper Levenshtein on char sequences)"""
         if len(reference) == 0 and len(prediction) == 0:
             return 0.0
         if len(reference) == 0:
             return 1.0
-        
-        # Simple edit distance
-        differences = 0
-        for i in range(max(len(reference), len(prediction))):
-            ref_char = reference[i] if i < len(reference) else ""
-            pred_char = prediction[i] if i < len(prediction) else ""
-            
-            if ref_char != pred_char:
-                differences += 1
-        
-        cer = differences / len(reference) if len(reference) > 0 else 0.0
-        return min(cer, 1.0)
+        return min(self._edit_distance(list(reference), list(prediction)) / len(reference), 1.0)
     
     def verify_accuracy(self):
         """Compare predictions with references"""
@@ -277,8 +278,7 @@ class VeddaAccuracyVerifier:
         """Run full verification"""
         print(f"\n🚀 Starting verification...")
         print(f"   Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        print(f"   Reference: {self.reference_file}")
-        print(f"   Results:   {self.test_results_file}\n")
+        print(f"   Reference: {self.reference_file}\n")
         
         # Load data
         if not self.load_references():

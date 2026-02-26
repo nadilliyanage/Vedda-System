@@ -83,13 +83,14 @@ speech-service/
 ├── vedda-asr-model/              # Vedda ASR training pipeline and models
 │   └── README.md                 # See for model details
 │
-├── retrain_v3_balanced.py        # Training script (currently configured for v4)
-├── test_frozen_model.py          # Evaluate whisper-frozen-v2 (current best)
-├── test_frozen_model_v3.py       # Evaluate whisper-frozen-v4
+├── retrain_v3_balanced.py        # Training script (whisper-frozen-v4, frozen encoder)
+├── eval_vedda_final.py           # Evaluate active model; saves eval_vedda_final_results.json
+├── test_frozen_model_v3.py       # Evaluate whisper-frozen-v4 specifically
 ├── verify_accuracy.py            # Compute WER / CER / exact-match metrics
 ├── analyze_report.py             # Analyse accuracy_report.json
 ├── accuracy_report.json          # Latest evaluation results
-├── test_results.json             # Per-sample test output
+├── eval_vedda_final_results.json # Per-sample output from eval_vedda_final.py
+├── train_v4_log.txt              # Training log for whisper-frozen-v4
 ├── augment_data.py               # Audio augmentation for training data
 ├── check_train_data.py           # Validate training dataset integrity
 ├── validate_train_data.py        # Additional dataset validation
@@ -97,7 +98,6 @@ speech-service/
 ├── spot_check.py                 # Quick manual spot-check on audio files
 ├── test_all_audio_inputs.py      # Batch audio input testing
 ├── test_vedda_integration.py     # End-to-end Vedda integration test
-├── run_v4_eval.bat               # Auto-run evaluation when v4 training finishes
 │
 ├── app/                          # Flask app module (blueprints / services)
 └── logs/                         # Runtime logs
@@ -110,8 +110,11 @@ speech-service/
 The service auto-selects the best available model at startup (priority order):
 
 1. `VEDDA_ASR_MODEL_PATH` environment variable (if set and path exists)
-2. `vedda-asr-model/models/whisper-frozen-v4/final` (if training is complete)
-3. `vedda-asr-model/models/whisper-frozen-v2/final` (stable fallback)
+2. `vedda-asr-model/models/whisper-vedda-final` ← current priority (loads first)
+3. `vedda-asr-model/models/whisper-frozen-v4/final` ← **best results** (52/385 exact, WER 71.66%)
+4. `vedda-asr-model/models/whisper-frozen-v2/final` (legacy — no longer on disk)
+
+> **Note:** To activate v4 (better accuracy), set `VEDDA_ASR_MODEL_PATH=vedda-asr-model/models/whisper-frozen-v4/final` in `.env`.
 
 ---
 
@@ -129,8 +132,8 @@ Service starts on `http://0.0.0.0:5007`.
 ## Vedda ASR — Quick Evaluation
 
 ```bash
-# Run inference on all test samples
-python test_frozen_model.py
+# Run inference and save results
+python eval_vedda_final.py
 
 # Compute WER / CER / exact-match
 python verify_accuracy.py
@@ -139,4 +142,7 @@ python verify_accuracy.py
 python analyze_report.py
 ```
 
-Current v2 results: **12/38 exact matches**, WER 88.60%, CER 85.40%.
+| Model                     | WER    | CER    | Exact  | Samples | Status                                |
+| ------------------------- | ------ | ------ | ------ | ------- | ------------------------------------- |
+| `whisper-frozen-v4/final` | 71.66% | 34.84% | 52/385 | 385     | trained Feb 2026, **best model**      |
+| `whisper-vedda-final`     | 78.75% | 39.26% | 0/20   | 20      | active at startup (loaded by default) |
