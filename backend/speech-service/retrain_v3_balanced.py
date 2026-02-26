@@ -24,8 +24,9 @@ from torch.utils.data import Dataset
 import evaluate
 
 # ── paths ─────────────────────────────────────────────────────────────────────
-BASE_MODEL    = 'vedda-asr-model/models/whisper-frozen-v2/final'  # continue from v2!
-AUGMENTED_DS  = 'vedda-asr-model/data/train_dataset_augmented.json'
+BASE_MODEL    = 'vedda-asr-model/models/whisper-vedda-final'  # Colab-trained whisper-small (best available)
+# Use original dataset — augmented audio files are not present on this machine
+AUGMENTED_DS  = 'vedda-asr-model/data/train_dataset.json'
 TEST_DS_FILE  = 'vedda-asr-model/data/test_dataset.json'
 OUTPUT_DIR    = 'vedda-asr-model/models/whisper-frozen-v4'
 
@@ -145,7 +146,7 @@ def compute_metrics(pred, processor):
 # ── main ───────────────────────────────────────────────────────────────────────
 def main():
     log('=' * 60)
-    log('[TRAIN v4]  VEDDA FROZEN ENCODER  -  CONTINUE FROM v2')
+    log('[TRAIN v4]  VEDDA FROZEN ENCODER  -  CONTINUE FROM whisper-vedda-final')
     log(f'  Start: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
     log('=' * 60)
 
@@ -156,7 +157,8 @@ def main():
     with open(TEST_DS_FILE, encoding='utf-8') as f:
         test_raw = json.load(f)
     if isinstance(test_raw, dict):
-        test_raw = test_raw.get('test', test_raw.get('data', []))
+        # test_dataset.json uses 'data' key
+        test_raw = test_raw.get('data', test_raw.get('test', []))
     test_items = test_raw
     log(f'  Test items: {len(test_items)}')
 

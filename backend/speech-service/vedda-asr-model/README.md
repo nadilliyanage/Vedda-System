@@ -23,20 +23,21 @@ A custom Automatic Speech Recognition (ASR) pipeline for the Vedda language, bui
 
 ## Model Architecture
 
-- **Base model:** `openai/whisper-tiny` (39M parameters)
-- **Encoder:** Frozen (weights not updated during fine-tuning)
-- **Decoder:** Fine-tuned on Vedda transcription data (29.5M trainable parameters)
+- **Base model:** `openai/whisper-small` (241.7M parameters)
+- **Encoder:** Frozen during v4 fine-tuning (weights not updated)
+- **Decoder:** Fine-tuned on Vedda transcription data (153.6M trainable parameters)
 - **Output script:** Sinhala Unicode (`si` language token)
-- **Forced decoder tokens:** `[<|si|>, <|transcribe|>]`
+- **Generate config:** `language='si', task='transcribe'`, num_beams=5
 
 ---
 
-## Current Best Model
+## Models
 
-| Model                     | WER         | CER    | Exact Matches | Notes                            |
-| ------------------------- | ----------- | ------ | ------------- | -------------------------------- |
-| `whisper-frozen-v2/final` | 88.60%      | 85.40% | 12 / 38       | Current production model         |
-| `whisper-frozen-v4/final` | in training | —      | —             | Continues from v2, WER-optimised |
+| Model | WER | CER | Exact | Notes |
+|---|---|---|---|---|
+| `whisper-vedda-final` | 78.75% | 39.26% | 0/20 | Colab full fine-tune; **active model** |
+| `whisper-frozen-v4/final` | pending eval | — | — | Frozen-encoder fine-tune from above; trained Feb 2026 |
+| `whisper-frozen-v2/final` | 88.60% | 85.40% | 12/38 | Legacy — no longer on disk |
 
 ---
 
@@ -76,14 +77,17 @@ vedda-asr-model/
 ## Training Configuration (v4)
 
 ```
-Base model:      whisper-frozen-v2/final  (continues from best checkpoint)
+Base model:      whisper-vedda-final  (Colab-trained whisper-small)
+Encoder:         Frozen  (153.6M / 241.7M params trainable)
 Learning rate:   5e-6
 Batch size:      8
 Max epochs:      5
-Early stopping:  patience = 2 (metric = WER)
-Train samples:   1368 (342 original × 4 augmentations)
+Early stopping:  patience = 2 (metric = WER)  → stopped at epoch 3
+Train samples:   342  (augmented audio missing; originals only)
 Eval samples:    38
 Optimiser:       AdamW  (weight_decay=0.01)
+Train loss:      1.11  (final epoch)
+Completed:       February 2026
 ```
 
 ---
@@ -91,12 +95,14 @@ Optimiser:       AdamW  (weight_decay=0.01)
 ## Inference Parameters
 
 ```python
-forced_decoder_ids = [[1, si_token_id], [2, transcribe_token_id]]
-num_beams          = 5
-repetition_penalty = 1.5
+# vedda_asr_service.py — model.generate() call
+language             = 'si'
+task                 = 'transcribe'
+num_beams            = 5
+repetition_penalty   = 1.5
 no_repeat_ngram_size = 4
-length_penalty     = 0.8
-max_new_tokens     = 100
+length_penalty       = 0.8
+max_new_tokens       = 100
 ```
 
 ---
@@ -112,13 +118,13 @@ pip install -r requirements.txt
 ## Evaluate a Model
 
 ```bash
-# Test v2 (current best)
-python ../test_frozen_model.py
+# Run inference on active model (whisper-vedda-final) and save results
+python ../eval_vedda_final.py
 
-# Test v4 (after training completes)
+# Evaluate whisper-frozen-v4 specifically
 python ../test_frozen_model_v3.py
 
-# Verify accuracy metrics
+# Compute WER / CER / exact-match (reads eval_vedda_final_results.json or test_results.json)
 python ../verify_accuracy.py
 
 # Analyse the accuracy report
