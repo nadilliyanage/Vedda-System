@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const connectDB = require('./config/database');
 const artifactRoutes = require('./routes/artifactRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5010;
@@ -21,8 +22,8 @@ app.use(morgan('dev'));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.status(200).json({ 
-    status: 'OK', 
+  res.status(200).json({
+    status: 'OK',
     message: 'Artifact Service is running',
     timestamp: new Date().toISOString()
   });
@@ -32,7 +33,7 @@ app.get('/health', (req, res) => {
 app.get('/health/db', (req, res) => {
   const dbStatus = mongoose.connection.readyState;
   const states = ['disconnected', 'connected', 'connecting', 'disconnecting'];
-  
+
   res.status(dbStatus === 1 ? 200 : 503).json({
     database: states[dbStatus],
     timestamp: new Date().toISOString()
@@ -41,6 +42,7 @@ app.get('/health/db', (req, res) => {
 
 // API Routes
 app.use('/api/artifacts', artifactRoutes);
+app.use('/api/feedback', feedbackRoutes);
 
 // 404 Handler
 app.use((req, res) => {

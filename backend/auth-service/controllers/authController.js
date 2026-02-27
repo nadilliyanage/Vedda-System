@@ -8,24 +8,24 @@ exports.register = async (req, res) => {
     // Validate request
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        errors: errors.array() 
+        errors: errors.array()
       });
     }
 
     const { username, email, password } = req.body;
 
     // Check if user already exists
-    const existingUser = await User.findOne({ 
-      $or: [{ email }, { username }] 
+    const existingUser = await User.findOne({
+      $or: [{ email }, { username }]
     });
 
     if (existingUser) {
       return res.status(400).json({
         success: false,
-        message: existingUser.email === email 
-          ? 'Email already registered' 
+        message: existingUser.email === email
+          ? 'Email already registered'
           : 'Username already taken'
       });
     }
@@ -39,7 +39,7 @@ exports.register = async (req, res) => {
     });
 
     // Generate token
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.role, user.username);
 
     res.status(201).json({
       success: true,
@@ -69,9 +69,9 @@ exports.login = async (req, res) => {
     // Validate request
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ 
+      return res.status(400).json({
         success: false,
-        errors: errors.array() 
+        errors: errors.array()
       });
     }
 
@@ -102,7 +102,7 @@ exports.login = async (req, res) => {
     await user.save();
 
     // Generate token
-    const token = generateToken(user._id);
+    const token = generateToken(user._id, user.role, user.username);
 
     res.json({
       success: true,
@@ -166,9 +166,9 @@ exports.updateProfile = async (req, res) => {
 
     if (username) {
       // Check if username is already taken
-      const existingUser = await User.findOne({ 
-        username, 
-        _id: { $ne: req.user.id } 
+      const existingUser = await User.findOne({
+        username,
+        _id: { $ne: req.user.id }
       });
       if (existingUser) {
         return res.status(400).json({
@@ -181,9 +181,9 @@ exports.updateProfile = async (req, res) => {
 
     if (email) {
       // Check if email is already taken
-      const existingUser = await User.findOne({ 
-        email, 
-        _id: { $ne: req.user.id } 
+      const existingUser = await User.findOne({
+        email,
+        _id: { $ne: req.user.id }
       });
       if (existingUser) {
         return res.status(400).json({

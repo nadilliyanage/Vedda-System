@@ -1,10 +1,28 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { FaTimes, FaCalendarAlt, FaRuler, FaLeaf, FaMapMarkerAlt, FaTag } from "react-icons/fa";
+import { FaTimes, FaCalendarAlt, FaRuler, FaLeaf, FaMapMarkerAlt, FaTag, FaEdit } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { getArtifacts } from "../../services/artifactService";
+import FeedbackFormModal from "./FeedbackFormModal";
+import { useAuth } from "../../contexts/AuthContext";
+import toast from "react-hot-toast";
 
 const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
   const [relatedArtifacts, setRelatedArtifacts] = useState([]);
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSuggestEdit = () => {
+    if (!isAuthenticated) {
+      toast("You have to sign in to suggest an edit", { icon: "🔒" });
+      onClose();
+      navigate("/login");
+      return;
+    }
+    setShowFeedbackForm(true);
+  };
 
   useEffect(() => {
     if (artifact?.category) {
@@ -44,21 +62,61 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
         </button>
 
         {/* Image Header */}
-        <div className="relative h-64 md:h-96 overflow-hidden rounded-t-2xl">
-          <img
-            src={artifact.imageUrl}
-            alt={artifact.name}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
-              {artifact.name}
-            </h2>
-            <span className="inline-block bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium capitalize">
-              {artifact.category}
-            </span>
-          </div>
-        </div>
+        {(() => {
+          // Build full image list: primary imageUrl + images array
+          const allImages = [];
+          if (artifact.imageUrl) allImages.push(artifact.imageUrl);
+          if (artifact.images?.length > 0) {
+            artifact.images.forEach((img) => {
+              const url = typeof img === 'string' ? img : img.url;
+              if (url && url !== artifact.imageUrl) allImages.push(url);
+            });
+          }
+          const activeImage = selectedImage || allImages[0];
+
+          return (
+            <>
+              <div className="relative h-64 md:h-96 overflow-hidden rounded-t-2xl">
+                <img
+                  src={activeImage}
+                  alt={artifact.name}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
+                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                    {artifact.name}
+                  </h2>
+                  <span className="inline-block bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium capitalize">
+                    {artifact.category}
+                  </span>
+                </div>
+              </div>
+
+              {/* Thumbnail strip — only show if more than 1 image */}
+              {allImages.length > 1 && (
+                <div className="flex gap-2 p-3 bg-gray-50 overflow-x-auto">
+                  {allImages.map((url, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setSelectedImage(url)}
+                      className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                        (activeImage === url)
+                          ? 'border-purple-500 ring-2 ring-purple-300'
+                          : 'border-gray-200 hover:border-gray-400'
+                      }`}
+                    >
+                      <img
+                        src={url}
+                        alt={`View ${i + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </>
+          );
+        })()}
 
         {/* Content */}
         <div className="p-6 md:p-8">
@@ -100,6 +158,17 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
             </section>
           )}
 
+          {/* Suggest Edit Button */}
+          <section className="mb-6">
+            <button
+              onClick={handleSuggestEdit}
+              className="w-full px-4 py-3 border border-1 border-gray-200 hover:border-gray-400 rounded-lg transition-all font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+            >
+              <FaEdit />
+              Suggest an Edit
+            </button>
+          </section>
+
           {/* Related Artifacts */}
           {relatedArtifacts.length > 0 && (
             <section className="mb-6">
@@ -132,6 +201,13 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
             </section>
           )}
         </div>
+
+        {/* Feedback Form Modal */}
+        <FeedbackFormModal
+          isOpen={showFeedbackForm}
+          onClose={() => setShowFeedbackForm(false)}
+          artifact={artifact}
+        />
       </div>
     </div>
   );
