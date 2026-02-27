@@ -118,6 +118,7 @@ exports.getFeedbackById = async (req, res) => {
 };
 
 // Review feedback - approve or reject (admin/elder only)
+// When approved, suggested changes are automatically applied to the artifact
 exports.reviewFeedback = async (req, res) => {
    try {
       const { status, reviewNote } = req.body;
@@ -145,6 +146,26 @@ exports.reviewFeedback = async (req, res) => {
          });
       }
 
+      // If approved, automatically apply suggested changes to the artifact
+      let updatedArtifact = null;
+      if (status === 'approved' && feedback.suggestedChanges) {
+         const changes = {};
+         const sc = feedback.suggestedChanges;
+         if (sc.name) changes.name = sc.name;
+         if (sc.description) changes.description = sc.description;
+         if (sc.category) changes.category = sc.category;
+         if (sc.tags && sc.tags.length > 0) changes.tags = sc.tags;
+         if (sc.location) changes.location = sc.location;
+
+         if (Object.keys(changes).length > 0) {
+            updatedArtifact = await Artifact.findByIdAndUpdate(
+               feedback.artifactId,
+               { $set: changes },
+               { new: true, runValidators: true }
+            );
+         }
+      }
+
       feedback.status = status;
       feedback.reviewedBy = req.user.id;
       feedback.reviewNote = reviewNote || '';
@@ -154,8 +175,11 @@ exports.reviewFeedback = async (req, res) => {
 
       res.status(200).json({
          success: true,
-         message: `Feedback ${status} successfully`,
-         data: feedback
+         message: status === 'approved'
+            ? 'Feedback approved and changes applied to artifact'
+            : 'Feedback rejected',
+         data: feedback,
+         updatedArtifact
       });
    } catch (error) {
       console.error('Review feedback error:', error);

@@ -9,7 +9,6 @@ import {
   Search,
   Filter,
   RefreshCw,
-  ArrowRight,
   BarChart3,
 } from "lucide-react";
 import toast from "react-hot-toast";
@@ -18,7 +17,7 @@ import {
   reviewFeedback,
   getFeedbackStats,
 } from "../services/feedbackService";
-import { updateArtifact } from "../services/artifactService";
+
 import LoadingScreen from "../components/ui/LoadingScreen";
 
 const STATUS_BADGES = {
@@ -114,7 +113,11 @@ const AdminFeedback = () => {
     try {
       const response = await reviewFeedback(feedbackId, status, reviewNote);
       if (response.success) {
-        toast.success(`Feedback ${status} successfully`);
+        toast.success(
+          status === "approved"
+            ? "Feedback approved & changes applied to artifact!"
+            : "Feedback rejected"
+        );
         setReviewNote("");
         setExpandedId(null);
         fetchFeedback();
@@ -128,31 +131,7 @@ const AdminFeedback = () => {
     }
   };
 
-  const handleApplyToArtifact = async (feedback) => {
-    try {
-      const changes = {};
-      const sc = feedback.suggestedChanges;
-      if (sc.name) changes.name = sc.name;
-      if (sc.description) changes.description = sc.description;
-      if (sc.category) changes.category = sc.category;
-      if (sc.tags && sc.tags.length > 0) changes.tags = sc.tags;
-      if (sc.location) changes.location = sc.location;
 
-      if (Object.keys(changes).length === 0) {
-        toast("No field changes to apply. This feedback contains only additional info.", { icon: "ℹ️" });
-        return;
-      }
-
-      const artifactId = feedback.artifactId?._id || feedback.artifactId;
-      const response = await updateArtifact(artifactId, changes);
-      if (response.success) {
-        toast.success("Artifact updated with feedback suggestions!");
-      }
-    } catch (error) {
-      console.error("Apply to artifact error:", error);
-      toast.error("Failed to apply changes to artifact");
-    }
-  };
 
   const filteredFeedback = searchTerm
     ? feedbackList.filter(
@@ -533,18 +512,6 @@ const AdminFeedback = () => {
                       </div>
                     )}
 
-                    {/* Apply to Artifact for Approved */}
-                    {feedback.status === "approved" && (
-                      <div className="mt-4">
-                        <button
-                          onClick={() => handleApplyToArtifact(feedback)}
-                          className="px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
-                        >
-                          <ArrowRight size={18} />
-                          Apply Changes to Artifact
-                        </button>
-                      </div>
-                    )}
                   </div>
                 )}
               </div>
