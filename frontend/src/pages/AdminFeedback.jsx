@@ -462,6 +462,31 @@ const AdminFeedback = () => {
                       )}
                     </div>
 
+                    {/* Suggested Images */}
+                    {feedback.suggestedImages?.length > 0 && (
+                      <div className="bg-white p-3 rounded-lg border mb-4">
+                        <p className="text-xs text-purple-600 mb-2 font-medium">
+                          Suggested Images ({feedback.suggestedImages.length})
+                        </p>
+                        <div className="grid grid-cols-3 gap-2">
+                          {feedback.suggestedImages.map((img, i) => (
+                            <a
+                              key={i}
+                              href={img.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              <img
+                                src={img.url}
+                                alt={`Suggested ${i + 1}`}
+                                className="w-full h-24 object-cover rounded-lg border border-gray-200 hover:border-purple-400 transition-colors cursor-pointer"
+                              />
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Review Note (for already reviewed) */}
                     {feedback.reviewNote && (
                       <div className="bg-white p-3 rounded-lg border mb-4">

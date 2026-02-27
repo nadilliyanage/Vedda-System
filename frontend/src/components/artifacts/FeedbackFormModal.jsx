@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import PropTypes from "prop-types";
-import { FaTimes, FaPaperPlane, FaInfoCircle } from "react-icons/fa";
-import { submitFeedback } from "../../services/feedbackService";
+import { FaTimes, FaPaperPlane, FaInfoCircle, FaImage, FaTrash } from "react-icons/fa";
+import { submitFeedback, uploadFeedbackImages } from "../../services/feedbackService";
 import { useAuth } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
 
@@ -46,11 +46,31 @@ const FeedbackFormModal = ({ isOpen, onClose, artifact }) => {
     additionalInfo: "",
   });
   const [submitting, setSubmitting] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const fileInputRef = useRef(null);
 
   if (!isOpen || !artifact) return null;
 
   const handleChange = (field, value) => {
     setSuggestedChanges((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const handleImageSelect = (e) => {
+    const files = Array.from(e.target.files);
+    if (selectedImages.length + files.length > 5) {
+      toast.error("Maximum 5 images allowed");
+      return;
+    }
+    const newPreviews = files.map((file) => URL.createObjectURL(file));
+    setSelectedImages((prev) => [...prev, ...files]);
+    setImagePreviews((prev) => [...prev, ...newPreviews]);
+  };
+
+  const handleRemoveImage = (index) => {
+    URL.revokeObjectURL(imagePreviews[index]);
+    setSelectedImages((prev) => prev.filter((_, i) => i !== index));
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
@@ -72,17 +92,27 @@ const FeedbackFormModal = ({ isOpen, onClose, artifact }) => {
     if (suggestedChanges.additionalInfo.trim())
       changes.additionalInfo = suggestedChanges.additionalInfo.trim();
 
-    if (Object.keys(changes).length === 0) {
-      toast.error("Please provide at least one suggested change or additional information");
+    if (Object.keys(changes).length === 0 && selectedImages.length === 0) {
+      toast.error("Please provide at least one suggested change, image, or additional information");
       return;
     }
 
     setSubmitting(true);
     try {
+      // Upload images first if any
+      let uploadedImages = [];
+      if (selectedImages.length > 0) {
+        const uploadRes = await uploadFeedbackImages(selectedImages);
+        if (uploadRes.success) {
+          uploadedImages = uploadRes.data;
+        }
+      }
+
       await submitFeedback({
         artifactId: artifact._id,
         feedbackType,
-        suggestedChanges: changes,
+        suggestedChanges: Object.keys(changes).length > 0 ? changes : {},
+        suggestedImages: uploadedImages,
         username: user?.username || "Anonymous",
       });
       toast.success("Feedback submitted! It will be reviewed by a curator.");
@@ -97,6 +127,8 @@ const FeedbackFormModal = ({ isOpen, onClose, artifact }) => {
         additionalInfo: "",
       });
       setFeedbackType("edit_suggestion");
+      setSelectedImages([]);
+      setImagePreviews([]);
     } catch (error) {
       console.error("Submit feedback error:", error);
       toast.error(
@@ -289,6 +321,56 @@ const FeedbackFormModal = ({ isOpen, onClose, artifact }) => {
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent text-sm resize-none"
               />
+            </div>
+
+            {/* Image Upload */}
+            <div>
+              <label className="block text-sm font-medium text-gray-600 mb-1">
+                Suggest New Images
+                <span className="text-gray-400 font-normal ml-1">
+                  (up to 5 images)
+                </span>
+              </label>
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className="w-full border-2 border-dashed border-gray-300 rounded-lg p-4 text-center cursor-pointer hover:border-purple-400 hover:bg-purple-50 transition-all"
+              >
+                <FaImage className="mx-auto text-gray-400 mb-2" size={24} />
+                <p className="text-sm text-gray-500">
+                  Click to select images
+                </p>
+                <p className="text-xs text-gray-400 mt-1">
+                  JPEG, PNG, GIF, WebP
+                </p>
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                multiple
+                onChange={handleImageSelect}
+                className="hidden"
+              />
+              {imagePreviews.length > 0 && (
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  {imagePreviews.map((preview, index) => (
+                    <div key={index} className="relative group">
+                      <img
+                        src={preview}
+                        alt={`Preview ${index + 1}`}
+                        className="w-full h-24 object-cover rounded-lg border border-gray-200"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveImage(index)}
+                        className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-md"
+                      >
+                        <FaTrash size={10} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 

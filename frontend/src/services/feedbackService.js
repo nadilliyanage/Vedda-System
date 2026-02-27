@@ -25,6 +25,16 @@ export const submitFeedback = async (data) => {
    return response.data;
 };
 
+// Upload images for feedback (any authenticated user)
+export const uploadFeedbackImages = async (files) => {
+   const formData = new FormData();
+   files.forEach((file) => formData.append('images', file));
+   const response = await feedbackAPI.post('/upload-images', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+   });
+   return response.data;
+};
+
 // Get current user's own feedback
 export const getMyFeedback = async (params = {}) => {
    const response = await feedbackAPI.get('/my', { params });
@@ -57,6 +67,7 @@ export const getFeedbackStats = async () => {
 
 export default {
    submitFeedback,
+   uploadFeedbackImages,
    getMyFeedback,
    getAllFeedback,
    getFeedbackById,

@@ -1,10 +1,11 @@
 const Feedback = require('../models/Feedback');
 const Artifact = require('../models/Artifact');
+const { uploadToCloudinary } = require('../utils/cloudinaryHelper');
 
 // Submit feedback for an artifact (any authenticated user)
 exports.submitFeedback = async (req, res) => {
    try {
-      const { artifactId, feedbackType, suggestedChanges, username } = req.body;
+      const { artifactId, feedbackType, suggestedChanges, suggestedImages, username } = req.body;
 
       // Validate artifact exists
       const artifact = await Artifact.findById(artifactId);
@@ -15,11 +16,13 @@ exports.submitFeedback = async (req, res) => {
          });
       }
 
-      // Validate that at least some change or info is provided
-      if (!suggestedChanges || Object.keys(suggestedChanges).length === 0) {
+      // Validate that at least some change, info, or images are provided
+      const hasChanges = suggestedChanges && Object.keys(suggestedChanges).length > 0;
+      const hasImages = suggestedImages && suggestedImages.length > 0;
+      if (!hasChanges && !hasImages) {
          return res.status(400).json({
             success: false,
-            message: 'Please provide at least one suggested change or additional information'
+            message: 'Please provide at least one suggested change, image, or additional information'
          });
       }
 
@@ -28,7 +31,8 @@ exports.submitFeedback = async (req, res) => {
          userId: req.user.id,
          username: username || req.user.username || 'Anonymous',
          feedbackType,
-         suggestedChanges
+         suggestedChanges,
+         suggestedImages: suggestedImages || []
       });
 
       await feedback.save();
@@ -41,6 +45,39 @@ exports.submitFeedback = async (req, res) => {
    } catch (error) {
       console.error('Submit feedback error:', error);
       res.status(400).json({
+         success: false,
+         message: error.message
+      });
+   }
+};
+
+// Upload images for feedback (any authenticated user)
+exports.uploadFeedbackImages = async (req, res) => {
+   try {
+      if (!req.files || req.files.length === 0) {
+         return res.status(400).json({
+            success: false,
+            message: 'Please upload at least one image'
+         });
+      }
+
+      const uploadResults = [];
+      for (const file of req.files) {
+         const result = await uploadToCloudinary(file.path, 'vedda-feedback');
+         uploadResults.push({
+            url: result.url,
+            publicId: result.publicId
+         });
+      }
+
+      res.status(200).json({
+         success: true,
+         message: `${uploadResults.length} image(s) uploaded successfully`,
+         data: uploadResults
+      });
+   } catch (error) {
+      console.error('Upload feedback images error:', error);
+      res.status(500).json({
          success: false,
          message: error.message
       });
@@ -148,19 +185,39 @@ exports.reviewFeedback = async (req, res) => {
 
       // If approved, automatically apply suggested changes to the artifact
       let updatedArtifact = null;
-      if (status === 'approved' && feedback.suggestedChanges) {
+      if (status === 'approved') {
          const changes = {};
-         const sc = feedback.suggestedChanges;
+         const sc = feedback.suggestedChanges || {};
          if (sc.name) changes.name = sc.name;
          if (sc.description) changes.description = sc.description;
          if (sc.category) changes.category = sc.category;
          if (sc.tags && sc.tags.length > 0) changes.tags = sc.tags;
          if (sc.location) changes.location = sc.location;
 
+         // Apply suggested images — add to the artifact's images array
+         const updateOps = {};
          if (Object.keys(changes).length > 0) {
+            updateOps.$set = changes;
+         }
+         if (feedback.suggestedImages && feedback.suggestedImages.length > 0) {
+            const newImages = feedback.suggestedImages.map(img => ({
+               url: img.url,
+               publicId: img.publicId || '',
+               isPrimary: false
+            }));
+            // Set the main imageUrl if artifact doesn't have one
+            const artifact = await Artifact.findById(feedback.artifactId);
+            if (artifact && !artifact.imageUrl) {
+               updateOps.$set = updateOps.$set || {};
+               updateOps.$set.imageUrl = newImages[0].url;
+            }
+            updateOps.$push = { images: { $each: newImages } };
+         }
+
+         if (Object.keys(updateOps).length > 0) {
             updatedArtifact = await Artifact.findByIdAndUpdate(
                feedback.artifactId,
-               { $set: changes },
+               updateOps,
                { new: true, runValidators: true }
             );
          }
