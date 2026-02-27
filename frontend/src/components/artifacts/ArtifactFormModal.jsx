@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
-import { X, Upload, Sparkles, Loader2 } from 'lucide-react';
+import { X, Upload, Sparkles, Loader2, Plus, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { createArtifactWithImage, updateArtifact, uploadImage, generateMetadata } from '../../services/artifactService';
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_ARTIFACT_SERVICE_URL || 'http://localhost:5010/api/artifacts';
 
 const CATEGORIES = [
   { value: 'tools', label: 'Tools' },
@@ -25,6 +28,9 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
 
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [additionalFiles, setAdditionalFiles] = useState([]);
+  const [additionalPreviews, setAdditionalPreviews] = useState([]);
+  const [existingAdditionalImages, setExistingAdditionalImages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [aiLoading, setAiLoading] = useState(false);
 
@@ -39,6 +45,9 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
         location: artifact.location || '',
       });
       setImagePreview(artifact.imageUrl || artifact.images?.[0]?.url || null);
+      // Load existing additional images (skip the primary one)
+      const extras = (artifact.images || []).filter((img, i) => i > 0);
+      setExistingAdditionalImages(extras);
     }
   }, [artifact, isOpen]);
 
@@ -47,27 +56,67 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         toast.error('Please select an image file');
         return;
       }
-
-      // Validate file size (5MB)
       if (file.size > 5 * 1024 * 1024) {
         toast.error('Image size should be less than 5MB');
         return;
       }
 
       setImageFile(file);
-
-      // Create preview
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleAdditionalImages = (e) => {
+    const files = Array.from(e.target.files);
+    const validFiles = [];
+    const newPreviews = [];
+
+    for (const file of files) {
+      if (!file.type.startsWith('image/')) {
+        toast.error(`${file.name} is not an image file`);
+        continue;
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error(`${file.name} is too large (max 5MB)`);
+        continue;
+      }
+      validFiles.push(file);
+    }
+
+    if (validFiles.length === 0) return;
+
+    // Create previews
+    validFiles.forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        newPreviews.push(reader.result);
+        if (newPreviews.length === validFiles.length) {
+          setAdditionalFiles((prev) => [...prev, ...validFiles]);
+          setAdditionalPreviews((prev) => [...prev, ...newPreviews]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+
+    // Reset the input so the same files can be selected again
+    e.target.value = '';
+  };
+
+  const removeAdditionalImage = (index) => {
+    setAdditionalFiles((prev) => prev.filter((_, i) => i !== index));
+    setAdditionalPreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  const removeExistingAdditionalImage = (index) => {
+    setExistingAdditionalImages((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleAutoFill = async () => {
@@ -78,11 +127,9 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
 
     setAiLoading(true);
     try {
-      // First upload the image
       const uploadResult = await uploadImage(imageFile);
       
       if (uploadResult.success) {
-        // Generate metadata using Gemini AI
         const aiResult = await generateMetadata(uploadResult.data.url);
         
         setFormData((prev) => ({
@@ -112,6 +159,44 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
     }));
   };
 
+  // Upload additional images and attach them to an artifact
+  const uploadAndAttachAdditionalImages = async (artifactId, currentImages = []) => {
+    if (additionalFiles.length === 0 && existingAdditionalImages.length === currentImages.length - 1) {
+      return; // No changes to additional images
+    }
+
+    try {
+      // Upload new additional images
+      const uploadedImages = [];
+      for (const file of additionalFiles) {
+        const result = await uploadImage(file);
+        if (result.success) {
+          uploadedImages.push({
+            url: result.data.url,
+            publicId: result.data.publicId,
+            isPrimary: false,
+          });
+        }
+      }
+
+      // Build the full images array: primary image + existing additional + newly uploaded
+      const primaryImage = currentImages.find((img) => img.isPrimary) || currentImages[0];
+      const allImages = [
+        primaryImage,
+        ...existingAdditionalImages,
+        ...uploadedImages,
+      ].filter(Boolean);
+
+      // Update the artifact with the complete images array
+      if (uploadedImages.length > 0 || existingAdditionalImages.length !== currentImages.length - 1) {
+        await updateArtifact(artifactId, { images: allImages });
+      }
+    } catch (error) {
+      console.error('Error uploading additional images:', error);
+      toast.error('Some additional images failed to upload');
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -123,7 +208,6 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
     setLoading(true);
     try {
       if (isEditMode) {
-        // Update existing artifact
         const updateData = {
           name: formData.name,
           description: formData.description,
@@ -132,7 +216,6 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
           tags: formData.tags ? formData.tags.split(',').map((tag) => tag.trim()).filter(Boolean) : [],
         };
 
-        // If new image is uploaded, handle it separately
         if (imageFile) {
           const uploadResult = await uploadImage(imageFile);
           if (uploadResult.success) {
@@ -148,8 +231,10 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
         const response = await updateArtifact(artifact._id, updateData);
 
         if (response.success) {
+          // Handle additional images
+          await uploadAndAttachAdditionalImages(artifact._id, response.data.images || artifact.images || []);
           toast.success('Artifact updated successfully!');
-          onSuccess(response.data, true); // Pass true to indicate update
+          onSuccess(response.data, true);
           handleClose();
         }
       } else {
@@ -160,7 +245,7 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
         submitData.append('description', formData.description);
         submitData.append('category', formData.category);
         submitData.append('location', formData.location);
-        submitData.append('createdBy', 'admin'); // TODO: Get from auth context
+        submitData.append('createdBy', 'admin');
 
         if (formData.tags) {
           const tagsArray = formData.tags.split(',').map((tag) => tag.trim()).filter(Boolean);
@@ -170,6 +255,10 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
         const response = await createArtifactWithImage(submitData);
 
         if (response.success) {
+          // Upload and attach additional images
+          if (additionalFiles.length > 0) {
+            await uploadAndAttachAdditionalImages(response.data._id, response.data.images || []);
+          }
           toast.success('Artifact created successfully!');
           onSuccess(response.data);
           handleClose();
@@ -193,8 +282,13 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
     });
     setImageFile(null);
     setImagePreview(null);
+    setAdditionalFiles([]);
+    setAdditionalPreviews([]);
+    setExistingAdditionalImages([]);
     onClose();
   };
+
+  const totalAdditionalImages = existingAdditionalImages.length + additionalPreviews.length;
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-xs flex items-center justify-center z-50 p-4">
@@ -326,7 +420,7 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
                 value={formData.description}
                 onChange={handleChange}
                 required
-                rows={10}
+                rows={6}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                 placeholder="Enter detailed description"
               />
@@ -360,6 +454,57 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="e.g., traditional, ancient, vedda"
               />
+            </div>
+
+            {/* Additional Images */}
+            <div className="col-span-2 mt-2">
+              <label className="block text-sm font-medium text-gray-700 mb-3">
+                Additional Images ({totalAdditionalImages})
+              </label>
+              
+              <div className="flex flex-wrap gap-3">
+                {/* Existing additional images (edit mode) */}
+                {existingAdditionalImages.map((img, i) => (
+                  <div key={`existing-${i}`} className="relative w-20 h-20 rounded-lg border overflow-hidden group">
+                    <img src={img.url} alt={`Additional ${i + 1}`} className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => removeExistingAdditionalImage(i)}
+                      className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Trash2 size={16} className="text-white" />
+                    </button>
+                  </div>
+                ))}
+
+                {/* New additional image previews */}
+                {additionalPreviews.map((preview, i) => (
+                  <div key={`new-${i}`} className="relative w-20 h-20 rounded-lg border overflow-hidden group">
+                    <img src={preview} alt={`New ${i + 1}`} className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => removeAdditionalImage(i)}
+                      className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Trash2 size={16} className="text-white" />
+                    </button>
+                  </div>
+                ))}
+
+                {/* Add more button */}
+                <label className="w-20 h-20 rounded-lg border-2 border-dashed border-gray-300 flex flex-col items-center justify-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors">
+                  <Plus size={20} className="text-gray-400" />
+                  <span className="text-xs text-gray-400 mt-1">Add</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleAdditionalImages}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+              <p className="text-xs text-gray-400 mt-2">You can add multiple additional images. Max 5MB each.</p>
             </div>
                 </div>
               </div>
