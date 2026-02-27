@@ -52,7 +52,7 @@ export const createArtifactWithImage = async (formData) => {
 export const uploadImage = async (file) => {
   const formData = new FormData();
   formData.append('image', file);
-  
+
   const response = await axios.post(`${API_URL}/upload/single`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
@@ -91,6 +91,7 @@ export const generateMetadata = async (imageUrl) => {
       description: metadata.suggestedDescription,
       category: metadata.suggestedCategory,
       tags: metadata.suggestedTags,
+      suggestedLocation: metadata.suggestedLocation,
       estimatedAge: metadata.estimatedAge
     };
   } catch (error) {
@@ -102,17 +103,17 @@ export const generateMetadata = async (imageUrl) => {
 // Identify artifact from image using AI
 export const identifyArtifact = async (imageFile) => {
   const IDENTIFIER_API_URL = import.meta.env.VITE_IDENTIFIER_SERVICE_URL || 'http://localhost:5009';
-  
+
   const formData = new FormData();
   formData.append('file', imageFile);
-  
+
   try {
     const response = await axios.post(`${IDENTIFIER_API_URL}/api/identifier/predict`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
     });
-    
+
     if (response.data.success) {
       const data = response.data.data;
       return {
@@ -125,7 +126,7 @@ export const identifyArtifact = async (imageFile) => {
         all_predictions: data.all_predictions
       };
     }
-    
+
     throw new Error('Failed to identify artifact');
   } catch (error) {
     console.error('Error identifying artifact:', error);

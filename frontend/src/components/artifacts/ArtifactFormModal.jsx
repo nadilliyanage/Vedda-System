@@ -91,6 +91,7 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
           description: aiResult.description || prev.description,
           category: aiResult.category || prev.category,
           tags: aiResult.tags?.join(', ') || prev.tags,
+          location: aiResult.suggestedLocation || prev.location,
         }));
         
         toast.success('✨ AI-powered fields auto-filled! Review and adjust as needed.');
