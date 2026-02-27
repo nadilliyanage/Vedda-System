@@ -1,65 +1,32 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
+import PropTypes from 'prop-types';
 
-const RegisterPage = () => {
+const RegisterPage = ({ onSwitchToLogin }) => {
   const navigate = useNavigate();
-  const { register, isAuthenticated } = useAuth();
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
-    role: 'user'
   });
   const [loading, setLoading] = useState(false);
 
-  // Redirect if already authenticated
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/');
-    }
-  }, [isAuthenticated, navigate]);
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  const handleChange = (e) =>
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Validate passwords match
-    if (formData.password !== formData.confirmPassword) {
-      toast.error('Passwords do not match');
-      return;
-    }
-
-    // Validate password length
-    if (formData.password.length < 6) {
-      toast.error('Password must be at least 6 characters long');
-      return;
-    }
-
-    // Validate username
-    if (formData.username.length < 3) {
-      toast.error('Username must be at least 3 characters long');
-      return;
-    }
+    if (formData.username.length < 3) return toast.error('Username must be at least 3 characters');
+    if (formData.password.length < 6) return toast.error('Password must be at least 6 characters');
+    if (formData.password !== formData.confirmPassword) return toast.error('Passwords do not match');
 
     setLoading(true);
-
-    const result = await register(
-      formData.username,
-      formData.email,
-      formData.password
-    );
-
+    const result = await register(formData.username, formData.email, formData.password);
     setLoading(false);
-
     if (result.success) {
       toast.success('Account created successfully!');
       navigate('/');
@@ -69,104 +36,81 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-8 bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-700">
-      <div className="bg-white rounded-xl shadow-2xl p-10 w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">Create Account</h1>
-          <p className="text-gray-600">Register for Vedda System</p>
-        </div>
+    <div className="flex flex-col items-center justify-center w-full h-full px-8 md:px-14 py-10">
+      <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Create Account</h1>
+      <p className="text-gray-400 text-sm mb-8">Join the Vedda Heritage Community</p>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-          <div>
-            <label htmlFor="username" className="block text-gray-700 font-medium mb-2 text-sm">
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="Choose a username"
-              required
-              minLength={3}
-              maxLength={30}
-              pattern="[a-zA-Z0-9_]+"
-              title="Username can only contain letters, numbers, and underscores"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            />
-          </div>
+      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-4">
+        <input
+          type="text"
+          name="username"
+          value={formData.username}
+          onChange={handleChange}
+          placeholder="Username"
+          required
+          minLength={3}
+          maxLength={30}
+          pattern="[a-zA-Z0-9_]+"
+          title="Letters, numbers, and underscores only"
+          className="w-full px-5 py-3.5 bg-gray-100 rounded-lg text-sm text-gray-800 placeholder-gray-400 border-none outline-none focus:ring-2 focus:ring-purple-300 focus:bg-white transition-all"
+        />
 
-          <div>
-            <label htmlFor="email" className="block text-gray-700 font-medium mb-2 text-sm">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="Enter your email"
-              required
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            />
-          </div>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Email"
+          required
+          className="w-full px-5 py-3.5 bg-gray-100 rounded-lg text-sm text-gray-800 placeholder-gray-400 border-none outline-none focus:ring-2 focus:ring-purple-300 focus:bg-white transition-all"
+        />
 
-          <div>
-            <label htmlFor="password" className="block text-gray-700 font-medium mb-2 text-sm">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Create a password"
-              required
-              minLength={6}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            />
-          </div>
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+          placeholder="Password"
+          required
+          minLength={6}
+          className="w-full px-5 py-3.5 bg-gray-100 rounded-lg text-sm text-gray-800 placeholder-gray-400 border-none outline-none focus:ring-2 focus:ring-purple-300 focus:bg-white transition-all"
+        />
 
-          <div>
-            <label htmlFor="confirmPassword" className="block text-gray-700 font-medium mb-2 text-sm">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm your password"
-              required
-              minLength={6}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-            />
-          </div>
+        <input
+          type="password"
+          name="confirmPassword"
+          value={formData.confirmPassword}
+          onChange={handleChange}
+          placeholder="Confirm Password"
+          required
+          minLength={6}
+          className="w-full px-5 py-3.5 bg-gray-100 rounded-lg text-sm text-gray-800 placeholder-gray-400 border-none outline-none focus:ring-2 focus:ring-purple-300 focus:bg-white transition-all"
+        />
 
-          <button 
-            type="submit" 
+        <div className="flex justify-center pt-2">
+          <button
+            type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-3 rounded-lg hover:from-purple-700 hover:to-blue-700 transform hover:scale-[1.02] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed disabled:transform-none"
+            className="px-14 py-3 bg-purple-700 hover:bg-purple-800 text-white text-xs font-bold uppercase tracking-[0.15em] rounded-full shadow-lg shadow-purple-200 hover:shadow-purple-300 active:scale-95 transition-all disabled:opacity-50"
           >
-            {loading ? 'Creating Account...' : 'Register'}
+            {loading ? 'Creating…' : 'Sign Up'}
           </button>
-        </form>
-
-        <div className="mt-6 pt-6 border-t border-gray-200 text-center">
-          <p className="text-gray-600 text-sm">
-            Already have an account?{' '}
-            <Link to="/login" className="text-blue-600 font-semibold hover:underline">
-              Login here
-            </Link>
-          </p>
         </div>
-      </div>
+      </form>
+
+      {/* Mobile only toggle */}
+      <p className="mt-8 text-sm text-gray-400 lg:hidden">
+        Already have an account?{' '}
+        <button onClick={onSwitchToLogin} className="text-purple-600 font-semibold hover:underline">
+          Sign In
+        </button>
+      </p>
     </div>
   );
+};
+
+RegisterPage.propTypes = {
+  onSwitchToLogin: PropTypes.func,
 };
 
 export default RegisterPage;

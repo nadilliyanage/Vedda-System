@@ -18,6 +18,7 @@ Analyze this Vedda cultural artifact image and provide detailed information in t
   "description": "A detailed description of the artifact including its appearance, materials, potential uses, and connection to Vedda culture and traditions (50-150 words)",
   "category": "One of: tools, pottery, jewelry, weapons, clothing, other",
   "tags": ["tag1", "tag2", "tag3", "tag4", "tag5"],
+  "location": "The likely geographic origin, region, or specific village in Sri Lanka where this type of artifact is typically found or used by the Vedda people (e.g., 'Dambana', 'Mahiyanganaya', 'Eastern Province', or 'Forest regions')",
   "estimatedAge": "Estimated age or time period (e.g., '500-1000 years old', 'Ancient period', 'Traditional', etc.)",
   "culturalSignificance": "Brief note on the artifact's significance to Vedda culture, traditional uses, or spiritual importance"
 }
@@ -49,7 +50,7 @@ Provide accurate, culturally respectful descriptions that honor the Vedda herita
 
     const response = result.response;
     const text = response.text();
-    
+
     // Parse the JSON response
     // Remove markdown code blocks if present
     const cleanText = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();

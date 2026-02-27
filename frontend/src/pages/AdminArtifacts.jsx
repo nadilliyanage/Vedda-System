@@ -24,6 +24,7 @@ const AdminArtifacts = () => {
     total: 0,
     pages: 0,
   });
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     const fetchArtifacts = async () => {
@@ -63,6 +64,7 @@ const AdminArtifacts = () => {
     categoryFilter,
     statusFilter,
     searchTerm,
+    refreshTrigger,
   ]);
 
   const handleDelete = (artifact) => {
@@ -77,8 +79,8 @@ const AdminArtifacts = () => {
         toast.success("Artifact deleted successfully");
         setShowDeleteConfirm(false);
         setArtifactToDelete(null);
-        // Force refresh by updating pagination
-        setPagination((prev) => ({ ...prev, page: prev.page }));
+        // Force refresh
+        setRefreshTrigger((prev) => prev + 1);
       }
     } catch (error) {
       console.error("Delete error:", error);
@@ -193,9 +195,7 @@ const AdminArtifacts = () => {
           {/* Buttons */}
           <div className="flex gap-2">
             <button
-              onClick={() =>
-                setPagination((prev) => ({ ...prev, page: prev.page }))
-              }
+              onClick={() => setRefreshTrigger((prev) => prev + 1)}
               className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
             >
               <RefreshCw size={20} />

@@ -50,6 +50,12 @@ const AdminSidebar = () => {
       roles: ["admin", "elder"],
     },
     {
+      path: "/admin/feedback",
+      icon: HiBookOpen,
+      label: "Feedback",
+      roles: ["admin", "elder"],
+    },
+    {
       path: "/admin/settings",
       icon: HiCog,
       label: "Settings",

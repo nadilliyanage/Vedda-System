@@ -57,7 +57,7 @@ exports.createArtifact = async (req, res) => {
   try {
     const artifact = new Artifact(req.body);
     await artifact.save();
-    
+
     res.status(201).json({
       success: true,
       message: 'Artifact created successfully',
@@ -82,7 +82,7 @@ exports.getAllArtifacts = async (req, res) => {
     } = req.query;
 
     const filter = {};
-    
+
     if (category) filter.category = category;
     if (search) {
       // Use regex for partial matching on name, description, and tags
@@ -124,7 +124,7 @@ exports.getAllArtifacts = async (req, res) => {
 exports.getArtifactById = async (req, res) => {
   try {
     const artifact = await Artifact.findById(req.params.id);
-    
+
     if (!artifact) {
       return res.status(404).json({
         success: false,
@@ -177,7 +177,7 @@ exports.updateArtifact = async (req, res) => {
 exports.deleteArtifact = async (req, res) => {
   try {
     const artifact = await Artifact.findByIdAndDelete(req.params.id);
-    
+
     if (!artifact) {
       return res.status(404).json({
         success: false,
@@ -200,10 +200,10 @@ exports.deleteArtifact = async (req, res) => {
 // Get artifacts by category
 exports.getArtifactsByCategory = async (req, res) => {
   try {
-    const artifacts = await Artifact.find({ 
-      category: req.params.category 
+    const artifacts = await Artifact.find({
+      category: req.params.category
     }).sort({ createdAt: -1 });
-    
+
     res.status(200).json({
       success: true,
       count: artifacts.length,
@@ -281,6 +281,7 @@ exports.generateMetadata = async (req, res) => {
         suggestedDescription: metadata.data.description,
         suggestedCategory: metadata.data.category,
         suggestedTags: metadata.data.tags,
+        suggestedLocation: metadata.data.location,
         culturalSignificance: metadata.data.culturalSignificance
       }
     });
