@@ -213,21 +213,21 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
           <div className="h-full flex gap-6 p-6">
             {/* Left Side - Image Upload */}
             <div className="w-2/5 flex flex-col">
-              <div className="flex-1 bg-gray-50 p-6 rounded-lg border-2 border-dashed border-gray-300 flex flex-col">
-                <label className="block text-sm font-medium text-gray-700 mb-4">
+              <div className="flex-1 bg-gray-50 p-6 rounded-lg border-2 border-dashed border-gray-300 flex flex-col min-h-0">
+                <label className="block text-sm font-medium text-gray-700 mb-4 shrink-0">
                   Artifact Image {!isEditMode && '*'}
                 </label>
                 
                 {imagePreview ? (
-                  <div className="flex-1 flex flex-col gap-4">
-                    <div className="flex-1 flex items-center justify-center">
+                  <div className="flex-1 flex flex-col gap-4 min-h-0">
+                    <div className="flex-1 relative bg-white rounded-lg border overflow-hidden min-h-0">
                       <img
                         src={imagePreview}
                         alt="Preview"
-                        className="max-h-full max-w-full object-contain rounded-lg border"
+                        className="absolute inset-0 w-full h-full object-contain p-2"
                       />
                     </div>
-                    <div className="flex flex-col gap-3">
+                    <div className="flex flex-col gap-3 shrink-0">
                       <button
                         type="button"
                         onClick={() => {
