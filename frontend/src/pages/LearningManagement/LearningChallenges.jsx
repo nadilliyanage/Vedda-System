@@ -12,14 +12,15 @@ import {
   FaBolt
 } from 'react-icons/fa';
 import { challengesAPI } from '../../services/learningAPI';
+import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 import ChallengeModal from './ChallengeModal';
 
 const LearningChallenges = ({ onBack }) => {
+  const { user } = useAuth();
   const [challenges, setChallenges] = useState([]);
   const [loading, setLoading] = useState(true);
   const [userProgress, setUserProgress] = useState({
-    completedChallenges: [],
     currentStreak: 5,
     totalXP: 2878,
     totalCoins: 5653,
@@ -35,7 +36,7 @@ const LearningChallenges = ({ onBack }) => {
 
   const fetchChallenges = async () => {
     try {
-      const response = await challengesAPI.getAll();
+      const response = await challengesAPI.getAll(user?.id);
       setChallenges(response.data);
     } catch (error) {
       console.error('Failed to fetch challenges:', error);
@@ -47,37 +48,50 @@ const LearningChallenges = ({ onBack }) => {
   };
 
   const generateMockChallenges = () => {
-    const types = ['fill_blank', 'multiple_choice', 'match_pairs', 'true_false'];
+    const types = ['multiple_choice', 'text_input', 'match_pairs'];
     const mockChallenges = [];
     
     for (let i = 1; i <= 30; i++) {
+      const type = types[i % types.length];
       mockChallenges.push({
         id: `challenge_${i}`,
-        type: types[i % types.length],
-        prompt: `Challenge ${i}: Complete this task`,
-        xp: 20 + (i % 3) * 10,
-        coins: 4 + (i % 2) * 2,
-        difficulty: i % 3 === 0 ? 'hard' : i % 2 === 0 ? 'medium' : 'easy'
+        challengeNumber: i,
+        question: {
+          questionNo: String(i),
+          type,
+          prompt: `Challenge ${i}: Complete this Sinhala language task`,
+          xp: 20 + (i % 3) * 10,
+          points: 4 + (i % 2) * 2,
+          timeLimitSec: 30,
+          options: [
+            { id: 'A', text: 'Option A', correct: true },
+            { id: 'B', text: 'Option B', correct: false },
+            { id: 'C', text: 'Option C', correct: false },
+          ],
+          correctOptions: ['A'],
+          answer: 'sample answer',
+          pairs: [{ left: 'Left 1', right: 'Right 1' }, { left: 'Left 2', right: 'Right 2' }],
+        }
       });
     }
     
     return mockChallenges;
   };
 
-  const isChallengeCompleted = (challengeId) => {
-    return userProgress.completedChallenges.includes(challengeId);
+  const isChallengeCompleted = (challenge) => {
+    return challenge?.isCompleted === true;
   };
 
-  const isChallengeUnlocked = (index) => {
-    // First challenge is always unlocked
-    if (index === 0) return true;
-    // Challenge is unlocked if previous challenge is completed
-    return isChallengeCompleted(challenges[index - 1]?.id);
-  };
-
+  // Derive the unlocked challenge purely from isCompleted values:
+  // the challenge immediately after the last completed one is unlocked.
+  // If nothing is completed yet, the first challenge (index 0) is unlocked.
   const getChallengeState = (challenge, index) => {
-    if (isChallengeCompleted(challenge.id)) return 'completed';
-    if (isChallengeUnlocked(index)) return 'unlocked';
+    if (isChallengeCompleted(challenge)) return 'completed';
+    const lastCompletedIndex = challenges.reduce(
+      (acc, c, i) => (c.isCompleted ? i : acc),
+      -1
+    );
+    if (index === lastCompletedIndex + 1) return 'unlocked';
     return 'locked';
   };
 
@@ -99,10 +113,17 @@ const LearningChallenges = ({ onBack }) => {
   };
 
   const handleChallengeComplete = (challengeId, earnedXP, earnedCoins) => {
-    // Update user progress
+    // Mark the challenge as completed — getChallengeState will automatically
+    // derive the new unlock position from the updated isCompleted values.
+    setChallenges(prev => {
+      const idx = prev.findIndex(c => (c._id || c.id) === challengeId);
+      if (idx === -1) return prev;
+      const updated = [...prev];
+      updated[idx] = { ...updated[idx], isCompleted: true };
+      return updated;
+    });
     setUserProgress(prev => ({
       ...prev,
-      completedChallenges: [...prev.completedChallenges, challengeId],
       totalXP: prev.totalXP + earnedXP,
       totalCoins: prev.totalCoins + earnedCoins,
       currentStreak: prev.currentStreak + 1
@@ -165,25 +186,25 @@ const LearningChallenges = ({ onBack }) => {
         `}>
           <div className="flex items-center justify-between mb-2">
             <span className={`
-              px-3 py-1 rounded-full text-xs font-semibold
-              ${challenge.difficulty === 'hard' ? 'bg-red-100 text-red-600' : 
-                challenge.difficulty === 'medium' ? 'bg-yellow-100 text-yellow-600' : 
+              px-3 py-1 rounded-full text-xs font-semibold capitalize
+              ${challenge.question?.type === 'multiple_choice' ? 'bg-blue-100 text-blue-600' :
+                challenge.question?.type === 'match_pairs' ? 'bg-orange-100 text-orange-600' :
                 'bg-green-100 text-green-600'}
             `}>
-              {challenge.difficulty || 'easy'}
+              {challenge.question?.type?.replace('_', ' ') || 'challenge'}
             </span>
             <div className="flex gap-2">
               <span className="flex items-center text-yellow-600 font-bold">
-                <FaStar className="mr-1" /> {challenge.xp}
+                <FaStar className="mr-1" /> {challenge.question?.xp ?? 0}
               </span>
               <span className="flex items-center text-blue-600 font-bold">
-                <FaGem className="mr-1" /> {challenge.coins}
+                <FaGem className="mr-1" /> {challenge.question?.points ?? 0}
               </span>
             </div>
           </div>
           
           <p className="text-gray-700 text-sm line-clamp-2">
-            {challenge.prompt}
+            {challenge.question?.prompt}
           </p>
           
           {state === 'locked' && (
@@ -320,12 +341,12 @@ const LearningChallenges = ({ onBack }) => {
               {/* Progress */}
               <div className="mt-6 pt-6 border-t border-gray-200">
                 <div className="text-sm font-semibold text-gray-700 mb-2">
-                  Progress: {userProgress.completedChallenges.length}/{challenges.length}
+                  Progress: {challenges.filter(c => c.isCompleted).length}/{challenges.length}
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-3">
                   <div 
                     className="bg-gradient-to-r from-green-400 to-blue-500 h-3 rounded-full transition-all duration-500"
-                    style={{ width: `${(userProgress.completedChallenges.length / challenges.length) * 100}%` }}
+                    style={{ width: `${challenges.length > 0 ? (challenges.filter(c => c.isCompleted).length / challenges.length) * 100 : 0}%` }}
                   />
                 </div>
               </div>
@@ -352,7 +373,7 @@ const LearningChallenges = ({ onBack }) => {
                     {isMilestone(index) && (
                       <MilestoneNode 
                         index={index}
-                        unlocked={isChallengeUnlocked(index + 1)}
+                        unlocked={challenge.isCompleted === true}
                       />
                     )}
                   </div>
@@ -381,7 +402,7 @@ const LearningChallenges = ({ onBack }) => {
                 <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4">
                   <div className="text-xs text-blue-600 font-semibold mb-1">Total Challenges</div>
                   <div className="text-3xl font-bold text-blue-700">
-                    {userProgress.completedChallenges.length}
+                    {challenges.filter(c => c.isCompleted).length}
                   </div>
                 </div>
 

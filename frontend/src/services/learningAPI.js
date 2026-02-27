@@ -69,7 +69,9 @@ export const exercisesAPI = {
 
 // ========== Challenges API ==========
 export const challengesAPI = {
-  getAll: () => axios.get(`${API_BASE}/api/learn/admin/challenges`),
+  getAll: (userId) => axios.get(`${API_BASE}/api/learn/admin/challenges`, {
+    params: userId ? { user_id: userId } : {}
+  }),
   
   getById: (id) => axios.get(`${API_BASE}/api/learn/admin/challenges/${id}`),
   

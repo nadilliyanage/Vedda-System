@@ -4,21 +4,24 @@ from ..models.user_attempt_model import UserAttempt
 from ..ml.predictor import classify_mistake
 
 def add_user_attempt_and_update_stat(user_id: str, exercise_id: str, skill_tags: list,
-                     is_correct: bool, correct_answer: str = None, student_answer: str = None):
+                     is_correct: bool, correct_answer: str = None, student_answer: str = None,
+                     attempt_type: str = "general"):
     error_type = classify_mistake(correct_answer, student_answer)
     save_user_attempt(
         user_id=user_id,
         exercise_id=exercise_id,
         skill_tags=skill_tags,
         is_correct=is_correct,
-        error_type=error_type
+        error_type=error_type,
+        attempt_type=attempt_type
     )
 
     update_user_stats(
         user_id=user_id,
         skill_tags=skill_tags,
         is_correct=is_correct,
-        error_type=error_type
+        error_type=error_type,
+        attempt_type=attempt_type
     )
 
 
@@ -26,11 +29,13 @@ def update_user_stats(
     user_id: str,
     skill_tags: list[str],
     is_correct: bool,
-    error_type: str | None
+    error_type: str | None,
+    attempt_type: str = "general"
 ):
     """
     Incrementally updates user statistics after each attempt.
     Assumes error_type is already predicted (or None if correct).
+    Tracks overall stats separately for 'general' and 'challenge' attempt types.
     """
     stats_col = _user_stat_col()
 
@@ -43,6 +48,16 @@ def update_user_stats(
             "skill_stats": {},
             "error_stats": {},
             "overall": {
+                "total_attempts": 0,
+                "total_correct": 0,
+                "overall_accuracy": 0.0
+            },
+            "overall_general": {
+                "total_attempts": 0,
+                "total_correct": 0,
+                "overall_accuracy": 0.0
+            },
+            "overall_challenge": {
                 "total_attempts": 0,
                 "total_correct": 0,
                 "overall_accuracy": 0.0
@@ -81,9 +96,19 @@ def update_user_stats(
     doc["overall"]["total_attempts"] += 1
     if is_correct:
         doc["overall"]["total_correct"] += 1
-
     doc["overall"]["overall_accuracy"] = round(
         doc["overall"]["total_correct"] / doc["overall"]["total_attempts"], 2
+    )
+
+    # Update per-type overall stats
+    type_key = "overall_challenge" if attempt_type == "challenge" else "overall_general"
+    if type_key not in doc:
+        doc[type_key] = {"total_attempts": 0, "total_correct": 0, "overall_accuracy": 0.0}
+    doc[type_key]["total_attempts"] += 1
+    if is_correct:
+        doc[type_key]["total_correct"] += 1
+    doc[type_key]["overall_accuracy"] = round(
+        doc[type_key]["total_correct"] / doc[type_key]["total_attempts"], 2
     )
 
     doc["last_updated"] = datetime.utcnow()
@@ -100,19 +125,21 @@ def update_user_stats(
 
 # ---------- User Attempts ----------
 def add_user_attempt(user_id: str, exercise_id: str, skill_tags: list,
-                     is_correct: bool, correct_answer: str = None, student_answer: str = None):
+                     is_correct: bool, correct_answer: str = None, student_answer: str = None,
+                     attempt_type: str = "general"):
     error_type = classify_mistake(correct_answer, student_answer)
     return save_user_attempt(
         user_id=user_id,
         exercise_id=exercise_id,
         skill_tags=skill_tags,
         is_correct=is_correct,
-        error_type=error_type
+        error_type=error_type,
+        attempt_type=attempt_type
     )
 
 
 def save_user_attempt(user_id: str, exercise_id: str, skill_tags: list,
-                      is_correct: bool, error_type: str = None):
+                      is_correct: bool, error_type: str = None, attempt_type: str = "general"):
     col = _user_attempts_col()
 
     # Create the user attempt model
@@ -122,6 +149,7 @@ def save_user_attempt(user_id: str, exercise_id: str, skill_tags: list,
         skill_tags=skill_tags,
         is_correct=is_correct,
         error_type=error_type,
+        attempt_type=attempt_type,
         timestamp=datetime.utcnow()
     )
 
@@ -159,17 +187,29 @@ def get_user_attempts(user_id: str, limit: int = 50):
 
 def get_completed_exercise_ids(user_id: str):
     """
-    Return a list of unique exercise_id values for correct attempts by the user.
-    Uses MongoDB's distinct() to efficiently get unique IDs.
+    Return a list of unique exercise_id values for correct general attempts by the user.
     """
     col = _user_attempts_col()
-
-    # Use distinct to get unique exercise_ids directly from MongoDB
-    result = col.distinct("exercise_id", {"user_id": user_id, "is_correct": True})
-
+    result = col.distinct("exercise_id", {
+        "user_id": user_id,
+        "is_correct": True,
+        "attempt_type": {"$in": ["general", None]}  # backwards compat: missing field = general
+    })
     print(f"[DEBUG] get_completed_exercise_ids for user {user_id}: found {len(result)} unique completed exercises")
-    print(f"[DEBUG] Completed exercise IDs: {result}")
+    return result
 
+
+def get_completed_challenge_ids(user_id: str):
+    """
+    Return a list of unique exercise_id values for correct challenge attempts by the user.
+    """
+    col = _user_attempts_col()
+    result = col.distinct("exercise_id", {
+        "user_id": user_id,
+        "is_correct": True,
+        "attempt_type": "challenge"
+    })
+    print(f"[DEBUG] get_completed_challenge_ids for user {user_id}: found {len(result)} unique completed challenges")
     return result
 
 def get_weak_skills_and_errors(user_stats, min_attempts=5, threshold=0.6):

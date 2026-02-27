@@ -20,7 +20,6 @@ def run_add_user_attempt(**kwargs):
     try:
         add_user_attempt_and_update_stat(**kwargs)
     except Exception as e:
-        # Log properly in real apps
         print("Background add_user_attempt failed:", e)
 
 @ai_bp.post("/generate-personalized-exercise")
@@ -67,15 +66,44 @@ def submit_answer():
     user_id = payload["user_id"]
     exercise_id = payload["exercise_id"]
     student_answer = payload.get("user_answer", "")
+    is_challenge = payload.get("is_challenge", False)
 
-    exercise = get_collection("exercises").find_one({"_id": ObjectId(exercise_id)})
-    if not exercise:
-        return jsonify({"error": "Exercise not found"}), 404
+    # Fetch document from the appropriate collection
+    try:
+        object_id = ObjectId(exercise_id)
+    except Exception:
+        return jsonify({"error": "Invalid ID format"}), 400
 
-    skill_tags = exercise.get("skillTags", [])
-    question = exercise.get("question", "")
+    if is_challenge:
+        doc = get_collection("challenges").find_one({"_id": object_id})
+        if not doc:
+            return jsonify({"error": "Challenge not found"}), 404
+    else:
+        doc = get_collection("exercises").find_one({"_id": object_id})
+        if not doc:
+            return jsonify({"error": "Exercise not found"}), 404
+
+    skill_tags = doc.get("skillTags", [])
+    question = doc.get("question", {})
     sentence = question.get("prompt", "")
-    correct_answer = question.get("correct_answer", "")
+
+    # Derive a comparable correct_answer string
+    if is_challenge:
+        q_type = question.get("type", "")
+        if q_type == "text_input":
+            correct_answer = question.get("answer", "")
+        elif q_type == "multiple_choice":
+            correct_opt_ids = set(question.get("correctOptions", []))
+            options_map = {o["id"]: o["text"] for o in question.get("options", [])}
+            correct_answer = ", ".join(options_map.get(oid, oid) for oid in sorted(correct_opt_ids))
+        elif q_type == "match_pairs":
+            pairs = question.get("pairs", [])
+            correct_answer = "; ".join(f"{p['left']} -> {p['right']}" for p in pairs)
+        else:
+            correct_answer = question.get("answer", "")
+    else:
+        correct_answer = question.get("correct_answer", "")
+
     is_correct = student_answer.strip().lower() == correct_answer.strip().lower()
 
     # Classify mistake if incorrect
@@ -111,6 +139,7 @@ def submit_answer():
         ).start()
 
     # Store attempt in background
+    attempt_type = "challenge" if is_challenge else "general"
     Thread(
         target=run_add_user_attempt,
         kwargs={
@@ -120,6 +149,7 @@ def submit_answer():
             "is_correct": is_correct,
             "correct_answer": correct_answer,
             "student_answer": student_answer,
+            "attempt_type": attempt_type,
         },
         daemon=True
     ).start()
