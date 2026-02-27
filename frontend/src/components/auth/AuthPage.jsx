@@ -19,7 +19,7 @@ const AuthPage = ({ initialMode = 'login' }) => {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center p-4 md:p-8 relative"
+      className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative"
       style={{
         backgroundImage: 'url(/assets/background-images/login-background.png)',
         backgroundSize: 'cover',
@@ -29,6 +29,15 @@ const AuthPage = ({ initialMode = 'login' }) => {
     >
       {/* Blur overlay */}
       <div className="absolute inset-0 backdrop-blur-[3px] bg-white/10" />
+
+      {/* Back to home */}
+      <a
+        href="/"
+        className="relative z-10 mb-4 text-sm text-gray-700 font-medium flex items-center gap-1.5 transition-all bg-white px-5 py-2.5 rounded-full shadow-lg hover:shadow-xl hover:bg-gray-50"
+      >
+        ← Back to Home
+      </a>
+
       <div
         className="relative w-full max-w-[900px] rounded-3xl shadow-2xl bg-white overflow-hidden"
         style={{ height: 620 }}

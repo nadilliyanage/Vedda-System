@@ -37,7 +37,6 @@ const RegisterPage = ({ onSwitchToLogin }) => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full h-full px-8 md:px-14 py-10">
-      <img src="/logo.png" alt="Vedda System" className="w-14 h-14 rounded-full object-cover mb-4 shadow-md" />
       <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-2">Create Account</h1>
       <p className="text-gray-400 text-sm mb-8">Join the Vedda Heritage Community</p>
 

@@ -36,13 +36,10 @@ const Header = ({ onHistoryClick }) => {
     <header className="bg-blue-500 text-white shadow-sm z-50 fixed top-0 left-0 right-0">
       <div className="mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <button className="p-2 rounded-lg hover:bg-blue-600 transition-colors duration-200 mr-2">
-              <HiMenu className="w-6 h-6" />
-            </button>
-
-            <Link to="/">
-              <h1 className="text-xl font-semibold cursor-pointer hover:text-blue-100 transition-colors">
+          <div className="flex items-center gap-3">
+            <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
+              <img src="/logo.png" alt="Vedda System" className="w-8 h-8 rounded-full object-cover shadow-sm bg-white" />
+              <h1 className="text-xl font-semibold">
                 Vedda System
               </h1>
             </Link>
