@@ -140,8 +140,8 @@ const FeedbackFormModal = ({ isOpen, onClose, artifact }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[60] flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
         {/* Header */}
         <div className="sticky top-0 bg-yellow-50 shadow-md p-6 rounded-t-2xl flex items-center justify-between">
           <div>
