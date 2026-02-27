@@ -1,0 +1,3482 @@
+{
+  "timestamp": "2026-02-26T14:08:40.356329",
+  "model": "vedda-asr-model/models/whisper-vedda-final",
+  "device": "cpu",
+  "params_M": 241.7,
+  "summary": {
+    "total": 385,
+    "evaluated": 385,
+    "errors": 0,
+    "exact": 44,
+    "exact_pct": 11.43,
+    "avg_wer": 74.55,
+    "avg_cer": 39.73
+  },
+  "results": [
+    {
+      "file": "vedda_110_20260211_231344_476c8be5.wav",
+      "reference": "හොච්ච දික්කා",
+      "predicted": "පොජ්ජ දිකා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4167,
+      "status": "success"
+    },
+    {
+      "file": "vedda_378_20260212_021138_0961ecb2.wav",
+      "reference": "ගැට මන්දා",
+      "predicted": "කැට මන්දෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_128_20260211_232656_2fe948b2.wav",
+      "reference": "චප්පිල ඇත්තන්ගේ ගෙඩි පොජ්ජ",
+      "predicted": "චප්පිලැත්තෝ දිට පොජ්ජ",
+      "exact": false,
+      "wer": 0.75,
+      "cer": 0.3846,
+      "status": "success"
+    },
+    {
+      "file": "vedda_324_20260212_014114_32736b8e.wav",
+      "reference": "ඔය ඇත්තන්නේ නම් පොජ්ජ මොන්නෙක",
+      "predicted": "ඔය ඇත්තන්න ලප්ප පොජ්ජට",
+      "exact": false,
+      "wer": 0.8,
+      "cer": 0.4138,
+      "status": "success"
+    },
+    {
+      "file": "vedda_023_20260211_094349_e86d25ff.wav",
+      "reference": "හොට පොජ්ජ",
+      "predicted": "කොට පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1111,
+      "status": "success"
+    },
+    {
+      "file": "vedda_032_20260211_095301_147e1fd7.wav",
+      "reference": "හඳුන්පොත",
+      "predicted": "අන්න පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.875,
+      "status": "success"
+    },
+    {
+      "file": "vedda_240_20260212_005900_22c48eea.wav",
+      "reference": "ලැක බොක පොජ්ජ මන්දෝ වෙනචා",
+      "predicted": "ලැක බොක පොජ්ජ මන්දෝ",
+      "exact": false,
+      "wer": 0.2,
+      "cer": 0.24,
+      "status": "success"
+    },
+    {
+      "file": "vedda_371_20260212_020818_4f0a5e6c.wav",
+      "reference": "රුකුල් පොජ්ජ",
+      "predicted": "රුකුල පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.0833,
+      "status": "success"
+    },
+    {
+      "file": "vedda_345_20260212_015542_ac76a074.wav",
+      "reference": "සන්තෝස පොජ්ජක් මන්දො වෙනවා",
+      "predicted": "ලත්තෝ පොජ්ජක් මන්දොයි",
+      "exact": false,
+      "wer": 0.75,
+      "cer": 0.3462,
+      "status": "success"
+    },
+    {
+      "file": "vedda_031_20260211_095227_055963af.wav",
+      "reference": "බෙලි පොජ්ජ",
+      "predicted": "දියි පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3,
+      "status": "success"
+    },
+    {
+      "file": "vedda_058_20260211_101112_aaac871a.wav",
+      "reference": "එකමයි",
+      "predicted": "ඇකමයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2,
+      "status": "success"
+    },
+    {
+      "file": "vedda_296_20260212_012337_2bfd728b.wav",
+      "reference": "චප්පිල ඇත්තන්ට",
+      "predicted": "චප්පිලැත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3571,
+      "status": "success"
+    },
+    {
+      "file": "vedda_086_20260211_102659_3d09e9aa.wav",
+      "reference": "වැඩි තැනක්‌",
+      "predicted": "රැදෙට තැන",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6364,
+      "status": "success"
+    },
+    {
+      "file": "vedda_310_20260212_013349_6d788ef1.wav",
+      "reference": "කැකුළො ගුටි පොජ්ජ මන්දො කරගන්න කොදොයි",
+      "predicted": "කැරු කොට්ට පොජ්ජ මන්දො වෙටා කරරියි",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.4324,
+      "status": "success"
+    },
+    {
+      "file": "vedda_328_20260212_014414_4d772217.wav",
+      "reference": "මේ කැලෑ පොජ්ජ මේ ඇත්තන්නේ කට්ටි පොජ්ජට හොඳමයි",
+      "predicted": "මේ කැලි පොජ්ජ මෙට ඇත්තෝ කට්ට පුටමන්න",
+      "exact": false,
+      "wer": 0.75,
+      "cer": 0.4222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_370_20260212_020753_15a4b860.wav",
+      "reference": "තේරුම් පොජ්ජ කොදුයි",
+      "predicted": "කැන පොජ්ජ කොදොයි",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.3684,
+      "status": "success"
+    },
+    {
+      "file": "vedda_315_20260212_013623_91d253cb.wav",
+      "reference": "කැකුලා කරකුරු ගච්චන රුකුල් පොජ්ජට මංගැච්චුවා",
+      "predicted": "කැකුළා කාල්ලා ගච්චන පොජ්ජට මංගැචා",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.3864,
+      "status": "success"
+    },
+    {
+      "file": "vedda_006_20260211_092651_baaacaaf.wav",
+      "reference": "අම්මිලැත්තෝ",
+      "predicted": "කරුලැන්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5455,
+      "status": "success"
+    },
+    {
+      "file": "vedda_174_20260211_235033_df298a86.wav",
+      "reference": "චන්නියලැත්තෝ",
+      "predicted": "මංගැන ඇත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_046_20260211_100410_8ff948eb.wav",
+      "reference": "නෑනලාත්තෝ",
+      "predicted": "නැනලල ඇත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4444,
+      "status": "success"
+    },
+    {
+      "file": "vedda_246_20260212_010145_40d5e3c2.wav",
+      "reference": "මංගච්චමු",
+      "predicted": "මංගච්චා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.25,
+      "status": "success"
+    },
+    {
+      "file": "vedda_120_20260211_232019_4f614b83.wav",
+      "reference": "දිය මැච්චී",
+      "predicted": "බෙන රැච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_075_20260211_102106_cb4f38de.wav",
+      "reference": "බෙදුම්තැන මන්දු කරන ලකුණු පොජ්ජ",
+      "predicted": "බෙට රැන මන්දු කරන ලකුණු පොජ්ජ",
+      "exact": false,
+      "wer": 0.4,
+      "cer": 0.1613,
+      "status": "success"
+    },
+    {
+      "file": "vedda_229_20260212_005213_78c8dc7b.wav",
+      "reference": "කං රැකුලට මන්දෝ වෙනවා",
+      "predicted": "කර පොජ්ජට මංගච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7619,
+      "status": "success"
+    },
+    {
+      "file": "vedda_112_20260211_231509_a2532fd6.wav",
+      "reference": "හොට වලුමඤ්ඤා",
+      "predicted": "බොට පලමන්න",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_106_20260211_231115_cf9d5294.wav",
+      "reference": "පිටගැටයා",
+      "predicted": "ඉට පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_353_20260212_020049_851520a4.wav",
+      "reference": "පොතු පොජ්ජක්",
+      "predicted": "පොට්පි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.75,
+      "status": "success"
+    },
+    {
+      "file": "vedda_074_20260211_102045_814ccb48.wav",
+      "reference": "බෙදුම්තැන මන්දෝ කරන ලකුණු පොජ්ජ",
+      "predicted": "බෙත්තැන මන්දු කරන ලකුණු පොජ්ජ",
+      "exact": false,
+      "wer": 0.4,
+      "cer": 0.129,
+      "status": "success"
+    },
+    {
+      "file": "vedda_210_20260212_004320_3f948ad8.wav",
+      "reference": "හිත්‌ පොජ්ජ හොද කොදොයි",
+      "predicted": "පොජ්ජ පට කොදොයි",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.4091,
+      "status": "success"
+    },
+    {
+      "file": "vedda_004_20260211_092511_a5c99029.wav",
+      "reference": "බුද්ධිලඇත්තෝ",
+      "predicted": "බොද්දැන ඇත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4167,
+      "status": "success"
+    },
+    {
+      "file": "vedda_019_20260211_093750_995df3e5.wav",
+      "reference": "දෙකමෙක්",
+      "predicted": "දෙකම්ක්",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1429,
+      "status": "success"
+    },
+    {
+      "file": "vedda_320_20260212_013832_c8fac246.wav",
+      "reference": "මේ ඇත්තොන්ට ලෙඩ පොජ්ජ මන්දොවෙලා",
+      "predicted": "එට ඇත්ට දෙට පොජ්ජ මංගච්ච",
+      "exact": false,
+      "wer": 0.8,
+      "cer": 0.5161,
+      "status": "success"
+    },
+    {
+      "file": "vedda_241_20260212_005922_190519cd.wav",
+      "reference": "දිය දමනවා",
+      "predicted": "දිය දමනවා",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_319_20260212_013810_9c63edf8.wav",
+      "reference": "මේ ඇත්තෝ තැනමක් කතා දාමු",
+      "predicted": "ගැත්තෝ තැනල කරදුයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5417,
+      "status": "success"
+    },
+    {
+      "file": "vedda_064_20260211_101419_7a47ff98.wav",
+      "reference": "හතමයි",
+      "predicted": "කටමයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4,
+      "status": "success"
+    },
+    {
+      "file": "vedda_231_20260212_005315_2627d2ff.wav",
+      "reference": "තියෙනවා",
+      "predicted": "තැයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7143,
+      "status": "success"
+    },
+    {
+      "file": "vedda_084_20260211_102611_db52c65d.wav",
+      "reference": "රිදී පෝරු",
+      "predicted": "රැදි පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_096_20260211_230556_a13c2526.wav",
+      "reference": "කටු කැච්චා",
+      "predicted": "කටු කැච්ච",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1,
+      "status": "success"
+    },
+    {
+      "file": "vedda_079_20260211_102411_83b2fad7.wav",
+      "reference": "මුළු තැනේ රූපතැන",
+      "predicted": "බුරු තැනයි බොජ්ජ දඬුක්",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.9375,
+      "status": "success"
+    },
+    {
+      "file": "vedda_222_20260212_004859_1eaf633d.wav",
+      "reference": "ඔටා දමනවා",
+      "predicted": "ඔට දමනවා",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1111,
+      "status": "success"
+    },
+    {
+      "file": "vedda_300_20260212_012709_b069eaac.wav",
+      "reference": "ලාබච්චාගනයි ඉඳින්නේ",
+      "predicted": "ලාබ ගච්චනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7368,
+      "status": "success"
+    },
+    {
+      "file": "vedda_115_20260211_231733_d40a04f2.wav",
+      "reference": "එළු මඤ්ඤා",
+      "predicted": "දිමමයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8889,
+      "status": "success"
+    },
+    {
+      "file": "vedda_204_20260212_003931_bf31341f.wav",
+      "reference": "බාසා පොජ්ජ",
+      "predicted": "බල පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3,
+      "status": "success"
+    },
+    {
+      "file": "vedda_116_20260211_231754_b8867c9b.wav",
+      "reference": "පන්නි",
+      "predicted": "පන්නේ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2,
+      "status": "success"
+    },
+    {
+      "file": "vedda_227_20260212_005113_3cca7b93.wav",
+      "reference": "ඇහි රුකුලට මන්දෝ කරනවා",
+      "predicted": "ඇහිරුක් මංගච්චනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_357_20260212_020236_451538b3.wav",
+      "reference": "වළ පොජ්ජක්",
+      "predicted": "මං පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4,
+      "status": "success"
+    },
+    {
+      "file": "vedda_302_20260212_012823_a2aff0cd.wav",
+      "reference": "ඉච්චර කාල මැච්චේ",
+      "predicted": "ඇච්චා කරන මැචියි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4375,
+      "status": "success"
+    },
+    {
+      "file": "vedda_077_20260211_102206_d1832b09.wav",
+      "reference": "කොටු පොජ්ජ",
+      "predicted": "තොට පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.2,
+      "status": "success"
+    },
+    {
+      "file": "vedda_095_20260211_230526_fe3194fe.wav",
+      "reference": "කංකුනා",
+      "predicted": "කංකුනා",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_247_20260212_010207_e73fc3e8.wav",
+      "reference": "විට පොජ්ජක්",
+      "predicted": "දිට පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2727,
+      "status": "success"
+    },
+    {
+      "file": "vedda_017_20260211_093603_d140eda2.wav",
+      "reference": "මාම කැච්චක්‌ හොඳමැයි",
+      "predicted": "මාම් කැච්ච කරන්න",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.55,
+      "status": "success"
+    },
+    {
+      "file": "vedda_068_20260211_101656_2da6ab75.wav",
+      "reference": "එකතු තැන මන්දෝ කරන ලකුණු පොජ්ජ",
+      "predicted": "කැත්තැන මන්දු කොරන ලකුණු පොජ්ජ",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.2,
+      "status": "success"
+    },
+    {
+      "file": "vedda_140_20260211_233510_06b53cc9.wav",
+      "reference": "කළු කෝමන්තැන වටාපු හූරා",
+      "predicted": "කලුකුමං තැන ඇත්තෝ පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6522,
+      "status": "success"
+    },
+    {
+      "file": "vedda_008_20260211_092841_b79fbf6b.wav",
+      "reference": "දෙයියලැත්තෝ",
+      "predicted": "දියලැත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1818,
+      "status": "success"
+    },
+    {
+      "file": "vedda_176_20260211_235130_b640c221.wav",
+      "reference": "කැකුළියෙක්‌ ඇන්න මංගච්චනවා",
+      "predicted": "කැකුළි ඇල් මංගච්චා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3462,
+      "status": "success"
+    },
+    {
+      "file": "vedda_233_20260212_005403_2ba0433e.wav",
+      "reference": "පටාරිනවා",
+      "predicted": "තාරියි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.625,
+      "status": "success"
+    },
+    {
+      "file": "vedda_339_20260212_015326_12116088.wav",
+      "reference": "ලංකා පොජ්ජ",
+      "predicted": "ලංකා පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_372_20260212_020838_ef71134c.wav",
+      "reference": "රුකුල් පොජ්ජ කොදුයි",
+      "predicted": "රුකුල් පොජ්ජ කොදුයි",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_111_20260211_231439_e5a4253a.wav",
+      "reference": "කුක්කා",
+      "predicted": "කොක්කා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_355_20260212_020137_33780529.wav",
+      "reference": "පටෑරගන්නවා",
+      "predicted": "මංගච්චන ගන්න",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_374_20260212_021002_13d9aab4.wav",
+      "reference": "කන්කුනා",
+      "predicted": "කැකුරා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4286,
+      "status": "success"
+    },
+    {
+      "file": "vedda_285_20260212_011926_fddca2fa.wav",
+      "reference": "ගම් පොජ්ජට",
+      "predicted": "දාබ පොජ්ජට",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3,
+      "status": "success"
+    },
+    {
+      "file": "vedda_061_20260211_101248_77ca6376.wav",
+      "reference": "හතරමයි",
+      "predicted": "තැනමයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_251_20260212_010358_f46d4af7.wav",
+      "reference": "කැකුළො",
+      "predicted": "කැකුරා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_365_20260212_020559_e6d22296.wav",
+      "reference": "රුකම් පොජ්ජක් පටෑරිලා",
+      "predicted": "කෝම් පොජ්ජ පටරී",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4286,
+      "status": "success"
+    },
+    {
+      "file": "vedda_159_20260211_234351_5d02885e.wav",
+      "reference": "ඉර පොජ්ජ",
+      "predicted": "ඉර පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_249_20260212_010314_5a1b2adf.wav",
+      "reference": "කැවිල්ලාන්න",
+      "predicted": "කැයල්ලාන්නේ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2727,
+      "status": "success"
+    },
+    {
+      "file": "vedda_146_20260211_233808_a9fd8800.wav",
+      "reference": "මලා ලීය",
+      "predicted": "මන්නේ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8571,
+      "status": "success"
+    },
+    {
+      "file": "vedda_018_20260211_093709_485e07d8.wav",
+      "reference": "එකමෙක්",
+      "predicted": "කමෙක්",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_297_20260212_012447_640bc9d5.wav",
+      "reference": "වන්නියලැත්තෝ පරම්පරා පොජ්ජේ",
+      "predicted": "කැන පොජ්ජ මංගැච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8148,
+      "status": "success"
+    },
+    {
+      "file": "vedda_025_20260211_094519_a51ecadb.wav",
+      "reference": "ඇහි රැකුල",
+      "predicted": "ඇයි රැකුල",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1111,
+      "status": "success"
+    },
+    {
+      "file": "vedda_138_20260211_233328_b9ad39e6.wav",
+      "reference": "රජාකාරී",
+      "predicted": "රැචා කාරී",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4286,
+      "status": "success"
+    },
+    {
+      "file": "vedda_335_20260212_015019_d6ee0f2a.wav",
+      "reference": "ඉච්චර කාල මැච්චේ බුද්දලැත්තො මංගැච්චුවා මහියංගන පෝරුගම් පොජ්ජට ඒ තැනේදී ඉඩ තැන මන්දොකරගත්තා",
+      "predicted": "කැල කාල මැච්චා තැන මංගුම් මෙදොයි පොජ්ජට පෝරැට ඇත්ට දෙට්ඩ මන්",
+      "exact": false,
+      "wer": 0.8462,
+      "cer": 0.6484,
+      "status": "success"
+    },
+    {
+      "file": "vedda_354_20260212_020117_5de0b327.wav",
+      "reference": "පටෑරගෙන",
+      "predicted": "පටරැන දියි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_313_20260212_013523_9488772f.wav",
+      "reference": "අල පොජ්ජ තැනමක්‌ කැවිල්ලාන්න",
+      "predicted": "අල පොජ්ජ තැනමක් කරුලා",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3214,
+      "status": "success"
+    },
+    {
+      "file": "vedda_168_20260211_234735_5947ccd6.wav",
+      "reference": "මඳු පොජ්ජ",
+      "predicted": "මං පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_337_20260212_015236_46282498.wav",
+      "reference": "ව්‍යාධ",
+      "predicted": "දිරැන",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_344_20260212_015520_fe21a2aa.wav",
+      "reference": "හිත් පොජ්ජ මන්දො වෙනවා",
+      "predicted": "පෙට පොජ්ජ මන්දො වෙනවා",
+      "exact": false,
+      "wer": 0.25,
+      "cer": 0.1818,
+      "status": "success"
+    },
+    {
+      "file": "vedda_377_20260212_021118_03201222.wav",
+      "reference": "මුන්දි",
+      "predicted": "මේරියි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_293_20260212_012226_bfaed3b1.wav",
+      "reference": "උඩතැනට",
+      "predicted": "බොට තැනක්",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_225_20260212_005014_0e192575.wav",
+      "reference": "කතා දමනවා",
+      "predicted": "කතා දමන්න",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_164_20260211_234539_7e94ea29.wav",
+      "reference": "ඉර පොජ්ජ උඩ තැනට මන්දෝ වුනා",
+      "predicted": "ඉරු පොජ්ජ බොදමනවා",
+      "exact": false,
+      "wer": 0.8333,
+      "cer": 0.5556,
+      "status": "success"
+    },
+    {
+      "file": "vedda_126_20260211_232609_2c65eabd.wav",
+      "reference": "දෙපටුල්ලංතැන",
+      "predicted": "බේ පොජ්ජලාතැන",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_280_20260212_011730_f8a0f335.wav",
+      "reference": "හූරා",
+      "predicted": "මුරා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_121_20260211_232101_850e49e3.wav",
+      "reference": "කඳඅරණි",
+      "predicted": "කඳ අරන්න",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_197_20260212_003631_36a5f9cf.wav",
+      "reference": "රට පොජ්ජ",
+      "predicted": "අඩ පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.25,
+      "status": "success"
+    },
+    {
+      "file": "vedda_166_20260211_234700_367114ad.wav",
+      "reference": "හබක්‌ පොජ්ජ",
+      "predicted": "කල පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3636,
+      "status": "success"
+    },
+    {
+      "file": "vedda_020_20260211_093821_6e61e8eb.wav",
+      "reference": "තුනමෙක්",
+      "predicted": "තොනමෙක්",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1429,
+      "status": "success"
+    },
+    {
+      "file": "vedda_156_20260211_234251_f74c089d.wav",
+      "reference": "ඇල්‌ පොජ්ජ",
+      "predicted": "ඇර පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3,
+      "status": "success"
+    },
+    {
+      "file": "vedda_081_20260211_102505_40daf414.wav",
+      "reference": "කාල තැනයි",
+      "predicted": "කාල තැනේ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_133_20260211_232955_67c1551c.wav",
+      "reference": "විට පොජ්ජ",
+      "predicted": "බෙට පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_141_20260211_233601_198b4b13.wav",
+      "reference": "බෙහෙත්තැන ඇනුකලන හූරා",
+      "predicted": "බෙත්තැන ඇනකලන පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.381,
+      "status": "success"
+    },
+    {
+      "file": "vedda_295_20260212_012302_676fd1e4.wav",
+      "reference": "කැකුළෙක්‌",
+      "predicted": "කැකුලෙක්",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_038_20260211_095704_a1b04e27.wav",
+      "reference": "අක්කිලැත්තෝ",
+      "predicted": "අත්තැන ඇතන්න",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8182,
+      "status": "success"
+    },
+    {
+      "file": "vedda_360_20260212_020334_a23907b4.wav",
+      "reference": "කඳුළු පොජ්ජක්",
+      "predicted": "කඳල් පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3846,
+      "status": "success"
+    },
+    {
+      "file": "vedda_359_20260212_020314_8d7c2943.wav",
+      "reference": "වළ පොජ්ජක් පටෑරිලා",
+      "predicted": "බල පොජ්ජ පටිරියි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3889,
+      "status": "success"
+    },
+    {
+      "file": "vedda_182_20260211_235345_44ba8524.wav",
+      "reference": "කඳ අරනී",
+      "predicted": "කඳ අරන්න",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.2857,
+      "status": "success"
+    },
+    {
+      "file": "vedda_183_20260211_235408_133586c4.wav",
+      "reference": "රුකුල් පොජ්ජ",
+      "predicted": "රුකුල් පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_060_20260211_101224_40e728e0.wav",
+      "reference": "තුනමයි",
+      "predicted": "තොනමයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_113_20260211_231553_4c29271e.wav",
+      "reference": "රැකූල්‌ පොප්ජේ පොල්ලැච්චා",
+      "predicted": "පහුරු පොජ්ජ පන්දොයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.68,
+      "status": "success"
+    },
+    {
+      "file": "vedda_153_20260211_234155_6880d8c5.wav",
+      "reference": "උඩ තැනෙං මංගච්චන දඬු කැච්ච",
+      "predicted": "උඩතැන මංගචන දඬු කැච්ච",
+      "exact": false,
+      "wer": 0.6,
+      "cer": 0.1923,
+      "status": "success"
+    },
+    {
+      "file": "vedda_007_20260211_092734_0ea9d704.wav",
+      "reference": "අප්පිලැත්තෝ",
+      "predicted": "අප්ප ඇත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2727,
+      "status": "success"
+    },
+    {
+      "file": "vedda_336_20260212_015207_3028b600.wav",
+      "reference": "ඒ කාල පොජ්ජේ එක්ක ඉඳ තබව්වේ යක්‌ වරිග පොජ්ජේ මිනිගජ්ජු",
+      "predicted": "කාල පොජ්ජ ඇත්ට තැනියි දබකුරැච්තෝ හොට්දො බොදිචා",
+      "exact": false,
+      "wer": 0.9,
+      "cer": 0.6481,
+      "status": "success"
+    },
+    {
+      "file": "vedda_287_20260212_012017_4ba88d74.wav",
+      "reference": "දියරැච්චාවත්",
+      "predicted": "දියරැච්චනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.25,
+      "status": "success"
+    },
+    {
+      "file": "vedda_011_20260211_093044_cdfa46da.wav",
+      "reference": "පය පොජ්ජ",
+      "predicted": "පය පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_178_20260211_235222_619b20c8.wav",
+      "reference": "දෙබාජකාරිලා ඇත්තෝ",
+      "predicted": "දෙබල් කරරනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7059,
+      "status": "success"
+    },
+    {
+      "file": "vedda_105_20260211_231041_c6a67dd1.wav",
+      "reference": "චප්පි",
+      "predicted": "චප්පි",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_083_20260211_102546_2360d895.wav",
+      "reference": "තඹ පෝරු",
+      "predicted": "තඳ පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7143,
+      "status": "success"
+    },
+    {
+      "file": "vedda_334_20260212_014854_1822afc5.wav",
+      "reference": "වන්නියලැත්තෝ පරම්පරා පොජ්ජේ මිනිග්ගජ්ජු ගල් රැක්කී කරපොජ්ජේ ලාබච්චාගනයි ඉඳින්නේ",
+      "predicted": "මන්දෝ ඇත්තෝ පොජ්ජ පරැච්චේ රිටරු දඬුයක් කරපිරා ලාමක ගංගැන දෙ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6582,
+      "status": "success"
+    },
+    {
+      "file": "vedda_224_20260212_004948_2cc8f2f5.wav",
+      "reference": "කරකුරු ගච්චනවා",
+      "predicted": "කරකුරු ගච්චනවා",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_193_20260212_003433_0d93c0ad.wav",
+      "reference": "කතා පෙට්ට්‌ පොජ්ජ",
+      "predicted": "කතා පොජ්ජක් හූරී",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.5882,
+      "status": "success"
+    },
+    {
+      "file": "vedda_211_20260212_004222_e15ff940.wav",
+      "reference": "මේ තැන මේ",
+      "predicted": "මේ තැනම්න",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_305_20260212_013124_740c09ed.wav",
+      "reference": "ඒ කාල පොජ්ජේ",
+      "predicted": "ඒ කාල පොජ්ජ",
+      "exact": false,
+      "wer": 0.3333,
+      "cer": 0.0833,
+      "status": "success"
+    },
+    {
+      "file": "vedda_154_20260211_234211_a9e058fb.wav",
+      "reference": "කැලෑ පොජ්ජ",
+      "predicted": "කැල පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1,
+      "status": "success"
+    },
+    {
+      "file": "vedda_091_20260211_230310_5c0e9f28.wav",
+      "reference": "තැනක්‌ නියක්‌",
+      "predicted": "තැන දියක්",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3846,
+      "status": "success"
+    },
+    {
+      "file": "vedda_177_20260211_235158_4f8b10f7.wav",
+      "reference": "හිංගිලා ඇත්තෝ",
+      "predicted": "දියලැත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5385,
+      "status": "success"
+    },
+    {
+      "file": "vedda_148_20260211_233859_0ed1088d.wav",
+      "reference": "කපා කන යමකෙ",
+      "predicted": "කැකල්ලන්න",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8182,
+      "status": "success"
+    },
+    {
+      "file": "vedda_212_20260212_004355_04a1abda.wav",
+      "reference": "ඒ තැන මේ",
+      "predicted": "ඒතැන්නේ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.375,
+      "status": "success"
+    },
+    {
+      "file": "vedda_094_20260211_230451_672dda58.wav",
+      "reference": "කලුමඤ්ඤා",
+      "predicted": "කල මංගයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.625,
+      "status": "success"
+    },
+    {
+      "file": "vedda_071_20260211_101906_47dc9ae8.wav",
+      "reference": "අඩුතැන මන්දු කරන ලකුණු පොජ්ජ",
+      "predicted": "අඩුතැන මන්දු කරන ලකුණු පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_125_20260211_232449_47bab790.wav",
+      "reference": "ගුලි පොජ්ජ",
+      "predicted": "බුරු පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3,
+      "status": "success"
+    },
+    {
+      "file": "vedda_098_20260211_230643_0d46a996.wav",
+      "reference": "බොක්කි",
+      "predicted": "බුක්ක",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_144_20260211_233722_528e5cf9.wav",
+      "reference": "ගල්‌ රැක්ක",
+      "predicted": "ගල් රැක්ක",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1,
+      "status": "success"
+    },
+    {
+      "file": "vedda_291_20260212_012140_01bfffab.wav",
+      "reference": "කැකුළී",
+      "predicted": "කැකුයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_099_20260211_230718_bf8ffc89.wav",
+      "reference": "පොල්ලැච්චා",
+      "predicted": "පොන ලැච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3,
+      "status": "success"
+    },
+    {
+      "file": "vedda_274_20260212_011526_47111065.wav",
+      "reference": "ලෙඩ පොජ්ජ මන්දොවෙලා",
+      "predicted": "බෙට පොජ්ජ මන්දොයි",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.3158,
+      "status": "success"
+    },
+    {
+      "file": "vedda_070_20260211_101823_93fd37a8.wav",
+      "reference": "අඩුතැන මන්දෝ කරන ලකුණු පොජ්ජ",
+      "predicted": "අඩුතැන මන්දෝ කරන ලකුණු පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_024_20260211_094437_2729dd9d.wav",
+      "reference": "නලල්‌ පොජ්ජ",
+      "predicted": "බල් පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.2727,
+      "status": "success"
+    },
+    {
+      "file": "vedda_037_20260211_095833_c3dfc017.wav",
+      "reference": "අයියලැත්තෝ",
+      "predicted": "අයලැත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2,
+      "status": "success"
+    },
+    {
+      "file": "vedda_145_20260211_233747_7313dcd1.wav",
+      "reference": "බිම්‌ පොජ්ජ පටාරින යමකේ",
+      "predicted": "බෙරු පොජ්ජ පටරිය ලමක්‌",
+      "exact": false,
+      "wer": 0.75,
+      "cer": 0.3913,
+      "status": "success"
+    },
+    {
+      "file": "vedda_124_20260211_232312_47987994.wav",
+      "reference": "අල පොජ්ජ",
+      "predicted": "අල පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_069_20260211_101726_d7388163.wav",
+      "reference": "එකතු තැන මන්දු කරන ලකුණු පොජ්ජ",
+      "predicted": "ඇකැකු තැන මන්දු ලකරු පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3,
+      "status": "success"
+    },
+    {
+      "file": "vedda_173_20260211_235005_8f47c155.wav",
+      "reference": "මහ හූරා",
+      "predicted": "මහ පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.7143,
+      "status": "success"
+    },
+    {
+      "file": "vedda_199_20260212_003728_099fa2c0.wav",
+      "reference": "බඩ උච්චා දමනවා",
+      "predicted": "මංගැච්චනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5714,
+      "status": "success"
+    },
+    {
+      "file": "vedda_203_20260212_003911_018a7a47.wav",
+      "reference": "පණ පොජ්ජ",
+      "predicted": "බල පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.25,
+      "status": "success"
+    },
+    {
+      "file": "vedda_303_20260212_012845_61112b07.wav",
+      "reference": "මහියංගන පෝරුගම් පොජ්ජට",
+      "predicted": "මේ ඇල්ලන පොජ්ජ පරැච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7727,
+      "status": "success"
+    },
+    {
+      "file": "vedda_181_20260211_235320_7cde3e8b.wav",
+      "reference": "කඳ පල්ලී",
+      "predicted": "කඳ පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_127_20260211_232631_7798e31f.wav",
+      "reference": "කිරි ගෙජ්ජ",
+      "predicted": "දිබ ගැච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6,
+      "status": "success"
+    },
+    {
+      "file": "vedda_147_20260211_233836_d7a1387e.wav",
+      "reference": "මොරියං කැච්ච",
+      "predicted": "බරිය කැච්ච",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.25,
+      "status": "success"
+    },
+    {
+      "file": "vedda_220_20260212_004814_39067c8e.wav",
+      "reference": "කැවිල්ලානවා",
+      "predicted": "කැන පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8182,
+      "status": "success"
+    },
+    {
+      "file": "vedda_088_20260211_102823_3d87f0b5.wav",
+      "reference": "කොයිතැනක්‌",
+      "predicted": "කොයි තැන",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4,
+      "status": "success"
+    },
+    {
+      "file": "vedda_343_20260212_015456_ed5e8f07.wav",
+      "reference": "වැව් පොජ්ජ",
+      "predicted": "දිර පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.4,
+      "status": "success"
+    },
+    {
+      "file": "vedda_277_20260212_011630_04e344ec.wav",
+      "reference": "ඔය ඇත්තන්නේ",
+      "predicted": "කොය ඇත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5455,
+      "status": "success"
+    },
+    {
+      "file": "vedda_323_20260212_013954_6471827f.wav",
+      "reference": "කැකුලෝ ඔටා දමනවා",
+      "predicted": "කැකුළා රූට දමනවා",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.3125,
+      "status": "success"
+    },
+    {
+      "file": "vedda_194_20260212_003451_d823ada1.wav",
+      "reference": "රූප පෙට්ට්‌ පොජ්ජ",
+      "predicted": "රුක පෙට්ටි පොජ්ජ",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.2353,
+      "status": "success"
+    },
+    {
+      "file": "vedda_289_20260212_012100_13db65bd.wav",
+      "reference": "මේ ඇත්තන්නේ",
+      "predicted": "මේ ඇත්තෝ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3636,
+      "status": "success"
+    },
+    {
+      "file": "vedda_184_20260212_002956_44149ace.wav",
+      "reference": "චාලාව",
+      "predicted": "චලානවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6,
+      "status": "success"
+    },
+    {
+      "file": "vedda_299_20260212_012552_a9411c4f.wav",
+      "reference": "කරපොජ්ජේ",
+      "predicted": "කර පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.25,
+      "status": "success"
+    },
+    {
+      "file": "vedda_271_20260212_011432_3c33f0df.wav",
+      "reference": "මේ ඇත්තෝ",
+      "predicted": "මේ ඇත්තෝ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_196_20260212_003536_62f673b6.wav",
+      "reference": "පෝරුගං පොජ්ජ",
+      "predicted": "බුරුකම පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_281_20260212_011746_7c4b04f2.wav",
+      "reference": "කොයිබට",
+      "predicted": "කොය පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_130_20260211_232838_a6b93acf.wav",
+      "reference": "උණු දිය රැච්ච",
+      "predicted": "පොන්දෝ රැච්ච",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.4615,
+      "status": "success"
+    },
+    {
+      "file": "vedda_039_20260211_095938_bcfa3e1a.wav",
+      "reference": "මුත්තිලැත්තෝ",
+      "predicted": "බොත්තැනක්‌",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_012_20260211_093140_0bfdf15a.wav",
+      "reference": "රුක පොජ්ජ",
+      "predicted": "බුක පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1111,
+      "status": "success"
+    },
+    {
+      "file": "vedda_257_20260212_010847_461390ba.wav",
+      "reference": "කඳඅරනිග දියතැන",
+      "predicted": "කඳලාරැක් ගච්චනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8571,
+      "status": "success"
+    },
+    {
+      "file": "vedda_186_20260212_003055_d8f57b08.wav",
+      "reference": "සිරංගිය",
+      "predicted": "කැන්නේ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_326_20260212_014259_0f243cdd.wav",
+      "reference": "මේ කැකුළා මාමකැච්චක් හොදමයි",
+      "predicted": "මේ කැකුරා මංගච්චන කොදොයි",
+      "exact": false,
+      "wer": 0.75,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_114_20260211_231658_2e9ba76b.wav",
+      "reference": "රුකුල්‌ පොජ්ජේ පිටගැටයා",
+      "predicted": "රුකුල පොජ්ජ ඇත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4783,
+      "status": "success"
+    },
+    {
+      "file": "vedda_180_20260211_235304_32f8e964.wav",
+      "reference": "වරිග පොජ්ජ",
+      "predicted": "පරුට පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3,
+      "status": "success"
+    },
+    {
+      "file": "vedda_255_20260212_010750_da25fae0.wav",
+      "reference": "කතාදමන්න",
+      "predicted": "කතා දඬනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_332_20260212_014626_529c559c.wav",
+      "reference": "මාම්ලැත්තෝ රැකං පොජ්ජ උඩතැනට මංගච්චනවා",
+      "predicted": "මං පොජ්ජ ඇත්ට රැච්චන බුටලට මංගචා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6842,
+      "status": "success"
+    },
+    {
+      "file": "vedda_119_20260211_231936_4c721c22.wav",
+      "reference": "චමනලයා",
+      "predicted": "චමන්නා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_352_20260212_020020_c89b0a83.wav",
+      "reference": "භාර පොජ්ජක්",
+      "predicted": "බාර පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2727,
+      "status": "success"
+    },
+    {
+      "file": "vedda_368_20260212_020711_c1498f49.wav",
+      "reference": "මංගච්චන්න කොදුයි",
+      "predicted": "කැච්චන කොදොයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.375,
+      "status": "success"
+    },
+    {
+      "file": "vedda_275_20260212_011547_e631c66a.wav",
+      "reference": "ඒ ඇත්තෝ",
+      "predicted": "ඒ ඇත්තෝ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_363_20260212_020509_d1acf1e5.wav",
+      "reference": "කෝනම් පොජ්ජක් පටෑරිලා",
+      "predicted": "කොරල පොජ්ජ පටිරා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4286,
+      "status": "success"
+    },
+    {
+      "file": "vedda_165_20260211_234621_7092ba38.wav",
+      "reference": "ඉර පොජ්ජ බිම්‌ පොජ්ජට ගමංගැච්චුවා",
+      "predicted": "ඉර පොජ්ජ පෙජක්ට මංගැච්ච",
+      "exact": false,
+      "wer": 0.6,
+      "cer": 0.3939,
+      "status": "success"
+    },
+    {
+      "file": "vedda_235_20260212_005514_906588e6.wav",
+      "reference": "මන්දෝ කරනවා",
+      "predicted": "මංගච්චනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6364,
+      "status": "success"
+    },
+    {
+      "file": "vedda_137_20260211_233159_919bbce2.wav",
+      "reference": "වේචා කොළ",
+      "predicted": "බෙචා කොනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.625,
+      "status": "success"
+    },
+    {
+      "file": "vedda_155_20260211_234231_0ea57a71.wav",
+      "reference": "රුකං පොජ්ජ",
+      "predicted": "රුකම පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1,
+      "status": "success"
+    },
+    {
+      "file": "vedda_200_20260212_003748_2cac15e0.wav",
+      "reference": "බඩ රුජා දමනවා",
+      "predicted": "බඩ රුච්චන දමනවා",
+      "exact": false,
+      "wer": 0.3333,
+      "cer": 0.3077,
+      "status": "success"
+    },
+    {
+      "file": "vedda_198_20260212_003651_cb63fe8d.wav",
+      "reference": "මත් දිය රැච්ච",
+      "predicted": "මංගැන රැච්ච",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.4615,
+      "status": "success"
+    },
+    {
+      "file": "vedda_375_20260212_021023_ca9bee38.wav",
+      "reference": "හොච්චදික්කා",
+      "predicted": "රුච්චා පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8182,
+      "status": "success"
+    },
+    {
+      "file": "vedda_003_20260211_092419_7262a092.wav",
+      "reference": "මැච්ච",
+      "predicted": "මැච්ච",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_205_20260212_003949_6361df33.wav",
+      "reference": "කවි තැන",
+      "predicted": "කබටියි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8571,
+      "status": "success"
+    },
+    {
+      "file": "vedda_117_20260211_231825_4cde91ea.wav",
+      "reference": "එල මඤ්ඤා",
+      "predicted": "ඇල මඤ්ඤා",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.125,
+      "status": "success"
+    },
+    {
+      "file": "vedda_338_20260212_015258_5d4d2705.wav",
+      "reference": "ගම් පොජ්ජ",
+      "predicted": "රැන පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_221_20260212_004840_58d4dbf1.wav",
+      "reference": "මංගච්චනවා",
+      "predicted": "මංගච්චනවා",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_027_20260211_094649_81b28eaa.wav",
+      "reference": "නාස්‌ පොජ්ජ",
+      "predicted": "රහ පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.4545,
+      "status": "success"
+    },
+    {
+      "file": "vedda_122_20260211_232120_4422e80d.wav",
+      "reference": "පැණි පොජ්ජ",
+      "predicted": "තැන පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3,
+      "status": "success"
+    },
+    {
+      "file": "vedda_294_20260212_012243_a186bc34.wav",
+      "reference": "උඩතැනට මංගච්චනවා",
+      "predicted": "ඉඩතැනට මංගච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.25,
+      "status": "success"
+    },
+    {
+      "file": "vedda_226_20260212_005030_c68e12ff.wav",
+      "reference": "බය දමනවා",
+      "predicted": "බය දමන්න",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.25,
+      "status": "success"
+    },
+    {
+      "file": "vedda_301_20260212_012759_78130af3.wav",
+      "reference": "ලාබච්චාගන",
+      "predicted": "ලමච්චනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5556,
+      "status": "success"
+    },
+    {
+      "file": "vedda_329_20260212_014456_6a6b2e0e.wav",
+      "reference": "ඒ ඇත්ති මේ ඇත්තන්නේ මහ කැකුළි",
+      "predicted": "ඒ ඇත්තෝ මංගච්චනවා කොදොයි",
+      "exact": false,
+      "wer": 0.8333,
+      "cer": 0.5517,
+      "status": "success"
+    },
+    {
+      "file": "vedda_128_20260211_232726_8070f052.wav",
+      "reference": "ගයි ගත්‌ කරල්‌ පොජ්ජ",
+      "predicted": "බෙට කාල පොජ්ජ",
+      "exact": false,
+      "wer": 0.75,
+      "cer": 0.55,
+      "status": "success"
+    },
+    {
+      "file": "vedda_076_20260211_102134_d7e70e31.wav",
+      "reference": "රවුම්‌ තැනක්‌",
+      "predicted": "රහුරු තැනක්‌",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3077,
+      "status": "success"
+    },
+    {
+      "file": "vedda_308_20260212_013249_e3cea4f1.wav",
+      "reference": "කඳපල්ලි පටාරන්න මංගච්චමු",
+      "predicted": "කඳපල්ලි පොජ්ජන මංගච්චන",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.2917,
+      "status": "success"
+    },
+    {
+      "file": "vedda_030_20260211_095200_74ec5851.wav",
+      "reference": "බුච්ච",
+      "predicted": "බොච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2,
+      "status": "success"
+    },
+    {
+      "file": "vedda_085_20260211_102630_f37beab9.wav",
+      "reference": "අඩු තැනක්‌",
+      "predicted": "අඩු තැනක්",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1,
+      "status": "success"
+    },
+    {
+      "file": "vedda_358_20260212_020253_3b658457.wav",
+      "reference": "පටෑරිලා",
+      "predicted": "පටියිලා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2857,
+      "status": "success"
+    },
+    {
+      "file": "vedda_109_20260211_231327_a5abb216.wav",
+      "reference": "මැච්චි",
+      "predicted": "මැච්චා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_250_20260212_010342_0253a838.wav",
+      "reference": "මංගච්චප",
+      "predicted": "මංගච්චා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1429,
+      "status": "success"
+    },
+    {
+      "file": "vedda_239_20260212_005810_25b91114.wav",
+      "reference": "වෙනකට මන්දෝ වෙනවා",
+      "predicted": "නැනකට මංගච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7059,
+      "status": "success"
+    },
+    {
+      "file": "vedda_134_20260211_233011_3ede3203.wav",
+      "reference": "ගයිගැට",
+      "predicted": "බෙට්ටා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_185_20260212_003027_1155a738.wav",
+      "reference": "කඳේ කොටන යමකේ",
+      "predicted": "කඳහ කොට මංගච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6154,
+      "status": "success"
+    },
+    {
+      "file": "vedda_278_20260212_011649_94db9818.wav",
+      "reference": "නම්  පොජ්ජ",
+      "predicted": "බම පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3,
+      "status": "success"
+    },
+    {
+      "file": "vedda_045_20260211_100332_be5d4aab.wav",
+      "reference": "කැකුළී",
+      "predicted": "තැක්පි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_380_20260212_021241_6472f510.wav",
+      "reference": "ඔත්කයි",
+      "predicted": "ඔකැක්",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_067_20260211_101556_166b058e.wav",
+      "reference": "දහමයි",
+      "predicted": "තාමයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4,
+      "status": "success"
+    },
+    {
+      "file": "vedda_284_20260212_011846_270932a2.wav",
+      "reference": "මේ කැකුළෝ",
+      "predicted": "මේ කැකුන්න",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_087_20260211_102741_c86e9fbf.wav",
+      "reference": "තැනමයි",
+      "predicted": "තැනමයි",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_187_20260212_003124_3ce746f8.wav",
+      "reference": "කෝමං තැන",
+      "predicted": "කෝමංගච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_072_20260211_101937_4290d8ad.wav",
+      "reference": "වැඩි තැන මන්දෝ කරන ලකුණු පොජීජ",
+      "predicted": "දිතැන මන්දු කරන ලකුණු පොජ්ජ",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.2,
+      "status": "success"
+    },
+    {
+      "file": "vedda_160_20260211_234409_fc9e24c4.wav",
+      "reference": "හඳ පොජ්ජ",
+      "predicted": "අඩ පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.25,
+      "status": "success"
+    },
+    {
+      "file": "vedda_013_20260211_093318_80af616e.wav",
+      "reference": "ලය පොජ්ජ",
+      "predicted": "ලය පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_036_20260211_095459_56a0aee5.wav",
+      "reference": "පය පොජ්ජ",
+      "predicted": "පය පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_029_20260211_095130_a277d3ca.wav",
+      "reference": "කං රුකුල",
+      "predicted": "කඳු පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.875,
+      "status": "success"
+    },
+    {
+      "file": "vedda_171_20260211_234852_47bd904d.wav",
+      "reference": "සකලයෝ ඇල්ලුම්‌ පොජ්ජ මන්දු කරන උගුල්‌ පොජ්ජ",
+      "predicted": "කැකුල ඇල්ල පොජ්ජ මන්දෝ කරනවා ගම්ට",
+      "exact": false,
+      "wer": 0.8571,
+      "cer": 0.4884,
+      "status": "success"
+    },
+    {
+      "file": "vedda_143_20260211_233647_ea845564.wav",
+      "reference": "ගුරු හූරා",
+      "predicted": "බුරු පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_304_20260212_013013_fc8188ce.wav",
+      "reference": "ඒ තැනේදී ඉඩ තැන මන්දොකරගත්තා",
+      "predicted": "ඒ තැනෙක්මේ ඇල්ලට කරනවා",
+      "exact": false,
+      "wer": 0.8,
+      "cer": 0.6786,
+      "status": "success"
+    },
+    {
+      "file": "vedda_364_20260212_020542_5cd2c508.wav",
+      "reference": "රුකම් පොජ්ජක්",
+      "predicted": "රුකම පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2308,
+      "status": "success"
+    },
+    {
+      "file": "vedda_151_20260211_234047_1b67268d.wav",
+      "reference": "මහ දඬු කැච්ච",
+      "predicted": "මහ දඬු කැච්ච",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_230_20260212_005259_bb9002d7.wav",
+      "reference": "තිබෙනවා",
+      "predicted": "තැයල්ලා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7143,
+      "status": "success"
+    },
+    {
+      "file": "vedda_223_20260212_004925_b2d036df.wav",
+      "reference": "වැතිරෙනවා",
+      "predicted": "රැත්දියි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7778,
+      "status": "success"
+    },
+    {
+      "file": "vedda_132_20260211_232923_cbcf9a3f.wav",
+      "reference": "තල ඇට පොජ්ජ",
+      "predicted": "තල ඇට පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_097_20260211_230621_f61b3c4e.wav",
+      "reference": "ඉරි මයිරා",
+      "predicted": "දිමයිරා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_356_20260212_020206_328071f2.wav",
+      "reference": "පොතු පොජ්ජක් පටෑරගෙන",
+      "predicted": "පොජ්ජ පටාරියි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.55,
+      "status": "success"
+    },
+    {
+      "file": "vedda_052_20260211_100707_316c558d.wav",
+      "reference": "එකම",
+      "predicted": "ඇකමයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_242_20260212_005941_72284964.wav",
+      "reference": "ලාබච්චනවා",
+      "predicted": "අා පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8889,
+      "status": "success"
+    },
+    {
+      "file": "vedda_286_20260212_011949_071c5f03.wav",
+      "reference": "කැවිල්ලාන",
+      "predicted": "කැනිලානා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4444,
+      "status": "success"
+    },
+    {
+      "file": "vedda_292_20260212_012200_4ec96411.wav",
+      "reference": "ඇන්න මංගච්චනවා",
+      "predicted": "ඇන්න මංගචනවා",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1429,
+      "status": "success"
+    },
+    {
+      "file": "vedda_179_20260211_235245_85408ef9.wav",
+      "reference": "සුදු හූරා",
+      "predicted": "කොදු පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7778,
+      "status": "success"
+    },
+    {
+      "file": "vedda_042_20260211_100158_c3ad3d67.wav",
+      "reference": "මයහූරා",
+      "predicted": "මය බුරා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_369_20260212_020734_b34335ba.wav",
+      "reference": "කැවිල්ලන්නේ කොදුයි",
+      "predicted": "තැන ලන්ක කොදොයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4444,
+      "status": "success"
+    },
+    {
+      "file": "vedda_207_20260212_004028_246520b0.wav",
+      "reference": "දින පොජ්ජ",
+      "predicted": "දිල පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1111,
+      "status": "success"
+    },
+    {
+      "file": "vedda_256_20260212_010815_0fa11549.wav",
+      "reference": "මේ කාල මැච්චේ",
+      "predicted": "මේ කාල මැච්ච",
+      "exact": false,
+      "wer": 0.3333,
+      "cer": 0.0769,
+      "status": "success"
+    },
+    {
+      "file": "vedda_317_20260212_013722_c5c57f7d.wav",
+      "reference": "ඔය ඇත්තන්ට කොයි හැටිමටද",
+      "predicted": "ඔය ඇත්තන්ට කොයිට",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3043,
+      "status": "success"
+    },
+    {
+      "file": "vedda_005_20260211_092605_d6756fe0.wav",
+      "reference": "කපුවලැත්තෝ",
+      "predicted": "කැකුල් ඇත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6,
+      "status": "success"
+    },
+    {
+      "file": "vedda_258_20260212_010921_2070006d.wav",
+      "reference": "අල පොජ්ජ",
+      "predicted": "අල පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_342_20260212_015436_2c1dbf75.wav",
+      "reference": "අත් පොජ්ජ",
+      "predicted": "අත් පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_102_20260211_230857_66a45cbc.wav",
+      "reference": "මුන්දි",
+      "predicted": "බොන්දි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_228_20260212_005149_4401d263.wav",
+      "reference": "කං රුකුලට මන්දෝ කරනවා",
+      "predicted": "කරුක් පොජ්ජ මංගච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7619,
+      "status": "success"
+    },
+    {
+      "file": "vedda_327_20260212_014324_e1e71d85.wav",
+      "reference": "මේ ගම්‌ පොජ්ජට කැවිල්ලාන දියරැචිචාවත්‌ කොදොයි",
+      "predicted": "රැන පොජ්ජ පෙට්ට කැයිල්ලාන දියගච්චා කොදොය",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_214_20260212_004451_c5461dbe.wav",
+      "reference": "හිත්ලානවා",
+      "predicted": "තැක් පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_172_20260211_234936_7d6a26b8.wav",
+      "reference": "කඳං තලන්නග හබක්‌ පොජිජ",
+      "predicted": "කඳතැන දමන්න පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_100_20260211_230745_24cb9250.wav",
+      "reference": "මයිරා",
+      "predicted": "මයිරා",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_217_20260212_004720_ff8b9263.wav",
+      "reference": "මෙයැත්තෝ",
+      "predicted": "මෙයැත්තෝ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_062_20260211_101337_1169b4c7.wav",
+      "reference": "පහමයි",
+      "predicted": "පහමයි",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_048_20260211_100503_98c80dc5.wav",
+      "reference": "බෑනලැත්තෝ",
+      "predicted": "බයලැත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_033_20260211_095337_c680c332.wav",
+      "reference": "බඩ පොජ්ජ",
+      "predicted": "බඩ පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_270_20260212_011407_b557e6fa.wav",
+      "reference": "එකමක්",
+      "predicted": "දෙකමක්",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4,
+      "status": "success"
+    },
+    {
+      "file": "vedda_201_20260212_003809_a28ffc07.wav",
+      "reference": "කැකුළෙක්‌ මන්දෝ වෙනවා",
+      "predicted": "කැකුළෙක් මන්දොයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.381,
+      "status": "success"
+    },
+    {
+      "file": "vedda_340_20260212_015350_9905dc14.wav",
+      "reference": "රුකම් පොජ්ජ",
+      "predicted": "රුකම පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.0909,
+      "status": "success"
+    },
+    {
+      "file": "vedda_028_20260211_094944_b207c1b4.wav",
+      "reference": "කට පොජ්ජ",
+      "predicted": "කට පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_307_20260212_013223_6c45c3cc.wav",
+      "reference": "යක්‌ වරිග පොජ්ජේ",
+      "predicted": "දිය පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5625,
+      "status": "success"
+    },
+    {
+      "file": "vedda_232_20260212_005341_c89e88cb.wav",
+      "reference": "ඇනුකලනවා",
+      "predicted": "ඇන් කරනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.375,
+      "status": "success"
+    },
+    {
+      "file": "vedda_263_20260212_011103_fbee4654.wav",
+      "reference": "හොඳවාගේ",
+      "predicted": "අඩ පාරුන්න",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_163_20260211_234513_d9a63696.wav",
+      "reference": "උඩතැනෙන්‌ දිය රැච්චා මන්දෝ වුනා",
+      "predicted": "බොටතැන දිරැච්චන මන්දොනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4516,
+      "status": "success"
+    },
+    {
+      "file": "vedda_325_20260212_014220_343252fc.wav",
+      "reference": "හූර කොයිබට මංගච්චන්නේ",
+      "predicted": "රුර කොප්පට මංගච්චනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.381,
+      "status": "success"
+    },
+    {
+      "file": "vedda_139_20260211_233425_d60d0158.wav",
+      "reference": "ජීචාකාරී",
+      "predicted": "ගැච්චකරා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.75,
+      "status": "success"
+    },
+    {
+      "file": "vedda_063_20260211_101359_f224f41c.wav",
+      "reference": "හයමයි",
+      "predicted": "කයමයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2,
+      "status": "success"
+    },
+    {
+      "file": "vedda_136_20260211_233121_124956ec.wav",
+      "reference": "ගල් මඳ",
+      "predicted": "කරු මන්දෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_129_20260211_232808_d317f5c3.wav",
+      "reference": "ගලේ ලා කරකුරු ගච්චන ඇටපොජ්ජ",
+      "predicted": "තැනල්ලා කරකුරු ගච්චන ඇට පොජ්ජ",
+      "exact": false,
+      "wer": 0.8,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_009_20260211_092925_4368fcd0.wav",
+      "reference": "නැන්දම්මිලැත්තෝ",
+      "predicted": "ලැන මංග්දෝ ඇත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6,
+      "status": "success"
+    },
+    {
+      "file": "vedda_066_20260211_101508_9e583567.wav",
+      "reference": "නමයමයි",
+      "predicted": "නමමයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_015_20260211_093438_a03e0167.wav",
+      "reference": "හෙට දින මැච්ච",
+      "predicted": "ඇත්තෝ මැච්ච",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.5385,
+      "status": "success"
+    },
+    {
+      "file": "vedda_157_20260211_234309_eeb44eda.wav",
+      "reference": "දිය ගං ඇල්ල",
+      "predicted": "දිය ගච්චනවා",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.5455,
+      "status": "success"
+    },
+    {
+      "file": "vedda_041_20260211_100106_cea74a24.wav",
+      "reference": "තුන්නලැත්තෝ",
+      "predicted": "තොන්නලැත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.0909,
+      "status": "success"
+    },
+    {
+      "file": "vedda_350_20260212_015829_c4c27118.wav",
+      "reference": "රුකුල් පොජ්ජ",
+      "predicted": "රුකු පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_341_20260212_015406_5ed4ddf5.wav",
+      "reference": "කෝනම් පොජ්ජ",
+      "predicted": "කොන පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.2727,
+      "status": "success"
+    },
+    {
+      "file": "vedda_218_20260212_004740_efd75c6e.wav",
+      "reference": "එයිබ",
+      "predicted": "එයිබ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_282_20260212_011805_a1900fff.wav",
+      "reference": "මංගච්චන්නේ",
+      "predicted": "මංගච්චා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4,
+      "status": "success"
+    },
+    {
+      "file": "vedda_330_20260212_014529_6c1c26f3.wav",
+      "reference": "අම්මිලැත්තෝ දියරැචිච ඇන්න මංගච්චනවා",
+      "predicted": "අම්ම ඇත්තෝ දියරැච්ච ඇන්න මංගචා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2286,
+      "status": "success"
+    },
+    {
+      "file": "vedda_238_20260212_005749_3d1065ae.wav",
+      "reference": "ගච්චනවා",
+      "predicted": "ගච්චනවා",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_208_20260212_004106_2520a09a.wav",
+      "reference": "හොර තැන",
+      "predicted": "හොට තැයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4286,
+      "status": "success"
+    },
+    {
+      "file": "vedda_213_20260212_004422_8f0d5278.wav",
+      "reference": "හොඳමයි",
+      "predicted": "කඳමයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_298_20260212_012524_001e4522.wav",
+      "reference": "මිනිග්ගජ්ජු",
+      "predicted": "මෙන ගච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6364,
+      "status": "success"
+    },
+    {
+      "file": "vedda_348_20260212_015735_df20f238.wav",
+      "reference": "භාර පොජ්ජක් මන්දො වෙනවා",
+      "predicted": "බාර පොජ්ජ මන්දො වෙනවා",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1304,
+      "status": "success"
+    },
+    {
+      "file": "vedda_254_20260212_010612_88d6af1b.wav",
+      "reference": "ඔය ඇත්තෝ",
+      "predicted": "ඔය ඇත්තෝ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_373_20260212_020930_687b7fa8.wav",
+      "reference": "කරකුරු ගච්චන යමෙක",
+      "predicted": "කැන ගච්චා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6471,
+      "status": "success"
+    },
+    {
+      "file": "vedda_349_20260212_015756_0b8a5559.wav",
+      "reference": "සන්තෝස පොජ්ජක්",
+      "predicted": "ලත්තෝ පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3571,
+      "status": "success"
+    },
+    {
+      "file": "vedda_306_20260212_013144_ea0d8506.wav",
+      "reference": "එක්ක ඉද තබව්වේ",
+      "predicted": "ඇක්ක ඇට තැනේ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_272_20260212_011449_3e07570c.wav",
+      "reference": "කතාදාමු",
+      "predicted": "කතා දබනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7143,
+      "status": "success"
+    },
+    {
+      "file": "vedda_202_20260212_003851_d771e183.wav",
+      "reference": "මිනිග්ගජ්ජා",
+      "predicted": "මේ රැච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8182,
+      "status": "success"
+    },
+    {
+      "file": "vedda_162_20260211_234439_960e0983.wav",
+      "reference": "දිය රැච්ච",
+      "predicted": "දිය රැච්ච",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_044_20260211_100309_74735f3d.wav",
+      "reference": "කැකුළා",
+      "predicted": "කැකුළා",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_219_20260212_004755_b6c21abc.wav",
+      "reference": "කොයිබ",
+      "predicted": "කොයිබ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_191_20260212_003314_b5d2bd88.wav",
+      "reference": "පය ලාන යමකේ",
+      "predicted": "පයලාන යමක්න",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2727,
+      "status": "success"
+    },
+    {
+      "file": "vedda_312_20260212_013456_35cec3a7.wav",
+      "reference": "මේ කාල මැච්චේ කඳඅරනිග දියතැන කොදොයි",
+      "predicted": "මේ කාල පොජ්ජ කරන්දොයි දෙට ඇත්ට කොදෝ",
+      "exact": false,
+      "wer": 0.8333,
+      "cer": 0.6,
+      "status": "success"
+    },
+    {
+      "file": "vedda_262_20260212_011041_dbee9c25.wav",
+      "reference": "කැකුළා",
+      "predicted": "කැකුලා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_107_20260211_231134_af497928.wav",
+      "reference": "පිලිපොත්තා",
+      "predicted": "දිබ පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6,
+      "status": "success"
+    },
+    {
+      "file": "vedda_054_20260211_100750_092816da.wav",
+      "reference": "තුනම",
+      "predicted": "තොනම",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.25,
+      "status": "success"
+    },
+    {
+      "file": "vedda_002_20260211_092113_bc0966ed.wav",
+      "reference": "ඉච්චර",
+      "predicted": "ඉච්චා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2,
+      "status": "success"
+    },
+    {
+      "file": "vedda_050_20260211_100617_4c7d0aa4.wav",
+      "reference": "මාමිලැත්තෝ",
+      "predicted": "මංගැන ඇත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6,
+      "status": "success"
+    },
+    {
+      "file": "vedda_082_20260211_102527_9d12d3fd.wav",
+      "reference": "කොල පොජ්ජ",
+      "predicted": "කොල පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_206_20260212_004008_c762c3b0.wav",
+      "reference": "කෝණ පොජ්ජ",
+      "predicted": "කොන පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_035_20260211_095422_33be5321.wav",
+      "reference": "ඇඟිලි පොජ්ජ",
+      "predicted": "ඇල්ලි පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1818,
+      "status": "success"
+    },
+    {
+      "file": "vedda_266_20260212_011220_ff577420.wav",
+      "reference": "කරකුරු ගච්චන රුකුල් පොජ්ජට",
+      "predicted": "කාරු පොජ්ජන මැච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7308,
+      "status": "success"
+    },
+    {
+      "file": "vedda_093_20260211_230426_87b4d045.wav",
+      "reference": "කබරා",
+      "predicted": "කබරා",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_053_20260211_100726_d304ba9c.wav",
+      "reference": "දෙකම",
+      "predicted": "දෙකම",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_267_20260212_011258_78201dbb.wav",
+      "reference": "මංගැච්චුවා",
+      "predicted": "මංගැච්චා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2,
+      "status": "success"
+    },
+    {
+      "file": "vedda_243_20260212_010011_e413b3da.wav",
+      "reference": "පුච්චා කඩනවා",
+      "predicted": "පොච්ච කඩනවා",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_014_20260211_093350_744cb290.wav",
+      "reference": "අද දින මැච්ච",
+      "predicted": "තැනේ මැච්ච",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_318_20260212_013749_b221c528.wav",
+      "reference": "උණුදිය රැච්ච එකමක් කැවිල්ලාමු",
+      "predicted": "උණ්දිය රැච්චේ එකමක් කැනල්ලා",
+      "exact": false,
+      "wer": 0.75,
+      "cer": 0.2069,
+      "status": "success"
+    },
+    {
+      "file": "vedda_090_20260211_230237_b483c64d.wav",
+      "reference": "මාම කැච්චයි",
+      "predicted": "මහම කැච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2727,
+      "status": "success"
+    },
+    {
+      "file": "vedda_276_20260212_011610_fe3f1e50.wav",
+      "reference": "මෙයිබ කොදොයි",
+      "predicted": "මේ කොදුයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4167,
+      "status": "success"
+    },
+    {
+      "file": "vedda_167_20260211_234717_4599b355.wav",
+      "reference": "ලූල් පොජ්ජ",
+      "predicted": "රුර පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.4,
+      "status": "success"
+    },
+    {
+      "file": "vedda_331_20260212_014557_20312fd6.wav",
+      "reference": "අප්පිලැත්තෝ කැලෑ පොජ්ජේ මංගච්චනවා",
+      "predicted": "මේ පොජ්ජට ඇත්තෝ කැන පුටච්චා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_375_20260212_021043_61a6081c.wav",
+      "reference": "කුක්කා",
+      "predicted": "කොක්කා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_135_20260211_233050_dc0cbaa8.wav",
+      "reference": "පැඟිරි කොළ",
+      "predicted": "පැදියි හූරා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6,
+      "status": "success"
+    },
+    {
+      "file": "vedda_309_20260212_013326_c4e84616.wav",
+      "reference": "විට පොජ්ජක් කැවිල්ලාන්න මංගච්චප",
+      "predicted": "තැට පොජ්ජක් කැනිලාන මංගච්ච",
+      "exact": false,
+      "wer": 0.75,
+      "cer": 0.2581,
+      "status": "success"
+    },
+    {
+      "file": "vedda_367_20260212_020651_fa3d198b.wav",
+      "reference": "මංගච්චන්න",
+      "predicted": "මංගච්චනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_322_20260212_013924_0f135445.wav",
+      "reference": "ඒ ඇත්තෝ මෙයිබ කොදොයි",
+      "predicted": "ඒ ඇත්තෝ මෙන්දෝ කොදොයි",
+      "exact": false,
+      "wer": 0.25,
+      "cer": 0.2,
+      "status": "success"
+    },
+    {
+      "file": "vedda_245_20260212_010116_780e00e8.wav",
+      "reference": "පටාරින්න",
+      "predicted": "තාරියි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.625,
+      "status": "success"
+    },
+    {
+      "file": "vedda_055_20260211_100810_6a8db3e3.wav",
+      "reference": "හතරම",
+      "predicted": "කටියි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_051_20260211_100643_34146093.wav",
+      "reference": "කුඩප්පිලැත්තෝ",
+      "predicted": "කොල් පොජ්ජ ඇත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7692,
+      "status": "success"
+    },
+    {
+      "file": "vedda_175_20260211_235102_f9b9d778.wav",
+      "reference": "මහ කැකුළියක්‌ මන්දෝ වෙනවා",
+      "predicted": "මහ කැකුළෙක් කරන්දොනවා",
+      "exact": false,
+      "wer": 0.75,
+      "cer": 0.36,
+      "status": "success"
+    },
+    {
+      "file": "vedda_190_20260212_003241_296ed65c.wav",
+      "reference": "කරුකුරු ගච්චන මහ රුකුල පොජ්ජ",
+      "predicted": "කරකුරු ගච්චන මහ රුකල පොජී",
+      "exact": false,
+      "wer": 0.6,
+      "cer": 0.1429,
+      "status": "success"
+    },
+    {
+      "file": "vedda_379_20260212_021221_41ce36ec.wav",
+      "reference": "එත්කයි",
+      "predicted": "දෙක්කා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_188_20260212_003144_523be7d8.wav",
+      "reference": "දිය කෝමං තැන",
+      "predicted": "දිය කෝමංගච්ච",
+      "exact": false,
+      "wer": 0.6667,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_170_20260211_234820_8e9ade6e.wav",
+      "reference": "උගුල් පොජ්ජ",
+      "predicted": "පුකුල් පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.2727,
+      "status": "success"
+    },
+    {
+      "file": "vedda_059_20260211_101136_4ed38ae3.wav",
+      "reference": "දෙකමයි",
+      "predicted": "දෙකමයි",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_049_20260211_100544_fb86db06.wav",
+      "reference": "නැන්දම්මිලැත්තො",
+      "predicted": "නැනලම් මන්දෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6,
+      "status": "success"
+    },
+    {
+      "file": "vedda_347_20260212_015700_b5434959.wav",
+      "reference": "ගෑනියෙක් මන්දො කර ගන්නවා",
+      "predicted": "ගෑන්නේ මංගච්චනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5833,
+      "status": "success"
+    },
+    {
+      "file": "vedda_237_20260212_005726_921fc87f.wav",
+      "reference": "වටනවා",
+      "predicted": "බොටන්නා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8,
+      "status": "success"
+    },
+    {
+      "file": "vedda_259_20260212_010656_d6d1de4c.wav",
+      "reference": "කවිතැන",
+      "predicted": "කවිතැන",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_022_20260211_094303_0d0936b5.wav",
+      "reference": "ඉච්‌ ගෙජ්ජේ බුච්ච",
+      "predicted": "ඉච්චා ගැචක්‌ පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6471,
+      "status": "success"
+    },
+    {
+      "file": "vedda_316_20260212_013653_e39c9647.wav",
+      "reference": "මංගච්චල රදන්න",
+      "predicted": "මංගච්චන රනන්න",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1538,
+      "status": "success"
+    },
+    {
+      "file": "vedda_161_20260211_234423_a1c66b09.wav",
+      "reference": "ගිනි රැච්ච",
+      "predicted": "මේ රැච්ච",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.4,
+      "status": "success"
+    },
+    {
+      "file": "vedda_279_20260212_011710_3a0ebc72.wav",
+      "reference": "මොන්නෙක",
+      "predicted": "බොන්දියි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7143,
+      "status": "success"
+    },
+    {
+      "file": "vedda_192_20260212_003359_4a2f39ac.wav",
+      "reference": "කරකුරැ ගච්චන යමකේ",
+      "predicted": "කරුකුල ගච්චනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4706,
+      "status": "success"
+    },
+    {
+      "file": "vedda_267_20260212_012422_d14d3555.wav",
+      "reference": "චප්පිල ඇත්තන්",
+      "predicted": "චප්පිය ඇත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2308,
+      "status": "success"
+    },
+    {
+      "file": "vedda_346_20260212_015634_9b4b7eeb.wav",
+      "reference": "රුකල් පොජ්ජක් මන්දො කරනවා",
+      "predicted": "රුක් පොජ්ජ මන්දු කරනවා",
+      "exact": false,
+      "wer": 0.75,
+      "cer": 0.16,
+      "status": "success"
+    },
+    {
+      "file": "vedda_260_20260212_010942_6c659a85.wav",
+      "reference": "තැනමක්‌",
+      "predicted": "තැනමක්",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1429,
+      "status": "success"
+    },
+    {
+      "file": "vedda_311_20260212_013421_21a9d228.wav",
+      "reference": "ඔය ඇත්තෝ කවිතැන කතාදමන්න",
+      "predicted": "ඔයලැත්තෝ කරතැන පොජ්ජට",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_150_20260211_234005_d77a41be.wav",
+      "reference": "පය පොජ්ජෙං මංගච්චන දඬු කැච්ච",
+      "predicted": "පය පොජ්ජ මංගච්චන දඬු කැච",
+      "exact": false,
+      "wer": 0.4,
+      "cer": 0.1429,
+      "status": "success"
+    },
+    {
+      "file": "vedda_131_20260211_232859_19a26c71.wav",
+      "reference": "පැණි ඇට පොජ්ජ",
+      "predicted": "පැන ඇට පොජ්ජ",
+      "exact": false,
+      "wer": 0.3333,
+      "cer": 0.1538,
+      "status": "success"
+    },
+    {
+      "file": "vedda_152_20260211_234108_efb54c75.wav",
+      "reference": "හුටු හුටු දඬු කැච්ච",
+      "predicted": "උඩ පොජ්ජ දඬු කැච්ච",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.4737,
+      "status": "success"
+    },
+    {
+      "file": "vedda_362_20260212_020448_7ae0e491.wav",
+      "reference": "කෝනම් පොජ්ජක්",
+      "predicted": "කොනම පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3077,
+      "status": "success"
+    },
+    {
+      "file": "vedda_101_20260211_230831_d29d881b.wav",
+      "reference": "උඩ කෙලිඤ්ඤා",
+      "predicted": "බොට කැන්නේ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8182,
+      "status": "success"
+    },
+    {
+      "file": "vedda_089_20260211_102903_473ef6fb.wav",
+      "reference": "මෙත්තයි",
+      "predicted": "මෙතැන",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5714,
+      "status": "success"
+    },
+    {
+      "file": "vedda_333_20260212_014654_4c07bfdb.wav",
+      "reference": "කැකුළෙක්‌ චප්පිල ඇත්තන්ට ගච්චනවා",
+      "predicted": "කැකුළෙක් කරපියි ඇත්තෝ ගච්චා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3438,
+      "status": "success"
+    },
+    {
+      "file": "vedda_216_20260212_004623_39fba1b2.wav",
+      "reference": "තොපන්‌",
+      "predicted": "තොපන්න",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_123_20260211_232216_d57d2451.wav",
+      "reference": "මස් පොජ්ජ",
+      "predicted": "මේ පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_381_20260212_021301_6bec8a15.wav",
+      "reference": "ඇත්තකයි",
+      "predicted": "ඇත්තැකයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1429,
+      "status": "success"
+    },
+    {
+      "file": "vedda_021_20260211_094214_7f7521aa.wav",
+      "reference": "ඉච්‌ ගෙජ්ජ",
+      "predicted": "ඉච්ච දිචා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6,
+      "status": "success"
+    },
+    {
+      "file": "vedda_189_20260212_003205_8c2dd2c1.wav",
+      "reference": "කරකුරු ගච්චන රුකුල්පොජ්ජ",
+      "predicted": "කර ගල රුකුල පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.375,
+      "status": "success"
+    },
+    {
+      "file": "vedda_073_20260211_102013_bbe72fb7.wav",
+      "reference": "වැඩි තැන මන්දු කරන ලකුණු පොජීජ",
+      "predicted": "බෙඩතැන මන්දු කරන ලකුණු පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_108_20260211_231305_3c6ab90b.wav",
+      "reference": "පෙඟිචා",
+      "predicted": "දිච්චා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_273_20260212_011507_25d39ae2.wav",
+      "reference": "මේ ඇත්තොන්ට",
+      "predicted": "මේ ඇත්තෝ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.3636,
+      "status": "success"
+    },
+    {
+      "file": "vedda_351_20260212_015848_302f1240.wav",
+      "reference": "ගෑනියෙක්",
+      "predicted": "ගයින්නේ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.75,
+      "status": "success"
+    },
+    {
+      "file": "vedda_104_20260211_230942_fda22824.wav",
+      "reference": "පාට චප්පි",
+      "predicted": "පාට ගජ්ජේ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.4444,
+      "status": "success"
+    },
+    {
+      "file": "vedda_001_20260211_091413_d1dd712e.wav",
+      "reference": "ඌරුවරිගේ වන්නියලැත්තෝ",
+      "predicted": "බුරු පොජ්ජ මන්දොයට",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8095,
+      "status": "success"
+    },
+    {
+      "file": "vedda_010_20260211_093009_5f640d19.wav",
+      "reference": "මාමිලැත්තෝ",
+      "predicted": "මංගැන ඇත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6,
+      "status": "success"
+    },
+    {
+      "file": "vedda_016_20260211_093508_b7807f05.wav",
+      "reference": "කාල මැච්ච",
+      "predicted": "කාල පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.4444,
+      "status": "success"
+    },
+    {
+      "file": "vedda_026_20260211_094609_0db25a7a.wav",
+      "reference": "ඇහි රැකුල ලගතැනෙ බුචිච",
+      "predicted": "ඇහිරුකුල මන්දෝ බොච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.4545,
+      "status": "success"
+    },
+    {
+      "file": "vedda_034_20260211_095356_d17cc747.wav",
+      "reference": "අයි දණ්ඩ",
+      "predicted": "අයි දමනවා",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_040_20260211_100032_07ccb53d.wav",
+      "reference": "ආත්තිලැත්තෝ",
+      "predicted": "අත් තැනට",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7273,
+      "status": "success"
+    },
+    {
+      "file": "vedda_043_20260211_100246_e5736112.wav",
+      "reference": "නෑනිලැත්තෝ",
+      "predicted": "නැනලැත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2,
+      "status": "success"
+    },
+    {
+      "file": "vedda_047_20260211_100439_ab6c1795.wav",
+      "reference": "මචිනලඇත්තෝ",
+      "predicted": "බච්නලැත්තෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3,
+      "status": "success"
+    },
+    {
+      "file": "vedda_056_20260211_100833_07b59c93.wav",
+      "reference": "පහමයි",
+      "predicted": "පහමයි",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_057_20260211_100854_89ce68de.wav",
+      "reference": "හයමයි",
+      "predicted": "චයම්නේ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8,
+      "status": "success"
+    },
+    {
+      "file": "vedda_065_20260211_101447_b6eb614d.wav",
+      "reference": "අටමයි",
+      "predicted": "පොට මැච්ච",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_078_20260211_102230_703f3f15.wav",
+      "reference": "දිගතැනේ කොටු පොජ්ජ",
+      "predicted": "ගළතැන කොටු පොජ්ජ",
+      "exact": false,
+      "wer": 0.3333,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_080_20260211_102444_0be84e14.wav",
+      "reference": "බාග තැනයි",
+      "predicted": "මංගැට තැනයි",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.4444,
+      "status": "success"
+    },
+    {
+      "file": "vedda_092_20260211_230347_a83150c9.wav",
+      "reference": "බොටකඳා",
+      "predicted": "බට කඳනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_103_20260211_230921_d0b88203.wav",
+      "reference": "කඳං තලන්නා",
+      "predicted": "කලත්තැන",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7,
+      "status": "success"
+    },
+    {
+      "file": "vedda_118_20260211_231907_23032905.wav",
+      "reference": "මී මඤ්ඤා",
+      "predicted": "මේ මඤ්ඤා",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.125,
+      "status": "success"
+    },
+    {
+      "file": "vedda_142_20260211_233622_aab61480.wav",
+      "reference": "පයින්ඩකාරී",
+      "predicted": "පයට කරනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8,
+      "status": "success"
+    },
+    {
+      "file": "vedda_149_20260211_233931_43e62a4c.wav",
+      "reference": "දඬු කැච්ච",
+      "predicted": "දඬු කැච්ච",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_158_20260211_234327_31a75c5b.wav",
+      "reference": "මහ දිය ගං ඇල්ල",
+      "predicted": "මහ පොජ්ජ ගච්ච",
+      "exact": false,
+      "wer": 0.75,
+      "cer": 0.6429,
+      "status": "success"
+    },
+    {
+      "file": "vedda_169_20260211_234756_2ca19447.wav",
+      "reference": "තඩි පොජ්ජ",
+      "predicted": "තැන පොජ්ජ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_195_20260212_003513_8b24f169.wav",
+      "reference": "මං පොජ්ජ",
+      "predicted": "මං පොජ්ජ",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_209_20260212_004132_3e93668a.wav",
+      "reference": "බොරු තැන මන්දො වෙනචා",
+      "predicted": "බොතැන මන්දෝ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5,
+      "status": "success"
+    },
+    {
+      "file": "vedda_215_20260212_004553_dc1410cd.wav",
+      "reference": "කොදොයි",
+      "predicted": "කොදියි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_234_20260212_005457_e76130ab.wav",
+      "reference": "මියඹට දමනවා",
+      "predicted": "දියමට දමනවා",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1818,
+      "status": "success"
+    },
+    {
+      "file": "vedda_236_20260212_005705_3d83b232.wav",
+      "reference": "ඉඳ තිබනවා",
+      "predicted": "ඉඩ තැනනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3333,
+      "status": "success"
+    },
+    {
+      "file": "vedda_244_20260212_010049_7259e4e1.wav",
+      "reference": "කඳපල්ලි",
+      "predicted": "කඳ පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.7143,
+      "status": "success"
+    },
+    {
+      "file": "vedda_248_20260212_010247_a9c2259d.wav",
+      "reference": "විට පොජ්ජක්",
+      "predicted": "බෙට පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3636,
+      "status": "success"
+    },
+    {
+      "file": "vedda_252_20260212_010508_cb8114f0.wav",
+      "reference": "ගුටි පොජ්ජ මන්දො කරගන්න",
+      "predicted": "කැක් පොජ්ජ මංගච්චනවා",
+      "exact": false,
+      "wer": 0.75,
+      "cer": 0.6087,
+      "status": "success"
+    },
+    {
+      "file": "vedda_253_20260212_010557_0d4c0f64.wav",
+      "reference": "කොදොයි",
+      "predicted": "කොදියි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.1667,
+      "status": "success"
+    },
+    {
+      "file": "vedda_261_20260212_011018_d50640f3.wav",
+      "reference": "කැවිල්ලාන්න",
+      "predicted": "කැල්ලාන",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3636,
+      "status": "success"
+    },
+    {
+      "file": "vedda_264_20260212_011136_2a624a55.wav",
+      "reference": "කවි තැනක්‌",
+      "predicted": "කැදිට",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8,
+      "status": "success"
+    },
+    {
+      "file": "vedda_265_20260212_011156_da6a6e22.wav",
+      "reference": "කතා දමන්න",
+      "predicted": "කතා දමන්න",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_268_20260212_011313_5465d417.wav",
+      "reference": "මංගච්චල",
+      "predicted": "මං පොජ්ජ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.8571,
+      "status": "success"
+    },
+    {
+      "file": "vedda_269_20260212_011339_141e493c.wav",
+      "reference": "රදන්න",
+      "predicted": "ගඳන්නේ",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.6,
+      "status": "success"
+    },
+    {
+      "file": "vedda_283_20260212_011823_fcb3fc39.wav",
+      "reference": "මේ කැකුළා",
+      "predicted": "මේ කැකුලා",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1111,
+      "status": "success"
+    },
+    {
+      "file": "vedda_288_20260212_012042_42640828.wav",
+      "reference": "ඒ ඇත්තී",
+      "predicted": "ඒ ඇත්තෝ",
+      "exact": false,
+      "wer": 0.5,
+      "cer": 0.1429,
+      "status": "success"
+    },
+    {
+      "file": "vedda_290_20260212_012120_881e44f5.wav",
+      "reference": "මහ",
+      "predicted": "මේරා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_314_20260212_013551_f37762ba.wav",
+      "reference": "කැකුළා හොඳවාගේ කවි තැනක්‌ කතා දමන්න",
+      "predicted": "කැකුල ඇත්තෝ කරගන්න කටල දමනවා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.5714,
+      "status": "success"
+    },
+    {
+      "file": "vedda_321_20260212_013858_c26e378a.wav",
+      "reference": "මාම කැච්ච්මක් සතුටු තැනෙයි",
+      "predicted": "මාම් කැච්චන ලකුට තැනයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.3462,
+      "status": "success"
+    },
+    {
+      "file": "vedda_361_20260212_020413_f5d0112a.wav",
+      "reference": "කඳුළු පොජ්ජක් පටෑරුනා",
+      "predicted": "කඳුරු පොජ්ජ පටිරා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2857,
+      "status": "success"
+    },
+    {
+      "file": "vedda_366_20260212_020633_46584568.wav",
+      "reference": "මංගච්චනවා",
+      "predicted": "මංගච්චා",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 0.2222,
+      "status": "success"
+    },
+    {
+      "file": "vedda_376_20260212_021100_15c8fb4a.wav",
+      "reference": "චප්පි",
+      "predicted": "චප්පි",
+      "exact": true,
+      "wer": 0.0,
+      "cer": 0.0,
+      "status": "success"
+    },
+    {
+      "file": "vedda_382_20260212_021336_120e673c.wav",
+      "reference": "මේ",
+      "predicted": "බෙයි",
+      "exact": false,
+      "wer": 1.0,
+      "cer": 1.0,
+      "status": "success"
+    }
+  ]
+}

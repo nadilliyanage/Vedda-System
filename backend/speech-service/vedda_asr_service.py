@@ -9,11 +9,14 @@ import librosa
 import os
 from pathlib import Path
 
-# Model path resolution: env var > v4 (if exists) > v2 (stable fallback)
+# Model path resolution: env var > colab-final > v4 > v2 (stable fallback)
 def _resolve_model_path():
     env = os.environ.get('VEDDA_ASR_MODEL_PATH')
     if env and os.path.exists(env):
         return env
+    colab_final = 'vedda-asr-model/models/whisper-vedda-final'
+    if os.path.exists(colab_final):
+        return colab_final
     v4 = 'vedda-asr-model/models/whisper-frozen-v4/final'
     if os.path.exists(v4):
         return v4
@@ -48,11 +51,7 @@ class VeddaASRService:
         print(f"[INFO] Loading Vedda ASR model from: {self.model_path}")
         
         # Load processor and model
-        self.processor = WhisperProcessor.from_pretrained(
-            self.model_path,
-            language="Sinhala",
-            task="transcribe"
-        )
+        self.processor = WhisperProcessor.from_pretrained(self.model_path)
         
         self.model = WhisperForConditionalGeneration.from_pretrained(self.model_path)
         
@@ -114,16 +113,16 @@ class VeddaASRService:
                 return_tensors="pt"
             ).input_features.to(self.device)
 
-            # Force Sinhala + transcribe (must match training)
-            forced_ids = [[1, self.si_token_id], [2, self.transcribe_id]]
-            
-            # Generate transcription with tuned inference params
+            # Force Sinhala + transcribe using modern language/task API
+            # Clear max_length from generation_config to avoid conflict with max_new_tokens
+            if hasattr(self.model, 'generation_config'):
+                self.model.generation_config.max_length = None
             with torch.no_grad():
                 predicted_ids = self.model.generate(
                     input_features,
-                    forced_decoder_ids=forced_ids,
+                    language='si',
+                    task='transcribe',
                     max_new_tokens=100,
-                    suppress_tokens=[],
                     no_repeat_ngram_size=4,
                     num_beams=5,
                     repetition_penalty=1.5,
