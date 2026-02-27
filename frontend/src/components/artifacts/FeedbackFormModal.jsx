@@ -122,7 +122,7 @@ const FeedbackFormModal = ({ isOpen, onClose, artifact }) => {
             onClick={onClose}
             className="text-white/80 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
           >
-            <FaTimes size={20} />
+            <FaTimes size={20} color="black" />
           </button>
         </div>
 
