@@ -8,8 +8,7 @@ import TranslatorPage from "./pages/TranslatorPage.jsx";
 import VeddaLearning from "./pages/LearningManagement/VeddaLearning.jsx";
 import ArtifactPage from "./pages/ArtifactPage.jsx";
 import VisualsPage from "./pages/VisualsPage.jsx";
-import LoginPage from "./pages/LoginPage.jsx";
-import RegisterPage from "./pages/RegisterPage.jsx";
+import AuthPage from "./components/auth/AuthPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
 import Visual3DViewer from "./pages/Visual3DViewer.jsx";
 
@@ -26,8 +25,8 @@ const AppRouter = () => {
   return (
     <Routes>
       {/* Auth routes */}
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/login" element={<AuthPage initialMode="login" />} />
+      <Route path="/register" element={<AuthPage initialMode="register" />} />
       
       {/* Main routes */}
       <Route element={<Layout />}>
