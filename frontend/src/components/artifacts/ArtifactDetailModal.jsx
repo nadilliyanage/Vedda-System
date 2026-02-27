@@ -1,15 +1,28 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
 import { FaTimes, FaCalendarAlt, FaRuler, FaLeaf, FaMapMarkerAlt, FaTag, FaEdit } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { getArtifacts } from "../../services/artifactService";
 import FeedbackFormModal from "./FeedbackFormModal";
 import { useAuth } from "../../contexts/AuthContext";
+import toast from "react-hot-toast";
 
 const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
   const [relatedArtifacts, setRelatedArtifacts] = useState([]);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const { user, isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSuggestEdit = () => {
+    if (!isAuthenticated) {
+      toast("You have to sign in to suggest an edit", { icon: "🔒" });
+      onClose();
+      navigate("/login");
+      return;
+    }
+    setShowFeedbackForm(true);
+  };
 
   useEffect(() => {
     if (artifact?.category) {
@@ -146,17 +159,15 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
           )}
 
           {/* Suggest Edit Button */}
-          {isAuthenticated && (
-            <section className="mb-6">
-              <button
-                onClick={() => setShowFeedbackForm(true)}
-                className="w-full px-4 py-3 border border-1 border-gray-200 hover:border-gray-400 rounded-lg transition-all font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
-              >
-                <FaEdit />
-                Suggest an Edit
-              </button>
-            </section>
-          )}
+          <section className="mb-6">
+            <button
+              onClick={handleSuggestEdit}
+              className="w-full px-4 py-3 border border-1 border-gray-200 hover:border-gray-400 rounded-lg transition-all font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+            >
+              <FaEdit />
+              Suggest an Edit
+            </button>
+          </section>
 
           {/* Related Artifacts */}
           {relatedArtifacts.length > 0 && (
