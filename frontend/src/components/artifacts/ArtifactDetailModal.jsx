@@ -1,10 +1,14 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { FaTimes, FaCalendarAlt, FaRuler, FaLeaf, FaMapMarkerAlt, FaTag } from "react-icons/fa";
+import { FaTimes, FaCalendarAlt, FaRuler, FaLeaf, FaMapMarkerAlt, FaTag, FaEdit } from "react-icons/fa";
 import { getArtifacts } from "../../services/artifactService";
+import FeedbackFormModal from "./FeedbackFormModal";
+import { useAuth } from "../../contexts/AuthContext";
 
 const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
   const [relatedArtifacts, setRelatedArtifacts] = useState([]);
+  const [showFeedbackForm, setShowFeedbackForm] = useState(false);
+  const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
     if (artifact?.category) {
@@ -100,6 +104,19 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
             </section>
           )}
 
+          {/* Suggest Edit Button */}
+          {isAuthenticated && (
+            <section className="mb-6">
+              <button
+                onClick={() => setShowFeedbackForm(true)}
+                className="w-full px-4 py-3 border border-1 border-gray-200 hover:border-gray-400 rounded-lg transition-all font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+              >
+                <FaEdit />
+                Suggest an Edit
+              </button>
+            </section>
+          )}
+
           {/* Related Artifacts */}
           {relatedArtifacts.length > 0 && (
             <section className="mb-6">
@@ -132,6 +149,13 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
             </section>
           )}
         </div>
+
+        {/* Feedback Form Modal */}
+        <FeedbackFormModal
+          isOpen={showFeedbackForm}
+          onClose={() => setShowFeedbackForm(false)}
+          artifact={artifact}
+        />
       </div>
     </div>
   );
