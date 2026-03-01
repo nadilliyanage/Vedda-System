@@ -162,59 +162,32 @@ def train_model(df: pd.DataFrame, test_size=0.2, random_state=42):
     print("\n===== INDIVIDUAL MODEL PERFORMANCE =====")
     print(f"{'Logistic Regression':25s} - Accuracy: {acc_individual:.4f}, Macro F1: {f1_individual:.4f}")
 
-    # Pipeline: TF-IDF char ngrams + Logistic Regression
-    pipeline = Pipeline([
-        (
-            "tfidf",
-            TfidfVectorizer(
-                analyzer="char",
-                ngram_range=(3, 6),
-                sublinear_tf=True,
-                max_features=50000
-            )
-        ),
-        (
-            "clf",
-            LogisticRegression(
-                max_iter=3000,
-                solver="lbfgs",
-                class_weight="balanced"
-            )
-
-        )
-    ])
-
-    print("\nTraining Logistic Regression...")
-    pipeline.fit(X_train, y_train)
-
-    # Evaluation
-    y_pred = pipeline.predict(X_test)
-
-    acc = accuracy_score(y_test, y_pred)
-    macro_f1 = f1_score(y_test, y_pred, average="macro")
-
-    print("\n===== EVALUATION RESULTS =====")
-    print(f"Accuracy : {acc:.4f}")
-    print(f"Macro F1 : {macro_f1:.4f}")
-
     print("\n===== CLASSIFICATION REPORT =====")
     print(
         classification_report(
             y_test,
-            y_pred,
-            labels=ALLOWED_LABELS,   # consistent reporting
+            y_pred_individual,
+            labels=ALLOWED_LABELS,
             digits=4,
             zero_division=0
         )
     )
 
-    cm = confusion_matrix(y_test, y_pred, labels=ALLOWED_LABELS)
+    cm = confusion_matrix(y_test, y_pred_individual, labels=ALLOWED_LABELS)
     cm_df = pd.DataFrame(cm, index=ALLOWED_LABELS, columns=ALLOWED_LABELS)
 
     print("\n===== CONFUSION MATRIX =====")
     print(cm_df)
 
-    return pipeline, acc, macro_f1, cm_df
+    pipeline = Pipeline([
+        ("tfidf", tfidf_baseline),
+        ("clf",   lr_individual)
+    ])
+
+    cm = confusion_matrix(y_test, y_pred_individual, labels=ALLOWED_LABELS)
+    cm_df = pd.DataFrame(cm, index=ALLOWED_LABELS, columns=ALLOWED_LABELS)
+
+    return pipeline, acc_individual, f1_individual, cm_df
 
 
 # =========================

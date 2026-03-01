@@ -162,82 +162,29 @@ def train_model(df: pd.DataFrame, test_size=0.2, random_state=42):
     print("\n===== INDIVIDUAL MODEL PERFORMANCE =====")
     print(f"{'Gradient Boosting':25s} - Accuracy: {acc_individual:.4f}, Macro F1: {f1_individual:.4f}")
 
-    # Pipeline: TF-IDF char ngrams + Gradient Boosting
-    pipeline = Pipeline([
-        (
-            "tfidf",
-            TfidfVectorizer(
-                analyzer="char",
-                ngram_range=(3, 6),
-                sublinear_tf=True,
-                max_features=50000
-            )
-        ),
-        (
-            "gb",
-            GradientBoostingClassifier(
-                n_estimators=200,
-                max_depth=6,
-                learning_rate=0.1,
-                subsample=0.8,
-                min_samples_split=4,
-                min_samples_leaf=2,
-                max_features="sqrt",
-                random_state=42,
-                validation_fraction=0.1,
-                n_iter_no_change=10,
-                verbose=0
-            )
-        )
-    ])
-
-    print("\n===== TRAINING GRADIENT BOOSTING MODEL =====")
-    print("Using 200 sequential trees with optimized hyperparameters")
-    print("Each tree learns from previous mistakes for maximum accuracy")
-    print("Training Gradient Boosting classifier...")
-    pipeline.fit(X_train, y_train)
-    
-    # Evaluation
-    y_pred = pipeline.predict(X_test)
-
-    acc = accuracy_score(y_test, y_pred)
-    macro_f1 = f1_score(y_test, y_pred, average="macro")
-
-    print("\n===== GRADIENT BOOSTING EVALUATION RESULTS =====")
-    print(f"Accuracy : {acc:.4f}")
-    print(f"Macro F1 : {macro_f1:.4f}")
-    
-    # Feature importance (top 10 features)
-    gb_model = pipeline.named_steps['gb']
-    tfidf = pipeline.named_steps['tfidf']
-    
-    if hasattr(gb_model, 'feature_importances_'):
-        feature_names = tfidf.get_feature_names_out()
-        importances = gb_model.feature_importances_
-        indices = importances.argsort()[-10:][::-1]
-        
-        print("\n===== TOP 10 IMPORTANT FEATURES =====")
-        for i, idx in enumerate(indices, 1):
-            print(f"{i:2d}. {feature_names[idx]:15s} - Importance: {importances[idx]:.6f}")
-
     print("\n===== CLASSIFICATION REPORT =====")
     print(
         classification_report(
             y_test,
-            y_pred,
-            labels=ALLOWED_LABELS,   # consistent reporting
+            y_pred_individual,
+            labels=ALLOWED_LABELS,
             digits=4,
             zero_division=0
         )
     )
 
-    cm = confusion_matrix(y_test, y_pred, labels=ALLOWED_LABELS)
+    cm = confusion_matrix(y_test, y_pred_individual, labels=ALLOWED_LABELS)
     cm_df = pd.DataFrame(cm, index=ALLOWED_LABELS, columns=ALLOWED_LABELS)
 
     print("\n===== CONFUSION MATRIX =====")
     print(cm_df)
 
-    return pipeline, acc, macro_f1, cm_df
+    pipeline = Pipeline([
+        ("tfidf", tfidf_baseline),
+        ("gb",    gb_individual)
+    ])
+
+    return pipeline, acc_individual, f1_individual, cm_df
 
 
 # =========================
