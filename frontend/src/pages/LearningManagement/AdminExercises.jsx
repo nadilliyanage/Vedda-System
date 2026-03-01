@@ -435,7 +435,7 @@ const AdminExercises = () => {
               <table className="min-w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="hidden px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       ID
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -458,7 +458,7 @@ const AdminExercises = () => {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {exercises.map((exercise) => (
                     <tr key={exercise.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="hidden px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {exercise.id}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
