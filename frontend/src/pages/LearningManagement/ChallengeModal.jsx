@@ -347,8 +347,9 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
 
   // ---------- render ----------
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[92vh] overflow-y-auto flex flex-col">
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundImage: 'url(/assets/background-images/challenge-background.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden">
+        <div className="overflow-y-auto flex flex-col flex-1">
 
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-5 rounded-t-2xl flex-shrink-0">
@@ -456,7 +457,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
                 <p className="text-xl font-bold text-red-700">
                   {timeLeft === 0 ? "Time's up! ⏰" : 'Not quite right 😔'}
                 </p>
-                <p className="text-red-600 text-sm mt-1">Keep practicing — you&apos;ll get it next time!</p>
+                <p className="text-red-600 text-sm mt-1">Keep practicing - you&apos;ll get it next time!</p>
               </>
             )}
           </div>
@@ -465,7 +466,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
         {/* AI Summary */}
         {submitted && (
           <div className="mx-6 mb-6 p-5 bg-white border-2 border-dashed border-blue-300 rounded-xl">
-            <h4 className="text-base font-bold text-gray-800 mb-3">🤖 AI Feedback</h4>
+            <h4 className="text-base font-bold text-gray-800 mb-3">AI Feedback</h4>
             {isGeneratingSummary ? (
               <div className="flex items-center gap-2 text-gray-500">
                 <FaSpinner className="animate-spin text-blue-500" />
@@ -476,6 +477,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
             )}
           </div>
         )}
+        </div>
       </div>
     </div>
   );
