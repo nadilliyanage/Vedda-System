@@ -369,12 +369,6 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
 
           <div className="flex items-center justify-between">
             <div className="flex gap-3">
-              <div className="flex items-center gap-1.5 bg-white bg-opacity-20 px-3 py-1.5 rounded-full text-sm font-bold">
-                <FaStar className="text-yellow-300" /> {question?.xp ?? 0} XP
-              </div>
-              <div className="flex items-center gap-1.5 bg-white bg-opacity-20 px-3 py-1.5 rounded-full text-sm font-bold">
-                <FaGem className="text-blue-200" /> {question?.points ?? 0} pts
-              </div>
             </div>
             <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full font-bold text-sm
               ${timeLeft <= 10 ? 'bg-red-500 text-white animate-pulse' : 'bg-blue-400 text-white'}`}>
