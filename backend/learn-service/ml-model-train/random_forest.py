@@ -20,15 +20,12 @@ from sklearn.metrics import (
 
 ALLOWED_LABELS = [
     "spelling_error",
-    "wrong_question_word",
-    "wrong_verb_form",
-    "missing_word",
     "word_order_error",
-    "wrong_word",
+    "missing_word",
     "other"
 ]
 
-MODEL_OUT_PATH = "../app/ml/mistake_classifier_lr.joblib"
+MODEL_OUT_PATH = "../app/ml/mistake_classifier_llr.joblib"
 
 
 # =========================
@@ -137,6 +134,35 @@ def train_model(df: pd.DataFrame, test_size=0.2, random_state=42):
             random_state=random_state,
             stratify=y
         )
+
+    # TF-IDF for standalone baselines: word-level unigrams/bigrams
+    # provide a higher-level view of each sample
+    tfidf_baseline = TfidfVectorizer(
+        analyzer="word",
+        ngram_range=(1, 2),
+        sublinear_tf=True,
+        max_features=8000
+    )
+
+    X_train_baseline = tfidf_baseline.fit_transform(X_train)
+    X_test_baseline  = tfidf_baseline.transform(X_test)
+
+    rf_individual = RandomForestClassifier(
+        n_estimators=30,
+        max_depth=4,
+        min_samples_split=10,
+        max_features="sqrt",
+        class_weight="balanced",
+        random_state=7,
+        n_jobs=-1
+    )
+    rf_individual.fit(X_train_baseline, y_train)
+    y_pred_individual = rf_individual.predict(X_test_baseline)
+    acc_individual = accuracy_score(y_test, y_pred_individual)
+    f1_individual  = f1_score(y_test, y_pred_individual, average="macro")
+
+    print("\n===== INDIVIDUAL MODEL PERFORMANCE =====")
+    print(f"{'Random Forest':25s} - Accuracy: {acc_individual:.4f}, Macro F1: {f1_individual:.4f}")
 
     # Pipeline: TF-IDF char ngrams + Random Forest
     pipeline = Pipeline([
