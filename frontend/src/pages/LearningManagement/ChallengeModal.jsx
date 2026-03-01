@@ -431,7 +431,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
                     }}
                     className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-bold hover:opacity-90 transition-all"
                   >
-                    {isCorrect ? 'Next Challenge' : 'Continue'}
+                    {isCorrect ? 'Continue' : 'Try Again'}
                   </button>
                 )}
               </>

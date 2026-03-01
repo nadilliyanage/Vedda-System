@@ -75,7 +75,7 @@ def submit_answer():
         return jsonify({"error": "Invalid ID format"}), 400
 
     if is_challenge:
-        doc = get_collection("challenges").find_one({"_id": object_id})
+        doc = get_collection("exercises").find_one({"_id": object_id, "type": "CHALLENGE"})
         if not doc:
             return jsonify({"error": "Challenge not found"}), 404
     else:
