@@ -150,6 +150,7 @@ def submit_answer():
             "correct_answer": correct_answer,
             "student_answer": student_answer,
             "attempt_type": attempt_type,
+            "error_type": error_type,
         },
         daemon=True
     ).start()

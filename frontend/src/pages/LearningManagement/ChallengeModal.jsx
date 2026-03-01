@@ -78,23 +78,22 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
   // ---------- submit handler ----------
   const handleSubmit = useCallback((timedOut = false) => {
     if (submitted) return;
+    // Don't allow submit if time ran out
+    if (!timerActive && timeLeft === 0) return;
+
     setSubmitted(true);
     setTimerActive(false);
 
-    const correct = timedOut ? false : validateAnswer();
+    const correct = validateAnswer();
     setIsCorrect(correct);
 
-    if (correct) {
-      const earnedXP = question?.xp || 0;
-      const earnedCoins = question?.points || 0;
-      setTimeout(() => {
-        onComplete(challenge.id, earnedXP, earnedCoins);
-      }, 2500);
-    }
-
+    // Generate AI summary
     generateAISummary(correct);
+    
+    // Don't call onComplete here - let user see the result first
+    // onComplete will be called when user clicks "Next Challenge"
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [submitted, validateAnswer, question, challenge, onComplete]);
+  }, [submitted, validateAnswer, question, challenge, timerActive, timeLeft]);
 
   // ---------- timer countdown ----------
   useEffect(() => {
@@ -103,7 +102,8 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
       setTimeLeft(prev => {
         if (prev <= 1) {
           clearInterval(timer);
-          handleSubmit(true);
+          setTimerActive(false);
+          toast.error('Time is up! You cannot submit answers now.');
           return 0;
         }
         return prev - 1;
@@ -158,7 +158,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
 
   // ---------- answer change handlers ----------
   const handleMultipleChoiceChange = (optionId, isSingle) => {
-    if (submitted) return;
+    if (submitted || (!timerActive && timeLeft === 0)) return;
     setAnswers(prev => ({
       ...prev,
       [question.questionNo]: isSingle
@@ -170,12 +170,12 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
   };
 
   const handleTextChange = (value) => {
-    if (submitted) return;
+    if (submitted || (!timerActive && timeLeft === 0)) return;
     setAnswers(prev => ({ ...prev, [question.questionNo]: value }));
   };
 
   const handlePairChange = (left, right) => {
-    if (submitted) return;
+    if (submitted || (!timerActive && timeLeft === 0)) return;
     setAnswers(prev => ({
       ...prev,
       [question.questionNo]: { ...(prev[question.questionNo] || {}), [left]: right }
@@ -249,7 +249,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
                       type={isSingle ? 'radio' : 'checkbox'}
                       checked={sel || false}
                       onChange={() => !submitted && handleMultipleChoiceChange(option.id, isSingle)}
-                      disabled={submitted}
+                      disabled={submitted || (!timerActive && timeLeft === 0)}
                       className="w-5 h-5 text-blue-600 mr-3 flex-shrink-0"
                     />
                     <span className="text-gray-800 flex-1">{option.text}</span>
@@ -272,7 +272,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
               value={userAnswer || ''}
               onChange={e => handleTextChange(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && canSubmit() && !submitted && handleSubmit()}
-              disabled={submitted}
+              disabled={submitted || (!timerActive && timeLeft === 0)}
               placeholder="Type your answer here..."
               className={`
                 w-full border-2 rounded-xl px-4 py-3 text-lg outline-none transition-all
@@ -305,7 +305,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
                   <select
                     value={selected}
                     onChange={e => handlePairChange(pair.left, e.target.value)}
-                    disabled={submitted}
+                    disabled={submitted || (!timerActive && timeLeft === 0)}
                     className={`
                       flex-1 border-2 rounded-xl px-4 py-3 outline-none transition-all
                       ${submitted
@@ -377,7 +377,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
               </div>
             </div>
             <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full font-bold text-sm
-              ${timeLeft <= 10 ? 'bg-red-500 animate-pulse' : 'bg-white bg-opacity-20'}`}>
+              ${timeLeft <= 10 ? 'bg-red-500 text-white animate-pulse' : 'bg-blue-400 text-white'}`}>
               <FaClock />
               <span>{Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, '0')}</span>
             </div>
@@ -386,7 +386,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
           {/* Timer progress bar */}
           <div className="mt-3 bg-white bg-opacity-20 rounded-full h-1.5">
             <div
-              className={`h-1.5 rounded-full transition-all duration-1000 ${timeLeft <= 10 ? 'bg-red-400' : 'bg-white'}`}
+              className={`h-1.5 rounded-full transition-all duration-1000 ${timeLeft <= 10 ? 'bg-red-400' : 'bg-blue-300'}`}
               style={{ width: `${(timeLeft / (question?.timeLimitSec || 45)) * 100}%` }}
             />
           </div>
@@ -398,7 +398,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
 
           {/* Action Buttons */}
           <div className="mt-6 flex items-center justify-end gap-3">
-            {!submitted ? (
+            {!submitted && !(!timerActive && timeLeft === 0) ? (
               <button
                 onClick={() => handleSubmit(false)}
                 disabled={!canSubmit()}
@@ -416,12 +416,24 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
                 >
                   <FaRedo /> Try Again
                 </button>
-                <button
-                  onClick={onClose}
-                  className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-bold hover:opacity-90 transition-all"
-                >
-                  Next Challenge
-                </button>
+                {submitted && (
+                  <button
+                    onClick={() => {
+                      // Call onComplete if answer was correct to update parent state
+                      if (isCorrect) {
+                        const earnedXP = question?.xp || 0;
+                        const earnedCoins = question?.points || 0;
+                        onComplete(challenge._id || challenge.id, earnedXP, earnedCoins);
+                      } else {
+                        // If incorrect, just close the modal
+                        onClose();
+                      }
+                    }}
+                    className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-bold hover:opacity-90 transition-all"
+                  >
+                    {isCorrect ? 'Next Challenge' : 'Continue'}
+                  </button>
+                )}
               </>
             )}
           </div>

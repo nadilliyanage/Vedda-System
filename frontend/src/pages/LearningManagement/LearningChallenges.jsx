@@ -37,46 +37,22 @@ const LearningChallenges = ({ onBack }) => {
   const fetchChallenges = async () => {
     try {
       const response = await challengesAPI.getAll(user?.id);
-      setChallenges(response.data);
+      const challengesData = response.data;
+
+      // Ensure first challenge is enabled by default if it doesn't have isEnabled set
+      if (challengesData.length > 0 && !challengesData[0].isEnabled && !challengesData[0].isCompleted) {
+        challengesData[0].isEnabled = true;
+      }
+
+      setChallenges(challengesData);
     } catch (error) {
       console.error('Failed to fetch challenges:', error);
-      // Use mock data if API fails
-      setChallenges(generateMockChallenges());
+      setChallenges([]);
     } finally {
       setLoading(false);
     }
   };
 
-  const generateMockChallenges = () => {
-    const types = ['multiple_choice', 'text_input', 'match_pairs'];
-    const mockChallenges = [];
-    
-    for (let i = 1; i <= 30; i++) {
-      const type = types[i % types.length];
-      mockChallenges.push({
-        id: `challenge_${i}`,
-        challengeNumber: i,
-        question: {
-          questionNo: String(i),
-          type,
-          prompt: `Challenge ${i}: Complete this Sinhala language task`,
-          xp: 20 + (i % 3) * 10,
-          points: 4 + (i % 2) * 2,
-          timeLimitSec: 30,
-          options: [
-            { id: 'A', text: 'Option A', correct: true },
-            { id: 'B', text: 'Option B', correct: false },
-            { id: 'C', text: 'Option C', correct: false },
-          ],
-          correctOptions: ['A'],
-          answer: 'sample answer',
-          pairs: [{ left: 'Left 1', right: 'Right 1' }, { left: 'Left 2', right: 'Right 2' }],
-        }
-      });
-    }
-    
-    return mockChallenges;
-  };
 
   const isChallengeCompleted = (challenge) => {
     return challenge?.isCompleted === true;
@@ -85,10 +61,15 @@ const LearningChallenges = ({ onBack }) => {
   // Derive the unlocked challenge purely from isCompleted values:
   // the challenge immediately after the last completed one is unlocked.
   // If nothing is completed yet, the first challenge (index 0) is unlocked.
+  // Also checks explicit isEnabled flag for overrides.
   const getChallengeState = (challenge, index) => {
     if (isChallengeCompleted(challenge)) return 'completed';
+
+    // Check explicit isEnabled flag
+    if (challenge?.isEnabled === true) return 'unlocked';
+
     const lastCompletedIndex = challenges.reduce(
-      (acc, c, i) => (c.isCompleted ? i : acc),
+      (acc, c, i) => (c.isCompleted === true ? i : acc),
       -1
     );
     if (index === lastCompletedIndex + 1) return 'unlocked';
@@ -113,22 +94,33 @@ const LearningChallenges = ({ onBack }) => {
   };
 
   const handleChallengeComplete = (challengeId, earnedXP, earnedCoins) => {
-    // Mark the challenge as completed — getChallengeState will automatically
-    // derive the new unlock position from the updated isCompleted values.
     setChallenges(prev => {
-      const idx = prev.findIndex(c => (c._id || c.id) === challengeId);
-      if (idx === -1) return prev;
       const updated = [...prev];
-      updated[idx] = { ...updated[idx], isCompleted: true };
+
+      // Use string comparison to safely match MongoDB _id or regular id
+      const completedIdx = updated.findIndex(c =>
+        String(c._id || c.id) === String(challengeId)
+      );
+      if (completedIdx === -1) return prev;
+
+      // Mark current challenge as completed
+      updated[completedIdx] = { ...updated[completedIdx], isCompleted: true };
+
+      // Mark next challenge as enabled (if it exists)
+      if (completedIdx + 1 < updated.length) {
+        updated[completedIdx + 1] = { ...updated[completedIdx + 1], isEnabled: true };
+      }
+
       return updated;
     });
+
     setUserProgress(prev => ({
       ...prev,
       totalXP: prev.totalXP + earnedXP,
       totalCoins: prev.totalCoins + earnedCoins,
       currentStreak: prev.currentStreak + 1
     }));
-    
+
     setShowChallengeModal(false);
     toast.success(`+${earnedXP} XP! +${earnedCoins} coins!`);
   };

@@ -5,8 +5,8 @@ from ..ml.predictor import classify_mistake
 
 def add_user_attempt_and_update_stat(user_id: str, exercise_id: str, skill_tags: list,
                      is_correct: bool, correct_answer: str = None, student_answer: str = None,
-                     attempt_type: str = "general"):
-    error_type = classify_mistake(correct_answer, student_answer)
+                     attempt_type: str = "general", error_type: str = None):
+
     save_user_attempt(
         user_id=user_id,
         exercise_id=exercise_id,
