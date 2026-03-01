@@ -5,6 +5,7 @@ from app.services.learn_service import (
     submit_challenge,
     save_user_lesson_progress
 )
+from app.services.user_stats_service import get_leaderboard
 
 from app.db.mongo import get_db
 from datetime import datetime, timedelta
@@ -49,6 +50,14 @@ def lesson_progress():
         "started_at": result["started_at"],
         "completed_at": result["completed_at"],
     }), 200
+
+@learn_bp.get("/leaderboard")
+def leaderboard():
+    user_id = request.args.get("user_id")
+    if not user_id:
+        return jsonify({"error": "user_id query parameter is required"}), 400
+    data = get_leaderboard(user_id)
+    return jsonify(data), 200
 
 @learn_bp.get("/user-dashboard")
 def get_dashboard():

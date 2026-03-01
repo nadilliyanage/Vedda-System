@@ -46,6 +46,7 @@ export const lessonsAPI = {
 
 export const userStatAPI = {
   userDashboard: (userId) => axios.get(`${API_BASE}/api/learn/user-dashboard?user_id=${userId}`),
+  getLeaderboard: (userId) => axios.get(`${API_BASE}/api/learn/leaderboard?user_id=${userId}`),
 };
 
 // ========== Exercises API ==========

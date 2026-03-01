@@ -5,7 +5,8 @@ from ..ml.predictor import classify_mistake
 
 def add_user_attempt_and_update_stat(user_id: str, exercise_id: str, skill_tags: list,
                      is_correct: bool, correct_answer: str = None, student_answer: str = None,
-                     attempt_type: str = "general", error_type: str = None):
+                     attempt_type: str = "general", error_type: str = None,
+                     points: int = 0):
 
     save_user_attempt(
         user_id=user_id,
@@ -21,7 +22,8 @@ def add_user_attempt_and_update_stat(user_id: str, exercise_id: str, skill_tags:
         skill_tags=skill_tags,
         is_correct=is_correct,
         error_type=error_type,
-        attempt_type=attempt_type
+        attempt_type=attempt_type,
+        points=points
     )
 
 
@@ -30,7 +32,8 @@ def update_user_stats(
     skill_tags: list[str],
     is_correct: bool,
     error_type: str | None,
-    attempt_type: str = "general"
+    attempt_type: str = "general",
+    points: int = 0
 ):
     """
     Incrementally updates user statistics after each attempt.
@@ -47,6 +50,7 @@ def update_user_stats(
             "user_id": user_id,
             "skill_stats": {},
             "error_stats": {},
+            "total_points": 0,
             "overall": {
                 "total_attempts": 0,
                 "total_correct": 0,
@@ -110,6 +114,12 @@ def update_user_stats(
     doc[type_key]["overall_accuracy"] = round(
         doc[type_key]["total_correct"] / doc[type_key]["total_attempts"], 2
     )
+
+    # -----------------------
+    # Update TOTAL POINTS
+    # -----------------------
+    if is_correct and points > 0:
+        doc["total_points"] = doc.get("total_points", 0) + points
 
     doc["last_updated"] = datetime.utcnow()
 
@@ -233,6 +243,49 @@ def safe_int(val):
         return int(val)
     except (TypeError, ValueError):
         return 0
+
+
+def get_leaderboard(current_user_id: str):
+    """
+    Build a leaderboard ranked by total_points (descending).
+    Resolves username from the users collection.
+    """
+    from bson import ObjectId
+
+    stats_col = _user_stat_col()
+    users_col = get_collection("users")
+
+    # Fetch all user stats sorted by total_points descending
+    all_stats = list(
+        stats_col.find({}, {"user_id": 1, "total_points": 1, "_id": 0})
+            .sort("total_points", -1)
+    )
+
+    # Collect all user_ids and batch-fetch usernames
+    user_ids = [s["user_id"] for s in all_stats if s.get("user_id")]
+    object_ids = []
+    for uid in user_ids:
+        try:
+            object_ids.append(ObjectId(uid))
+        except Exception:
+            pass
+
+    users = {
+        str(u["_id"]): u.get("username", "Unknown")
+        for u in users_col.find({"_id": {"$in": object_ids}}, {"_id": 1, "username": 1})
+    }
+
+    leaderboard = []
+    for rank, stat in enumerate(all_stats, start=1):
+        uid = stat.get("user_id", "")
+        leaderboard.append({
+            "name": users.get(uid, "Unknown"),
+            "rank": rank,
+            "is_current_user": uid == current_user_id,
+            "totalPoints": stat.get("total_points", 0)
+        })
+
+    return leaderboard
 
 def _user_attempts_col():
     return get_collection("user_attempts")

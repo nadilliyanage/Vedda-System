@@ -61,22 +61,9 @@ const PerformanceView = ({ onBack }) => {
     }).catch(() => setIsLoading(false));
 
     // Fetch leaderboard data
-    // TODO: Replace with actual API call when endpoint is ready
-    // userStatAPI.getLeaderboard().then((response) => {
-    //   setLeaderboard(response.data);
-    // });
-    
-    // Mock data for now
-    const mockLeaderboard = [
-      { user_id: "sdaskjdsauiwjkwsjs5as5das75d", name: "Sasanka", rank: 1 },
-      { user_id: "sdaskjdsa555uiwjkwsjs5as5das75d", name: "Kasun", rank: 2 },
-      { user_id: "sdaskjdsa555uiwjkwsjs5adfgas75d", name: "Kasun2", rank: 6 },
-      { user_id: "sdaskjdsaui554wjkwsjs5as5das75d", name: "Dasun", rank: 3 },
-      { user_id: "68ff3189f74e8f05180b17e7", name: "Nimal", rank: 4 },
-      { user_id: "sdaskjdsauiwjkwsj58852s5as5das75d", name: "Kamal", rank: 5 }
-
-    ];
-    setLeaderboard([...mockLeaderboard].sort((a, b) => a.rank - b.rank));
+    userStatAPI.getLeaderboard(userId).then((response) => {
+      setLeaderboard([...response.data].sort((a, b) => a.rank - b.rank));
+    }).catch(() => setLeaderboard([]));
   }, [user?.id]);
 
   // Auto-scroll to current user within the leaderboard container only
@@ -96,7 +83,7 @@ const PerformanceView = ({ onBack }) => {
         });
       }
     }
-  }, [leaderboard, user?.id]);
+  }, [leaderboard]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 to-teal-50 py-8 px-4 pt-24">
@@ -254,13 +241,13 @@ const PerformanceView = ({ onBack }) => {
           </h2>
           <div className="h-80 overflow-y-auto overflow-x-hidden space-y-3 scroll-smooth">
             {leaderboard.length > 0 ? (
-              leaderboard.map((player, index) => {
-                const isCurrentUser = player.user_id === user?.id;
+              leaderboard.map((player) => {
+                const isCurrentUser = player.is_current_user;
                 const isTopThree = player.rank <= 3;
                 
                 return (
                   <div
-                    key={player.user_id}
+                    key={player.rank}
                     ref={isCurrentUser ? currentUserRef : null}
                     className={`mt-0 mb-2 ml-8 me-8 flex items-center justify-between p-2 rounded-lg transition-all ${
                       isCurrentUser
@@ -306,12 +293,12 @@ const PerformanceView = ({ onBack }) => {
                       </div>
                     </div>
                     
-                    {/* Rank Number */}
+                    {/* Rank & Points */}
                     <div className={`text-right ${
                       isCurrentUser ? 'font-bold text-purple-700' : 'text-gray-600'
                     }`}>
                       <p className="text-2xl font-bold">#{player.rank}</p>
-                      <p className="text-xs">Rank</p>
+                      <p className="text-xs">{player.totalPoints} pts</p>
                     </div>
                   </div>
                 );

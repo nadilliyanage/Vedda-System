@@ -140,6 +140,8 @@ def submit_answer():
 
     # Store attempt in background
     attempt_type = "challenge" if is_challenge else "general"
+    exercise_type = doc.get("type", "")
+    exercise_points = int(doc.get("question", {}).get("points", 0) or 0) if exercise_type in ("MANUAL", "CHALLENGE") else 0
     Thread(
         target=run_add_user_attempt,
         kwargs={
@@ -151,6 +153,7 @@ def submit_answer():
             "student_answer": student_answer,
             "attempt_type": attempt_type,
             "error_type": error_type,
+            "points": exercise_points,
         },
         daemon=True
     ).start()
