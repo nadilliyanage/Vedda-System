@@ -3,7 +3,9 @@ from ..config import Config
 from ..ai.client import call_openai_json
 from ..ai.prompts import (
     FEEDBACK_SYSTEM, FEEDBACK_USER_TEMPLATE,
-    GEN_SYSTEM, GEN_USER_TEMPLATE
+    GEN_SYSTEM, GEN_USER_TEMPLATE,
+    GEN_MC_INSTRUCTIONS, GEN_MC_JSON_TEMPLATE,
+    GEN_TEXT_INPUT_INSTRUCTIONS, GEN_TEXT_INPUT_JSON_TEMPLATE
 )
 from ..ai.rag import build_rag_context
 from ..ai.rag_hybrid import hybrid_retrieve
@@ -192,11 +194,31 @@ def generate_exercise_with_rag(
         # Fallback to old RAG
         rag_knowledge = build_rag_context(skills)
 
+    # Randomly pick exercise type
+    exercise_type = random.choice(["multiple_choice", "text_input"])
+
+    # Build type-specific instructions and JSON template
+    if exercise_type == "text_input":
+        type_specific_instructions = GEN_TEXT_INPUT_INSTRUCTIONS
+        json_template = GEN_TEXT_INPUT_JSON_TEMPLATE.format(
+            exercise_number=str(exercise_number),
+            skill_tags=", ".join(f'"{s}"' for s in skills)
+        )
+    else:
+        type_specific_instructions = GEN_MC_INSTRUCTIONS
+        json_template = GEN_MC_JSON_TEMPLATE.format(
+            exercise_number=str(exercise_number),
+            skill_tags=", ".join(f'"{s}"' for s in skills)
+        )
+
     user_prompt = GEN_USER_TEMPLATE.format(
         context=rag_knowledge,
         skill_tags=", ".join(skills),
         error_types=", ".join(error_types),
-        exercise_number=str(exercise_number)
+        exercise_type=exercise_type,
+        exercise_number=str(exercise_number),
+        type_specific_instructions=type_specific_instructions,
+        json_template=json_template
     )
 
     raw, usage = call_openai_json(
@@ -211,10 +233,16 @@ def generate_exercise_with_rag(
     if not isinstance(data, dict):
         raise ValueError("Expected a single JSON object from the model.")
 
-    # Hard validation (VERY IMPORTANT)
+    # Hard validation
     assert data["categoryId"] == "z0"
-    assert data["question"]["type"] == "multiple_choice"
-    assert len(data["question"]["options"]) == 4
+    q_type = data["question"]["type"]
+    assert q_type in ("multiple_choice", "text_input"), f"Unexpected question type: {q_type}"
+
+    if q_type == "multiple_choice":
+        assert len(data["question"]["options"]) == 4
+    else:
+        assert data["question"].get("answer"), "text_input exercise must have an answer field"
+        assert data["question"].get("correct_answer"), "text_input exercise must have a correct_answer field"
 
     # Store knowledge IDs for effectiveness tracking
     if retrieved_docs:
