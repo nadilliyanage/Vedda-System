@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { FaArrowLeft, FaArrowRight, FaChevronLeft, FaChevronRight, FaPlay } from 'react-icons/fa';
+import { FaArrowLeft, FaArrowRight, FaChevronLeft, FaChevronRight, FaPlay, FaCheckCircle } from 'react-icons/fa';
 import {exercisesAPI} from "../../services/learningAPI.js";
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -7,12 +7,14 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
   const { user } = useAuth();
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
   const [currentLesson, setCurrentLesson] = useState(lesson);
+  const [lessonDone, setLessonDone] = useState(false);
 
   useEffect(() => {
     // Find the index of the current lesson in the category's lessons
     const index = allLessons.findIndex(l => l.id === lesson.id);
     setCurrentLessonIndex(index);
     setCurrentLesson(lesson);
+    setLessonDone(false);
     const userId = user?.id;
 
     if (lesson) {
@@ -39,6 +41,10 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
       setCurrentLesson(nextLesson);
       setCurrentLessonIndex(currentLessonIndex + 1);
     }
+    
+  };
+
+  const handleMarkAsDone = async () => {
     const userId = user?.id;
     if (currentLesson) {
       exercisesAPI.startExercise({
@@ -47,17 +53,11 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
         completed: true
       });
     }
+    setLessonDone(true);
   };
 
   const handlePractice = () => {
-    const userId = user?.id;
-    if (currentLesson) {
-      exercisesAPI.startExercise({
-        user_id: userId,
-        lesson_id: currentLesson._id,
-        completed: true
-      });
-    }
+
     onPractice(currentLesson);
   };
 
@@ -140,6 +140,18 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
                   {currentLesson.xp} XP 
                 </div>
               </div>
+              <button
+                onClick={handleMarkAsDone}
+                disabled={lessonDone}
+                className={`flex items-center gap-2 px-6 py-3 rounded-lg font-bold text-base border-2 transition-all ${
+                  lessonDone
+                    ? 'bg-green-100 border-green-400 text-green-700 cursor-not-allowed'
+                    : 'bg-white border-gray-300 text-gray-700 hover:bg-green-50 hover:border-green-400 hover:text-green-700'
+                }`}
+              >
+                <FaCheckCircle className={lessonDone ? 'text-green-500' : 'text-gray-400'} />
+                {lessonDone ? 'Completed' : 'Mark as Done'}
+              </button>
             </div>
           </div>
         </div>
@@ -203,16 +215,6 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
           </div>
         </div>
 
-        {/* Additional Info Card */}
-        <div className="mt-6 bg-blue-50 rounded-xl p-6 border-2 border-blue-200">
-          <h3 className="text-lg font-bold text-blue-900 mb-2">
-            💡 Ready to test your knowledge?
-          </h3>
-          <p className="text-blue-700">
-            Click the Practice button to begin interactive exercises 
-            and reinforce what you have learned in this lesson.
-          </p>
-        </div>
       </div>
 
       {/* Custom styles for lesson content */}

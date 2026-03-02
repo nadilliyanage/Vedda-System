@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { FaArrowLeft, FaSpinner, FaChevronDown, FaChevronRight, FaDumbbell, FaMagic, FaStar } from 'react-icons/fa';
+import { FaArrowLeft, FaSpinner, FaChevronDown, FaChevronRight, FaDumbbell, FaMagic, FaStar, FaCheckCircle } from 'react-icons/fa';
 import { categoriesAPI, lessonsAPI, exercisesAPI } from '../../services/learningAPI';
 import { useAuth } from '../../contexts/AuthContext';
 
@@ -360,6 +360,7 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                               <div className="ml-8 mt-2 space-y-2">
                                 {lessonExercises.map((exercise) => {
                                   const totalXP = exercise.question?.xp || 0;
+                                  const isCompleted = exercise.completed === true;
                                   
                                   return (
                                     <div
@@ -377,6 +378,9 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                                           </p>
                                         </div>
                                         <div className="flex items-center gap-4">
+                                          {isCompleted && (
+                                            <FaCheckCircle className="text-white text-2xl flex-shrink-0" title="Completed" />
+                                          )}
                                           <div className="bg-white/20 px-4 py-2 rounded-lg">
                                             <div className="text-sm text-blue-100">Reward</div>
                                             <div className="text-xl font-bold">{totalXP} XP</div>
