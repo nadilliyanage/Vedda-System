@@ -65,17 +65,19 @@ def get_dashboard():
     user_id = request.args.get("user_id")
 
     total_lessons = db.lessons.count_documents({})
-    total_exercises = db.exercises.count_documents({})
+    total_exercises = db.exercises.count_documents({"type": "MANUAL"})
     # Lessons completed
     lessons_completed = db.user_lessons.count_documents({
         "user_id": user_id,
         "completed": True
     })
 
-    # Exercises completed
-    exercises_completed = len(
-        db.user_attempts.distinct("exercise_id", {"user_id": user_id})
-    )
+    # Exercises completed (MANUAL only)
+    manual_exercise_ids = {
+        str(e["_id"]) for e in db.exercises.find({"type": "MANUAL"}, {"_id": 1})
+    }
+    completed_exercise_ids = db.user_attempts.distinct("exercise_id", {"user_id": user_id})
+    exercises_completed = len([eid for eid in completed_exercise_ids if eid in manual_exercise_ids])
 
     # Average score
     user_stats = db.user_stats.find_one({"user_id": user_id})
