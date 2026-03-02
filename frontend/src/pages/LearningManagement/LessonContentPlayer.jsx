@@ -136,9 +136,8 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
           <div className="mt-8 pt-6 border-t border-gray-200">
             <div className="flex items-center justify-center gap-6">
               <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg px-6 py-3">
-                <div className="text-sm text-yellow-700 font-medium">Rewards</div>
                 <div className="text-2xl font-bold text-yellow-600">
-                  {currentLesson.xp} XP • {currentLesson.coins} Coins
+                  {currentLesson.xp} XP 
                 </div>
               </div>
             </div>

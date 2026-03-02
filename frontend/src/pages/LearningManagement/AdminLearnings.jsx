@@ -77,15 +77,7 @@ const AdminLearnings = () => {
           })}
         </div>
 
-        {/* Info Section */}
-        <div className="mt-12 bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
-          <p className="text-blue-700">
-            <strong>Quick Guide:</strong> Select a module above to manage
-            different aspects of the learning system. Lessons contain
-            educational content, Exercises provide practice opportunities, and
-            Challenges test learner knowledge.
-          </p>
-        </div>
+        
       </div>
     );
   }
