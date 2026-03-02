@@ -422,7 +422,7 @@ const AdminChallenges = () => {
 
         <div className="bg-white rounded-lg shadow-md">
           {loading ? (
-            <LoadingScreen />
+            <LoadingScreen message="Loading challenges..." />
           ) : challenges.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">No challenges found</p>

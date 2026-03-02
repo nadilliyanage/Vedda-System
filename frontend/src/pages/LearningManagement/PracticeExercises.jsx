@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { FaArrowLeft, FaSpinner, FaChevronDown, FaChevronRight, FaDumbbell, FaMagic, FaStar, FaCheckCircle } from 'react-icons/fa';
 import { categoriesAPI, lessonsAPI, exercisesAPI } from '../../services/learningAPI';
 import { useAuth } from '../../contexts/AuthContext';
+import LoadingScreen from '../../components/ui/LoadingScreen';
 
 const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBack, onStartExercise }) => {
   const { user } = useAuth();
@@ -161,16 +162,7 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 pt-16">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="text-center py-20">
-            <FaSpinner className="text-5xl text-orange-600 animate-spin mx-auto mb-4" />
-            <p className="text-gray-600 text-lg">Loading exercises...</p>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading exercises..." />;
   }
 
   return (
@@ -234,10 +226,7 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                 >
                   {loadingPersonalized ? (
                     <div className="flex items-center justify-center gap-3">
-                      <FaSpinner className="text-2xl text-purple-500 animate-spin" />
-                      <span className="text-lg text-gray-700 font-semibold">
-                        Generating personalized exercise...
-                      </span>
+                      <LoadingScreen message="Generating personalized exercise..." />
                     </div>
                   ) : (
                     <div className="flex items-center justify-between">

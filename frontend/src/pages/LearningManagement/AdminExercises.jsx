@@ -422,7 +422,7 @@ const AdminExercises = () => {
 
         <div className="bg-white rounded-lg shadow-md">
           {loading ? (
-            <LoadingScreen />
+            <LoadingScreen message="Loading exercises..." />
           ) : exercises.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">No exercises found</p>

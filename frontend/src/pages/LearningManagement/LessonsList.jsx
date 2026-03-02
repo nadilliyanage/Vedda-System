@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { FaArrowLeft, FaSpinner, FaBook } from 'react-icons/fa';
+import { FaArrowLeft, FaBook } from 'react-icons/fa';
 import { lessonsAPI } from '../../services/learningAPI';
+import LoadingScreen from '../../components/ui/LoadingScreen';
 
 const LessonsList = ({ category, onBack, onLessonSelect }) => {
   const [lessons, setLessons] = useState([]);
@@ -56,16 +57,7 @@ const LessonsList = ({ category, onBack, onLessonSelect }) => {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 pt-16">
-        <div className="max-w-4xl mx-auto px-4 py-8">
-          <div className="text-center py-20">
-            <FaSpinner className="text-5xl text-blue-600 animate-spin mx-auto mb-4" />
-            <p className="text-gray-600 text-lg">Loading lessons...</p>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading lessons..." />;
   }
 
   return (

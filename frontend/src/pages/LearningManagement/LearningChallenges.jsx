@@ -15,6 +15,7 @@ import { challengesAPI } from '../../services/learningAPI';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 import ChallengeModal from './ChallengeModal';
+import LoadingScreen from '../../components/ui/LoadingScreen';
 
 const LearningChallenges = ({ onBack }) => {
   const { user } = useAuth();
@@ -245,11 +246,7 @@ const LearningChallenges = ({ onBack }) => {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-green-50 flex items-center justify-center">
-        <div className="text-2xl font-bold text-gray-600">Loading challenges...</div>
-      </div>
-    );
+    return <LoadingScreen message="Loading challenges..." />;
   }
 
   return (
