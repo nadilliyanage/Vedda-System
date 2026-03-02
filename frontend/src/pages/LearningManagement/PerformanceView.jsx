@@ -178,14 +178,14 @@ const PerformanceView = ({ onBack }) => {
         </div>
 
         {/* Progress Chart Section */}
-        <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+        {/* <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Learning Progress</h2>
           <div className="flex items-center justify-center h-64 bg-gradient-to-br from-purple-100 to-teal-100 rounded-lg">
             <p className="text-gray-600 text-lg">
               📊 Progress chart visualization coming soon
             </p>
           </div>
-        </div>
+        </div> */}
 
         {/* Mistake Types Section */}
         <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
