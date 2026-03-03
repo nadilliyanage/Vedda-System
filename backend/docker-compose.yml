@@ -1,6 +1,16 @@
 version: "3.8"
 
 services:
+  # MongoDB - Shared database
+  mongodb:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - vedda-network
+
   # API Gateway - Main entry point
   api-gateway:
     build:
@@ -12,11 +22,23 @@ services:
       - translator-service
       - dictionary-service
       - history-service
+      - auth-service
+      - learn-service
+      - speech-service
+      - 3d-model-service
+      - artifact-identifier-service
+      - artifact-service
     environment:
       - FLASK_ENV=development
       - TRANSLATOR_SERVICE_URL=http://translator-service:5001
       - DICTIONARY_SERVICE_URL=http://dictionary-service:5002
       - HISTORY_SERVICE_URL=http://history-service:5003
+      - AUTH_SERVICE_URL=http://auth-service:5005
+      - LEARN_SERVICE_URL=http://learn-service:5006
+      - SPEECH_SERVICE_URL=http://speech-service:5007
+      - THREE_D_MODEL_SERVICE_URL=http://3d-model-service:5008
+      - ARTIFACT_IDENTIFIER_SERVICE_URL=http://artifact-identifier-service:5009
+      - ARTIFACT_SERVICE_URL=http://artifact-service:5010
     networks:
       - vedda-network
 
@@ -44,12 +66,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5002:5002"
-    environment:
-      - FLASK_ENV=development
-      - DATABASE_PATH=/app/data/vedda_dictionary.db
-    volumes:
-      - ./data:/app/data
-      - ../data:/app/data # Mount the shared data directory
+    env_file:
+      - ./dictionary-service/.env
     networks:
       - vedda-network
 
@@ -60,12 +78,64 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5003:5003"
+    env_file:
+      - ./history-service/.env
+    networks:
+      - vedda-network
+
+  # Auth Service
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    ports:
+      - "5005:5005"
+    env_file:
+      - ./auth-service/.env
+    networks:
+      - vedda-network
+
+  # Learn Service
+  learn-service:
+    build:
+      context: ./learn-service
+      dockerfile: Dockerfile
+    ports:
+      - "5006:5006"
+    env_file:
+      - ./learn-service/.env
+    networks:
+      - vedda-network
+
+  # Speech Service
+  speech-service:
+    build:
+      context: ./speech-service
+      dockerfile: Dockerfile
+    ports:
+      - "5007:5007"
+    env_file:
+      - ./speech-service/.env
     environment:
       - FLASK_ENV=development
-      - DATABASE_PATH=/app/data/vedda_history.db
+      - PORT=5007
     volumes:
-      - ./data:/app/data
-      - ../data:/app/data # Mount the shared data directory
+      - ./speech-service/vedda-asr-model:/app/vedda-asr-model
+    networks:
+      - vedda-network
+
+  # 3D Model Service
+  3d-model-service:
+    build:
+      context: ./3D-model-service
+      dockerfile: Dockerfile
+    ports:
+      - "5008:5008"
+    env_file:
+      - ./3D-model-service/.env
+    environment:
+      - FLASK_ENV=development
+      - PORT=5008
     networks:
       - vedda-network
 
@@ -87,6 +157,20 @@ services:
     networks:
       - vedda-network
 
+  # Artifact Service
+  artifact-service:
+    build:
+      context: ./artifact-service
+      dockerfile: Dockerfile
+    ports:
+      - "5010:5010"
+    env_file:
+      - ./artifact-service/.env
+    volumes:
+      - ./artifact-service/uploads:/app/uploads
+    networks:
+      - vedda-network
+
   # Database initialization service (runs once)
   db-init:
     build:
@@ -99,7 +183,6 @@ services:
       print('Database directory created');
       "
     volumes:
-      - ./data:/app/data
       - ../data:/app/data
     networks:
       - vedda-network
@@ -109,5 +192,7 @@ networks:
     driver: bridge
 
 volumes:
+  mongo-data:
+    driver: local
   vedda-data:
     driver: local
