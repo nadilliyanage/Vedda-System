@@ -38,7 +38,7 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
       });
       if (response.success) {
         // Filter out the current artifact and get max 3 related
-        const related = response.data.artifacts
+        const related = (response.artifacts || [])
           .filter(a => a._id !== artifact._id)
           .slice(0, 3);
         setRelatedArtifacts(related);

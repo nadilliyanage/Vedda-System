@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowLeft, FaLandmark } from "react-icons/fa";
 import { Sparkles } from "lucide-react";
@@ -19,7 +19,7 @@ const ArtifactPage = () => {
   const [loading, setLoading] = useState(true);
   const [showIdentifyModal, setShowIdentifyModal] = useState(false);
 
-  const fetchArtifacts = async () => {
+  const fetchArtifacts = useCallback(async () => {
     setLoading(true);
     try {
       const params = {
@@ -37,7 +37,6 @@ const ArtifactPage = () => {
       const response = await getArtifacts(params);
       
       if (response.success) {
-        // The artifacts are directly on the response object
         const artifacts = response.artifacts || [];
         setFilteredArtifacts(artifacts);
       } else {
@@ -50,13 +49,16 @@ const ArtifactPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory, searchQuery]);
+
+  // Scroll to top only on initial mount
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   useEffect(() => {
     fetchArtifacts();
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [selectedCategory, searchQuery]);
+  }, [fetchArtifacts]);
 
   const handleArtifactClick = (artifact) => {
     setSelectedArtifact(artifact);
@@ -67,88 +69,148 @@ const ArtifactPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-purple-100 mt-16">
-      {/* Back Button */}
-      <div className="bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-4">
+    <div
+      className="min-h-screen mt-[60px] bg-cover bg-center bg-fixed"
+      style={{ backgroundImage: `url('/assets/background-images/background-1.png')` }}
+    >
+      {/* ── Glassmorphic sub-nav bar ── */}
+      <div
+        className="border-b shadow-md"
+        style={{
+          background: "rgba(28,20,8,0.55)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          borderColor: "rgba(200,170,100,0.18)",
+        }}
+      >
+        <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
+            {/* Back button */}
             <button
               onClick={() => navigate("/")}
-              className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+              className="flex items-center gap-2 text-[rgba(255,248,230,0.90)] bg-white/10 border border-[rgba(200,165,90,0.25)] rounded-[9px] px-3.5 py-1.5 font-semibold text-sm cursor-pointer transition-colors duration-200 hover:bg-[rgba(200,165,90,0.18)]"
             >
-              <FaArrowLeft className="mr-2" />
-              <span className="font-medium">Back to Home</span>
+              <FaArrowLeft className="text-xs" />
+              Back to Home
             </button>
-            <div className="flex items-center text-purple-600">
-              <FaLandmark className="mr-2" />
-              <span className="font-semibold">
-                {filteredArtifacts.length} Artifact{filteredArtifacts.length !== 1 ? "s" : ""}
-              </span>
+
+            {/* Artifact count */}
+            <div className="flex items-center gap-2 text-[#d4b483] font-semibold text-sm">
+              <FaLandmark />
+              <span>{filteredArtifacts.length} Artifact{filteredArtifacts.length !== 1 ? "s" : ""}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
-        {/* Page Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-3">
-            Vedda Artifact Preservation System
-          </h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-6">
-            Explore the rich cultural heritage of the indigenous Vedda people
-            through their traditional artifacts, tools, and ceremonial objects
-          </p>
-          {/* Identify Artifact Button */}
-          <button
-            onClick={() => setShowIdentifyModal(true)}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 font-semibold"
+      {/* ── Hero section ── */}
+      <div
+        className="py-6 text-center"
+        style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,0) 100%)" }}
+      >
+        {/* Badge */}
+        <span className="inline-block bg-white/60 border border-[rgba(100,80,40,0.22)] rounded-full px-4 py-1 text-[0.73rem] tracking-[0.16em] uppercase text-[#5c4a1e] mb-2 font-sans">
+          🏺 Cultural Heritage Collection
+        </span>
+
+        {/* Title */}
+        <h1
+          className="font-extrabold text-[#1c1409] leading-tight mx-auto mb-2 max-w-3xl px-4 font-serif tracking-tight whitespace-nowrap text-[40px]"
+          style={{ textShadow: "0 1px 0 rgba(255,255,255,0.8)" }}
+        >
+          Vedda{" "}
+          <span
+            className="text-[#9a6f2a]"
+            style={{ textShadow: "0 1px 0 rgba(255,255,255,0.9), 0 2px 8px rgba(255,255,255,0.5)" }}
           >
-            <Sparkles size={20} />
-            Identify Artifact
-          </button>
+            Artifact
+          </span>{" "}
+          Preservation System
+        </h1>
+
+        {/* Subtitle */}
+        <p
+          className="max-w-lg mx-auto mb-4 px-4 leading-relaxed text-[#3d2e0f] italic font-serif"
+          style={{ fontSize: "clamp(0.9rem, 1.8vw, 1.08rem)" }}
+        >
+          Explore the rich cultural heritage of the indigenous Vedda people
+          through their traditional artifacts, tools, and ceremonial objects.
+        </p>
+
+        {/* Identify Artifact button */}
+        <button
+          onClick={() => setShowIdentifyModal(true)}
+          className="inline-flex items-center gap-2 px-6 py-2.5 text-white font-bold text-sm rounded-[10px] cursor-pointer transition-all duration-200 hover:-translate-y-0.5 font-sans"
+          style={{
+            background: "linear-gradient(135deg, #7c3fa8, #4a6fa8)",
+            boxShadow: "0 4px 18px rgba(124,63,168,0.40)",
+          }}
+        >
+          <Sparkles size={18} />
+          Identify Artifact
+        </button>
+
+        {/* Gold divider */}
+        <div
+          className="w-[52px] h-[3px] mx-auto mt-4 rounded-full"
+          style={{ background: "linear-gradient(90deg, #9a6f2a, #c9943a)" }}
+        />
+      </div>
+
+      {/* ── Content area ── */}
+      <div className="container mx-auto px-4 pb-12">
+
+        {/* Search — frosted wrapper */}
+        <div
+          className="rounded-[14px] p-2 mb-4 border border-white/60 shadow-lg"
+          style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+        >
+          <ArtifactSearch searchQuery={searchQuery} onSearchChange={setSearchQuery} />
         </div>
 
-        {/* Search */}
-        <ArtifactSearch
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-        />
-
-        {/* Category Filter */}
-        <ArtifactFilter
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-        />
+        {/* Filter — frosted wrapper */}
+        <div
+          className="rounded-[14px] p-2 mb-7 border border-white/60 shadow-lg"
+          style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+        >
+          <ArtifactFilter selectedCategory={selectedCategory} onCategoryChange={setSelectedCategory} />
+        </div>
 
         {/* Artifacts Grid */}
         {loading ? (
           <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600"></div>
+            <div
+              className="animate-spin w-12 h-12 rounded-full"
+              style={{ border: "3px solid rgba(154,111,42,0.25)", borderTopColor: "#9a6f2a" }}
+            />
           </div>
         ) : filteredArtifacts.length === 0 ? (
-          <div className="text-center py-20">
-            <p className="text-gray-600 text-lg">No artifacts found</p>
+          <div className="text-center py-20 px-4 text-[#3d2e0f] text-base bg-white/70 rounded-[14px] font-sans">
+            No artifacts found
           </div>
         ) : (
-          <ArtifactGrid
-            artifacts={filteredArtifacts}
-            onArtifactClick={handleArtifactClick}
-          />
+          <ArtifactGrid artifacts={filteredArtifacts} onArtifactClick={handleArtifactClick} />
         )}
 
-        {/* Info Section */}
-        <div className="mt-12 bg-white rounded-xl shadow-md p-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        {/* About section */}
+        <div
+          className="mt-12 rounded-[18px] px-10 py-9 border border-white/60 shadow-xl"
+          style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+        >
+          <div
+            className="w-9 h-[2px] mb-5 rounded-full"
+            style={{ background: "linear-gradient(90deg, #9a6f2a, #c9943a)" }}
+          />
+          <h2 className="text-[1.4rem] font-bold text-[#1c1409] mb-3 font-serif">
             About This Collection
           </h2>
-          <p className="text-gray-700 leading-relaxed mb-4">
+          <p className="text-gray-600 leading-[1.85] mb-3 font-sans">
             This collection showcases traditional Vedda artifacts spanning thousands
             of years of indigenous culture in Sri Lanka. Each artifact tells a story
             of the Vedda people&apos;s deep connection with the forest, their
             ingenious use of natural materials, and their rich spiritual traditions.
           </p>
-          <p className="text-gray-700 leading-relaxed">
+          <p className="text-gray-600 leading-[1.85] font-sans">
             The Vedda people (Wanniyala-Aetto) are the indigenous inhabitants of Sri
             Lanka, with a heritage dating back over 16,000 years. Their artifacts
             represent not just tools and objects, but a complete way of life in
@@ -158,7 +220,7 @@ const ArtifactPage = () => {
         </div>
       </div>
 
-      {/* Artifact Detail Modal */}
+      {/* Modals */}
       {selectedArtifact && (
         <ArtifactDetailModal
           artifact={selectedArtifact}
@@ -166,14 +228,15 @@ const ArtifactPage = () => {
           onArtifactClick={handleArtifactClick}
         />
       )}
-
-      {/* Identify Artifact Modal */}
       <IdentifyArtifactModal
         isOpen={showIdentifyModal}
         onClose={() => setShowIdentifyModal(false)}
       />
     </div>
   );
+
 };
 
 export default ArtifactPage;
+
+

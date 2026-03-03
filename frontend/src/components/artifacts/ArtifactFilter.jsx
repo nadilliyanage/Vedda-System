@@ -3,8 +3,8 @@ import { artifactCategories } from "../../data/artifacts";
 
 const ArtifactFilter = ({ selectedCategory, onCategoryChange }) => {
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 mb-8">
-      <h3 className="text-lg font-bold text-gray-800 mb-4">Filter by Category</h3>
+    <div className="p-2">
+      <h3 className="text-lg font-bold text-gray-800 mb-2">Filter by Category</h3>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
         {artifactCategories.map((category) => (
           <button
