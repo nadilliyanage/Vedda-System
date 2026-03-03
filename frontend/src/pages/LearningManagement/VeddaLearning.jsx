@@ -55,7 +55,15 @@ const VeddaLearning = () => {
   // Main hub view
   if (activeView === 'main') {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8 px-4 pt-24">
+        <div
+          className="min-h-screen py-8 px-4 pt-24"
+          style={{
+            backgroundImage: `url('/assets/background-images/background-1.png')`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+          }}
+        >
           <div className="max-w-6xl mx-auto">
             {/* Header */}
             <div className="text-center mb-12">

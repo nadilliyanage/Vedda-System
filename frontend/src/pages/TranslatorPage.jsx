@@ -31,7 +31,15 @@ const TranslatorPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 mt-16">
+    <div
+      className="min-h-screen mt-16"
+      style={{
+        backgroundImage: `url('/assets/background-images/background-1.png')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+      }}
+    >
       {/* Back Button */}
       <div className="bg-white shadow-sm">
         <div className="container mx-auto px-4 py-4">

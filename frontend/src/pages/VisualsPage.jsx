@@ -110,7 +110,16 @@ const VisualsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-dark-bg p-20">
+    <div
+      className="min-h-screen p-20"
+      style={{
+        backgroundImage: `url('/assets/background-images/background-1.png')`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
+        paddingTop: "calc(5rem + 60px)",
+      }}
+    >
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}

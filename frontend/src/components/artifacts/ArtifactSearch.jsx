@@ -3,7 +3,7 @@ import { FaSearch, FaTimes } from "react-icons/fa";
 
 const ArtifactSearch = ({ searchQuery, onSearchChange }) => {
   return (
-    <div className="bg-white rounded-xl shadow-md p-6 mb-8">
+    <div className="px-1 py-1">
       <div className="relative">
         <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
         <input
