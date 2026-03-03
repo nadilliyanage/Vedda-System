@@ -166,6 +166,8 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
   }
 
   return (
+    <>
+    {loadingPersonalized && <LoadingScreen message="Generating personalized exercise..." />}
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 pt-16">
       <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Header */}
@@ -224,12 +226,7 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                   onClick={fetchPersonalizedExercise}
                   className="group bg-white rounded-xl p-6 cursor-pointer hover:shadow-2xl transition-all transform hover:scale-102"
                 >
-                  {loadingPersonalized ? (
-                    <div className="flex items-center justify-center gap-3">
-                      <LoadingScreen message="Generating personalized exercise..." />
-                    </div>
-                  ) : (
-                    <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
                           <h3 className="text-2xl font-bold text-gray-800">
@@ -253,7 +250,6 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                         </svg>
                       </div>
                     </div>
-                  )}
                 </div>
               </div>
             )}
@@ -420,6 +416,7 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
         )} */}
       </div>
     </div>
+    </>
   );
 };
 
