@@ -21,35 +21,35 @@ JWT_ALGORITHMS = ['HS256']
 # Service configuration
 SERVICES = {
     'translator': {
-        'url': 'http://localhost:5001',
+        'url': os.getenv('TRANSLATOR_SERVICE_URL', 'http://localhost:5001'),
         'health': '/health'
     },
     'learn': {
-        'url': 'http://127.0.0.1:5006',
+        'url': os.getenv('LEARN_SERVICE_URL', 'http://localhost:5006'),
         'health': '/health'
     },
     'dictionary': {
-        'url': 'http://localhost:5002',
+        'url': os.getenv('DICTIONARY_SERVICE_URL', 'http://localhost:5002'),
         'health': '/health'
     },
     'history': {
-        'url': 'http://localhost:5003',
+        'url': os.getenv('HISTORY_SERVICE_URL', 'http://localhost:5003'),
         'health': '/health'
     },
     'speech': {
-        'url': 'http://localhost:5007',
+        'url': os.getenv('SPEECH_SERVICE_URL', 'http://localhost:5007'),
         'health': '/health'
     },
     'auth': {
-        'url': 'http://localhost:5005',
+        'url': os.getenv('AUTH_SERVICE_URL', 'http://localhost:5005'),
         'health': '/health'
     },
     '3d-models': {
-        'url': 'http://localhost:5008',
+        'url': os.getenv('THREE_D_MODEL_SERVICE_URL', 'http://localhost:5008'),
         'health': '/health'
     },
     'artifacts': {
-        'url': 'http://localhost:5010',
+        'url': os.getenv('ARTIFACT_SERVICE_URL', 'http://localhost:5010'),
         'health': '/health'
     }
 }
@@ -78,7 +78,7 @@ PUBLIC_ROUTE_PREFIXES = [
     '/api/translate',
     '/api/dictionary',
     '/api/history',
-
+    '/api/learn',
     '/api/tts',
     '/api/stt',
     '/api/3d-models',
