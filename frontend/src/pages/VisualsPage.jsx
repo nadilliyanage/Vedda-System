@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { FaArrowLeft } from 'react-icons/fa';
 import { modelAPI } from '../services/modelAPI';
 
 const ITEMS_PER_PAGE = 14;
@@ -111,86 +112,189 @@ const VisualsPage = () => {
 
   return (
     <div
-      className="min-h-screen p-20"
+      className="min-h-screen mt-[60px]"
       style={{
         backgroundImage: `url('/assets/background-images/background-1.png')`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundAttachment: "fixed",
-        paddingTop: "calc(5rem + 60px)",
       }}
     >
-      <div className="max-w-6xl mx-auto">
-
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-black mb-2">Word Library</h1>
-            <p className="text-gray-400">
-              {onlyWithIPA 
-                ? 'Showing only words with IPA data for animation'
-                : 'Showing all words (some may not have animation data)'}
-            </p>
-          </div>
-
-          {/* IPA Filter Toggle */}
-          <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
-            <label className="text-sm text-gray-700 font-medium">Only with IPA:</label>
+      {/* ── Glassmorphic nav bar ── */}
+      <div
+        style={{
+          background: "rgba(28,20,8,0.55)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          borderBottom: "1px solid rgba(200,170,100,0.18)",
+          boxShadow: "0 2px 16px rgba(0,0,0,0.20)",
+        }}
+      >
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
             <button
-              onClick={handleToggleIPA}
-              disabled={isLoading}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-                onlyWithIPA ? 'bg-blue-600' : 'bg-gray-400'
-              }`}
+              onClick={() => navigate("/")}
+              style={{
+                display: "flex", alignItems: "center", gap: "0.5rem",
+                color: "rgba(255,248,230,0.90)",
+                background: "rgba(255,255,255,0.08)",
+                border: "1px solid rgba(200,165,90,0.25)",
+                borderRadius: "9px", padding: "0.4rem 0.9rem",
+                fontFamily: "system-ui, sans-serif", fontWeight: "600",
+                fontSize: "0.88rem", cursor: "pointer",
+                transition: "background 0.2s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = "rgba(200,165,90,0.18)"}
+              onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}
             >
-              <span
-                className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                  onlyWithIPA ? 'translate-x-6' : 'translate-x-1'
+              <FaArrowLeft style={{ fontSize: "0.8rem" }} />
+              Back to Home
+            </button>
+            <div style={{
+              color: "#d4b483", fontFamily: "system-ui, sans-serif",
+              fontWeight: "600", fontSize: "0.9rem",
+            }}>
+              {totalCount} Word{totalCount !== 1 ? "s" : ""}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Hero section ── */}
+      <div
+        style={{
+          background: "linear-gradient(to bottom, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,0) 100%)",
+          paddingTop: "1.5rem",
+          paddingBottom: "1.5rem",
+          textAlign: "center",
+        }}
+      >
+        <span style={{
+          display: "inline-block",
+          background: "rgba(255,255,255,0.60)",
+          border: "1px solid rgba(100,80,40,0.22)",
+          borderRadius: "999px",
+          padding: "0.28rem 1rem",
+          fontSize: "0.73rem",
+          letterSpacing: "0.16em",
+          textTransform: "uppercase",
+          color: "#5c4a1e",
+          marginBottom: "0.6rem",
+          fontFamily: "system-ui, sans-serif",
+        }}>
+          🎭 3D Word Animations
+        </span>
+        <h1 style={{
+          fontSize: "clamp(1.8rem,4.5vw,3.2rem)",
+          fontWeight: "800",
+          color: "#1c1409",
+          lineHeight: 1.2,
+          margin: "0 auto 0.5rem",
+          maxWidth: "720px",
+          fontFamily: "'Georgia', serif",
+          letterSpacing: "-0.3px",
+          textShadow: "0 1px 0 rgba(255,255,255,0.8)",
+          padding: "0 1rem",
+        }}>
+          Vedda{" "}
+          <span style={{ color: "#9a6f2a", textShadow: "0 1px 0 rgba(255,255,255,0.9), 0 2px 8px rgba(255,255,255,0.5)" }}>
+            Word
+          </span>{" "}
+          Library
+        </h1>
+        <p style={{
+          fontSize: "clamp(0.9rem,1.8vw,1.08rem)",
+          color: "#3d2e0f",
+          maxWidth: "540px",
+          margin: "0 auto 0.5rem",
+          lineHeight: 1.75,
+          fontFamily: "'Georgia', serif",
+          fontStyle: "italic",
+          padding: "0 1rem",
+        }}>
+          Explore Vedda words with 3D phoneme animations to learn authentic pronunciation.
+        </p>
+        <div style={{
+          width: "52px", height: "3px",
+          background: "linear-gradient(90deg, #9a6f2a, #c9943a)",
+          margin: "1rem auto 0",
+          borderRadius: "99px",
+        }} />
+      </div>
+
+      {/* ── Content area ── */}
+      <div className="container mx-auto px-4 pb-12">
+        {/* Controls — frosted wrapper */}
+        <div style={{
+          background: "rgba(255,255,255,0.88)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          borderRadius: "14px",
+          padding: "1rem 1.25rem",
+          marginBottom: "1.5rem",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
+          border: "1px solid rgba(255,255,255,0.60)",
+        }}>
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 flex-wrap">
+            {/* IPA Filter Toggle */}
+            <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
+              <label className="text-sm text-gray-700 font-medium">Only with IPA:</label>
+              <button
+                onClick={handleToggleIPA}
+                disabled={isLoading}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  onlyWithIPA ? 'bg-blue-600' : 'bg-gray-400'
                 }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                    onlyWithIPA ? 'translate-x-6' : 'translate-x-1'
+                  }`}
+                />
+              </button>
+            </div>
+
+            {/* Search */}
+            <form onSubmit={handleSearchSubmit} className="flex gap-2">
+              <input
+                value={searchInput}
+                onChange={e => setSearchInput(e.target.value)}
+                placeholder="Search by English word..."
+                className="px-3 py-2 rounded-lg border border-gray-300 text-black"
+                disabled={isLoading}
               />
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+              >
+                Search
+              </button>
+              <button
+                type="button"
+                onClick={handleClearSearch}
+                className="px-3 py-2 bg-gray-300 rounded-lg"
+                disabled={!search && !searchInput}
+              >
+                Clear
+              </button>
+            </form>
+            <button
+              onClick={() => fetchWords(page, search)}
+              disabled={isLoading}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors flex items-center gap-2"
+            >
+              <svg 
+                className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              {isLoading ? 'Loading...' : 'Refresh'}
             </button>
           </div>
-
-          {/* Search */}
-          <form onSubmit={handleSearchSubmit} className="flex gap-2">
-            <input
-              value={searchInput}
-              onChange={e => setSearchInput(e.target.value)}
-              placeholder="Search by English word..."
-              className="px-3 py-2 rounded-lg border border-gray-300 text-black"
-              disabled={isLoading}
-            />
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg"
-            >
-              Search
-            </button>
-            <button
-              type="button"
-              onClick={handleClearSearch}
-              className="px-3 py-2 bg-gray-300 rounded-lg"
-              disabled={!search && !searchInput}
-            >
-              Clear
-            </button>
-          </form>
-          <button
-            onClick={() => fetchWords(page, search)}
-            disabled={isLoading}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors flex items-center gap-2"
-          >
-            <svg 
-              className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-            {isLoading ? 'Loading...' : 'Refresh'}
-          </button>
         </div>
 
         {/* Loading */}
