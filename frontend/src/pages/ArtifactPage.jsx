@@ -70,7 +70,7 @@ const ArtifactPage = () => {
 
   return (
     <div
-      className="min-h-screen mt-16"
+      className="min-h-screen mt-[60px]"
       style={{
         backgroundImage: `url('/assets/background-images/background-1.png')`,
         backgroundSize: "cover",
