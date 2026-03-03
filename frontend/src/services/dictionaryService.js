@@ -1,8 +1,8 @@
 import axios from "axios";
 
-// Dictionary service runs on port 5002 (not 5003)
+// Route through API gateway (works in both local and Docker)
 const DICTIONARY_API_URL =
-  import.meta.env.VITE_DICTIONARY_SERVICE_URL || "http://localhost:5002";
+  import.meta.env.VITE_API_GATEWAY_URL || "http://localhost:5000";
 
 /**
  * Translate a single word
