@@ -300,13 +300,31 @@ const VisualsPage = () => {
         {/* Loading */}
         {isLoading && (
           <div className="flex justify-center py-12">
-            <div className="animate-spin h-10 w-10 border-b-2 border-blue-500 rounded-full" />
+            <div
+              className="animate-spin"
+              style={{
+                width: "40px", height: "40px",
+                border: "3px solid rgba(154,111,42,0.25)",
+                borderTopColor: "#9a6f2a",
+                borderRadius: "50%",
+              }}
+            />
           </div>
         )}
 
         {/* Error */}
         {error && (
-          <div className="p-4 bg-red-900/20 border border-red-700 rounded-lg mb-6 text-red-400">
+          <div style={{
+            background: "rgba(255,255,255,0.88)",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            border: "1px solid rgba(220,38,38,0.35)",
+            borderRadius: "12px",
+            padding: "1rem 1.25rem",
+            marginBottom: "1.5rem",
+            color: "#b91c1c",
+            fontFamily: "system-ui, sans-serif",
+          }}>
             {error}
           </div>
         )}
@@ -314,24 +332,59 @@ const VisualsPage = () => {
         {/* Results */}
         {words.length > 0 && (
           <>
-            <div className="flex justify-between items-center mb-4 text-gray-400 text-sm">
-              {search
-                ? `Found ${totalCount} matching "${search}"`
-                : `Showing ${words.length} of ${totalCount}`}
+            {/* Pagination row — frosted */}
+            <div style={{
+              background: "rgba(255,255,255,0.88)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+              borderRadius: "10px",
+              padding: "0.6rem 1rem",
+              marginBottom: "1rem",
+              boxShadow: "0 2px 10px rgba(0,0,0,0.08)",
+              border: "1px solid rgba(255,255,255,0.60)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              flexWrap: "wrap",
+              gap: "0.5rem",
+            }}>
+              <span style={{ color: "#4b5563", fontSize: "0.875rem", fontFamily: "system-ui, sans-serif" }}>
+                {search
+                  ? `Found ${totalCount} matching "${search}"`
+                  : `Showing ${words.length} of ${totalCount}`}
+              </span>
               {totalPages > 1 && (
-                <div className="flex gap-2">
+                <div className="flex items-center gap-2">
                   <button
                     onClick={() => handlePageChange(page - 1)}
                     disabled={page === 1}
-                    className="px-2 py-1 bg-gray-700 text-white rounded"
+                    style={{
+                      padding: "0.3rem 0.75rem",
+                      background: page === 1 ? "#e5e7eb" : "#9a6f2a",
+                      color: page === 1 ? "#9ca3af" : "#fff",
+                      border: "none", borderRadius: "7px",
+                      fontWeight: "600", fontSize: "0.82rem",
+                      cursor: page === 1 ? "not-allowed" : "pointer",
+                      fontFamily: "system-ui, sans-serif",
+                    }}
                   >
                     Prev
                   </button>
-                  <span>Page {page} of {totalPages}</span>
+                  <span style={{ color: "#3d2e0f", fontSize: "0.85rem", fontWeight: "600", fontFamily: "system-ui, sans-serif" }}>
+                    Page {page} of {totalPages}
+                  </span>
                   <button
                     onClick={() => handlePageChange(page + 1)}
                     disabled={page === totalPages}
-                    className="px-2 py-1 bg-gray-700 text-white rounded"
+                    style={{
+                      padding: "0.3rem 0.75rem",
+                      background: page === totalPages ? "#e5e7eb" : "#9a6f2a",
+                      color: page === totalPages ? "#9ca3af" : "#fff",
+                      border: "none", borderRadius: "7px",
+                      fontWeight: "600", fontSize: "0.82rem",
+                      cursor: page === totalPages ? "not-allowed" : "pointer",
+                      fontFamily: "system-ui, sans-serif",
+                    }}
                   >
                     Next
                   </button>
@@ -343,31 +396,46 @@ const VisualsPage = () => {
               {words.map(word => (
                 <div
                   key={word.id}
-                  className="bg-dark-surface border border-dark-border rounded-xl p-4"
+                  style={{
+                    background: "rgba(255,255,255,0.88)",
+                    backdropFilter: "blur(10px)",
+                    WebkitBackdropFilter: "blur(10px)",
+                    border: "1px solid rgba(255,255,255,0.60)",
+                    boxShadow: "0 4px 16px rgba(0,0,0,0.10)",
+                  }}
+                  className="rounded-xl p-4"
                 >
-                  <h3 className="text-lg font-semibold text-black">
+                  <h3 className="text-lg font-semibold" style={{ color: "#1c1409" }}>
                     {word.word}
                   </h3>
                   {word.ipa ? (
-                    <p className="text-blue-400 font-mono">/{word.ipa}/</p>
+                    <p className="font-mono" style={{ color: "#7c3fa8" }}>/{word.ipa}/</p>
                   ) : (
-                    <p className="text-red-400 text-xs">No IPA data available</p>
+                    <p className="text-xs" style={{ color: "#dc2626" }}>No IPA data available</p>
                   )}
                   {word.sinhalaWord && (
-                    <p className="text-xs text-gray-500">{word.sinhalaWord}</p>
+                    <p className="text-xs" style={{ color: "#6b7280" }}>{word.sinhalaWord}</p>
                   )}
                   {word.englishWord && (
-                    <p className="text-xs text-gray-500">{word.englishWord}</p>
+                    <p className="text-xs" style={{ color: "#6b7280" }}>{word.englishWord}</p>
                   )}
 
                   <button
                     onClick={() => handleAnimateWord(word)}
                     disabled={!word.ipa}
-                    className={`mt-3 w-full py-2 rounded-lg ${
-                      word.ipa 
-                        ? 'bg-blue-600 text-white hover:bg-blue-700' 
-                        : 'bg-gray-400 text-gray-200 cursor-not-allowed'
-                    }`}
+                    style={word.ipa ? {
+                      marginTop: "0.75rem", width: "100%", padding: "0.5rem",
+                      background: "linear-gradient(135deg, #7c3fa8, #4a6fa8)",
+                      color: "#fff", border: "none", borderRadius: "8px",
+                      fontWeight: "600", fontSize: "0.9rem",
+                      fontFamily: "system-ui, sans-serif", cursor: "pointer",
+                    } : {
+                      marginTop: "0.75rem", width: "100%", padding: "0.5rem",
+                      background: "#e5e7eb", color: "#9ca3af",
+                      border: "none", borderRadius: "8px",
+                      fontWeight: "600", fontSize: "0.9rem",
+                      fontFamily: "system-ui, sans-serif", cursor: "not-allowed",
+                    }}
                   >
                     {word.ipa ? 'View Animation' : 'No Animation Available'}
                   </button>
@@ -379,7 +447,14 @@ const VisualsPage = () => {
 
         {/* Empty */}
         {!isLoading && !error && words.length === 0 && (
-          <div className="text-center py-12 text-gray-500">
+          <div style={{
+            textAlign: "center", padding: "5rem 1rem",
+            background: "rgba(255,255,255,0.70)",
+            borderRadius: "14px",
+            color: "#3d2e0f",
+            fontFamily: "system-ui, sans-serif",
+            fontSize: "1.05rem",
+          }}>
             {search
               ? `No words found for "${search}"`
               : 'No words with IPA found.'}
