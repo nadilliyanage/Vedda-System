@@ -26,7 +26,7 @@ const ProfilePage = () => {
 
   if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center py-4 px-8 relative" style={{ backgroundImage: 'url(/assets/background-images/profile-background.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div className="min-h-screen flex items-center justify-center py-4 px-8 relative" style={{ backgroundImage: 'url(/assets/background-images/background-3.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
         <div className="absolute inset-0 backdrop-blur-[3px] bg-black/20" />
         <div className="bg-white rounded-xl shadow-2xl p-8">
           <p className="text-gray-600">Loading...</p>
@@ -56,7 +56,7 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen py-20 px-4 sm:px-8 relative" style={{ backgroundImage: 'url(/assets/background-images/profile-background.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
+    <div className="min-h-screen py-20 px-4 sm:px-8 relative" style={{ backgroundImage: 'url(/assets/background-images/background-3.png)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
       <div className="absolute inset-0 backdrop-blur-[3px] bg-black/20" />
       
       <div className="max-w-4xl mx-auto space-y-8 relative z-10">
