@@ -247,7 +247,7 @@ class VeddaTranslator:
         """Search dictionary service for word translation (LEGACY - use batch_translate_dictionary for better performance)"""
         try:
             response = self.session.get(
-                f"{self.dictionary_service_url}/api/dictionary/search",
+                f"{self.dictionary_service_url}/search",
                 params={
                     'q': word,
                     'source': source_lang,

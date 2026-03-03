@@ -52,7 +52,7 @@ services:
       - history-service
     environment:
       - FLASK_ENV=development
-      - DICTIONARY_SERVICE_URL=http://dictionary-service:5002
+      - DICTIONARY_SERVICE_URL=http://dictionary-service:5002/api/dictionary
       - HISTORY_SERVICE_URL=http://history-service:5003
     networks:
       - vedda-network
