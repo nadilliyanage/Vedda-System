@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { FaLanguage, FaBookOpen, FaLandmark, FaCube, FaArrowRight } from "react-icons/fa";
 
-/* ─── Accent palette matching the earthy forest bg ─── */
+/* ─── Per-card accent colours ─── */
 const ACCENTS = {
-  1: { from: "#1e6fa8", to: "#3b9fd1", shadow: "rgba(30,111,168,0.45)" },   // Blue
-  2: { from: "#2d7a4f", to: "#4aad72", shadow: "rgba(45,122,79,0.45)" },    // Green
-  3: { from: "#7c3fa8", to: "#b06bd6", shadow: "rgba(124,63,168,0.45)" },   // Purple
-  4: { from: "#b85c10", to: "#e88033", shadow: "rgba(184,92,16,0.45)" },    // Orange
+  1: { from: "#1e6fa8", to: "#3b9fd1", glow: "rgba(30,111,168,0.30)" },
+  2: { from: "#2d7a4f", to: "#4aad72", glow: "rgba(45,122,79,0.30)" },
+  3: { from: "#7c3fa8", to: "#b06bd6", glow: "rgba(124,63,168,0.30)" },
+  4: { from: "#b85c10", to: "#e88033", glow: "rgba(184,92,16,0.30)" },
 };
 
 const features = [
@@ -44,107 +44,7 @@ const features = [
   },
 ];
 
-/* ─── Inline styles (no Tailwind required for new additions) ─── */
-const styles = {
-  page: {
-    minHeight: "100vh",
-    backgroundImage: `url('/assets/background-images/background-1.png')`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundAttachment: "fixed",
-    fontFamily: "'Georgia', 'Times New Roman', serif",
-  },
-  overlay: {
-    minHeight: "100vh",
-    background: "linear-gradient(160deg, rgba(10,15,10,0.72) 0%, rgba(20,30,20,0.55) 60%, rgba(5,10,5,0.80) 100%)",
-  },
-  heroSection: {
-    paddingTop: "6rem",
-    paddingBottom: "4rem",
-    textAlign: "center",
-    position: "relative",
-  },
-  badge: {
-    display: "inline-block",
-    background: "rgba(255,255,255,0.12)",
-    border: "1px solid rgba(255,255,255,0.25)",
-    borderRadius: "999px",
-    padding: "0.35rem 1.2rem",
-    fontSize: "0.78rem",
-    letterSpacing: "0.18em",
-    textTransform: "uppercase",
-    color: "rgba(255,255,255,0.82)",
-    marginBottom: "1.5rem",
-    backdropFilter: "blur(8px)",
-  },
-  heroTitle: {
-    fontSize: "clamp(2.2rem, 5vw, 4rem)",
-    fontWeight: "800",
-    color: "#ffffff",
-    lineHeight: 1.18,
-    margin: "0 auto 1.25rem",
-    maxWidth: "820px",
-    textShadow: "0 2px 24px rgba(0,0,0,0.55)",
-    letterSpacing: "-0.5px",
-  },
-  heroTitle_em: {
-    background: "linear-gradient(90deg, #a78c5d, #d4b483, #c49a52)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-  },
-  heroSub: {
-    fontSize: "clamp(1rem, 2vw, 1.22rem)",
-    color: "rgba(255,255,255,0.72)",
-    maxWidth: "560px",
-    margin: "0 auto 2.5rem",
-    lineHeight: 1.75,
-    fontFamily: "'Georgia', serif",
-    fontStyle: "italic",
-  },
-  divider: {
-    width: "64px",
-    height: "3px",
-    background: "linear-gradient(90deg, #a78c5d, #d4b483)",
-    margin: "0 auto 4rem",
-    borderRadius: "99px",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 420px), 1fr))",
-    gap: "1.75rem",
-    maxWidth: "960px",
-    margin: "0 auto",
-    padding: "0 1.25rem",
-  },
-  aboutSection: {
-    maxWidth: "700px",
-    margin: "5rem auto 5rem",
-    padding: "0 1.25rem",
-    textAlign: "center",
-  },
-  aboutTitle: {
-    fontSize: "1.6rem",
-    fontWeight: "700",
-    color: "#d4b483",
-    marginBottom: "1rem",
-    letterSpacing: "0.02em",
-  },
-  aboutText: {
-    fontSize: "1.05rem",
-    color: "rgba(255,255,255,0.68)",
-    lineHeight: 1.9,
-    fontStyle: "italic",
-  },
-  aboutDividerTop: {
-    width: "40px",
-    height: "2px",
-    background: "rgba(212,180,131,0.45)",
-    margin: "0 auto 2rem",
-    borderRadius: "99px",
-  },
-};
-
-/* ─── Feature Card ─── */
+/* ── Feature Card ── */
 const FeatureCard = ({ feature, onClick }) => {
   const Icon = feature.icon;
   const accent = ACCENTS[feature.id];
@@ -154,137 +54,214 @@ const FeatureCard = ({ feature, onClick }) => {
       onClick={onClick}
       style={{
         cursor: "pointer",
-        borderRadius: "20px",
+        borderRadius: "18px",
         overflow: "hidden",
-        background: "rgba(255,255,255,0.06)",
-        border: "1px solid rgba(255,255,255,0.14)",
-        backdropFilter: "blur(18px)",
-        WebkitBackdropFilter: "blur(18px)",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.35)",
-        transition: "transform 0.32s cubic-bezier(.25,.8,.25,1), box-shadow 0.32s",
+        background: "#ffffff",
+        boxShadow: "0 4px 24px rgba(0,0,0,0.12)",
+        transition: "transform 0.28s cubic-bezier(.25,.8,.25,1), box-shadow 0.28s",
         display: "flex",
         flexDirection: "column",
       }}
       onMouseEnter={e => {
-        e.currentTarget.style.transform = "translateY(-8px) scale(1.015)";
-        e.currentTarget.style.boxShadow = `0 20px 48px ${accent.shadow}, 0 4px 16px rgba(0,0,0,0.4)`;
+        e.currentTarget.style.transform = "translateY(-6px)";
+        e.currentTarget.style.boxShadow = `0 16px 48px ${accent.glow}, 0 4px 16px rgba(0,0,0,0.14)`;
       }}
       onMouseLeave={e => {
-        e.currentTarget.style.transform = "translateY(0) scale(1)";
-        e.currentTarget.style.boxShadow = "0 8px 32px rgba(0,0,0,0.35)";
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.12)";
       }}
     >
-      {/* Image Banner */}
-      <div style={{ position: "relative", height: "180px", overflow: "hidden" }}>
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            backgroundImage: `url(${feature.bgImage})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            transition: "transform 0.5s ease",
-          }}
-        />
-        {/* Gradient over image */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: `linear-gradient(135deg, ${accent.from}cc 0%, ${accent.to}99 100%)`,
-          }}
-        />
-        {/* Icon badge */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: "1rem",
-            left: "1.25rem",
-            background: "rgba(0,0,0,0.35)",
-            border: "1px solid rgba(255,255,255,0.25)",
-            borderRadius: "12px",
-            padding: "0.55rem 0.75rem",
-            backdropFilter: "blur(8px)",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.6rem",
-          }}
-        >
-          <Icon style={{ color: "#fff", fontSize: "1.4rem" }} />
-          <span style={{ color: "#fff", fontWeight: "700", fontSize: "1rem", fontFamily: "sans-serif" }}>
+      {/* Coloured image banner */}
+      <div style={{ position: "relative", height: "175px", overflow: "hidden" }}>
+        {/* Feature background image */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: `url(${feature.bgImage})`,
+          backgroundSize: "cover", backgroundPosition: "center",
+        }} />
+        {/* Colour gradient overlay */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: `linear-gradient(135deg, ${accent.from}bb 0%, ${accent.to}88 100%)`,
+        }} />
+        {/* Title chip at bottom-left */}
+        <div style={{
+          position: "absolute", bottom: "1rem", left: "1rem",
+          display: "flex", alignItems: "center", gap: "0.55rem",
+          background: "rgba(0,0,0,0.40)",
+          backdropFilter: "blur(6px)",
+          border: "1px solid rgba(255,255,255,0.22)",
+          borderRadius: "10px",
+          padding: "0.45rem 0.85rem",
+        }}>
+          <Icon style={{ color: "#fff", fontSize: "1.25rem", flexShrink: 0 }} />
+          <span style={{ color: "#fff", fontWeight: "700", fontSize: "0.95rem", fontFamily: "system-ui, sans-serif" }}>
             {feature.title}
           </span>
         </div>
       </div>
 
-      {/* Body */}
-      <div style={{ padding: "1.4rem 1.5rem 1.6rem", display: "flex", flexDirection: "column", flexGrow: 1 }}>
-        <p style={{ color: "rgba(255,255,255,0.72)", fontSize: "0.96rem", lineHeight: 1.7, margin: 0, fontFamily: "sans-serif" }}>
+      {/* White body */}
+      <div style={{ padding: "1.25rem 1.4rem 1.5rem", flexGrow: 1, display: "flex", flexDirection: "column" }}>
+        <p style={{
+          margin: 0,
+          color: "#4b5563",
+          fontSize: "0.95rem",
+          lineHeight: 1.65,
+          fontFamily: "system-ui, sans-serif",
+        }}>
           {feature.description}
         </p>
-        <div
-          style={{
-            marginTop: "1.25rem",
-            display: "flex",
-            alignItems: "center",
-            gap: "0.45rem",
-            color: "#d4b483",
-            fontFamily: "sans-serif",
-            fontWeight: "600",
-            fontSize: "0.9rem",
-            letterSpacing: "0.04em",
-            transition: "gap 0.2s",
-          }}
-        >
+        <div style={{
+          marginTop: "1.1rem",
+          display: "flex", alignItems: "center", gap: "0.4rem",
+          fontFamily: "system-ui, sans-serif",
+          fontWeight: "600", fontSize: "0.88rem",
+          color: accent.from,
+          letterSpacing: "0.03em",
+        }}>
           <span>Explore</span>
-          <FaArrowRight style={{ fontSize: "0.8rem" }} />
+          <FaArrowRight style={{ fontSize: "0.75rem" }} />
         </div>
       </div>
     </div>
   );
 };
 
-/* ─── Page ─── */
+/* ── Page ── */
 const HomePage = () => {
   const navigate = useNavigate();
 
   return (
-    <div style={styles.page}>
-      <div style={styles.overlay}>
-        {/* ── Hero ── */}
-        <div style={styles.heroSection}>
-          <div style={styles.badge}>🌿 Indigenous Heritage Platform</div>
+    <div style={{
+      minHeight: "100vh",
+      backgroundImage: `url('/assets/background-images/background-1.png')`,
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      backgroundAttachment: "fixed",
+    }}>
+      {/* ── Hero area: only the top strip gets a subtle white fade so text is readable ── */}
+      <div style={{
+        paddingTop: "5rem",
+        paddingBottom: "3.5rem",
+        textAlign: "center",
+        background: "linear-gradient(to bottom, rgba(255,255,255,0.90) 0%, rgba(255,255,255,0.70) 55%, rgba(255,255,255,0) 100%)",
+      }}>
+        {/* Badge */}
+        <span style={{
+          display: "inline-block",
+          background: "rgba(255,255,255,0.70)",
+          border: "1px solid rgba(100,80,40,0.22)",
+          borderRadius: "999px",
+          padding: "0.3rem 1.1rem",
+          fontSize: "0.75rem",
+          letterSpacing: "0.16em",
+          textTransform: "uppercase",
+          color: "#5c4a1e",
+          marginBottom: "1.25rem",
+          fontFamily: "system-ui, sans-serif",
+          backdropFilter: "blur(6px)",
+        }}>
+          🌿 Indigenous Heritage Platform
+        </span>
 
-          <h1 style={styles.heroTitle}>
-            Vedda Culture{" "}
-            <span style={styles.heroTitle_em}>Preservation</span>{" "}
-            System
-          </h1>
+        {/* Headline */}
+        <h1 style={{
+          fontSize: "clamp(2rem, 5vw, 3.8rem)",
+          fontWeight: "800",
+          color: "#1c1409",
+          lineHeight: 1.15,
+          margin: "0 auto 1rem",
+          maxWidth: "780px",
+          fontFamily: "'Georgia', serif",
+          letterSpacing: "-0.5px",
+          textShadow: "0 1px 0 rgba(255,255,255,0.8)",
+          padding: "0 1rem",
+        }}>
+          Vedda Culture{" "}
+          <span style={{
+            color: "#9a6f2a",
+            textShadow: "0 1px 0 rgba(255,255,255,0.9), 0 2px 8px rgba(255,255,255,0.6)",
+          }}>
+            Preservation
+          </span>{" "}
+          System
+        </h1>
 
-          <p style={styles.heroSub}>
-            Preserving and celebrating the indigenous Vedda people of Sri Lanka
-            through immersive digital experiences.
-          </p>
+        {/* Subtitle */}
+        <p style={{
+          fontSize: "clamp(0.95rem, 2vw, 1.15rem)",
+          color: "#3d2e0f",
+          maxWidth: "520px",
+          margin: "0 auto",
+          lineHeight: 1.8,
+          fontFamily: "'Georgia', serif",
+          fontStyle: "italic",
+          padding: "0 1rem",
+        }}>
+          Preserving and celebrating the indigenous Vedda people of Sri Lanka
+          through immersive digital experiences.
+        </p>
+      </div>
 
-          <div style={styles.divider} />
+      {/* ── Cards section: sits directly on the background image ── */}
+      <div style={{ padding: "0 1.25rem 5rem" }}>
+        {/* Thin gold divider */}
+        <div style={{
+          width: "56px", height: "3px",
+          background: "linear-gradient(90deg, #9a6f2a, #c9943a)",
+          margin: "0 auto 2.75rem",
+          borderRadius: "99px",
+        }} />
 
-          {/* ── Feature Cards ── */}
-          <div style={styles.grid}>
-            {features.map((feature) => (
-              <FeatureCard
-                key={feature.id}
-                feature={feature}
-                onClick={() => navigate(feature.path)}
-              />
-            ))}
-          </div>
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 400px), 1fr))",
+          gap: "1.5rem",
+          maxWidth: "900px",
+          margin: "0 auto",
+        }}>
+          {features.map(feature => (
+            <FeatureCard
+              key={feature.id}
+              feature={feature}
+              onClick={() => navigate(feature.path)}
+            />
+          ))}
         </div>
 
-        {/* ── About ── */}
-        <div style={styles.aboutSection}>
-          <div style={styles.aboutDividerTop} />
-          <h2 style={styles.aboutTitle}>About the Vedda Culture</h2>
-          <p style={styles.aboutText}>
+        {/* ── About section: card on the background ── */}
+        <div style={{
+          maxWidth: "680px",
+          margin: "4rem auto 0",
+          background: "rgba(255,255,255,0.88)",
+          backdropFilter: "blur(12px)",
+          WebkitBackdropFilter: "blur(12px)",
+          borderRadius: "20px",
+          padding: "2.5rem 2.75rem",
+          textAlign: "center",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.10)",
+          border: "1px solid rgba(255,255,255,0.60)",
+        }}>
+          <div style={{
+            width: "36px", height: "2px",
+            background: "linear-gradient(90deg, #9a6f2a, #c9943a)",
+            margin: "0 auto 1.5rem",
+            borderRadius: "99px",
+          }} />
+          <h2 style={{
+            fontSize: "1.55rem", fontWeight: "700",
+            color: "#1c1409", marginBottom: "1rem",
+            fontFamily: "'Georgia', serif",
+          }}>
+            About the Vedda Culture
+          </h2>
+          <p style={{
+            fontSize: "1rem", color: "#4b5563",
+            lineHeight: 1.85, margin: 0,
+            fontFamily: "'Georgia', serif",
+            fontStyle: "italic",
+          }}>
             The Vedda people are the indigenous inhabitants of Sri Lanka, with a history
             stretching back thousands of years. This platform is dedicated to safeguarding
             their language, traditions, and cultural artefacts — bridging ancient wisdom
