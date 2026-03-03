@@ -383,11 +383,6 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
           <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
             {question.points} Points
           </span>
-          {question.timeLimitSec && (
-            <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full">
-              ⏱ {question.timeLimitSec}s
-            </span>
-          )}
         </div>
       </div>
     );
@@ -414,7 +409,7 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
         {submitted && (
           <div className="bg-white border-2 border-dashed border-blue-400 rounded-xl p-6 mb-6">
             <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-              <span>🤖</span> AI Summary
+              <span></span> AI Summary
             </h3>
             {isGeneratingSummary ? (
               <div className="flex items-center gap-3 text-gray-600">
@@ -454,14 +449,7 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
           )}
         </div>
 
-        {/* Progress Info */}
-        {!submitted && (
-          <div className="mt-6 bg-blue-50 rounded-xl p-4 border-2 border-blue-200">
-            <p className="text-blue-700 text-center">
-              <strong>{exercise.question?.xp || 0} XP</strong> available for correct answer
-            </p>
-          </div>
-        )}
+
       </div>
     </div>
   );

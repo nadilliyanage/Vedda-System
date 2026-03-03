@@ -422,7 +422,7 @@ const AdminExercises = () => {
 
         <div className="bg-white rounded-lg shadow-md">
           {loading ? (
-            <LoadingScreen />
+            <LoadingScreen message="Loading exercises..." />
           ) : exercises.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">No exercises found</p>
@@ -435,7 +435,7 @@ const AdminExercises = () => {
               <table className="min-w-full">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="hidden px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       ID
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -458,7 +458,7 @@ const AdminExercises = () => {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {exercises.map((exercise) => (
                     <tr key={exercise.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                      <td className="hidden px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {exercise.id}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -671,28 +671,7 @@ const AdminExercises = () => {
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Question</h3>
 
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Question No.
-                </label>
-                <input
-                  type="text"
-                  value={formData.question.questionNo}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      question: {
-                        ...formData.question,
-                        questionNo: e.target.value,
-                      },
-                    })
-                  }
-                  className="w-full border rounded-lg px-3 py-2"
-                  placeholder="e.g., 1"
-                  disabled
-                />
-              </div>
+            <div className="grid grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Type
@@ -712,9 +691,6 @@ const AdminExercises = () => {
                   <option value="match_pairs">Match Pairs</option>
                 </select>
               </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   XP Reward
@@ -745,26 +721,6 @@ const AdminExercises = () => {
                       question: {
                         ...formData.question,
                         points: e.target.value,
-                      },
-                    })
-                  }
-                  className="w-full border rounded-lg px-3 py-2"
-                  min="0"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Time Limit (sec)
-                </label>
-                <input
-                  type="number"
-                  value={formData.question.timeLimitSec}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      question: {
-                        ...formData.question,
-                        timeLimitSec: e.target.value,
                       },
                     })
                   }

@@ -5,6 +5,7 @@ from app.services.learn_service import (
     submit_challenge,
     save_user_lesson_progress
 )
+from app.services.user_stats_service import get_leaderboard
 
 from app.db.mongo import get_db
 from datetime import datetime, timedelta
@@ -50,23 +51,33 @@ def lesson_progress():
         "completed_at": result["completed_at"],
     }), 200
 
+@learn_bp.get("/leaderboard")
+def leaderboard():
+    user_id = request.args.get("user_id")
+    if not user_id:
+        return jsonify({"error": "user_id query parameter is required"}), 400
+    data = get_leaderboard(user_id)
+    return jsonify(data), 200
+
 @learn_bp.get("/user-dashboard")
 def get_dashboard():
     db = get_db()
     user_id = request.args.get("user_id")
 
     total_lessons = db.lessons.count_documents({})
-    total_exercises = db.exercises.count_documents({})
+    total_exercises = db.exercises.count_documents({"type": "MANUAL"})
     # Lessons completed
     lessons_completed = db.user_lessons.count_documents({
         "user_id": user_id,
         "completed": True
     })
 
-    # Exercises completed
-    exercises_completed = len(
-        db.user_attempts.distinct("exercise_id", {"user_id": user_id})
-    )
+    # Exercises completed (MANUAL only)
+    manual_exercise_ids = {
+        str(e["_id"]) for e in db.exercises.find({"type": "MANUAL"}, {"_id": 1})
+    }
+    completed_exercise_ids = db.user_attempts.distinct("exercise_id", {"user_id": user_id})
+    exercises_completed = len([eid for eid in completed_exercise_ids if eid in manual_exercise_ids])
 
     # Average score
     user_stats = db.user_stats.find_one({"user_id": user_id})

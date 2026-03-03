@@ -8,7 +8,8 @@ admin_bp = Blueprint("admin", __name__)
 
 @admin_bp.get("/challenges")
 def admin_list_challenges():
-    data = admin_service.admin_list_challenges()
+    user_id = request.args.get("user_id")  # optional: annotate with completion flags
+    data = admin_service.admin_list_challenges(user_id=user_id)
     return jsonify(data), 200
 
 

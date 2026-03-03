@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { FaEye, FaEdit, FaTrash, FaPlus, FaArrowLeft } from 'react-icons/fa';
 import { categoriesAPI } from '../../services/learningAPI';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
+import LoadingScreen from '../../components/ui/LoadingScreen';
 
 const AdminCategories = ({ onBack }) => {
   const [categories, setCategories] = useState([]);
@@ -119,9 +120,7 @@ const AdminCategories = ({ onBack }) => {
 
         <div className="bg-white rounded-lg shadow-md">
           {loading ? (
-            <div className="text-center py-8">
-              <p className="text-gray-600">Loading categories...</p>
-            </div>
+            <LoadingScreen message="Loading categories..." />
           ) : categories.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">No categories found</p>

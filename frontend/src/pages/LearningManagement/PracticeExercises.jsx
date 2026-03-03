@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { FaArrowLeft, FaSpinner, FaChevronDown, FaChevronRight, FaDumbbell, FaMagic, FaStar } from 'react-icons/fa';
+import { FaArrowLeft, FaSpinner, FaChevronDown, FaChevronRight, FaDumbbell, FaMagic, FaStar, FaCheckCircle } from 'react-icons/fa';
 import { categoriesAPI, lessonsAPI, exercisesAPI } from '../../services/learningAPI';
 import { useAuth } from '../../contexts/AuthContext';
+import LoadingScreen from '../../components/ui/LoadingScreen';
 
 const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBack, onStartExercise }) => {
   const { user } = useAuth();
@@ -161,16 +162,7 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-yellow-50 pt-16">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="text-center py-20">
-            <FaSpinner className="text-5xl text-orange-600 animate-spin mx-auto mb-4" />
-            <p className="text-gray-600 text-lg">Loading exercises...</p>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading exercises..." />;
   }
 
   return (
@@ -213,7 +205,6 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <h2 className="text-2xl font-bold">Your Personalized Practice</h2>
-                      <FaStar className="text-yellow-300 text-xl animate-pulse" />
                     </div>
                     <p className="text-white/90 text-sm">
                       AI-generated exercises tailored just for you based on your progress
@@ -235,23 +226,16 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                 >
                   {loadingPersonalized ? (
                     <div className="flex items-center justify-center gap-3">
-                      <FaSpinner className="text-2xl text-purple-500 animate-spin" />
-                      <span className="text-lg text-gray-700 font-semibold">
-                        Generating personalized exercise...
-                      </span>
+                      <LoadingScreen message="Generating personalized exercise..." />
                     </div>
                   ) : (
                     <div className="flex items-center justify-between">
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">
-                          <FaMagic className="text-3xl text-purple-500" />
                           <h3 className="text-2xl font-bold text-gray-800">
                             Start Personalized Practice
                           </h3>
                         </div>
-                        <p className="text-gray-600 ml-12">
-                          Get an AI-generated exercise tailored to your learning progress and weak areas
-                        </p>
                       </div>
                       <div className="ml-4">
                         <svg
@@ -365,6 +349,7 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                               <div className="ml-8 mt-2 space-y-2">
                                 {lessonExercises.map((exercise) => {
                                   const totalXP = exercise.question?.xp || 0;
+                                  const isCompleted = exercise.completed === true;
                                   
                                   return (
                                     <div
@@ -382,6 +367,9 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                                           </p>
                                         </div>
                                         <div className="flex items-center gap-4">
+                                          {isCompleted && (
+                                            <FaCheckCircle className="text-white text-2xl flex-shrink-0" title="Completed" />
+                                          )}
                                           <div className="bg-white/20 px-4 py-2 rounded-lg">
                                             <div className="text-sm text-blue-100">Reward</div>
                                             <div className="text-xl font-bold">{totalXP} XP</div>
@@ -418,7 +406,7 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
         )}
 
         {/* Info Card */}
-        {categories.length > 0 && (
+        {/* {categories.length > 0 && (
           <div className="mt-8 bg-white rounded-xl shadow-md p-6">
             <h3 className="text-xl font-bold text-gray-800 mb-3">
               How It Works
@@ -429,7 +417,7 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
               Start an exercise to test your knowledge and earn XP rewards!
             </p>
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );

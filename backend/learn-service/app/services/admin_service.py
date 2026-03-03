@@ -1,39 +1,62 @@
 from bson import ObjectId
 from ..db.mongo import get_collection
 from ..models.common import serialize_mongo_doc
-from ..services.user_stats_service import get_completed_exercise_ids
+from ..services.user_stats_service import get_completed_exercise_ids, get_completed_challenge_ids
 from flask import g
 
 # ---------- Challenges ----------
 
-def admin_list_challenges():
+def admin_list_challenges(user_id: str = None):
     current_user = g.current_user
     print(f"current user: {current_user}")
-    col = get_collection("challenges")
-    challenges = list(col.find({}))
-    for challenge in challenges:
+    col = get_collection("exercises")
+    challenges = list(col.find({"type": "CHALLENGE"}))
+
+    # Sort by challengeNumber ascending
+    challenges.sort(key=lambda c: c.get("challengeNumber", 0))
+
+    # Annotate with completion/enabled flags when user_id is provided
+    completed_ids = set()
+    if user_id:
+        completed_ids = set(get_completed_challenge_ids(user_id))
+
+    for i, challenge in enumerate(challenges):
         if "_id" in challenge:
             challenge["_id"] = str(challenge["_id"])
+
+        challenge_id = challenge.get("_id") or challenge.get("id", "")
+        is_completed = challenge_id in completed_ids
+        challenge["isCompleted"] = is_completed
+
+        # First challenge always enabled; others enabled if previous is completed
+        if i == 0:
+            challenge["isEnabled"] = True
+        else:
+            prev = challenges[i - 1]
+            prev_id = prev.get("_id") or prev.get("id", "")
+            challenge["isEnabled"] = prev_id in completed_ids
+
     return challenges
 
 
 def admin_create_challenge(data: dict):
-    col = get_collection("challenges")
+    col = get_collection("exercises")
 
     required = ["id", "lessonId", "categoryId", "challengeNumber", "question"]
     if not all(field in data for field in required):
         return {"success": False, "error": "Missing required fields"}, 400
 
-    if col.find_one({"id": data["id"]}):
+    if col.find_one({"id": data["id"], "type": "CHALLENGE"}):
         return {"success": False, "error": "Challenge with this ID already exists"}, 400
 
+    data["type"] = "CHALLENGE"
     col.insert_one(data)
     return {"success": True, "message": "Challenge created successfully"}, 201
 
 
 def admin_get_challenge(challenge_id: str):
-    col = get_collection("challenges")
-    challenge = col.find_one({"id": challenge_id}, {"_id": 0})
+    col = get_collection("exercises")
+    challenge = col.find_one({"id": challenge_id, "type": "CHALLENGE"}, {"_id": 0})
 
     if challenge:
         return {"success": True, "challenge": challenge}, 200
@@ -42,16 +65,17 @@ def admin_get_challenge(challenge_id: str):
 
 
 def admin_update_challenge(challenge_id: str, data: dict):
-    col = get_collection("challenges")
+    col = get_collection("exercises")
 
     data.pop("id", None)
     data.pop("_id", None)
+    data.pop("type", None)
 
     required = ["lessonId", "categoryId", "challengeNumber", "question"]
     if not all(field in data for field in required):
         return {"success": False, "error": "Missing required fields"}, 400
 
-    result = col.update_one({"id": challenge_id}, {"$set": data})
+    result = col.update_one({"id": challenge_id, "type": "CHALLENGE"}, {"$set": data})
 
     if result.modified_count > 0:
         return {"success": True, "message": "Challenge updated successfully"}, 200
@@ -60,8 +84,8 @@ def admin_update_challenge(challenge_id: str, data: dict):
 
 
 def admin_delete_challenge(challenge_id: str):
-    col = get_collection("challenges")
-    result = col.delete_one({"id": challenge_id})
+    col = get_collection("exercises")
+    result = col.delete_one({"id": challenge_id, "type": "CHALLENGE"})
 
     if result.deleted_count > 0:
         return {"success": True, "message": "Challenge deleted successfully"}, 200
@@ -192,7 +216,7 @@ def admin_list_exercises():
     current_user = g.current_user
     print(f"current user: {current_user}")
     col = get_collection("exercises")
-    exercises = list(col.find({}))
+    exercises = list(col.find({"type": "MANUAL"}))
     completedExList = get_completed_exercise_ids(current_user.id) if current_user else []
     completed_ids = set(completedExList)  # Already strings from user_attempts
     print(f"Completed IDs: {completed_ids}")

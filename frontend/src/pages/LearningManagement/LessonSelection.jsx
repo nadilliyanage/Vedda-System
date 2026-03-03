@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { FaArrowLeft, FaSpinner } from 'react-icons/fa';
+import { FaArrowLeft } from 'react-icons/fa';
 import { categoriesAPI } from '../../services/learningAPI';
+import LoadingScreen from '../../components/ui/LoadingScreen';
 
 const LessonSelection = ({ onBack, onCategorySelect }) => {
   const [categories, setCategories] = useState([]);
@@ -47,16 +48,7 @@ const LessonSelection = ({ onBack, onCategorySelect }) => {
   };
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 pt-16">
-        <div className="max-w-6xl mx-auto px-4 py-8">
-          <div className="text-center py-20">
-            <FaSpinner className="text-5xl text-blue-600 animate-spin mx-auto mb-4" />
-            <p className="text-gray-600 text-lg">Loading categories...</p>
-          </div>
-        </div>
-      </div>
-    );
+    return <LoadingScreen message="Loading categories..." />;
   }
 
   return (
@@ -129,7 +121,7 @@ const LessonSelection = ({ onBack, onCategorySelect }) => {
         )}
 
         {/* Info Card */}
-        <div className="mt-12 max-w-3xl mx-auto">
+        {/* <div className="mt-12 max-w-3xl mx-auto">
           <div className="bg-white rounded-xl shadow-md p-6">
             <h3 className="text-xl font-bold text-gray-800 mb-3">
               How It Works
@@ -140,7 +132,7 @@ const LessonSelection = ({ onBack, onCategorySelect }) => {
               effectively. Track your progress and earn rewards as you complete lessons.
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

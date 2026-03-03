@@ -40,7 +40,7 @@ class VeddaAudioTester:
             return False
         
         try:
-            print(f"🤖 Loading Vedda ASR model...")
+            print(f"Loading Vedda ASR model...")
             self.processor = WhisperProcessor.from_pretrained(
                 self.model_path, 
                 language="Sinhala", 

@@ -5,12 +5,13 @@ from typing import List, Optional
 
 @dataclass
 class UserAttempt:
-    """Model for tracking user exercise attempts."""
+    """Model for tracking user exercise and challenge attempts."""
     user_id: str
     exercise_id: str
     skill_tags: List[str]
     is_correct: bool
     error_type: Optional[str] = None
+    attempt_type: str = "general"  # "general" for exercises, "challenge" for challenges
     timestamp: datetime = field(default_factory=datetime.utcnow)
     
     def to_dict(self):
@@ -21,6 +22,7 @@ class UserAttempt:
             "skill_tags": self.skill_tags,
             "is_correct": self.is_correct,
             "error_type": self.error_type,
+            "attempt_type": self.attempt_type,
             "timestamp": self.timestamp
         }
     
@@ -33,5 +35,6 @@ class UserAttempt:
             skill_tags=data.get("skill_tags", []),
             is_correct=data.get("is_correct", False),
             error_type=data.get("error_type"),
+            attempt_type=data.get("attempt_type", "general"),
             timestamp=data.get("timestamp", datetime.utcnow())
         )

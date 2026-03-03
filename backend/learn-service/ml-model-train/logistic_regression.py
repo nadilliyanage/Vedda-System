@@ -20,15 +20,12 @@ from sklearn.metrics import (
 
 ALLOWED_LABELS = [
     "spelling_error",
-    "wrong_question_word",
-    "wrong_verb_form",
-    "missing_word",
     "word_order_error",
-    "wrong_word",
+    "missing_word",
     "other"
 ]
 
-MODEL_OUT_PATH = "../app/ml/mistake_classifier_lr.joblib"
+MODEL_OUT_PATH = "../app/ml/mistake_classifier_llr.joblib"
 
 
 # =========================
@@ -138,59 +135,59 @@ def train_model(df: pd.DataFrame, test_size=0.2, random_state=42):
             stratify=y
         )
 
-    # Pipeline: TF-IDF char ngrams + Logistic Regression
-    pipeline = Pipeline([
-        (
-            "tfidf",
-            TfidfVectorizer(
-                analyzer="char",
-                ngram_range=(3, 6),
-                sublinear_tf=True,
-                max_features=50000
-            )
-        ),
-        (
-            "clf",
-            LogisticRegression(
-                max_iter=3000,
-                solver="lbfgs",
-                class_weight="balanced"
-            )
+    # TF-IDF for standalone baselines: word-level unigrams/bigrams
+    # provide a higher-level view of each sample
+    tfidf_baseline = TfidfVectorizer(
+        analyzer="word",
+        ngram_range=(1, 2),
+        sublinear_tf=True,
+        max_features=8000
+    )
 
-        )
-    ])
+    X_train_baseline = tfidf_baseline.fit_transform(X_train)
+    X_test_baseline  = tfidf_baseline.transform(X_test)
 
-    print("\nTraining Logistic Regression...")
-    pipeline.fit(X_train, y_train)
+    lr_individual = LogisticRegression(
+        C=0.1,
+        max_iter=300,
+        solver="lbfgs",
+        class_weight="balanced",
+        random_state=7
+    )
+    lr_individual.fit(X_train_baseline, y_train)
+    y_pred_individual = lr_individual.predict(X_test_baseline)
+    acc_individual = accuracy_score(y_test, y_pred_individual)
+    f1_individual  = f1_score(y_test, y_pred_individual, average="macro")
 
-    # Evaluation
-    y_pred = pipeline.predict(X_test)
-
-    acc = accuracy_score(y_test, y_pred)
-    macro_f1 = f1_score(y_test, y_pred, average="macro")
-
-    print("\n===== EVALUATION RESULTS =====")
-    print(f"Accuracy : {acc:.4f}")
-    print(f"Macro F1 : {macro_f1:.4f}")
+    print("\n===== INDIVIDUAL MODEL PERFORMANCE =====")
+    print(f"{'Logistic Regression':25s} - Accuracy: {acc_individual:.4f}, Macro F1: {f1_individual:.4f}")
 
     print("\n===== CLASSIFICATION REPORT =====")
     print(
         classification_report(
             y_test,
-            y_pred,
-            labels=ALLOWED_LABELS,   # consistent reporting
+            y_pred_individual,
+            labels=ALLOWED_LABELS,
             digits=4,
             zero_division=0
         )
     )
 
-    cm = confusion_matrix(y_test, y_pred, labels=ALLOWED_LABELS)
+    cm = confusion_matrix(y_test, y_pred_individual, labels=ALLOWED_LABELS)
     cm_df = pd.DataFrame(cm, index=ALLOWED_LABELS, columns=ALLOWED_LABELS)
 
     print("\n===== CONFUSION MATRIX =====")
     print(cm_df)
 
-    return pipeline, acc, macro_f1, cm_df
+    pipeline = Pipeline([
+        ("tfidf", tfidf_baseline),
+        ("clf",   lr_individual)
+    ])
+
+    cm = confusion_matrix(y_test, y_pred_individual, labels=ALLOWED_LABELS)
+    cm_df = pd.DataFrame(cm, index=ALLOWED_LABELS, columns=ALLOWED_LABELS)
+
+    return pipeline, acc_individual, f1_individual, cm_df
 
 
 # =========================

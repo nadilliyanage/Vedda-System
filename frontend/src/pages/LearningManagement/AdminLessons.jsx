@@ -174,7 +174,7 @@ const AdminLessons = () => {
 
         <div className="bg-white rounded-lg shadow-md">
           {loading ? (
-            <LoadingScreen />
+            <LoadingScreen message="Loading lessons..." />
           ) : lessons.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">No lessons found</p>

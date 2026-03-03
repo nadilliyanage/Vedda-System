@@ -24,7 +24,7 @@ class VeddaASRSpecialized:
             return
         
         try:
-            print(f"🤖 Loading Vedda ASR model (Sinhala output)...")
+            print(f"Loading Vedda ASR model (Sinhala output)...")
             self.processor = WhisperProcessor.from_pretrained(model_path, language="Sinhala", task="transcribe")
             self.model = WhisperForConditionalGeneration.from_pretrained(model_path)
             

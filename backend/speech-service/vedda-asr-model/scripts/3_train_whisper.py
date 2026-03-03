@@ -104,7 +104,7 @@ class VeddaASRTrainer:
     
     def load_model_and_processor(self):
         """Load Whisper model and processor"""
-        print(f"\n🤖 Loading Whisper-{self.model_size} model...")
+        print(f"\nLoading Whisper-{self.model_size} model...")
         
         model_name = f"openai/whisper-{self.model_size}"
         
