@@ -70,49 +70,32 @@ const ArtifactPage = () => {
 
   return (
     <div
-      className="min-h-screen mt-[60px]"
-      style={{
-        backgroundImage: `url('/assets/background-images/background-1.png')`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundAttachment: "fixed",
-      }}
+      className="min-h-screen mt-[60px] bg-cover bg-center bg-fixed"
+      style={{ backgroundImage: `url('/assets/background-images/background-1.png')` }}
     >
-      {/* ── Glassmorphic nav bar (matches Header style) ── */}
+      {/* ── Glassmorphic sub-nav bar ── */}
       <div
+        className="border-b shadow-md"
         style={{
           background: "rgba(28,20,8,0.55)",
           backdropFilter: "blur(14px)",
           WebkitBackdropFilter: "blur(14px)",
-          borderBottom: "1px solid rgba(200,170,100,0.18)",
-          boxShadow: "0 2px 16px rgba(0,0,0,0.20)",
+          borderColor: "rgba(200,170,100,0.18)",
         }}
       >
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
+            {/* Back button */}
             <button
               onClick={() => navigate("/")}
-              style={{
-                display: "flex", alignItems: "center", gap: "0.5rem",
-                color: "rgba(255,248,230,0.90)",
-                background: "rgba(255,255,255,0.08)",
-                border: "1px solid rgba(200,165,90,0.25)",
-                borderRadius: "9px", padding: "0.4rem 0.9rem",
-                fontFamily: "system-ui, sans-serif", fontWeight: "600",
-                fontSize: "0.88rem", cursor: "pointer",
-                transition: "background 0.2s",
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = "rgba(200,165,90,0.18)"}
-              onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.08)"}
+              className="flex items-center gap-2 text-[rgba(255,248,230,0.90)] bg-white/10 border border-[rgba(200,165,90,0.25)] rounded-[9px] px-3.5 py-1.5 font-semibold text-sm cursor-pointer transition-colors duration-200 hover:bg-[rgba(200,165,90,0.18)]"
             >
-              <FaArrowLeft style={{ fontSize: "0.8rem" }} />
+              <FaArrowLeft className="text-xs" />
               Back to Home
             </button>
-            <div style={{
-              display: "flex", alignItems: "center", gap: "0.5rem",
-              color: "#d4b483", fontFamily: "system-ui, sans-serif",
-              fontWeight: "600", fontSize: "0.9rem",
-            }}>
+
+            {/* Artifact count */}
+            <div className="flex items-center gap-2 text-[#d4b483] font-semibold text-sm">
               <FaLandmark />
               <span>{filteredArtifacts.length} Artifact{filteredArtifacts.length !== 1 ? "s" : ""}</span>
             </div>
@@ -120,61 +103,36 @@ const ArtifactPage = () => {
         </div>
       </div>
 
-      {/* ── Hero section: white fade only where text lives ── */}
+      {/* ── Hero section ── */}
       <div
-        style={{
-          background: "linear-gradient(to bottom, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,0) 100%)",
-          paddingTop: "1.5rem",
-          paddingBottom: "1.5rem",
-          textAlign: "center",
-        }}
+        className="py-6 text-center"
+        style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,0) 100%)" }}
       >
         {/* Badge */}
-        <span style={{
-          display: "inline-block",
-          background: "rgba(255,255,255,0.60)",
-          border: "1px solid rgba(100,80,40,0.22)",
-          borderRadius: "999px",
-          padding: "0.28rem 1rem",
-          fontSize: "0.73rem",
-          letterSpacing: "0.16em",
-          textTransform: "uppercase",
-          color: "#5c4a1e",
-          marginBottom: "0.6rem",
-          fontFamily: "system-ui, sans-serif",
-        }}>
+        <span className="inline-block bg-white/60 border border-[rgba(100,80,40,0.22)] rounded-full px-4 py-1 text-[0.73rem] tracking-[0.16em] uppercase text-[#5c4a1e] mb-2 font-sans">
           🏺 Cultural Heritage Collection
         </span>
 
-        <h1 style={{
-          fontSize: "clamp(1.8rem,4.5vw,3.2rem)",
-          fontWeight: "800",
-          color: "#1c1409",
-          lineHeight: 1.2,
-          margin: "0 auto 0.5rem",
-          maxWidth: "720px",
-          fontFamily: "'Georgia', serif",
-          letterSpacing: "-0.3px",
-          textShadow: "0 1px 0 rgba(255,255,255,0.8)",
-          padding: "0 1rem",
-        }}>
+        {/* Title */}
+        <h1
+          className="font-extrabold text-[#1c1409] leading-tight mx-auto mb-2 max-w-3xl px-4 font-serif tracking-tight whitespace-nowrap text-[40px]"
+          style={{ textShadow: "0 1px 0 rgba(255,255,255,0.8)" }}
+        >
           Vedda{" "}
-          <span style={{ color: "#9a6f2a", textShadow: "0 1px 0 rgba(255,255,255,0.9), 0 2px 8px rgba(255,255,255,0.5)" }}>
+          <span
+            className="text-[#9a6f2a]"
+            style={{ textShadow: "0 1px 0 rgba(255,255,255,0.9), 0 2px 8px rgba(255,255,255,0.5)" }}
+          >
             Artifact
           </span>{" "}
           Preservation System
         </h1>
 
-        <p style={{
-          fontSize: "clamp(0.9rem,1.8vw,1.08rem)",
-          color: "#3d2e0f",
-          maxWidth: "540px",
-          margin: "0 auto 1rem",
-          lineHeight: 1.75,
-          fontFamily: "'Georgia', serif",
-          fontStyle: "italic",
-          padding: "0 1rem",
-        }}>
+        {/* Subtitle */}
+        <p
+          className="max-w-lg mx-auto mb-4 px-4 leading-relaxed text-[#3d2e0f] italic font-serif"
+          style={{ fontSize: "clamp(0.9rem, 1.8vw, 1.08rem)" }}
+        >
           Explore the rich cultural heritage of the indigenous Vedda people
           through their traditional artifacts, tools, and ceremonial objects.
         </p>
@@ -182,131 +140,77 @@ const ArtifactPage = () => {
         {/* Identify Artifact button */}
         <button
           onClick={() => setShowIdentifyModal(true)}
+          className="inline-flex items-center gap-2 px-6 py-2.5 text-white font-bold text-sm rounded-[10px] cursor-pointer transition-all duration-200 hover:-translate-y-0.5 font-sans"
           style={{
-            display: "inline-flex", alignItems: "center", gap: "0.5rem",
-            padding: "0.7rem 1.6rem",
             background: "linear-gradient(135deg, #7c3fa8, #4a6fa8)",
-            color: "#fff",
-            border: "none", borderRadius: "10px",
-            fontWeight: "700", fontSize: "0.95rem",
-            fontFamily: "system-ui, sans-serif",
-            cursor: "pointer",
             boxShadow: "0 4px 18px rgba(124,63,168,0.40)",
-            transition: "transform 0.2s, box-shadow 0.2s",
           }}
-          onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 28px rgba(124,63,168,0.50)"; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 18px rgba(124,63,168,0.40)"; }}
         >
           <Sparkles size={18} />
           Identify Artifact
         </button>
 
         {/* Gold divider */}
-        <div style={{
-          width: "52px", height: "3px",
-          background: "linear-gradient(90deg, #9a6f2a, #c9943a)",
-          margin: "1rem auto 0",
-          borderRadius: "99px",
-        }} />
+        <div
+          className="w-[52px] h-[3px] mx-auto mt-4 rounded-full"
+          style={{ background: "linear-gradient(90deg, #9a6f2a, #c9943a)" }}
+        />
       </div>
 
       {/* ── Content area ── */}
       <div className="container mx-auto px-4 pb-12">
+
         {/* Search — frosted wrapper */}
-        <div style={{
-          background: "rgba(255,255,255,0.88)",
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
-          borderRadius: "14px",
-          padding: "0.5rem",
-          marginBottom: "1rem",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
-          border: "1px solid rgba(255,255,255,0.60)",
-        }}>
-          <ArtifactSearch
-            searchQuery={searchQuery}
-            onSearchChange={setSearchQuery}
-          />
+        <div
+          className="rounded-[14px] p-2 mb-4 border border-white/60 shadow-lg"
+          style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+        >
+          <ArtifactSearch searchQuery={searchQuery} onSearchChange={setSearchQuery} />
         </div>
 
         {/* Filter — frosted wrapper */}
-        <div style={{
-          background: "rgba(255,255,255,0.88)",
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
-          borderRadius: "14px",
-          padding: "0.5rem",
-          marginBottom: "1.75rem",
-          boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
-          border: "1px solid rgba(255,255,255,0.60)",
-        }}>
-          <ArtifactFilter
-            selectedCategory={selectedCategory}
-            onCategoryChange={setSelectedCategory}
-          />
+        <div
+          className="rounded-[14px] p-2 mb-7 border border-white/60 shadow-lg"
+          style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+        >
+          <ArtifactFilter selectedCategory={selectedCategory} onCategoryChange={setSelectedCategory} />
         </div>
 
         {/* Artifacts Grid */}
         {loading ? (
           <div className="flex justify-center items-center py-20">
             <div
-              className="animate-spin"
-              style={{
-                width: "48px", height: "48px",
-                border: "3px solid rgba(154,111,42,0.25)",
-                borderTopColor: "#9a6f2a",
-                borderRadius: "50%",
-              }}
+              className="animate-spin w-12 h-12 rounded-full"
+              style={{ border: "3px solid rgba(154,111,42,0.25)", borderTopColor: "#9a6f2a" }}
             />
           </div>
         ) : filteredArtifacts.length === 0 ? (
-          <div style={{
-            textAlign: "center", padding: "5rem 1rem",
-            color: "#3d2e0f",
-            fontFamily: "system-ui, sans-serif",
-            fontSize: "1.05rem",
-            background: "rgba(255,255,255,0.70)",
-            borderRadius: "14px",
-          }}>
+          <div className="text-center py-20 px-4 text-[#3d2e0f] text-base bg-white/70 rounded-[14px] font-sans">
             No artifacts found
           </div>
         ) : (
-          <ArtifactGrid
-            artifacts={filteredArtifacts}
-            onArtifactClick={handleArtifactClick}
-          />
+          <ArtifactGrid artifacts={filteredArtifacts} onArtifactClick={handleArtifactClick} />
         )}
 
         {/* About section */}
-        <div style={{
-          marginTop: "3rem",
-          background: "rgba(255,255,255,0.88)",
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
-          borderRadius: "18px",
-          padding: "2.25rem 2.5rem",
-          boxShadow: "0 8px 40px rgba(0,0,0,0.10)",
-          border: "1px solid rgba(255,255,255,0.60)",
-        }}>
-          <div style={{
-            width: "36px", height: "2px",
-            background: "linear-gradient(90deg, #9a6f2a, #c9943a)",
-            marginBottom: "1.25rem", borderRadius: "99px",
-          }} />
-          <h2 style={{
-            fontSize: "1.4rem", fontWeight: "700",
-            color: "#1c1409", marginBottom: "0.85rem",
-            fontFamily: "'Georgia', serif",
-          }}>
+        <div
+          className="mt-12 rounded-[18px] px-10 py-9 border border-white/60 shadow-xl"
+          style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+        >
+          <div
+            className="w-9 h-[2px] mb-5 rounded-full"
+            style={{ background: "linear-gradient(90deg, #9a6f2a, #c9943a)" }}
+          />
+          <h2 className="text-[1.4rem] font-bold text-[#1c1409] mb-3 font-serif">
             About This Collection
           </h2>
-          <p style={{ color: "#4b5563", lineHeight: 1.85, marginBottom: "0.85rem", fontFamily: "system-ui, sans-serif" }}>
+          <p className="text-gray-600 leading-[1.85] mb-3 font-sans">
             This collection showcases traditional Vedda artifacts spanning thousands
             of years of indigenous culture in Sri Lanka. Each artifact tells a story
             of the Vedda people&apos;s deep connection with the forest, their
             ingenious use of natural materials, and their rich spiritual traditions.
           </p>
-          <p style={{ color: "#4b5563", lineHeight: 1.85, margin: 0, fontFamily: "system-ui, sans-serif" }}>
+          <p className="text-gray-600 leading-[1.85] font-sans">
             The Vedda people (Wanniyala-Aetto) are the indigenous inhabitants of Sri
             Lanka, with a heritage dating back over 16,000 years. Their artifacts
             represent not just tools and objects, but a complete way of life in
@@ -334,3 +238,5 @@ const ArtifactPage = () => {
 };
 
 export default ArtifactPage;
+
+
