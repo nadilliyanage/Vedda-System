@@ -294,11 +294,21 @@ const VeddaLearning = () => {
 
             {/* Features Info */}
             <div className="mt-16 text-center max-w-3xl mx-auto">
-              <div className="bg-white rounded-xl shadow-md p-8">
-                <h3 className="text-2xl font-bold text-gray-800 mb-4">
+              <div className="rounded-[18px] px-8 py-8 border border-white/60 shadow-xl"
+                style={{
+                  background: "rgba(255,255,255,0.88)",
+                  backdropFilter: "blur(10px)",
+                  WebkitBackdropFilter: "blur(10px)",
+                }}
+              >
+                <div
+                  className="w-9 h-[2px] mb-5 rounded-full mx-auto"
+                  style={{ background: "linear-gradient(90deg, #9a6f2a, #c9943a)" }}
+                />
+                <h2 className="text-[1.4rem] font-bold text-[#1c1409] mb-3 font-serif">
                   Your Learning Journey
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
+                </h2>
+                <p className="text-gray-600 leading-[1.85] font-sans">
                   Progress through structured lessons, practice with interactive exercises,
                   and challenge yourself with quizzes. Track your achievements and earn
                   rewards as you master the Vedda language.
