@@ -3,10 +3,10 @@ import { FaLanguage, FaBookOpen, FaLandmark, FaCube, FaArrowRight } from "react-
 
 /* ─── Per-card accent colours ─── */
 const ACCENTS = {
-  1: { from: "#1e6fa8", to: "#3b9fd1", glow: "rgba(30,111,168,0.30)" },
-  2: { from: "#2d7a4f", to: "#4aad72", glow: "rgba(45,122,79,0.30)" },
-  3: { from: "#7c3fa8", to: "#b06bd6", glow: "rgba(124,63,168,0.30)" },
-  4: { from: "#b85c10", to: "#e88033", glow: "rgba(184,92,16,0.30)" },
+  1: { from: "#1e6fa8", to: "#3b9fd1", glow: "rgba(30,111,168,0.65)" },
+  2: { from: "#2d7a4f", to: "#4aad72", glow: "rgba(45,122,79,0.65)" },
+  3: { from: "#7c3fa8", to: "#b06bd6", glow: "rgba(124,63,168,0.65)" },
+  4: { from: "#b85c10", to: "#e88033", glow: "rgba(184,92,16,0.65)" },
 };
 
 const features = [
@@ -64,7 +64,7 @@ const FeatureCard = ({ feature, onClick }) => {
       }}
       onMouseEnter={e => {
         e.currentTarget.style.transform = "translateY(-6px)";
-        e.currentTarget.style.boxShadow = `0 16px 48px ${accent.glow}, 0 4px 16px rgba(0,0,0,0.14)`;
+        e.currentTarget.style.boxShadow = `0 0 0 2px ${accent.glow}, 0 20px 60px ${accent.glow}, 0 4px 16px rgba(0,0,0,0.14)`;
       }}
       onMouseLeave={e => {
         e.currentTarget.style.transform = "translateY(0)";
