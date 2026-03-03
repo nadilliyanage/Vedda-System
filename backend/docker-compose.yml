@@ -144,6 +144,8 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5009:5009"
+    env_file:
+      - ./artifact-identifier-service/.env
     environment:
       - FLASK_ENV=development
       - PORT=5009
