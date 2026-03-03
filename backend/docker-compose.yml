@@ -171,22 +171,6 @@ services:
     networks:
       - vedda-network
 
-  # Database initialization service (runs once)
-  db-init:
-    build:
-      context: ./dictionary-service
-      dockerfile: Dockerfile
-    command: python -c "
-      import sqlite3;
-      import os;
-      os.makedirs('/app/data', exist_ok=True);
-      print('Database directory created');
-      "
-    volumes:
-      - ../data:/app/data
-    networks:
-      - vedda-network
-
 networks:
   vedda-network:
     driver: bridge

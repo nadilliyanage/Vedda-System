@@ -150,14 +150,14 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 px-6 py-4 flex justify-between items-center">
+        <div className="bg-gray-300 px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <Sparkles className="text-white" size={24} />
-            <h2 className="text-2xl font-bold text-white">Identify Artifact</h2>
+            <Sparkles className="text-black" size={24} />
+            <h2 className="text-2xl font-bold text-black">Identify Artifact</h2>
           </div>
           <button
             onClick={handleClose}
-            className="text-white hover:bg-white/20 rounded-full p-2 transition-colors"
+            className="text-black hover:bg-black/10 rounded-full p-2 transition-colors"
           >
             <X size={24} />
           </button>
@@ -174,11 +174,11 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
                 
                 {imagePreview ? (
                   <div className="flex-1 flex flex-col gap-4">
-                    <div className="flex-1 flex items-center justify-center bg-white rounded-lg overflow-hidden">
+                    <div className="flex items-center justify-center bg-white rounded-lg overflow-hidden w-full h-64">
                       <img
                         src={imagePreview}
                         alt="Preview"
-                        className="max-h-full max-w-full object-contain"
+                        className="w-full h-full object-contain"
                       />
                     </div>
                     <div className="flex gap-3">
