@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaBook, FaDumbbell, FaTrophy, FaArrowLeft, FaChartLine } from 'react-icons/fa';
 import LessonSelection from './LessonSelection';
 import LessonsList from './LessonsList';
@@ -10,6 +11,7 @@ import LearningChallenges from './LearningChallenges';
 
 
 const VeddaLearning = () => {
+  const navigate = useNavigate();
   const [activeView, setActiveView] = useState('main'); // 'main', 'learn', 'practice', 'challenges', 'performance', 'quiz'
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedLesson, setSelectedLesson] = useState(null);
@@ -55,7 +57,20 @@ const VeddaLearning = () => {
   // Main hub view
   if (activeView === 'main') {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-8 px-4 pt-24">
+        <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 mt-16">
+          {/* Back to Home */}
+          <div className="bg-white shadow-sm">
+            <div className="container mx-auto px-4 py-4">
+              <button
+                onClick={() => navigate('/')}
+                className="flex items-center text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                <FaArrowLeft className="mr-2" />
+                <span className="font-medium">Back to Home</span>
+              </button>
+            </div>
+          </div>
+          <div className="py-8 px-4">
           <div className="max-w-6xl mx-auto">
             {/* Header */}
             <div className="text-center mb-12">
@@ -204,6 +219,7 @@ const VeddaLearning = () => {
               </div>
             </div>
           </div>
+        </div>
         </div>
     );
   }
