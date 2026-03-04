@@ -215,7 +215,7 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                 }
               >
                 <FaArrowLeft style={{ fontSize: '0.8rem' }} />
-                Back
+                Back to Learning Hub
               </button>
             )}
             {!onBack && <div />}
