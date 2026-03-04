@@ -51,7 +51,7 @@ const TranslationInput = ({
         "Speech transcribed:",
         transcribedText,
         "Method:",
-        result.method
+        result.method,
       );
     }
   };
@@ -64,7 +64,7 @@ const TranslationInput = ({
   return (
     <div className="p-6 h-full flex flex-col">
       {/* Input Language Label */}
-      <p className="text-sm text-gray-600 mb-3">
+      <p className="text-sm font-semibold mb-3" style={{ color: "#8c7040" }}>
         {getLanguageNative(sourceLanguage)}
       </p>
 
@@ -82,7 +82,16 @@ const TranslationInput = ({
         {inputText && (
           <button
             onClick={onClear}
-            className="absolute top-2 right-2 p-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors duration-200"
+            className="absolute top-2 right-2 p-1 rounded-full transition-colors duration-200"
+            style={{ color: "rgba(92,74,30,0.6)", background: "transparent" }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = "rgba(200,165,90,0.20)";
+              e.currentTarget.style.color = "#5c4a1e";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+              e.currentTarget.style.color = "rgba(92,74,30,0.6)";
+            }}
           >
             <HiX className="w-4 h-4" />
           </button>
@@ -91,8 +100,19 @@ const TranslationInput = ({
 
       {/* Source Language Pronunciation Display */}
       {(sourceIpaTranscription || sourceSinglish) && inputText && (
-        <div className="bg-blue-50 p-4 rounded-lg mt-4 border border-blue-200 space-y-3">
-          <p className="text-sm font-medium text-blue-700 mb-2 flex items-center">
+        <div
+          className="p-4 rounded-lg mt-4 space-y-3"
+          style={{
+            background: "rgba(200, 165, 90, 0.14)",
+            border: "1px solid rgba(200, 165, 90, 0.32)",
+            backdropFilter: "blur(6px)",
+            WebkitBackdropFilter: "blur(6px)",
+          }}
+        >
+          <p
+            className="text-sm font-semibold mb-2 flex items-center"
+            style={{ color: "#5c4a1e" }}
+          >
             <span className="mr-2">🔊</span>
             {LANGUAGES.find((l) => l.code === sourceLanguage)?.name ||
               sourceLanguage}{" "}
@@ -102,11 +122,23 @@ const TranslationInput = ({
           {/* Singlish - Only for Vedda/Sinhala */}
           {sourceSinglish &&
             (sourceLanguage === "vedda" || sourceLanguage === "sinhala") && (
-              <div className="bg-white p-3 rounded border border-blue-100">
-                <p className="text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+              <div
+                className="p-3 rounded"
+                style={{
+                  background: "rgba(255, 248, 230, 0.55)",
+                  border: "1px solid rgba(200, 165, 90, 0.25)",
+                }}
+              >
+                <p
+                  className="text-xs font-semibold mb-1 uppercase tracking-wide"
+                  style={{ color: "#8c7040" }}
+                >
                   Singlish
                 </p>
-                <p className="text-lg text-gray-800 font-medium tracking-wide leading-relaxed break-words">
+                <p
+                  className="text-lg font-medium tracking-wide leading-relaxed break-words"
+                  style={{ color: "#2d1f07" }}
+                >
                   {sourceSinglish}
                 </p>
               </div>
@@ -114,13 +146,23 @@ const TranslationInput = ({
 
           {/* IPA - For all languages */}
           {sourceIpaTranscription && (
-            <div className="bg-white p-3 rounded border border-blue-100">
-              <p className="text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wide">
+            <div
+              className="p-3 rounded"
+              style={{
+                background: "rgba(255, 248, 230, 0.55)",
+                border: "1px solid rgba(200, 165, 90, 0.25)",
+              }}
+            >
+              <p
+                className="text-xs font-semibold mb-1 uppercase tracking-wide"
+                style={{ color: "#8c7040" }}
+              >
                 IPA (International Phonetic Alphabet)
               </p>
               <p
-                className="text-lg text-blue-800 font-normal tracking-wide leading-relaxed break-words"
+                className="text-lg font-normal tracking-wide leading-relaxed break-words"
                 style={{
+                  color: "#5c3a10",
                   fontFamily:
                     '"Doulos SIL", "Charis SIL", "Times New Roman", serif',
                 }}
@@ -137,11 +179,18 @@ const TranslationInput = ({
         <div className="flex gap-2">
           <button
             onClick={handleTextToSpeech}
-            className={`p-2 rounded-lg transition-colors duration-200 ${
-              inputText.trim()
-                ? "text-blue-600 hover:text-blue-700 hover:bg-blue-50"
-                : "text-gray-400 cursor-not-allowed"
-            }`}
+            className="p-2 rounded-lg transition-colors duration-200"
+            style={{
+              color: inputText.trim() ? "#9a6f2a" : "rgba(140,112,64,0.45)",
+              cursor: inputText.trim() ? "pointer" : "not-allowed",
+            }}
+            onMouseEnter={(e) => {
+              if (inputText.trim())
+                e.currentTarget.style.background = "rgba(200,165,90,0.18)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = "transparent";
+            }}
             disabled={!inputText.trim()}
             title={
               !inputText.trim()
@@ -159,14 +208,17 @@ const TranslationInput = ({
             className="relative"
           />
           <button
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+            className="p-2 rounded-lg transition-colors duration-200"
+            style={{ color: "rgba(140,112,64,0.45)", cursor: "not-allowed" }}
             disabled
           >
             <HiCamera className="w-5 h-5" />
           </button>
         </div>
 
-        <p className="text-sm text-gray-500">{inputText.length}/5000</p>
+        <p className="text-sm" style={{ color: "#8c7040" }}>
+          {inputText.length}/5000
+        </p>
       </div>
     </div>
   );

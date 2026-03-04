@@ -98,7 +98,10 @@ const TranslationCard = ({
         {/* Translation Interface */}
         <div className="grid grid-cols-1 md:grid-cols-2 min-h-[350px]">
           {/* Input Panel */}
-          <div className="md:border-r border-gray-200">
+          <div
+            className="md:border-r"
+            style={{ borderColor: "rgba(200, 165, 90, 0.22)" }}
+          >
             <TranslationInput
               inputText={inputText}
               sourceLanguage={sourceLanguage}
@@ -130,7 +133,10 @@ const TranslationCard = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="p-6 border-t border-gray-200 flex justify-center gap-4">
+        <div
+          className="p-6 flex justify-center gap-4"
+          style={{ borderTop: "1px solid rgba(200, 165, 90, 0.22)" }}
+        >
           <button
             className={`btn-blue min-w-[140px] flex items-center justify-center ${
               loading || !inputText.trim()
