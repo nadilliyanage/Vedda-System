@@ -50,7 +50,12 @@ const TranslationCard = ({
         console.log("Translation note:", result.note);
       }
 
-      onTranslationComplete(); // Refresh history
+      onTranslationComplete({
+        input_text: inputText,
+        output_text: result.translatedText,
+        source_language: sourceLanguage,
+        target_language: targetLanguage,
+      });
     }
   };
 

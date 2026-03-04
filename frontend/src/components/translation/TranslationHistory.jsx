@@ -1,7 +1,7 @@
-import { HiClock, HiRefresh } from "react-icons/hi";
+import { HiClock, HiRefresh, HiTrash } from "react-icons/hi";
 import { useState } from "react";
 
-const TranslationHistory = ({ history, onSelectHistoryItem, onRefresh }) => {
+const TranslationHistory = ({ history, onSelectHistoryItem, onRefresh, onDeleteHistoryItem }) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefresh = async () => {
@@ -54,8 +54,8 @@ const TranslationHistory = ({ history, onSelectHistoryItem, onRefresh }) => {
         <div className="space-y-2">
           {history.map((item, index) => (
             <div
-              key={index}
-              className="rounded-lg p-3 cursor-pointer transition-all duration-200"
+              key={item.id ?? index}
+              className="rounded-lg p-3 transition-all duration-200"
               style={{
                 background: "rgba(255, 248, 230, 0.35)",
                 border: "1px solid rgba(200, 165, 90, 0.28)",
@@ -68,17 +68,42 @@ const TranslationHistory = ({ history, onSelectHistoryItem, onRefresh }) => {
                 e.currentTarget.style.background = "rgba(255, 248, 230, 0.35)";
                 e.currentTarget.style.borderColor = "rgba(200, 165, 90, 0.28)";
               }}
-              onClick={() => onSelectHistoryItem(item)}
             >
-              <p
-                className="font-semibold text-sm mb-1"
-                style={{ color: "#2d1f07" }}
-              >
-                {item.input_text}
-              </p>
-              <p className="text-sm" style={{ color: "#5c4a1e" }}>
-                → {item.output_text}
-              </p>
+              <div className="flex items-start justify-between gap-2">
+                <div
+                  className="flex-1 cursor-pointer"
+                  onClick={() => onSelectHistoryItem(item)}
+                >
+                  <p
+                    className="font-semibold text-sm mb-1"
+                    style={{ color: "#2d1f07" }}
+                  >
+                    {item.input_text}
+                  </p>
+                  <p className="text-sm" style={{ color: "#5c4a1e" }}>
+                    → {item.output_text}
+                  </p>
+                </div>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onDeleteHistoryItem(item.id);
+                  }}
+                  title="Delete"
+                  className="flex-shrink-0 p-1 rounded transition-colors duration-150"
+                  style={{ color: "rgba(154,111,42,0.55)", background: "transparent" }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = "#c0392b";
+                    e.currentTarget.style.background = "rgba(192,57,43,0.10)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = "rgba(154,111,42,0.55)";
+                    e.currentTarget.style.background = "transparent";
+                  }}
+                >
+                  <HiTrash className="w-4 h-4" />
+                </button>
+              </div>
             </div>
           ))}
         </div>
