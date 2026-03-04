@@ -68,7 +68,9 @@ const ModelViewer = ({ onModelLoad, onMorphTargetsUpdate, xrayMode }) => {
     // Load GLTF model
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/3DModel/ShapeKey Testing.glb',
+      // '/assets/3DModel/ShapeKey Testing.glb',
+      '/assets/3DModel/Untitled.glb',
+      // '/assets/3DModel/facenew.glb',
       (gltf) => {
         const model = gltf.scene;
         scene.add(model);

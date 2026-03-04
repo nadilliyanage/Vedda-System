@@ -237,10 +237,6 @@ export const useLipSync = (meshesWithMorphTargets) => {
         const basePhoneDuration = 100; // Base duration per phoneme in ms
         const phonemeDuration = basePhoneDuration / (utterance.rate || 0.8);
 
-        // Calculate total expected duration based on adjusted phoneme duration
-        const totalPhonemes = phonemes.length;
-        const expectedDuration = totalPhonemes * phonemeDuration;
-
         isAnimatingRef.current = true;
         setIsAnimating(true);
         let phonemeIndex = 0;
@@ -277,29 +273,14 @@ export const useLipSync = (meshesWithMorphTargets) => {
             speechEndTime = elapsed;
           }
 
-          // Stop animation if we've exceeded expected duration or speech has ended
-          if (elapsed >= expectedDuration && !isSpeaking) {
-            hasEnded = true;
-            isAnimatingRef.current = false;
-            setIsAnimating(false);
-            if (animationIdRef.current) {
-              cancelAnimationFrame(animationIdRef.current);
-              animationIdRef.current = null;
-            }
-            // Smoothly transition to closed mouth
-            smoothTransition({}, 80);
-            return;
-          }
-
           // Don't advance phonemes if speech has ended
           if (isSpeaking) {
-            const currentPhonemeIndex = Math.floor(elapsed / phonemeDuration);
+            // Use modulo so phonemes cycle continuously until speech actually ends
+            const currentPhonemeIndex =
+              Math.floor(elapsed / phonemeDuration) % phonemes.length;
 
             // Only update when we move to a new phoneme
-            if (
-              currentPhonemeIndex !== phonemeIndex &&
-              currentPhonemeIndex < phonemes.length
-            ) {
+            if (currentPhonemeIndex !== phonemeIndex) {
               phonemeIndex = currentPhonemeIndex;
               const phoneme = phonemes[phonemeIndex];
               const viseme = phonemeToViseme[phoneme];
@@ -347,9 +328,10 @@ export const useLipSync = (meshesWithMorphTargets) => {
         };
 
         utterance.onend = () => {
-          const duration = startTime ? Date.now() - startTime : 0;
+          const actualDuration = startTime ? Date.now() - startTime : 0;
+          console.log(`✅ Speech ended - Actual: ${actualDuration} ms`);
           isSpeaking = false;
-          speechEndTime = duration;
+          speechEndTime = actualDuration;
           
           // Allow a brief moment for final transition, then stop
           setTimeout(() => {
@@ -679,7 +661,7 @@ export const useLipSync = (meshesWithMorphTargets) => {
       phonemes.forEach((phoneme) => {
         const viseme = ipaToViseme[phoneme];
         // Apply speed control: reduce duration by 20% for tighter sync, then adjust by animationSpeed
-        const baseDuration = viseme ? (viseme.duration || 120) * 0.8 : 80;
+        const baseDuration = viseme ? (viseme.duration || 120) * 0.8 : 70;
         const duration = baseDuration / animationSpeed;
         phonemeTimeline.push({
           phoneme,
