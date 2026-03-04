@@ -148,7 +148,15 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+      <div 
+        className="rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col"
+        style={{
+          background: "rgba(255,248,230,0.55)",
+          backdropFilter: "blur(18px)",
+          WebkitBackdropFilter: "blur(18px)",
+          border: "1px solid rgba(200,165,90,0.30)"
+        }}
+      >
         {/* Header */}
         <div className="bg-gradient-to-r from-purple-600 to-blue-500 px-6 py-4 flex justify-between items-center">
           <div className="flex items-center gap-3">
@@ -167,14 +175,23 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Left Side - Image Upload */}
             <div>
-              <div className="bg-gray-50 rounded-xl border-2 border-dashed border-gray-300 p-6 h-full min-h-[400px] flex flex-col">
-                <label className="block text-sm font-medium text-gray-700 mb-4">
+              <div 
+                className="rounded-xl border-2 border-dashed p-6 h-full min-h-[400px] flex flex-col"
+                style={{
+                  background: "rgba(255,248,230,0.35)",
+                  borderColor: "rgba(200,165,90,0.35)"
+                }}
+              >
+                <label className="block text-sm font-medium mb-4" style={{ color: "#5c4a1e" }}>
                   Upload Artifact Image
                 </label>
                 
                 {imagePreview ? (
                   <div className="flex-1 flex flex-col gap-4">
-                    <div className="flex items-center justify-center bg-white rounded-lg overflow-hidden w-full h-64">
+                    <div 
+                      className="flex items-center justify-center rounded-lg overflow-hidden w-full h-64"
+                      style={{ background: "rgba(255,248,230,0.65)" }}
+                    >
                       <img
                         src={imagePreview}
                         alt="Preview"
@@ -189,7 +206,14 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
                           setImagePreview(null);
                           setIdentifiedData(null);
                         }}
-                        className="flex-1 px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors font-medium"
+                        className="flex-1 px-4 py-2 rounded-lg transition-colors font-medium"
+                        style={{
+                          background: "rgba(220,100,100,0.15)",
+                          color: "#c44545",
+                          border: "1px solid rgba(220,100,100,0.25)"
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.background = "rgba(220,100,100,0.25)"}
+                        onMouseLeave={(e) => e.currentTarget.style.background = "rgba(220,100,100,0.15)"}
                       >
                         Remove Image
                       </button>
@@ -197,7 +221,13 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
                         type="button"
                         onClick={handleIdentify}
                         disabled={loading}
-                        className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:from-purple-700 hover:to-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 font-medium"
+                        className="flex-1 px-4 py-3 text-white rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 font-medium"
+                        style={{
+                          background: "linear-gradient(135deg, #7c3fa8, #4a6fa8)",
+                          boxShadow: "0 4px 12px rgba(124,63,168,0.30)"
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.boxShadow = "0 6px 16px rgba(124,63,168,0.40)"}
+                        onMouseLeave={(e) => e.currentTarget.style.boxShadow = "0 4px 12px rgba(124,63,168,0.30)"}
                       >
                         {loading ? (
                           <>
@@ -214,10 +244,10 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
                     </div>
                   </div>
                 ) : (
-                  <label className="flex-1 flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors rounded-lg">
-                    <Upload size={64} className="text-gray-400 mb-4" />
-                    <p className="text-gray-600 text-lg mb-2 font-medium">Click to upload artifact image</p>
-                    <p className="text-gray-400 text-sm">PNG, JPG, WEBP up to 5MB</p>
+                  <label className="flex-1 flex flex-col items-center justify-center cursor-pointer rounded-lg transition-colors" style={{ color: "#5c4a1e" }} onMouseEnter={(e) => e.currentTarget.style.background = "rgba(200,165,90,0.08)"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
+                    <Upload size={64} className="mb-4" />
+                    <p className="text-lg mb-2 font-medium">Click to upload artifact image</p>
+                    <p className="text-sm" style={{ color: "#7c6a47" }}>PNG, JPG, WEBP up to 5MB</p>
                     <input
                       type="file"
                       accept="image/*"
@@ -231,27 +261,33 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
 
             {/* Right Side - Identification Results */}
             <div>
-              <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-6 h-full min-h-[400px]">
-                <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <Sparkles className="text-purple-600" size={20} />
+              <div 
+                className="rounded-xl p-6 h-full min-h-[400px]"
+                style={{
+                  background: "rgba(255,248,230,0.80)",
+                  border: "1px solid rgba(200,165,90,0.22)"
+                }}
+              >
+                <h3 className="text-lg font-bold mb-4 flex items-center gap-2" style={{ color: "#1c1409" }}>
+                  <Sparkles style={{ color: "#7c3fa8" }} size={20} />
                   Identification Results
                 </h3>
 
                 {identifiedData ? (
                   identifiedData.notIdentified ? (
                     <div className="h-full flex items-center justify-center">
-                      <div className="text-center bg-white rounded-xl p-8">
+                      <div className="text-center rounded-xl p-8" style={{ background: "rgba(255,248,230,0.70)" }}>
                         <div className="text-6xl mb-4">❌</div>
-                        <h3 className="text-xl font-bold text-red-600 mb-2">Artifact Not Identified</h3>
-                        <p className="text-gray-600 mb-4">
+                        <h3 className="text-xl font-bold mb-2" style={{ color: "#c44545" }}>Artifact Not Identified</h3>
+                        <p className="mb-4" style={{ color: "#3d2e0f" }}>
                           The confidence level is too low to accurately identify this artifact.
                         </p>
-                        <div className="bg-red-50 rounded-lg p-4 mb-4">
-                          <p className="text-sm text-red-800 font-medium">
+                        <div className="rounded-lg p-4 mb-4" style={{ background: "rgba(196,69,69,0.10)", border: "1px solid rgba(196,69,69,0.20)" }}>
+                          <p className="text-sm font-medium" style={{ color: "#c44545" }}>
                             Confidence: {(identifiedData.confidence * 100).toFixed(1)}% (Minimum: 60%)
                           </p>
                         </div>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm" style={{ color: "#7c6a47" }}>
                           Try uploading a clearer image with better lighting and focus.
                         </p>
                       </div>
@@ -259,22 +295,35 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
                   ) : (
                     <div className="space-y-4">
                     {/* Name with Confidence */}
-                    <div className="bg-white rounded-lg p-4 shadow-sm">
-                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 block">
+                    <div 
+                      className="rounded-lg p-4 shadow-sm border"
+                      style={{
+                        background: "rgba(255,248,230,0.20)",
+                        borderColor: "rgba(200,165,90,0.20)"
+                      }}
+                    >
+                      <label className="text-xs font-semibold uppercase tracking-wide mb-1 block" style={{ color: "#7c6a47" }}>
                         Artifact Name
                       </label>
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="text-lg font-bold text-gray-800 capitalize">{identifiedData.name}</p>
+                          <p className="text-lg font-bold capitalize" style={{ color: "#1c1409" }}>{identifiedData.name}</p>
                           {identifiedData.veddaWord && (
-                            <p className="text-md text-purple-600 font-semibold mt-1">
-                              {identifiedData.veddaWord} <span className="text-xs text-gray-500">(Vedda)</span>
+                            <p className="text-md font-semibold mt-1" style={{ color: "#7c3fa8" }}>
+                              {identifiedData.veddaWord} <span className="text-xs" style={{ color: "#7c6a47" }}>(Vedda)</span>
                             </p>
                           )}
                         </div>
-                        <div className="flex items-center gap-1 bg-green-100 text-green-800 px-3 py-1 rounded-full">
+                        <div 
+                          className="flex items-center gap-1 px-3 py-1 rounded-full text-sm font-semibold"
+                          style={{
+                            color: "#2d7a3e",
+                            background: "rgba(61,153,87,0.15)",
+                            border: "1px solid rgba(61,153,87,0.25)"
+                          }}
+                        >
                           <TrendingUp size={14} />
-                          <span className="text-sm font-semibold">
+                          <span>
                             {(identifiedData.confidence * 100).toFixed(1)}%
                           </span>
                         </div>
@@ -282,34 +331,63 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
                     </div>
 
                     {/* Category */}
-                    <div className="bg-white rounded-lg p-4 shadow-sm">
-                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1 block">
+                    <div 
+                      className="rounded-lg p-4 shadow-sm border"
+                      style={{
+                        background: "rgba(255,248,230,0.20)",
+                        borderColor: "rgba(200,165,90,0.20)"
+                      }}
+                    >
+                      <label className="text-xs font-semibold uppercase tracking-wide mb-1 block" style={{ color: "#7c6a47" }}>
                         Category
                       </label>
-                      <span className="inline-block bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium capitalize">
+                      <span 
+                        className="inline-block px-3 py-1 rounded-full text-sm font-medium capitalize"
+                        style={{
+                          color: "#7c3fa8",
+                          background: "rgba(124,63,168,0.12)",
+                          border: "1px solid rgba(124,63,168,0.20)"
+                        }}
+                      >
                         {identifiedData.category}
                       </span>
                     </div>
 
                     {/* Description */}
-                    <div className="bg-white rounded-lg p-4 shadow-sm">
-                      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 block">
+                    <div 
+                      className="rounded-lg p-4 shadow-sm border"
+                      style={{
+                        background: "rgba(255,248,230,0.20)",
+                        borderColor: "rgba(200,165,90,0.20)"
+                      }}
+                    >
+                      <label className="text-xs font-semibold uppercase tracking-wide mb-2 block" style={{ color: "#7c6a47" }}>
                         Description
                       </label>
-                      <p className="text-gray-700 leading-relaxed">{identifiedData.description}</p>
+                      <p className="leading-relaxed" style={{ color: "#3d2e0f" }}>{identifiedData.description}</p>
                     </div>
 
                     {/* Tags */}
                     {identifiedData.tags && identifiedData.tags.length > 0 && (
-                      <div className="bg-white rounded-lg p-4 shadow-sm">
-                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 block">
+                      <div 
+                        className="rounded-lg p-4 shadow-sm border"
+                        style={{
+                          background: "rgba(255,248,230,0.65)",
+                          borderColor: "rgba(200,165,90,0.20)"
+                        }}
+                      >
+                        <label className="text-xs font-semibold uppercase tracking-wide mb-2 block" style={{ color: "#7c6a47" }}>
                           Tags
                         </label>
                         <div className="flex flex-wrap gap-2">
                           {identifiedData.tags.map((tag, index) => (
                             <span
                               key={index}
-                              className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium"
+                              className="px-3 py-1 rounded-full text-sm font-medium"
+                              style={{
+                                color: "#7c3fa8",
+                                background: "rgba(124,63,168,0.12)"
+                              }}
                             >
                               {tag}
                             </span>
@@ -323,10 +401,10 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
                   )
                 ) : (
                   <div className="h-full flex items-center justify-center">
-                    <div className="text-center">
+                    <div className="text-center" style={{ color: "#5c4a1e" }}>
                       <div className="text-6xl mb-4">🔍</div>
-                      <p className="text-gray-600 text-lg mb-2">Upload an image to identify</p>
-                      <p className="text-gray-400 text-sm">
+                      <p className="text-lg mb-2" style={{ color: "#3d2e0f" }}>Upload an image to identify</p>
+                      <p className="text-sm" style={{ color: "#7c6a47" }}>
                         Our AI will analyze the artifact and provide detailed information
                       </p>
                     </div>
@@ -338,13 +416,26 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
         </div>
 
         {/* Footer */}
-        <div className="border-t px-6 py-4 bg-gray-50 flex justify-between items-center">
-          <p className="text-sm text-gray-600">
+        <div 
+          className="border-t px-6 py-4 flex justify-between items-center"
+          style={{
+            background: "rgba(255,248,230,0.35)",
+            borderColor: "rgba(200,165,90,0.22)"
+          }}
+        >
+          <p className="text-sm" style={{ color: "#3d2e0f" }}>
             💡 <span className="font-medium">Tip:</span> Upload clear, well-lit images for best results
           </p>
           <button
             onClick={handleClose}
-            className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors font-medium"
+            className="px-6 py-2 rounded-lg transition-colors font-medium"
+            style={{
+              color: "#7c6a47",
+              border: "1px solid rgba(200,165,90,0.30)",
+              background: "rgba(255,248,230,0.70)"
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.background = "rgba(200,165,90,0.15)"}
+            onMouseLeave={(e) => e.currentTarget.style.background = "rgba(255,248,230,0.70)"}
           >
             Close
           </button>
