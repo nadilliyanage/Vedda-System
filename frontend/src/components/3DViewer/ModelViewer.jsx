@@ -217,7 +217,7 @@ const ModelViewer = ({ onModelLoad, onMorphTargetsUpdate, xrayMode }) => {
       )}
       
       {/* Instructions overlay */}
-      <div className="absolute top-6 left-6 bg-blue-900/90 backdrop-blur-sm text-white px-4 py-3 rounded-lg shadow-lg border border-dark-border max-w-xs">
+      <div className="absolute left-6 bg-blue-900/90 backdrop-blur-sm text-white px-4 py-3 rounded-lg shadow-lg border border-dark-border max-w-xs" style={{ top: "124px" }}>
         <h4 className="text-sm font-semibold mb-2 text-blue-400">Controls</h4>
         <ul className="text-xs space-y-1 text-gray-300">
           <li>• <span className="font-medium">Left Click + Drag:</span> Rotate</li>
