@@ -222,36 +222,84 @@ const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col">
+    <div
+      className="fixed inset-0 z-50 flex flex-col"
+      style={{
+        background: "rgba(20,14,4,0.82)",
+        backdropFilter: "blur(6px)",
+        WebkitBackdropFilter: "blur(6px)",
+      }}
+    >
       <div className="flex flex-col h-full max-w-7xl mx-auto w-full">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-200 bg-white shadow-sm">
+        <div
+          className="flex items-center justify-between p-4 md:p-6 shadow-sm"
+          style={{
+            background: "rgba(255, 248, 230, 0.14)",
+            backdropFilter: "blur(18px)",
+            WebkitBackdropFilter: "blur(18px)",
+            borderBottom: "1px solid rgba(200, 165, 90, 0.28)",
+          }}
+        >
           <div className="flex items-center space-x-2 md:space-x-4">
-            <h2 className="text-lg md:text-xl font-semibold text-gray-800">
+            <h2
+              className="text-lg md:text-xl font-semibold"
+              style={{ color: "rgba(255,248,230,0.92)" }}
+            >
               Conversation Mode
             </h2>
-            <div className="flex items-center space-x-2 text-xs md:text-sm text-gray-600">
-              <span className="px-2 md:px-3 py-1 bg-blue-100 text-blue-700 rounded-full">
+            <div
+              className="flex items-center space-x-2 text-xs md:text-sm"
+              style={{ color: "rgba(212,180,131,0.80)" }}
+            >
+              <span
+                className="px-2 md:px-3 py-1 rounded-full"
+                style={{
+                  background: "rgba(154,111,42,0.28)",
+                  color: "#d4b483",
+                  border: "1px solid rgba(200,165,90,0.30)",
+                }}
+              >
                 {getLanguageLabel(sourceLanguage)}
               </span>
               <span className="hidden sm:inline">↔</span>
-              <span className="px-2 md:px-3 py-1 bg-green-100 text-green-700 rounded-full">
+              <span
+                className="px-2 md:px-3 py-1 rounded-full"
+                style={{
+                  background: "rgba(60,130,80,0.28)",
+                  color: "#7fcf9a",
+                  border: "1px solid rgba(60,160,80,0.30)",
+                }}
+              >
                 {getLanguageLabel(targetLanguage)}
               </span>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 rounded-full transition-colors"
+            style={{ color: "rgba(212,180,131,0.80)" }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.background = "rgba(200,165,90,0.20)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = "transparent")
+            }
           >
-            <HiX className="w-5 h-5 md:w-6 md:h-6 text-gray-600" />
+            <HiX className="w-5 h-5 md:w-6 md:h-6" />
           </button>
         </div>
 
         {/* Messages Area */}
-        <div className="flex-1 overflow-y-auto p-3 md:p-6 space-y-3 md:space-y-4 bg-gray-50">
+        <div
+          className="flex-1 overflow-y-auto p-3 md:p-6 space-y-3 md:space-y-4"
+          style={{ background: "rgba(20,14,4,0.40)" }}
+        >
           {messages.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-gray-400">
+            <div
+              className="flex flex-col items-center justify-center h-full"
+              style={{ color: "rgba(212,180,131,0.55)" }}
+            >
               <HiMicrophone className="w-12 h-12 md:w-16 md:h-16 mb-4" />
               <p className="text-sm md:text-lg text-center px-4">
                 Tap a microphone to start conversation
@@ -264,21 +312,41 @@ const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
                 className={`flex ${message.isSource ? "justify-start" : "justify-end"}`}
               >
                 <div
-                  className={`max-w-[85%] sm:max-w-[75%] md:max-w-[70%] rounded-lg p-3 md:p-4 ${
-                    message.isSource
-                      ? "bg-blue-100 text-blue-900"
-                      : "bg-green-100 text-green-900"
-                  }`}
+                  className="max-w-[85%] sm:max-w-[75%] md:max-w-[70%] rounded-lg p-3 md:p-4"
+                  style={{
+                    background: message.isSource
+                      ? "rgba(154,111,42,0.30)"
+                      : "rgba(60,130,80,0.28)",
+                    border: message.isSource
+                      ? "1px solid rgba(200,165,90,0.35)"
+                      : "1px solid rgba(60,160,80,0.30)",
+                    color: message.isSource ? "#f5e9c8" : "#c8f0d8",
+                    backdropFilter: "blur(10px)",
+                    WebkitBackdropFilter: "blur(10px)",
+                  }}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-semibold uppercase">
+                    <span
+                      className="text-xs font-semibold uppercase"
+                      style={{ opacity: 0.75 }}
+                    >
                       {getLanguageLabel(message.language)}
                     </span>
                     <button
                       onClick={() =>
                         handleSpeak(message.text, message.language)
                       }
-                      className="p-1 hover:bg-white hover:bg-opacity-50 rounded-full transition-colors ml-2"
+                      className="p-1 rounded-full transition-colors ml-2"
+                      style={{ opacity: 0.75 }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.opacity = "1";
+                        e.currentTarget.style.background =
+                          "rgba(255,255,255,0.15)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.opacity = "0.75";
+                        e.currentTarget.style.background = "transparent";
+                      }}
                     >
                       <HiVolumeUp className="w-4 h-4" />
                     </button>
@@ -287,7 +355,7 @@ const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
                     {message.text}
                   </p>
                   {message.type === "translated" && message.confidence && (
-                    <div className="mt-2 text-xs opacity-70">
+                    <div className="mt-2 text-xs" style={{ opacity: 0.65 }}>
                       Confidence: {(message.confidence * 100).toFixed(0)}%
                     </div>
                   )}
@@ -299,7 +367,15 @@ const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
         </div>
 
         {/* Control Panel */}
-        <div className="border-t border-gray-200 p-3 md:p-6 bg-white shadow-lg">
+        <div
+          className="p-3 md:p-6 shadow-lg"
+          style={{
+            background: "rgba(255, 248, 230, 0.12)",
+            backdropFilter: "blur(18px)",
+            WebkitBackdropFilter: "blur(18px)",
+            borderTop: "1px solid rgba(200, 165, 90, 0.28)",
+          }}
+        >
           <div className="grid grid-cols-2 gap-2 md:gap-4">
             {/* Source Language Controls */}
             <div className="space-y-2">
@@ -309,10 +385,26 @@ const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
                   loading || (isRecording && activeLanguage !== sourceLanguage)
                 }
                 className={`w-full relative flex flex-col items-center justify-center p-4 md:p-6 rounded-lg transition-all ${
-                  isRecording && activeLanguage === sourceLanguage
-                    ? "bg-red-500 text-white scale-105 shadow-lg"
-                    : "bg-blue-500 hover:bg-blue-600 text-white"
-                } ${loading || (isRecording && activeLanguage !== sourceLanguage) ? "opacity-50 cursor-not-allowed" : ""}`}
+                  loading || (isRecording && activeLanguage !== sourceLanguage)
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
+                style={{
+                  background:
+                    isRecording && activeLanguage === sourceLanguage
+                      ? "rgba(220, 38, 38, 0.70)"
+                      : "rgba(154, 111, 42, 0.55)",
+                  border: "1px solid rgba(200,165,90,0.40)",
+                  color: "rgba(255,248,230,0.95)",
+                  transform:
+                    isRecording && activeLanguage === sourceLanguage
+                      ? "scale(1.04)"
+                      : "scale(1)",
+                  boxShadow:
+                    isRecording && activeLanguage === sourceLanguage
+                      ? "0 6px 24px rgba(220,38,38,0.35)"
+                      : "0 2px 8px rgba(0,0,0,0.20)",
+                }}
               >
                 {loading && activeLanguage === sourceLanguage ? (
                   <AiOutlineLoading3Quarters className="w-8 h-8 md:w-12 md:h-12 animate-spin" />
@@ -337,7 +429,18 @@ const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
                   setManualInputLanguage(sourceLanguage);
                   setShowManualInput(true);
                 }}
-                className="w-full px-3 md:px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg text-xs md:text-sm font-medium transition-colors"
+                className="w-full px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition-colors"
+                style={{
+                  background: "rgba(154,111,42,0.22)",
+                  border: "1px solid rgba(200,165,90,0.30)",
+                  color: "#d4b483",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.background = "rgba(154,111,42,0.38)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.background = "rgba(154,111,42,0.22)")
+                }
               >
                 Type instead
               </button>
@@ -351,10 +454,26 @@ const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
                   loading || (isRecording && activeLanguage !== targetLanguage)
                 }
                 className={`w-full relative flex flex-col items-center justify-center p-4 md:p-6 rounded-lg transition-all ${
-                  isRecording && activeLanguage === targetLanguage
-                    ? "bg-red-500 text-white scale-105 shadow-lg"
-                    : "bg-green-500 hover:bg-green-600 text-white"
-                } ${loading || (isRecording && activeLanguage !== targetLanguage) ? "opacity-50 cursor-not-allowed" : ""}`}
+                  loading || (isRecording && activeLanguage !== targetLanguage)
+                    ? "opacity-50 cursor-not-allowed"
+                    : ""
+                }`}
+                style={{
+                  background:
+                    isRecording && activeLanguage === targetLanguage
+                      ? "rgba(220, 38, 38, 0.70)"
+                      : "rgba(40, 130, 80, 0.55)",
+                  border: "1px solid rgba(60,160,90,0.40)",
+                  color: "rgba(255,248,230,0.95)",
+                  transform:
+                    isRecording && activeLanguage === targetLanguage
+                      ? "scale(1.04)"
+                      : "scale(1)",
+                  boxShadow:
+                    isRecording && activeLanguage === targetLanguage
+                      ? "0 6px 24px rgba(220,38,38,0.35)"
+                      : "0 2px 8px rgba(0,0,0,0.20)",
+                }}
               >
                 {loading && activeLanguage === targetLanguage ? (
                   <AiOutlineLoading3Quarters className="w-8 h-8 md:w-12 md:h-12 animate-spin" />
@@ -379,7 +498,18 @@ const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
                   setManualInputLanguage(targetLanguage);
                   setShowManualInput(true);
                 }}
-                className="w-full px-3 md:px-4 py-2 bg-green-100 hover:bg-green-200 text-green-700 rounded-lg text-xs md:text-sm font-medium transition-colors"
+                className="w-full px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition-colors"
+                style={{
+                  background: "rgba(40,130,80,0.22)",
+                  border: "1px solid rgba(60,160,90,0.30)",
+                  color: "#7fcf9a",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.background = "rgba(40,130,80,0.38)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.background = "rgba(40,130,80,0.22)")
+                }
               >
                 Type instead
               </button>
@@ -387,7 +517,10 @@ const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
           </div>
 
           {isRecording && (
-            <div className="mt-3 md:mt-4 text-center text-xs md:text-sm text-gray-600">
+            <div
+              className="mt-3 md:mt-4 text-center text-xs md:text-sm"
+              style={{ color: "rgba(212,180,131,0.75)" }}
+            >
               Listening... Speak now
             </div>
           )}
@@ -396,16 +529,34 @@ const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
 
       {/* Manual Input Modal */}
       {showManualInput && (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-lg shadow-xl w-full max-w-md p-4 md:p-6">
-            <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{
+            background: "rgba(0,0,0,0.60)",
+            backdropFilter: "blur(4px)",
+            WebkitBackdropFilter: "blur(4px)",
+          }}
+        >
+          <div
+            className="rounded-xl shadow-2xl w-full max-w-md p-4 md:p-6"
+            style={{
+              background: "rgba(255, 248, 230, 0.88)",
+              backdropFilter: "blur(20px)",
+              WebkitBackdropFilter: "blur(20px)",
+              border: "1px solid rgba(200, 165, 90, 0.35)",
+            }}
+          >
+            <h3
+              className="text-base md:text-lg font-semibold mb-3 md:mb-4"
+              style={{ color: "#2d1f07" }}
+            >
               Type in {getLanguageLabel(manualInputLanguage)}
             </h3>
             <textarea
               value={manualInput}
               onChange={(e) => setManualInput(e.target.value)}
               placeholder={`Type your message in ${getLanguageLabel(manualInputLanguage)}...`}
-              className="w-full h-32 p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm md:text-base"
+              className="textarea-field h-32 text-sm md:text-base"
               autoFocus
             />
             <div className="flex gap-3 mt-4">

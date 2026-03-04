@@ -115,17 +115,26 @@ const ExamplePhrases = ({ onSelectExample }) => {
   return (
     <div className="card h-full">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-900">
+        <h3 className="text-lg font-semibold" style={{ color: "#2d1f07" }}>
           Try These Examples
         </h3>
         <button
           onClick={fetchExamples}
           disabled={isRefreshing}
-          className={`flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg transition-all duration-200 ${
-            isRefreshing
-              ? "text-gray-400 bg-gray-50 cursor-not-allowed"
-              : "text-gray-600 hover:text-gray-800 hover:bg-gray-100"
-          }`}
+          className="flex items-center gap-1 px-3 py-1.5 text-sm rounded-lg transition-all duration-200"
+          style={{
+            color: isRefreshing ? "rgba(140,112,64,0.45)" : "#5c4a1e",
+            background: isRefreshing ? "rgba(200,165,90,0.08)" : "transparent",
+            border: "1px solid transparent",
+            cursor: isRefreshing ? "not-allowed" : "pointer",
+          }}
+          onMouseEnter={(e) => {
+            if (!isRefreshing)
+              e.currentTarget.style.background = "rgba(200,165,90,0.16)";
+          }}
+          onMouseLeave={(e) => {
+            if (!isRefreshing) e.currentTarget.style.background = "transparent";
+          }}
           title="Refresh examples"
         >
           <HiRefresh
@@ -135,17 +144,30 @@ const ExamplePhrases = ({ onSelectExample }) => {
         </button>
       </div>
 
-      <hr className="border-gray-200 mb-4" />
+      <hr
+        className="mb-4"
+        style={{ borderColor: "rgba(200, 165, 90, 0.25)" }}
+      />
 
       {loading ? (
         <div className="space-y-2">
           {[...Array(5)].map((_, i) => (
             <div
               key={i}
-              className="border border-gray-200 rounded-lg p-3 animate-pulse"
+              className="rounded-lg p-3 animate-pulse"
+              style={{
+                background: "rgba(200, 165, 90, 0.12)",
+                border: "1px solid rgba(200, 165, 90, 0.20)",
+              }}
             >
-              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2" />
-              <div className="h-3 bg-gray-100 rounded w-1/2" />
+              <div
+                className="h-4 rounded w-3/4 mb-2"
+                style={{ background: "rgba(200,165,90,0.22)" }}
+              />
+              <div
+                className="h-3 rounded w-1/2"
+                style={{ background: "rgba(200,165,90,0.14)" }}
+              />
             </div>
           ))}
         </div>
@@ -156,7 +178,22 @@ const ExamplePhrases = ({ onSelectExample }) => {
             return (
               <div
                 key={word.id || index}
-                className="border border-gray-200 rounded-lg p-3 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+                className="rounded-lg p-3 cursor-pointer transition-all duration-200"
+                style={{
+                  background: "rgba(255, 248, 230, 0.35)",
+                  border: "1px solid rgba(200, 165, 90, 0.28)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "rgba(200, 165, 90, 0.22)";
+                  e.currentTarget.style.borderColor =
+                    "rgba(200, 165, 90, 0.45)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background =
+                    "rgba(255, 248, 230, 0.35)";
+                  e.currentTarget.style.borderColor =
+                    "rgba(200, 165, 90, 0.28)";
+                }}
                 onClick={() =>
                   onSelectExample({
                     vedda: word.vedda_word,
@@ -164,11 +201,17 @@ const ExamplePhrases = ({ onSelectExample }) => {
                   })
                 }
               >
-                <p className="font-medium text-gray-900 text-sm mb-1">
+                <p
+                  className="font-semibold text-sm mb-1"
+                  style={{ color: "#2d1f07" }}
+                >
                   {word.vedda_word}
                 </p>
                 {singlish && (
-                  <p className="text-xs text-blue-600 font-medium">
+                  <p
+                    className="text-xs font-medium"
+                    style={{ color: "#9a6f2a" }}
+                  >
                     {singlish}
                   </p>
                 )}
@@ -177,7 +220,7 @@ const ExamplePhrases = ({ onSelectExample }) => {
           })}
         </div>
       ) : (
-        <p className="text-sm text-gray-500 text-center py-4">
+        <p className="text-sm text-center py-4" style={{ color: "#8c7040" }}>
           No words available
         </p>
       )}

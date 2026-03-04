@@ -5,8 +5,8 @@ import { generateSpeech } from "../../utils/ttsUtils";
 // Loading skeleton component
 const Skeleton = ({ width = "100%", height = "1.5rem" }) => (
   <div
-    className="animate-pulse bg-gray-200 rounded"
-    style={{ width, height }}
+    className="animate-pulse rounded"
+    style={{ width, height, background: "rgba(200, 165, 90, 0.22)" }}
   />
 );
 
@@ -51,32 +51,64 @@ const TranslationOutput = ({
       // Current translator service method names
       case "google":
       case "google_translate":
-        return "bg-indigo-100 text-indigo-800 border-indigo-200";
+        return (
+          "px-2 py-1 text-xs font-medium rounded border" +
+          " " +
+          "bg-indigo-100/60 text-indigo-900 border-indigo-300/60"
+        );
       case "dictionary":
       case "english_to_vedda_direct":
       case "vedda_direct":
-        return "bg-green-100 text-green-800 border-green-200";
+        return (
+          "px-2 py-1 text-xs font-medium rounded border" +
+          " " +
+          "bg-green-100/60 text-green-900 border-green-300/60"
+        );
       case "phrase_match":
-        return "bg-teal-100 text-teal-800 border-teal-200";
+        return (
+          "px-2 py-1 text-xs font-medium rounded border" +
+          " " +
+          "bg-teal-100/60 text-teal-900 border-teal-300/60"
+        );
       case "fallback":
       case "english_to_sinhala_fallback":
       case "bridge_via_english":
       case "vedda_fallback":
       case "vedda_to_english_to_target":
       case "source_to_english_to_vedda":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200";
+        return (
+          "px-2 py-1 text-xs font-medium rounded border" +
+          " " +
+          "bg-amber-100/60 text-amber-900 border-amber-300/60"
+        );
       case "sinhala_bridge":
       case "english_to_sinhala_google":
       case "sinhala_to_target":
       case "sinhala_passthrough":
-        return "bg-blue-100 text-blue-800 border-blue-200";
+        return (
+          "px-2 py-1 text-xs font-medium rounded border" +
+          " " +
+          "bg-sky-100/60 text-sky-900 border-sky-300/60"
+        );
       case "sinhala_word":
       case "vedda_as_sinhala_batch":
-        return "bg-purple-100 text-purple-800 border-purple-200";
+        return (
+          "px-2 py-1 text-xs font-medium rounded border" +
+          " " +
+          "bg-purple-100/60 text-purple-900 border-purple-300/60"
+        );
       case "unknown":
-        return "bg-red-100 text-red-800 border-red-200";
+        return (
+          "px-2 py-1 text-xs font-medium rounded border" +
+          " " +
+          "bg-red-100/60 text-red-900 border-red-300/60"
+        );
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return (
+          "px-2 py-1 text-xs font-medium rounded border" +
+          " " +
+          "bg-stone-100/60 text-stone-800 border-stone-300/60"
+        );
     }
   };
 
@@ -131,7 +163,7 @@ const TranslationOutput = ({
   return (
     <div className="p-6 h-full flex flex-col">
       {/* Output Language Label */}
-      <p className="text-sm text-gray-600 mb-3">
+      <p className="text-sm font-semibold mb-3" style={{ color: "#8c7040" }}>
         {getLanguageNative(targetLanguage)}
       </p>
 
@@ -146,7 +178,14 @@ const TranslationOutput = ({
 
       {/* Error State */}
       {error && !loading && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+        <div
+          className="px-4 py-3 rounded-lg mb-4"
+          style={{
+            background: "rgba(220, 38, 38, 0.12)",
+            border: "1px solid rgba(220, 38, 38, 0.30)",
+            color: "#7f1d1d",
+          }}
+        >
           {error}
         </div>
       )}
@@ -154,14 +193,28 @@ const TranslationOutput = ({
       {/* Translation Output */}
       {outputText && !loading && (
         <div className="flex-grow">
-          <p className="text-lg leading-relaxed mb-4 min-h-[100px]">
+          <p
+            className="text-lg leading-relaxed mb-4 min-h-[100px]"
+            style={{ color: "#2d1f07" }}
+          >
             {outputText}
           </p>
 
           {/* Target Pronunciation */}
           {(targetIpaTranscription || targetSinglish) && (
-            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg mb-4 border border-blue-200">
-              <p className="text-sm font-semibold text-gray-700 mb-4 flex items-center">
+            <div
+              className="p-6 rounded-lg mb-4"
+              style={{
+                background: "rgba(200, 165, 90, 0.14)",
+                border: "1px solid rgba(200, 165, 90, 0.32)",
+                backdropFilter: "blur(6px)",
+                WebkitBackdropFilter: "blur(6px)",
+              }}
+            >
+              <p
+                className="text-sm font-semibold mb-4 flex items-center"
+                style={{ color: "#5c4a1e" }}
+              >
                 <span className="mr-2">🔊</span>
                 {LANGUAGES.find((l) => l.code === targetLanguage)?.name ||
                   targetLanguage}{" "}
@@ -173,11 +226,23 @@ const TranslationOutput = ({
                 {targetSinglish &&
                   (targetLanguage === "vedda" ||
                     targetLanguage === "sinhala") && (
-                    <div className="bg-white p-4 rounded-lg border border-blue-100 shadow-sm">
-                      <p className="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+                    <div
+                      className="p-4 rounded-lg shadow-sm"
+                      style={{
+                        background: "rgba(255, 248, 230, 0.55)",
+                        border: "1px solid rgba(200, 165, 90, 0.25)",
+                      }}
+                    >
+                      <p
+                        className="text-xs font-semibold mb-2 uppercase tracking-wide"
+                        style={{ color: "#8c7040" }}
+                      >
                         Singlish
                       </p>
-                      <p className="text-base text-gray-800 font-medium tracking-wide leading-relaxed break-words">
+                      <p
+                        className="text-base font-medium tracking-wide leading-relaxed break-words"
+                        style={{ color: "#2d1f07" }}
+                      >
                         {targetSinglish}
                       </p>
                     </div>
@@ -185,13 +250,23 @@ const TranslationOutput = ({
 
                 {/* Target IPA - For all languages */}
                 {targetIpaTranscription && (
-                  <div className="bg-white p-4 rounded-lg border border-blue-100 shadow-sm">
-                    <p className="text-xs font-semibold text-gray-600 mb-2 uppercase tracking-wide">
+                  <div
+                    className="p-4 rounded-lg shadow-sm"
+                    style={{
+                      background: "rgba(255, 248, 230, 0.55)",
+                      border: "1px solid rgba(200, 165, 90, 0.25)",
+                    }}
+                  >
+                    <p
+                      className="text-xs font-semibold mb-2 uppercase tracking-wide"
+                      style={{ color: "#8c7040" }}
+                    >
                       IPA (International Phonetic Alphabet)
                     </p>
                     <p
-                      className="text-base text-indigo-800 font-normal tracking-wide leading-relaxed break-words"
+                      className="text-base font-normal tracking-wide leading-relaxed break-words"
                       style={{
+                        color: "#5c3a10",
                         fontFamily:
                           '"Doulos SIL", "Charis SIL", "Times New Roman", serif',
                       }}
@@ -207,7 +282,7 @@ const TranslationOutput = ({
           {/* Confidence Score */}
           {confidence && (
             <div className="mb-4">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm" style={{ color: "#8c7040" }}>
                 Translation Confidence: {Math.round(confidence * 100)}%
               </p>
             </div>
@@ -216,15 +291,12 @@ const TranslationOutput = ({
           {/* Translation Methods */}
           {translationMethods.length > 0 && (
             <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-2">Translation methods:</p>
+              <p className="text-sm mb-2" style={{ color: "#8c7040" }}>
+                Translation methods:
+              </p>
               <div className="flex flex-wrap gap-2">
                 {[...new Set(translationMethods)].map((method, index) => (
-                  <span
-                    key={index}
-                    className={`px-2 py-1 text-xs font-medium rounded border ${getMethodColor(
-                      method
-                    )}`}
-                  >
+                  <span key={index} className={getMethodColor(method)}>
                     {getMethodLabel(method)}
                   </span>
                 ))}
@@ -236,8 +308,8 @@ const TranslationOutput = ({
 
       {/* Empty State */}
       {!outputText && !loading && !error && (
-        <div className="flex-grow flex items-center justify-center text-gray-500">
-          <p>Click translate to see results</p>
+        <div className="flex-grow flex items-center justify-center">
+          <p style={{ color: "#8c7040" }}>Click translate to see results</p>
         </div>
       )}
 
@@ -247,19 +319,34 @@ const TranslationOutput = ({
           <div className="flex gap-2">
             <button
               onClick={handleOutputTextToSpeech}
-              className="p-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors duration-200"
+              className="p-2 rounded-lg transition-colors duration-200"
+              style={{ color: "#9a6f2a" }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = "rgba(200,165,90,0.18)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = "transparent")
+              }
               title="Listen to pronunciation"
             >
               <HiVolumeUp className="w-5 h-5" />
             </button>
             <button
-              className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              className="p-2 rounded-lg transition-colors duration-200"
+              style={{ color: "#5c4a1e" }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = "rgba(200,165,90,0.18)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = "transparent")
+              }
               onClick={onCopyOutput}
             >
               <HiClipboardCopy className="w-5 h-5" />
             </button>
             <button
-              className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+              className="p-2 rounded-lg transition-colors duration-200"
+              style={{ color: "rgba(140,112,64,0.45)", cursor: "not-allowed" }}
               disabled
             >
               <HiShare className="w-5 h-5" />
