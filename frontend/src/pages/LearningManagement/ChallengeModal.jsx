@@ -385,8 +385,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
           <div className="mt-3 rounded-full h-1.5" style={{ background: 'rgba(255,255,255,0.22)' }}>
             <div
               className={`h-1.5 rounded-full transition-all duration-1000 ${timeLeft <= 10 ? 'bg-red-400' : ''}`}
-              style={timeLeft > 10 ? { background: 'rgba(255,248,200,0.90)' } : {}}
-              style={{ width: `${(timeLeft / (question?.timeLimitSec || 45)) * 100}%` }}
+              style={{ width: `${(timeLeft / (question?.timeLimitSec || 45)) * 100}%`, ...(timeLeft > 10 ? { background: 'rgba(255,248,200,0.90)' } : {}) }}
             />
           </div>
         </div>
