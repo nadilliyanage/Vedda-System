@@ -93,7 +93,7 @@ const PerformanceView = ({ onBack }) => {
         <button onClick={onBack} className="flex items-center gap-2 px-3 py-1.5 rounded-[9px] transition-all text-sm font-medium" style={{ color: 'rgba(255,248,230,0.90)', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(200,165,90,0.25)' }}
           onMouseEnter={e => e.currentTarget.style.background='rgba(200,165,90,0.18)'}
           onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.08)'}>
-          <FaArrowLeft className="text-sm" /> Back
+          <FaArrowLeft className="text-sm" /> Back to Learning Hub
         </button>
         <span className="text-sm font-semibold" style={{ color: '#d4b483' }}>Performance Dashboard</span>
         <div style={{ width: 72 }} />
