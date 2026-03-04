@@ -135,7 +135,7 @@ const ArtifactPage = () => {
             color: "#1c1409",
             lineHeight: 1.2,
             margin: "0 auto 0.5rem",
-            maxWidth: "720px",
+            maxWidth: "100%",
             fontFamily: "'Georgia', serif",
             letterSpacing: "-0.3px",
             textShadow: "0 1px 0 rgba(255,255,255,0.8)",
