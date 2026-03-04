@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { FaArrowLeft } from 'react-icons/fa';
+import { FaArrowLeft, FaBook } from 'react-icons/fa';
 import { categoriesAPI } from '../../services/learningAPI';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 
@@ -52,31 +52,171 @@ const LessonSelection = ({ onBack, onCategorySelect }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 pt-16">
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <button
-            onClick={onBack}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors mb-6"
-          >
-            <FaArrowLeft /> Back to Learning Hub
-          </button>
-          
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">Lessons</h1>
-            <p className="text-lg text-gray-600">
-              Select a category to start learning
-            </p>
+    <div
+      className="min-h-screen mt-[60px]"
+      style={{
+        backgroundImage: `url('/assets/background-images/background-1.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* ── Glassmorphic nav bar ── */}
+      <div
+        style={{
+          background: 'rgba(28,20,8,0.55)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          borderBottom: '1px solid rgba(200,170,100,0.18)',
+          boxShadow: '0 2px 16px rgba(0,0,0,0.20)',
+        }}
+      >
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={onBack}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                color: 'rgba(255,248,230,0.90)',
+                background: 'rgba(255,255,255,0.08)',
+                border: '1px solid rgba(200,165,90,0.25)',
+                borderRadius: '9px',
+                padding: '0.4rem 0.9rem',
+                fontFamily: 'system-ui, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.88rem',
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = 'rgba(200,165,90,0.18)')
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')
+              }
+            >
+              <FaArrowLeft style={{ fontSize: '0.8rem' }} />
+              Back to Learning Hub
+            </button>
+            <div
+              style={{
+                color: '#d4b483',
+                fontFamily: 'system-ui, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.9rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+              }}
+            >
+              <FaBook style={{ fontSize: '0.85rem' }} />
+              Vedda Lessons
+            </div>
           </div>
         </div>
+      </div>
 
+      {/* ── Hero section ── */}
+      <div
+        style={{
+          background:
+            'linear-gradient(to bottom, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,0) 100%)',
+          paddingTop: '1.5rem',
+          paddingBottom: '1.5rem',
+          textAlign: 'center',
+        }}
+      >
+        <span
+          style={{
+            display: 'inline-block',
+            background: 'rgba(255,255,255,0.60)',
+            border: '1px solid rgba(100,80,40,0.22)',
+            borderRadius: '999px',
+            padding: '0.28rem 1rem',
+            fontSize: '0.73rem',
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase',
+            color: '#5c4a1e',
+            marginBottom: '0.6rem',
+            fontFamily: 'system-ui, sans-serif',
+          }}
+        >
+          📚 Language Learning
+        </span>
+        <h1
+          style={{
+            fontSize: '45px',
+            fontWeight: '800',
+            color: '#1c1409',
+            lineHeight: 1.2,
+            margin: '0 auto 0.5rem',
+            maxWidth: '720px',
+            fontFamily: "'Georgia', serif",
+            letterSpacing: '-0.3px',
+            textShadow: '0 1px 0 rgba(255,255,255,0.8)',
+            padding: '0 1rem',
+          }}
+        >
+          Vedda{' '}
+          <span
+            style={{
+              color: '#9a6f2a',
+              textShadow:
+                '0 1px 0 rgba(255,255,255,0.9), 0 2px 8px rgba(255,255,255,0.5)',
+            }}
+          >
+            Lessons
+          </span>
+        </h1>
+        <p
+          style={{
+            fontSize: 'clamp(0.9rem,1.8vw,1.08rem)',
+            color: '#3d2e0f',
+            maxWidth: '540px',
+            margin: '0 auto 0.5rem',
+            lineHeight: 1.75,
+            fontFamily: "'Georgia', serif",
+            fontStyle: 'italic',
+            padding: '0 1rem',
+          }}
+        >
+          Select a category to start learning the indigenous Vedda language.
+        </p>
+        <div
+          style={{
+            width: '52px',
+            height: '3px',
+            background: 'linear-gradient(90deg, #9a6f2a, #c9943a)',
+            margin: '1rem auto 0',
+            borderRadius: '99px',
+          }}
+        />
+      </div>
+
+      {/* ── Content ── */}
+      <div className="container mx-auto px-4 py-8">
         {/* Categories Grid */}
         {categories.length === 0 ? (
           <div className="text-center py-20">
-            <div className="bg-white rounded-xl shadow-md p-12 max-w-md mx-auto">
-              <p className="text-gray-500 text-lg mb-4">No categories available yet</p>
-              <p className="text-gray-400">
+            <div
+              className="rounded-xl p-12 max-w-md mx-auto"
+              style={{
+                background: 'rgba(255,255,255,0.82)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '1px solid rgba(200,170,100,0.25)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+              }}
+            >
+              <p
+                className="text-lg mb-4"
+                style={{ color: '#5c4a1e', fontFamily: "'Georgia', serif" }}
+              >
+                No categories available yet
+              </p>
+              <p style={{ color: '#8a7550', fontFamily: 'system-ui, sans-serif' }}>
                 Categories will appear here once an admin creates them
               </p>
             </div>
@@ -119,20 +259,6 @@ const LessonSelection = ({ onBack, onCategorySelect }) => {
             ))}
           </div>
         )}
-
-        {/* Info Card */}
-        {/* <div className="mt-12 max-w-3xl mx-auto">
-          <div className="bg-white rounded-xl shadow-md p-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-3">
-              How It Works
-            </h3>
-            <p className="text-gray-600 leading-relaxed">
-              Choose a category above to explore lessons in that topic. Each category 
-              contains carefully crafted lessons to help you learn Vedda vocabulary 
-              effectively. Track your progress and earn rewards as you complete lessons.
-            </p>
-          </div>
-        </div> */}
       </div>
     </div>
   );

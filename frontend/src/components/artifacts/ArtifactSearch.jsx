@@ -5,13 +5,13 @@ const ArtifactSearch = ({ searchQuery, onSearchChange }) => {
   return (
     <div className="px-1 py-1">
       <div className="relative">
-        <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+        <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-800" />
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           placeholder="Search artifacts by name, description, or cultural significance..."
-          className="w-full pl-12 pr-12 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition-colors"
+          className="w-full pl-12 pr-12 py-3 border-2 border-gray-200 rounded-lg focus:border-purple-500 focus:outline-none transition-colors font-semibold"
         />
         {searchQuery && (
           <button

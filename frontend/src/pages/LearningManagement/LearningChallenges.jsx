@@ -166,42 +166,62 @@ const LearningChallenges = ({ onBack }) => {
           {stateIcons[state]}
           
           {/* Challenge Number */}
-          <div className="absolute -bottom-6 bg-white text-gray-700 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm shadow">
+          <div
+            className="absolute -bottom-6 rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm shadow"
+            style={{ background: 'rgba(255,255,255,0.92)', color: '#5c4a1e', border: '1px solid rgba(200,170,100,0.35)' }}
+          >
             {index + 1}
           </div>
         </div>
 
         {/* Challenge Info Card */}
-        <div className={`
-          bg-white rounded-xl shadow-lg p-4 w-64 transition-all duration-300
-          hover:shadow-xl border-2
-          ${state === 'unlocked' ? 'border-blue-400' : state === 'completed' ? 'border-green-400' : 'border-gray-300'}
-        `}>
+        <div
+          className="rounded-xl p-4 w-64 transition-all duration-300 hover:shadow-xl"
+          style={{
+            background: 'rgba(255,255,255,0.88)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            border: `2px solid ${
+              state === 'unlocked' ? 'rgba(154,111,42,0.60)'
+              : state === 'completed' ? '#22c55e'
+              : 'rgba(200,170,100,0.25)'
+            }`,
+            boxShadow: '0 4px 16px rgba(0,0,0,0.10)',
+          }}
+        >
           <div className="flex items-center justify-between mb-2">
-            <span className={`
-              px-3 py-1 rounded-full text-xs font-semibold capitalize
-              ${challenge.question?.type === 'multiple_choice' ? 'bg-blue-100 text-blue-600' :
-                challenge.question?.type === 'match_pairs' ? 'bg-orange-100 text-orange-600' :
-                'bg-green-100 text-green-600'}
-            `}>
+            <span
+              className="px-3 py-1 rounded-full text-xs font-semibold capitalize"
+              style={{
+                background:
+                  challenge.question?.type === 'multiple_choice' ? 'rgba(59,130,246,0.12)' :
+                  challenge.question?.type === 'match_pairs' ? 'rgba(249,115,22,0.12)' :
+                  'rgba(34,197,94,0.12)',
+                color:
+                  challenge.question?.type === 'multiple_choice' ? '#3b82f6' :
+                  challenge.question?.type === 'match_pairs' ? '#f97316' :
+                  '#16a34a',
+                border: '1px solid currentColor',
+              }}
+            >
               {challenge.question?.type?.replace('_', ' ') || 'challenge'}
             </span>
             <div className="flex gap-2">
-              <span className="flex items-center text-yellow-600 font-bold">
+              <span className="flex items-center font-bold" style={{ color: '#9a6f2a' }}>
                 <FaStar className="mr-1" /> {challenge.question?.xp ?? 0}
               </span>
-              <span className="flex items-center text-blue-600 font-bold">
+              <span className="flex items-center font-bold" style={{ color: '#5b8dd9' }}>
                 <FaGem className="mr-1" /> {challenge.question?.points ?? 0}
               </span>
             </div>
           </div>
           
-          <p className="text-gray-700 text-sm line-clamp-2">
+          <p className="text-sm line-clamp-2" style={{ color: '#3d2e0f' }}>
             {challenge.question?.prompt}
           </p>
           
           {state === 'locked' && (
-            <div className="mt-2 text-xs text-gray-500 italic">
+            <div className="mt-2 text-xs italic" style={{ color: '#8a7550' }}>
               Complete previous challenge to unlock
             </div>
           )}
@@ -250,52 +270,195 @@ const LearningChallenges = ({ onBack }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-green-50 pt-16">
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <button
-            onClick={onBack}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors mb-6"
-          >
-            <FaArrowLeft /> Back to Learning Hub
-          </button>
-
-          <div className="text-center mb-6">
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">
-              Learning Path
-            </h1>
-            <p className="text-gray-600">
-              Complete challenges to progress and earn rewards!
-            </p>
-          </div>
-
-          {/* User Stats Bar */}
-          <div className="flex items-center justify-center gap-6 mb-8">
-            <div className="flex items-center gap-2 bg-orange-100 px-4 py-2 rounded-full shadow">
-              <FaFire className="text-orange-500 text-xl" />
-              <span className="font-bold text-orange-700">{userProgress.currentStreak} day streak</span>
-            </div>
-            
-            <div className="flex items-center gap-2 bg-yellow-100 px-4 py-2 rounded-full shadow">
-              <FaStar className="text-yellow-500 text-xl" />
-              <span className="font-bold text-yellow-700">{userProgress.totalXP} XP</span>
-            </div>
-            
-            <div className="flex items-center gap-2 bg-blue-100 px-4 py-2 rounded-full shadow">
-              <FaGem className="text-blue-500 text-xl" />
-              <span className="font-bold text-blue-700">{userProgress.totalCoins} coins</span>
+    <div
+      className="min-h-screen mt-[60px]"
+      style={{
+        backgroundImage: `url('/assets/background-images/background-1.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* ── Glassmorphic nav bar ── */}
+      <div
+        style={{
+          background: 'rgba(28,20,8,0.55)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          borderBottom: '1px solid rgba(200,170,100,0.18)',
+          boxShadow: '0 2px 16px rgba(0,0,0,0.20)',
+        }}
+      >
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={onBack}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                color: 'rgba(255,248,230,0.90)',
+                background: 'rgba(255,255,255,0.08)',
+                border: '1px solid rgba(200,165,90,0.25)',
+                borderRadius: '9px',
+                padding: '0.4rem 0.9rem',
+                fontFamily: 'system-ui, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.88rem',
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = 'rgba(200,165,90,0.18)')
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')
+              }
+            >
+              <FaArrowLeft style={{ fontSize: '0.8rem' }} />
+              Back to Learning Hub
+            </button>
+            <div
+              style={{
+                color: '#d4b483',
+                fontFamily: 'system-ui, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.9rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+              }}
+            >
+              <FaTrophy style={{ fontSize: '0.85rem' }} />
+              Challenges
             </div>
           </div>
         </div>
+      </div>
+
+      {/* ── Hero section ── */}
+      <div
+        style={{
+          background:
+            'linear-gradient(to bottom, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,0) 100%)',
+          paddingTop: '1.5rem',
+          paddingBottom: '1rem',
+          textAlign: 'center',
+        }}
+      >
+        <span
+          style={{
+            display: 'inline-block',
+            background: 'rgba(255,255,255,0.60)',
+            border: '1px solid rgba(100,80,40,0.22)',
+            borderRadius: '999px',
+            padding: '0.28rem 1rem',
+            fontSize: '0.73rem',
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase',
+            color: '#5c4a1e',
+            marginBottom: '0.6rem',
+            fontFamily: 'system-ui, sans-serif',
+          }}
+        >
+          🏆 Challenges
+        </span>
+        <h1
+          style={{
+            fontSize: '45px',
+            fontWeight: '800',
+            color: '#1c1409',
+            lineHeight: 1.2,
+            margin: '0 auto 0.4rem',
+            maxWidth: '720px',
+            fontFamily: "'Georgia', serif",
+            letterSpacing: '-0.3px',
+            textShadow: '0 1px 0 rgba(255,255,255,0.8)',
+            padding: '0 1rem',
+          }}
+        >
+          Challenge{' '}
+          <span
+            style={{
+              color: '#9a6f2a',
+              textShadow: '0 1px 0 rgba(255,255,255,0.9), 0 2px 8px rgba(255,255,255,0.5)',
+            }}
+          >
+            Path
+          </span>
+        </h1>
+        <p
+          style={{
+            fontSize: 'clamp(0.9rem,1.8vw,1.08rem)',
+            color: '#3d2e0f',
+            maxWidth: '540px',
+            margin: '0 auto 0.8rem',
+            lineHeight: 1.75,
+            fontFamily: "'Georgia', serif",
+            fontStyle: 'italic',
+            padding: '0 1rem',
+          }}
+        >
+          Complete challenges to progress and earn rewards!
+        </p>
+
+        {/* User Stats Bar */}
+        <div className="flex items-center justify-center gap-4 flex-wrap pb-2">
+          <div
+            className="flex items-center gap-2 px-4 py-2 rounded-full shadow"
+            style={{ background: 'rgba(251,146,60,0.18)', border: '1px solid rgba(251,146,60,0.40)' }}
+          >
+            <FaFire style={{ color: '#f97316', fontSize: '1.1rem' }} />
+            <span className="font-bold" style={{ color: '#c2410c' }}>{userProgress.currentStreak} day streak</span>
+          </div>
+          <div
+            className="flex items-center gap-2 px-4 py-2 rounded-full shadow"
+            style={{ background: 'rgba(200,170,100,0.18)', border: '1px solid rgba(200,165,90,0.45)' }}
+          >
+            <FaStar style={{ color: '#9a6f2a', fontSize: '1.1rem' }} />
+            <span className="font-bold" style={{ color: '#9a6f2a' }}>{userProgress.totalXP} XP</span>
+          </div>
+          <div
+            className="flex items-center gap-2 px-4 py-2 rounded-full shadow"
+            style={{ background: 'rgba(147,197,253,0.18)', border: '1px solid rgba(96,165,250,0.40)' }}
+          >
+            <FaGem style={{ color: '#3b82f6', fontSize: '1.1rem' }} />
+            <span className="font-bold" style={{ color: '#1d4ed8' }}>{userProgress.totalCoins} coins</span>
+          </div>
+        </div>
+
+        <div
+          style={{
+            width: '52px',
+            height: '3px',
+            background: 'linear-gradient(90deg, #9a6f2a, #c9943a)',
+            margin: '0.8rem auto 0',
+            borderRadius: '99px',
+          }}
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 py-8">
 
         {/* Main Content */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Left Sidebar - Badges */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-4">
-              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <FaTrophy className="text-yellow-500" />
+            <div
+              className="rounded-xl p-6 sticky top-4"
+              style={{
+                background: 'rgba(255,255,255,0.85)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(200,170,100,0.28)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+              }}
+            >
+              <h3
+                className="text-xl font-bold mb-4 flex items-center gap-2"
+                style={{ color: '#1c1409', fontFamily: "'Georgia', serif" }}
+              >
+                <FaTrophy style={{ color: '#c9943a' }} />
                 Your Badges
               </h3>
               
@@ -307,17 +470,22 @@ const LearningChallenges = ({ onBack }) => {
                   return (
                     <div 
                       key={badge.id}
-                      className={`
-                        flex items-center gap-3 p-3 rounded-lg transition-all
-                        ${earned ? 'bg-gradient-to-r from-yellow-50 to-orange-50 shadow' : 'bg-gray-50 opacity-50'}
-                      `}
+                      className="flex items-center gap-3 p-3 rounded-lg transition-all"
+                      style={{
+                        background: earned ? 'rgba(200,170,100,0.12)' : 'rgba(200,200,200,0.08)',
+                        border: earned ? '1px solid rgba(200,165,90,0.30)' : '1px solid rgba(200,200,200,0.20)',
+                        opacity: earned ? 1 : 0.5,
+                      }}
                     >
                       <BadgeIcon className={`text-3xl ${earned ? badge.color : 'text-gray-400'}`} />
                       <div className="flex-1">
-                        <div className={`font-bold text-sm ${earned ? 'text-gray-800' : 'text-gray-500'}`}>
+                        <div
+                          className="font-bold text-sm"
+                          style={{ color: earned ? '#1c1409' : '#6b7280' }}
+                        >
                           {badge.name}
                         </div>
-                        <div className="text-xs text-gray-500">{badge.desc}</div>
+                        <div className="text-xs" style={{ color: '#8a7550' }}>{badge.desc}</div>
                       </div>
                       {earned && (
                         <FaCheckCircle className="text-green-500" />
@@ -328,14 +496,23 @@ const LearningChallenges = ({ onBack }) => {
               </div>
 
               {/* Progress */}
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <div className="text-sm font-semibold text-gray-700 mb-2">
+              <div
+                className="mt-6 pt-6"
+                style={{ borderTop: '1px solid rgba(200,170,100,0.30)' }}
+              >
+                <div
+                  className="text-sm font-semibold mb-2"
+                  style={{ color: '#5c4a1e' }}
+                >
                   Progress: {challenges.filter(c => c.isCompleted).length}/{challenges.length}
                 </div>
-                <div className="w-full bg-gray-200 rounded-full h-3">
+                <div className="w-full rounded-full h-3" style={{ background: 'rgba(200,170,100,0.20)' }}>
                   <div 
-                    className="bg-gradient-to-r from-green-400 to-blue-500 h-3 rounded-full transition-all duration-500"
-                    style={{ width: `${challenges.length > 0 ? (challenges.filter(c => c.isCompleted).length / challenges.length) * 100 : 0}%` }}
+                    className="h-3 rounded-full transition-all duration-500"
+                    style={{
+                      width: `${challenges.length > 0 ? (challenges.filter(c => c.isCompleted).length / challenges.length) * 100 : 0}%`,
+                      background: 'linear-gradient(90deg, #9a6f2a, #c9943a)',
+                    }}
                   />
                 </div>
               </div>
@@ -381,9 +558,21 @@ const LearningChallenges = ({ onBack }) => {
 
           {/* Right Sidebar - Leaderboard/Stats */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-4">
-              <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-                <FaMedal className="text-orange-500" />
+            <div
+              className="rounded-xl p-6 sticky top-4"
+              style={{
+                background: 'rgba(255,255,255,0.85)',
+                backdropFilter: 'blur(12px)',
+                WebkitBackdropFilter: 'blur(12px)',
+                border: '1px solid rgba(200,170,100,0.28)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+              }}
+            >
+              <h3
+                className="text-xl font-bold mb-4 flex items-center gap-2"
+                style={{ color: '#1c1409', fontFamily: "'Georgia', serif" }}
+              >
+                <FaMedal style={{ color: '#f97316' }} />
                 Achievements
               </h3>
               

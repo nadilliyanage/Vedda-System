@@ -109,14 +109,38 @@ const ArtifactPage = () => {
         style={{ background: "linear-gradient(to bottom, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,0) 100%)" }}
       >
         {/* Badge */}
-        <span className="inline-block bg-white/60 border border-[rgba(100,80,40,0.22)] rounded-full px-4 py-1 text-[0.73rem] tracking-[0.16em] uppercase text-[#5c4a1e] mb-2 font-sans">
+        <span
+          style={{
+            display: "inline-block",
+            background: "rgba(255,255,255,0.60)",
+            border: "1px solid rgba(100,80,40,0.22)",
+            borderRadius: "999px",
+            padding: "0.28rem 1rem",
+            fontSize: "0.73rem",
+            letterSpacing: "0.16em",
+            textTransform: "uppercase",
+            color: "#5c4a1e",
+            marginBottom: "0.6rem",
+            fontFamily: "system-ui, sans-serif",
+          }}
+        >
           🏺 Cultural Heritage Collection
         </span>
 
         {/* Title */}
         <h1
-          className="font-extrabold text-[#1c1409] leading-tight mx-auto mb-2 max-w-3xl px-4 font-serif tracking-tight whitespace-nowrap text-[40px]"
-          style={{ textShadow: "0 1px 0 rgba(255,255,255,0.8)" }}
+          style={{
+            fontSize: "clamp(1.8rem, 5vw, 3.2rem)",
+            fontWeight: "800",
+            color: "#1c1409",
+            lineHeight: 1.2,
+            margin: "0 auto 0.5rem",
+            maxWidth: "100%",
+            fontFamily: "'Georgia', serif",
+            letterSpacing: "-0.3px",
+            textShadow: "0 1px 0 rgba(255,255,255,0.8)",
+            padding: "0 1rem",
+          }}
         >
           Vedda{" "}
           <span
@@ -130,8 +154,16 @@ const ArtifactPage = () => {
 
         {/* Subtitle */}
         <p
-          className="max-w-lg mx-auto mb-4 px-4 leading-relaxed text-[#3d2e0f] italic font-serif"
-          style={{ fontSize: "clamp(0.9rem, 1.8vw, 1.08rem)" }}
+          style={{
+            fontSize: "clamp(0.9rem, 1.8vw, 1.08rem)",
+            color: "#3d2e0f",
+            maxWidth: "540px",
+            margin: "0 auto 0.5rem",
+            lineHeight: 1.75,
+            fontFamily: "'Georgia', serif",
+            fontStyle: "italic",
+            padding: "0 1rem",
+          }}
         >
           Explore the rich cultural heritage of the indigenous Vedda people
           through their traditional artifacts, tools, and ceremonial objects.
@@ -140,10 +172,29 @@ const ArtifactPage = () => {
         {/* Identify Artifact button */}
         <button
           onClick={() => setShowIdentifyModal(true)}
-          className="inline-flex items-center gap-2 px-6 py-2.5 text-white font-bold text-sm rounded-[10px] cursor-pointer transition-all duration-200 hover:-translate-y-0.5 font-sans"
           style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "0.5rem",
+            padding: "0.7rem 1.6rem",
             background: "linear-gradient(135deg, #7c3fa8, #4a6fa8)",
+            color: "#fff",
+            border: "none",
+            borderRadius: "10px",
+            fontWeight: "700",
+            fontSize: "0.95rem",
+            fontFamily: "system-ui, sans-serif",
+            cursor: "pointer",
             boxShadow: "0 4px 18px rgba(124,63,168,0.40)",
+            transition: "transform 0.2s, box-shadow 0.2s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = "translateY(-2px)";
+            e.currentTarget.style.boxShadow = "0 8px 28px rgba(124,63,168,0.50)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = "translateY(0)";
+            e.currentTarget.style.boxShadow = "0 4px 18px rgba(124,63,168,0.40)";
           }}
         >
           <Sparkles size={18} />
@@ -152,8 +203,13 @@ const ArtifactPage = () => {
 
         {/* Gold divider */}
         <div
-          className="w-[52px] h-[3px] mx-auto mt-4 rounded-full"
-          style={{ background: "linear-gradient(90deg, #9a6f2a, #c9943a)" }}
+          style={{
+            width: "52px",
+            height: "3px",
+            background: "linear-gradient(90deg, #9a6f2a, #c9943a)",
+            margin: "1rem auto 0",
+            borderRadius: "99px",
+          }}
         />
       </div>
 
@@ -162,16 +218,26 @@ const ArtifactPage = () => {
 
         {/* Search — frosted wrapper */}
         <div
-          className="rounded-[14px] p-2 mb-4 border border-white/60 shadow-lg"
-          style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+          className="rounded-[14px] p-2 mb-4 border shadow-lg"
+          style={{ 
+            background: "rgba(255,248,230,0.45)", 
+            backdropFilter: "blur(12px)", 
+            WebkitBackdropFilter: "blur(12px)",
+            borderColor: "rgba(200,165,90,0.30)"
+          }}
         >
           <ArtifactSearch searchQuery={searchQuery} onSearchChange={setSearchQuery} />
         </div>
 
         {/* Filter — frosted wrapper */}
         <div
-          className="rounded-[14px] p-2 mb-7 border border-white/60 shadow-lg"
-          style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+          className="rounded-[14px] p-2 mb-7 border shadow-lg"
+          style={{ 
+            background: "rgba(255,248,230,0.45)", 
+            backdropFilter: "blur(12px)", 
+            WebkitBackdropFilter: "blur(12px)",
+            borderColor: "rgba(200,165,90,0.30)"
+          }}
         >
           <ArtifactFilter selectedCategory={selectedCategory} onCategoryChange={setSelectedCategory} />
         </div>
@@ -185,7 +251,15 @@ const ArtifactPage = () => {
             />
           </div>
         ) : filteredArtifacts.length === 0 ? (
-          <div className="text-center py-20 px-4 text-[#3d2e0f] text-base bg-white/70 rounded-[14px] font-sans">
+          <div 
+            className="text-center py-20 px-4 text-[#3d2e0f] text-base rounded-[14px] font-sans border shadow-md"
+            style={{
+              background: "rgba(255,248,230,0.88)",
+              backdropFilter: "blur(10px)",
+              WebkitBackdropFilter: "blur(10px)",
+              borderColor: "rgba(200,165,90,0.22)"
+            }}
+          >
             No artifacts found
           </div>
         ) : (
@@ -194,8 +268,13 @@ const ArtifactPage = () => {
 
         {/* About section */}
         <div
-          className="mt-12 rounded-[18px] px-10 py-9 border border-white/60 shadow-xl"
-          style={{ background: "rgba(255,255,255,0.88)", backdropFilter: "blur(10px)", WebkitBackdropFilter: "blur(10px)" }}
+          className="mt-12 rounded-[18px] px-10 py-9 border shadow-xl"
+          style={{ 
+            background: "rgba(255,248,230,0.90)", 
+            backdropFilter: "blur(10px)", 
+            WebkitBackdropFilter: "blur(10px)",
+            borderColor: "rgba(200,165,90,0.22)"
+          }}
         >
           <div
             className="w-9 h-[2px] mb-5 rounded-full"

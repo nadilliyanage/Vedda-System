@@ -117,7 +117,7 @@ const Header = ({ onHistoryClick }) => {
                       onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,0.08)"; e.currentTarget.style.borderColor = "transparent"; }}
                     >
                       <HiShieldCheck style={{ width: "17px", height: "17px", color: "#c9a84c" }} />
-                      <span style={{ display: "none" }} className="sm-inline">Dashboard</span>
+                      <span className="hidden sm:inline">Dashboard</span>
                     </Link>
                   )}
 
