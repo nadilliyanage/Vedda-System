@@ -23,7 +23,12 @@ export const useTranslationHistory = () => {
     setTranslationHistory(loadFromStorage());
   };
 
-  const addToHistory = ({ input_text, output_text, source_language, target_language }) => {
+  const addToHistory = ({
+    input_text,
+    output_text,
+    source_language,
+    target_language,
+  }) => {
     const current = loadFromStorage();
     const newItem = {
       id: Date.now().toString(),

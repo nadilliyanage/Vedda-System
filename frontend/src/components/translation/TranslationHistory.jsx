@@ -1,7 +1,12 @@
 import { HiClock, HiRefresh, HiTrash } from "react-icons/hi";
 import { useState } from "react";
 
-const TranslationHistory = ({ history, onSelectHistoryItem, onRefresh, onDeleteHistoryItem }) => {
+const TranslationHistory = ({
+  history,
+  onSelectHistoryItem,
+  onRefresh,
+  onDeleteHistoryItem,
+}) => {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleRefresh = async () => {
@@ -91,7 +96,10 @@ const TranslationHistory = ({ history, onSelectHistoryItem, onRefresh, onDeleteH
                   }}
                   title="Delete"
                   className="flex-shrink-0 p-1 rounded transition-colors duration-150"
-                  style={{ color: "rgba(154,111,42,0.55)", background: "transparent" }}
+                  style={{
+                    color: "rgba(154,111,42,0.55)",
+                    background: "transparent",
+                  }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.color = "#c0392b";
                     e.currentTarget.style.background = "rgba(192,57,43,0.10)";
