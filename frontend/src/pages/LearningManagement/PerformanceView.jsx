@@ -89,14 +89,59 @@ const PerformanceView = ({ onBack }) => {
     <div className="min-h-screen mt-[60px]" style={{ backgroundImage: "url('/assets/background-images/background-1.png')", backgroundSize: 'cover', backgroundAttachment: 'fixed', backgroundPosition: 'center' }}>
 
       {/* Glassmorphic nav bar */}
-      <div className="sticky top-0 z-20 flex items-center justify-between px-6 py-3" style={{ background: 'rgba(28,20,8,0.55)', backdropFilter: 'blur(14px)', borderBottom: '1px solid rgba(200,170,100,0.18)', boxShadow: '0 2px 16px rgba(0,0,0,0.20)' }}>
-        <button onClick={onBack} className="flex items-center gap-2 px-3 py-1.5 rounded-[9px] transition-all text-sm font-medium" style={{ color: 'rgba(255,248,230,0.90)', background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(200,165,90,0.25)' }}
-          onMouseEnter={e => e.currentTarget.style.background='rgba(200,165,90,0.18)'}
-          onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.08)'}>
-          <FaArrowLeft className="text-sm" /> Back to Learning Hub
-        </button>
-        <span className="text-sm font-semibold" style={{ color: '#d4b483' }}>Performance Dashboard</span>
-        <div style={{ width: 72 }} />
+      <div
+        style={{
+          background: 'rgba(28,20,8,0.55)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          borderBottom: '1px solid rgba(200,170,100,0.18)',
+          boxShadow: '0 2px 16px rgba(0,0,0,0.20)',
+        }}
+      >
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={onBack}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                color: 'rgba(255,248,230,0.90)',
+                background: 'rgba(255,255,255,0.08)',
+                border: '1px solid rgba(200,165,90,0.25)',
+                borderRadius: '9px',
+                padding: '0.4rem 0.9rem',
+                fontFamily: 'system-ui, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.88rem',
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = 'rgba(200,165,90,0.18)')
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')
+              }
+            >
+              <FaArrowLeft style={{ fontSize: '0.8rem' }} />
+              Back to Learning Hub
+            </button>
+            <div
+              style={{
+                color: '#d4b483',
+                fontFamily: 'system-ui, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.9rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+              }}
+            >
+              Performance
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Hero section */}
