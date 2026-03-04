@@ -237,17 +237,25 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
     return (
       <div
         key={question.questionNo}
-        className={`bg-white rounded-xl shadow-md p-6 mb-4 ${
-          submitted
+        className="rounded-xl p-6 mb-4"
+        style={{
+          background: 'rgba(255,255,255,0.88)',
+          backdropFilter: 'blur(10px)',
+          WebkitBackdropFilter: 'blur(10px)',
+          border: submitted
             ? result?.isCorrect
-              ? 'border-2 border-green-500'
-              : 'border-2 border-red-500'
-            : ''
-        }`}
+              ? '2px solid #22c55e'
+              : '2px solid #ef4444'
+            : '1px solid rgba(200,170,100,0.30)',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.10)',
+        }}
       >
         {/* Question Header */}
         <div className="flex items-start justify-between mb-4">
-          <h3 className="text-lg font-bold text-gray-800">
+          <h3
+            className="text-lg font-bold"
+            style={{ color: '#1c1409', fontFamily: "'Georgia', serif" }}
+          >
             {question.prompt}
           </h3>
           {submitted && (
@@ -275,17 +283,27 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
               {question.options?.map(option => (
                 <label
                   key={option.id}
-                  className={`flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all ${
-                    submitted
+                  className="flex items-center p-3 rounded-lg border-2 cursor-pointer transition-all"
+                  style={{
+                    borderColor: submitted
                       ? question.correctOptions?.includes(option.id)
-                        ? 'border-green-500 bg-green-50'
+                        ? '#22c55e'
                         : userAnswer?.includes(option.id)
-                        ? 'border-red-500 bg-red-50'
-                        : 'border-gray-200'
+                        ? '#ef4444'
+                        : 'rgba(200,170,100,0.25)'
                       : userAnswer?.includes(option.id)
-                      ? 'border-blue-500 bg-blue-50'
-                      : 'border-gray-200 hover:border-blue-300'
-                  }`}
+                      ? '#9a6f2a'
+                      : 'rgba(200,170,100,0.25)',
+                    background: submitted
+                      ? question.correctOptions?.includes(option.id)
+                        ? 'rgba(34,197,94,0.08)'
+                        : userAnswer?.includes(option.id)
+                        ? 'rgba(239,68,68,0.08)'
+                        : 'transparent'
+                      : userAnswer?.includes(option.id)
+                      ? 'rgba(200,170,100,0.12)'
+                      : 'transparent',
+                  }}
                 >
                   <input
                     type={inputType}
@@ -296,9 +314,10 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
                       handleMultipleChoiceChange(question.questionNo, option.id, e.target.checked, isSingleAnswer)
                     }
                     disabled={submitted}
-                    className="w-5 h-5 text-blue-600 mr-3"
+                    className="w-5 h-5 mr-3"
+                    style={{ accentColor: '#9a6f2a' }}
                   />
-                  <span className="text-gray-800">{option.text}</span>
+                  <span style={{ color: '#3d2e0f' }}>{option.text}</span>
                   {submitted && question.correctOptions?.includes(option.id) && (
                     <span className="ml-auto text-green-600 font-semibold text-sm">
                       ✓ Correct
@@ -312,23 +331,30 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
 
         {question.type === 'text_input' && (
           <div>
-            <p className="text-gray-600 mb-3">Fill in the blank...</p>
+            <p className="mb-3" style={{ color: '#5c4a1e', fontStyle: 'italic' }}>Fill in the blank...</p>
             <input
               type="text"
               value={userAnswer || ''}
               onChange={(e) => !submitted && handleTextInputChange(question.questionNo, e.target.value)}
               disabled={submitted}
               placeholder="Your answer"
-              className={`w-full border-2 rounded-lg px-4 py-3 text-lg ${
-                submitted
+              className="w-full rounded-lg px-4 py-3 text-lg focus:outline-none"
+              style={{
+                border: submitted
                   ? result?.isCorrect
-                    ? 'border-green-500 bg-green-50'
-                    : 'border-red-500 bg-red-50'
-                  : 'border-gray-300 focus:border-blue-500 focus:outline-none'
-              }`}
+                    ? '2px solid #22c55e'
+                    : '2px solid #ef4444'
+                  : '2px solid rgba(200,170,100,0.40)',
+                background: submitted
+                  ? result?.isCorrect
+                    ? 'rgba(34,197,94,0.08)'
+                    : 'rgba(239,68,68,0.08)'
+                  : 'rgba(255,255,255,0.80)',
+                color: '#1c1409',
+              }}
             />
             {submitted && !result?.isCorrect && (
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm" style={{ color: '#5c4a1e' }}>
                 <span className="font-semibold">Expected answer:</span> {question.answer}
               </p>
             )}
@@ -337,26 +363,36 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
 
         {question.type === 'match_pairs' && (
           <div className="space-y-3">
-            <p className="text-gray-600 mb-3">Match the pairs:</p>
+            <p className="mb-3" style={{ color: '#5c4a1e', fontStyle: 'italic' }}>Match the pairs:</p>
             {question.pairs?.map((pair, idx) => (
               <div key={idx} className="flex items-center gap-3">
-                <div className="flex-1 bg-gray-100 rounded-lg px-4 py-3 font-semibold">
+                <div
+                  className="flex-1 rounded-lg px-4 py-3 font-semibold"
+                  style={{ background: 'rgba(200,170,100,0.15)', color: '#3d2e0f' }}
+                >
                   {pair.left}
                 </div>
-                <span className="text-gray-400 text-xl">=</span>
+                <span style={{ color: '#9a6f2a', fontSize: '1.25rem' }}>=</span>
                 <select
                   value={userAnswer?.[pair.left] || ''}
                   onChange={(e) =>
                     !submitted && handleMatchPairChange(question.questionNo, pair.left, e.target.value)
                   }
                   disabled={submitted}
-                  className={`flex-1 border-2 rounded-lg px-4 py-3 ${
-                    submitted
+                  className="flex-1 rounded-lg px-4 py-3 focus:outline-none"
+                  style={{
+                    border: submitted
                       ? userAnswer?.[pair.left]?.toLowerCase().trim() === pair.right.toLowerCase().trim()
-                        ? 'border-green-500 bg-green-50'
-                        : 'border-red-500 bg-red-50'
-                      : 'border-gray-300 focus:border-blue-500 focus:outline-none'
-                  }`}
+                        ? '2px solid #22c55e'
+                        : '2px solid #ef4444'
+                      : '2px solid rgba(200,170,100,0.40)',
+                    background: submitted
+                      ? userAnswer?.[pair.left]?.toLowerCase().trim() === pair.right.toLowerCase().trim()
+                        ? 'rgba(34,197,94,0.08)'
+                        : 'rgba(239,68,68,0.08)'
+                      : 'rgba(255,255,255,0.80)',
+                    color: '#1c1409',
+                  }}
                 >
                   <option value="">Select</option>
                   {question.pairs?.map((p, i) => (
@@ -366,7 +402,7 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
                   ))}
                 </select>
                 {submitted && userAnswer?.[pair.left]?.toLowerCase().trim() !== pair.right.toLowerCase().trim() && (
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm" style={{ color: '#5c4a1e' }}>
                     (Expected: {pair.right})
                   </span>
                 )}
@@ -376,11 +412,20 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
         )}
 
         {/* Question Metadata */}
-        <div className="mt-4 pt-4 border-t border-gray-200 flex items-center gap-4 text-sm text-gray-600">
-          <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-semibold">
+        <div
+          className="mt-4 pt-4 flex items-center gap-4 text-sm"
+          style={{ borderTop: '1px solid rgba(200,170,100,0.30)' }}
+        >
+          <span
+            className="px-3 py-1 rounded-full font-semibold"
+            style={{ background: 'rgba(200,170,100,0.18)', color: '#9a6f2a', border: '1px solid rgba(200,165,90,0.35)' }}
+          >
             {question.xp} XP
           </span>
-          <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full">
+          <span
+            className="px-3 py-1 rounded-full"
+            style={{ background: 'rgba(200,170,100,0.10)', color: '#5c4a1e', border: '1px solid rgba(200,170,100,0.25)' }}
+          >
             {question.points} Points
           </span>
         </div>
@@ -389,35 +434,169 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 pt-16">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">{lesson.topic}</h1>
+    <div
+      className="min-h-screen mt-[60px]"
+      style={{
+        backgroundImage: `url('/assets/background-images/background-1.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* ── Glassmorphic nav bar ── */}
+      <div
+        style={{
+          background: 'rgba(28,20,8,0.55)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          borderBottom: '1px solid rgba(200,170,100,0.18)',
+          boxShadow: '0 2px 16px rgba(0,0,0,0.20)',
+        }}
+      >
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={onClose}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                color: 'rgba(255,248,230,0.90)',
+                background: 'rgba(255,255,255,0.08)',
+                border: '1px solid rgba(200,165,90,0.25)',
+                borderRadius: '9px',
+                padding: '0.4rem 0.9rem',
+                fontFamily: 'system-ui, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.88rem',
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = 'rgba(200,165,90,0.18)')
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')
+              }
+            >
+              <FaTimes style={{ fontSize: '0.8rem' }} />
+              Close
+            </button>
+            <div
+              style={{
+                color: '#d4b483',
+                fontFamily: 'system-ui, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.9rem',
+              }}
+            >
+              {category?.name || 'Exercise'}
+            </div>
+          </div>
         </div>
+      </div>
 
+      {/* ── Hero section ── */}
+      <div
+        style={{
+          background:
+            'linear-gradient(to bottom, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,0) 100%)',
+          paddingTop: '1.5rem',
+          paddingBottom: '1.5rem',
+          textAlign: 'center',
+        }}
+      >
+        <span
+          style={{
+            display: 'inline-block',
+            background: 'rgba(255,255,255,0.60)',
+            border: '1px solid rgba(100,80,40,0.22)',
+            borderRadius: '999px',
+            padding: '0.28rem 1rem',
+            fontSize: '0.73rem',
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase',
+            color: '#5c4a1e',
+            marginBottom: '0.6rem',
+            fontFamily: 'system-ui, sans-serif',
+          }}
+        >
+          ✏️ Exercise
+        </span>
+        <h1
+          style={{
+            fontSize: 'clamp(1.6rem, 4vw, 2.6rem)',
+            fontWeight: '800',
+            color: '#1c1409',
+            lineHeight: 1.2,
+            margin: '0 auto 0.4rem',
+            maxWidth: '800px',
+            fontFamily: "'Georgia', serif",
+            letterSpacing: '-0.3px',
+            textShadow: '0 1px 0 rgba(255,255,255,0.8)',
+            padding: '0 1rem',
+          }}
+        >
+          {lesson.topic}
+        </h1>
+        <div
+          style={{
+            width: '52px',
+            height: '3px',
+            background: 'linear-gradient(90deg, #9a6f2a, #c9943a)',
+            margin: '0.8rem auto 0',
+            borderRadius: '99px',
+          }}
+        />
+      </div>
+
+      {/* ── Content ── */}
+      <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Questions */}
         <div className="mb-6">
           {exercise.question ? renderQuestion(exercise.question, 0) : (
-            <div className="text-center py-12 bg-white rounded-xl">
-              <p className="text-gray-500 text-lg">No question available</p>
+            <div
+              className="text-center py-12 rounded-xl"
+              style={{
+                background: 'rgba(255,255,255,0.82)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '1px solid rgba(200,170,100,0.25)',
+              }}
+            >
+              <p className="text-lg" style={{ color: '#5c4a1e' }}>No question available</p>
             </div>
           )}
         </div>
 
         {/* AI Summary (After Submission) */}
         {submitted && (
-          <div className="bg-white border-2 border-dashed border-blue-400 rounded-xl p-6 mb-6">
-            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+          <div
+            className="rounded-xl p-6 mb-6"
+            style={{
+              background: 'rgba(255,255,255,0.82)',
+              backdropFilter: 'blur(10px)',
+              WebkitBackdropFilter: 'blur(10px)',
+              border: '2px dashed rgba(200,165,90,0.55)',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+            }}
+          >
+            <h3
+              className="text-xl font-bold mb-4 flex items-center gap-2"
+              style={{ color: '#1c1409', fontFamily: "'Georgia', serif" }}
+            >
               <span></span> AI Summary
             </h3>
             {isGeneratingSummary ? (
-              <div className="flex items-center gap-3 text-gray-600">
-                <FaSpinner className="animate-spin text-blue-600" />
+              <div className="flex items-center gap-3" style={{ color: '#5c4a1e' }}>
+                <FaSpinner className="animate-spin" style={{ color: '#9a6f2a' }} />
                 <span>Generating feedback...</span>
               </div>
             ) : (
-              <div className="text-gray-700 leading-relaxed whitespace-pre-line">
+              <div
+                className="leading-relaxed whitespace-pre-line"
+                style={{ color: '#3d2e0f' }}
+              >
                 {aiSummary}
               </div>
             )}
@@ -426,30 +605,24 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
 
         {/* Action Buttons */}
         <div className="flex items-center justify-end gap-4">
-          <button
-            onClick={onClose}
-            className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-all"
-          >
-            <FaTimes /> Close
-          </button>
           {!submitted ? (
             <button
               onClick={handleSubmit}
-              className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+              className="px-8 py-3 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+              style={{ background: 'linear-gradient(135deg, #9a6f2a, #c9943a)' }}
             >
               Submit
             </button>
           ) : (
             <button
               onClick={handleRefresh}
-              className="flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+              className="flex items-center gap-2 px-6 py-3 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+              style={{ background: 'linear-gradient(135deg, #9a6f2a, #c9943a)' }}
             >
               <FaRedo /> Try Again
             </button>
           )}
         </div>
-
-
       </div>
     </div>
   );

@@ -212,7 +212,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
       <div>
         {/* Prompt */}
         <div className="flex items-start justify-between mb-6">
-          <h3 className="text-xl font-bold text-gray-800 leading-snug">{question.prompt}</h3>
+          <h3 className="text-xl font-bold leading-snug" style={{ color: '#1c1409', fontFamily: 'Georgia, serif' }}>{question.prompt}</h3>
           {submitted && (
             <div className="ml-4 flex-shrink-0">
               {isCorrect
@@ -236,21 +236,21 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
                 return (
                   <label
                     key={option.id}
-                    className={`
-                      flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all select-none
-                      ${submitted
-                        ? correct
-                          ? 'border-green-500 bg-green-50'
-                          : sel ? 'border-red-500 bg-red-50' : 'border-gray-200 bg-white'
-                        : sel ? 'border-blue-500 bg-blue-50' : 'border-gray-200 bg-white hover:border-blue-300'}
-                    `}
+                    className="flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all select-none"
+                    style={submitted
+                      ? correct
+                        ? { borderColor: '#22c55e', background: '#f0fdf4' }
+                        : sel ? { borderColor: '#ef4444', background: '#fef2f2' } : { borderColor: 'rgba(200,170,100,0.25)', background: 'rgba(255,255,255,0.7)' }
+                      : sel
+                        ? { borderColor: '#9a6f2a', background: 'rgba(200,170,100,0.12)' }
+                        : { borderColor: 'rgba(200,170,100,0.25)', background: 'rgba(255,255,255,0.7)' }}
                   >
                     <input
                       type={isSingle ? 'radio' : 'checkbox'}
                       checked={sel || false}
                       onChange={() => !submitted && handleMultipleChoiceChange(option.id, isSingle)}
                       disabled={submitted || (!timerActive && timeLeft === 0)}
-                      className="w-5 h-5 text-blue-600 mr-3 flex-shrink-0"
+                      className="w-5 h-5 mr-3 flex-shrink-0" style={{ accentColor: '#9a6f2a' }}
                     />
                     <span className="text-gray-800 flex-1">{option.text}</span>
                     {submitted && correct && (
@@ -274,12 +274,10 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
               onKeyDown={e => e.key === 'Enter' && canSubmit() && !submitted && handleSubmit()}
               disabled={submitted || (!timerActive && timeLeft === 0)}
               placeholder="Type your answer here..."
-              className={`
-                w-full border-2 rounded-xl px-4 py-3 text-lg outline-none transition-all
-                ${submitted
-                  ? isCorrect ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'
-                  : 'border-gray-300 focus:border-blue-500'}
-              `}
+              className="w-full border-2 rounded-xl px-4 py-3 text-lg outline-none transition-all"
+              style={submitted
+                ? isCorrect ? { borderColor: '#22c55e', background: '#f0fdf4' } : { borderColor: '#ef4444', background: '#fef2f2' }
+                : { borderColor: 'rgba(200,170,100,0.45)', background: 'rgba(255,255,255,0.85)' }}
             />
             {submitted && !isCorrect && (
               <p className="mt-2 text-sm text-gray-600">
@@ -298,7 +296,8 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
               const correct = selected.toLowerCase().trim() === pair.right.toLowerCase().trim();
               return (
                 <div key={idx} className="flex items-center gap-3">
-                  <div className="flex-1 bg-blue-50 border-2 border-blue-200 rounded-xl px-4 py-3 font-semibold text-blue-800">
+                  <div className="flex-1 rounded-xl px-4 py-3 font-semibold"
+                    style={{ background: 'rgba(200,170,100,0.12)', border: '2px solid rgba(200,165,90,0.40)', color: '#6b4a10' }}>
                     {pair.left}
                   </div>
                   <span className="text-gray-400 text-xl font-bold">=</span>
@@ -306,12 +305,10 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
                     value={selected}
                     onChange={e => handlePairChange(pair.left, e.target.value)}
                     disabled={submitted || (!timerActive && timeLeft === 0)}
-                    className={`
-                      flex-1 border-2 rounded-xl px-4 py-3 outline-none transition-all
-                      ${submitted
-                        ? correct ? 'border-green-500 bg-green-50' : 'border-red-500 bg-red-50'
-                        : 'border-gray-300 focus:border-blue-500'}
-                    `}
+                    className="flex-1 border-2 rounded-xl px-4 py-3 outline-none transition-all"
+                    style={submitted
+                      ? correct ? { borderColor: '#22c55e', background: '#f0fdf4' } : { borderColor: '#ef4444', background: '#fef2f2' }
+                      : { borderColor: 'rgba(200,170,100,0.45)', background: 'rgba(255,255,255,0.85)' }}
                   >
                     <option value="">Select...</option>
                     {question.pairs?.map((p, i) => (
@@ -329,14 +326,14 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
 
         {/* Metadata */}
         <div className="mt-5 pt-4 border-t border-gray-100 flex flex-wrap gap-2 text-sm">
-          <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full font-semibold">
+          <span className="px-3 py-1 rounded-full font-semibold text-sm" style={{ background: 'rgba(200,170,100,0.18)', color: '#9a6f2a', border: '1px solid rgba(200,165,90,0.35)' }}>
             ⭐ {question.xp} XP
           </span>
-          <span className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full">
+          <span className="px-3 py-1 rounded-full text-sm" style={{ background: 'rgba(200,170,100,0.12)', color: '#6b4a10', border: '1px solid rgba(200,165,90,0.25)' }}>
             🏅 {question.points} pts
           </span>
           {question.timeLimitSec && (
-            <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full">
+            <span className="px-3 py-1 rounded-full text-sm" style={{ background: 'rgba(200,170,100,0.12)', color: '#6b4a10', border: '1px solid rgba(200,165,90,0.25)' }}>
               ⏱ {question.timeLimitSec}s
             </span>
           )}
@@ -347,12 +344,15 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
 
   // ---------- render ----------
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 p-4" style={{ backgroundImage: 'url(/assets/background-images/challenge-background.png)', backgroundSize: 'cover', backgroundPosition: 'center' }}>
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden">
+    <div className="fixed inset-0 flex items-center justify-center z-50 p-4"
+      style={{ background: 'rgba(20,14,4,0.72)', backdropFilter: 'blur(6px)' }}>
+      <div className="w-full max-w-2xl max-h-[92vh] flex flex-col overflow-hidden"
+        style={{ background: 'rgba(255,252,243,0.97)', borderRadius: 20, boxShadow: '0 8px 48px rgba(0,0,0,0.38)', border: '1.5px solid rgba(200,170,100,0.35)' }}>
         <div className="overflow-y-auto flex flex-col flex-1">
 
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-5 rounded-t-2xl flex-shrink-0">
+        <div className="flex-shrink-0 px-6 py-5"
+          style={{ background: 'linear-gradient(135deg, #6b4a10 0%, #9a6f2a 50%, #c9943a 100%)', borderRadius: '18px 18px 0 0', color: '#fff' }}>
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-2xl font-bold">Challenge #{challenge.challengeNumber}</h2>
@@ -362,7 +362,9 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-white hover:bg-opacity-20 rounded-full transition-colors"
+              className="p-2 rounded-full transition-colors" style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,248,220,0.25)' }}
+              onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.22)'}
+              onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.12)'}
             >
               <FaTimes className="text-xl" />
             </button>
@@ -372,17 +374,18 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
             <div className="flex gap-3">
             </div>
             <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full font-bold text-sm
-              ${timeLeft <= 10 ? 'bg-red-500 text-white animate-pulse' : 'bg-blue-400 text-white'}`}>
+              ${timeLeft <= 10 ? 'bg-red-500 text-white animate-pulse' : 'text-white'}`}
+              style={timeLeft > 10 ? { background: 'rgba(255,255,255,0.22)', border: '1px solid rgba(255,248,220,0.35)' } : {}}>
               <FaClock />
               <span>{Math.floor(timeLeft / 60)}:{String(timeLeft % 60).padStart(2, '0')}</span>
             </div>
           </div>
 
           {/* Timer progress bar */}
-          <div className="mt-3 bg-white bg-opacity-20 rounded-full h-1.5">
+          <div className="mt-3 rounded-full h-1.5" style={{ background: 'rgba(255,255,255,0.22)' }}>
             <div
-              className={`h-1.5 rounded-full transition-all duration-1000 ${timeLeft <= 10 ? 'bg-red-400' : 'bg-blue-300'}`}
-              style={{ width: `${(timeLeft / (question?.timeLimitSec || 45)) * 100}%` }}
+              className={`h-1.5 rounded-full transition-all duration-1000 ${timeLeft <= 10 ? 'bg-red-400' : ''}`}
+              style={{ width: `${(timeLeft / (question?.timeLimitSec || 45)) * 100}%`, ...(timeLeft > 10 ? { background: 'rgba(255,248,200,0.90)' } : {}) }}
             />
           </div>
         </div>
@@ -397,9 +400,8 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
               <button
                 onClick={() => handleSubmit(false)}
                 disabled={!canSubmit()}
-                className="px-8 py-3 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600
-                  text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105
-                  disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                className="px-8 py-3 text-white rounded-xl font-bold shadow-lg transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                style={{ background: 'linear-gradient(135deg, #9a6f2a, #c9943a)', boxShadow: '0 4px 16px rgba(154,111,42,0.35)' }}
               >
                 Submit Answer
               </button>
@@ -407,7 +409,8 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
               <>
                 <button
                   onClick={handleReset}
-                  className="flex items-center gap-2 px-5 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition-all"
+                  className="flex items-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all"
+                  style={{ background: 'rgba(255,255,255,0.80)', border: '2px solid rgba(200,165,90,0.40)', color: '#6b4a10' }}
                 >
                   <FaRedo /> Try Again
                 </button>
@@ -424,7 +427,8 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
                         onClose();
                       }
                     }}
-                    className="flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-bold hover:opacity-90 transition-all"
+                    className="flex items-center gap-2 px-5 py-3 text-white rounded-xl font-bold hover:opacity-90 transition-all"
+                    style={{ background: 'linear-gradient(135deg, #9a6f2a, #c9943a)', boxShadow: '0 4px 16px rgba(154,111,42,0.30)' }}
                   >
                     {isCorrect ? 'Continue' : 'Try Again'}
                   </button>
@@ -465,11 +469,11 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
 
         {/* AI Summary */}
         {submitted && (
-          <div className="mx-6 mb-6 p-5 bg-white border-2 border-dashed border-blue-300 rounded-xl">
-            <h4 className="text-base font-bold text-gray-800 mb-3">AI Feedback</h4>
+          <div className="mx-6 mb-6 p-5 rounded-xl" style={{ background: 'rgba(255,252,240,0.90)', border: '2px dashed rgba(200,165,90,0.45)', backdropFilter: 'blur(6px)' }}>
+            <h4 className="text-base font-bold mb-3" style={{ color: '#7a5820' }}>AI Feedback</h4>
             {isGeneratingSummary ? (
-              <div className="flex items-center gap-2 text-gray-500">
-                <FaSpinner className="animate-spin text-blue-500" />
+              <div className="flex items-center gap-2" style={{ color: '#9a7840' }}>
+                <FaSpinner className="animate-spin" style={{ color: '#c9943a' }} />
                 <span>Generating feedback...</span>
               </div>
             ) : (

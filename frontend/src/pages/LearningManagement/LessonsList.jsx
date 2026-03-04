@@ -61,38 +61,177 @@ const LessonsList = ({ category, onBack, onLessonSelect }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 pt-16">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <button
-            onClick={onBack}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors mb-6"
-          >
-            <FaArrowLeft /> Back to Categories
-          </button>
-          
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-gray-800 mb-2">
-              Lessons - {category.name}
-            </h1>
-            {category.description && (
-              <p className="text-lg text-gray-600">
-                {category.description}
-              </p>
-            )}
+    <div
+      className="min-h-screen mt-[60px]"
+      style={{
+        backgroundImage: `url('/assets/background-images/background-1.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* ── Glassmorphic nav bar ── */}
+      <div
+        style={{
+          background: 'rgba(28,20,8,0.55)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          borderBottom: '1px solid rgba(200,170,100,0.18)',
+          boxShadow: '0 2px 16px rgba(0,0,0,0.20)',
+        }}
+      >
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={onBack}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                color: 'rgba(255,248,230,0.90)',
+                background: 'rgba(255,255,255,0.08)',
+                border: '1px solid rgba(200,165,90,0.25)',
+                borderRadius: '9px',
+                padding: '0.4rem 0.9rem',
+                fontFamily: 'system-ui, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.88rem',
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = 'rgba(200,165,90,0.18)')
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')
+              }
+            >
+              <FaArrowLeft style={{ fontSize: '0.8rem' }} />
+              Back to Categories
+            </button>
+            <div
+              style={{
+                color: '#d4b483',
+                fontFamily: 'system-ui, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.9rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+              }}
+            >
+              <FaBook style={{ fontSize: '0.85rem' }} />
+              {category.name}
+            </div>
           </div>
         </div>
+      </div>
 
+      {/* ── Hero section ── */}
+      <div
+        style={{
+          background:
+            'linear-gradient(to bottom, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,0) 100%)',
+          paddingTop: '1.5rem',
+          paddingBottom: '1.5rem',
+          textAlign: 'center',
+        }}
+      >
+        <span
+          style={{
+            display: 'inline-block',
+            background: 'rgba(255,255,255,0.60)',
+            border: '1px solid rgba(100,80,40,0.22)',
+            borderRadius: '999px',
+            padding: '0.28rem 1rem',
+            fontSize: '0.73rem',
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase',
+            color: '#5c4a1e',
+            marginBottom: '0.6rem',
+            fontFamily: 'system-ui, sans-serif',
+          }}
+        >
+          📖 {category.name}
+        </span>
+        <h1
+          style={{
+            fontSize: '45px',
+            fontWeight: '800',
+            color: '#1c1409',
+            lineHeight: 1.2,
+            margin: '0 auto 0.5rem',
+            maxWidth: '720px',
+            fontFamily: "'Georgia', serif",
+            letterSpacing: '-0.3px',
+            textShadow: '0 1px 0 rgba(255,255,255,0.8)',
+            padding: '0 1rem',
+          }}
+        >
+          Lessons &mdash;{' '}
+          <span
+            style={{
+              color: '#9a6f2a',
+              textShadow:
+                '0 1px 0 rgba(255,255,255,0.9), 0 2px 8px rgba(255,255,255,0.5)',
+            }}
+          >
+            {category.name}
+          </span>
+        </h1>
+        {category.description && (
+          <p
+            style={{
+              fontSize: 'clamp(0.9rem,1.8vw,1.08rem)',
+              color: '#3d2e0f',
+              maxWidth: '540px',
+              margin: '0 auto 0.5rem',
+              lineHeight: 1.75,
+              fontFamily: "'Georgia', serif",
+              fontStyle: 'italic',
+              padding: '0 1rem',
+            }}
+          >
+            {category.description}
+          </p>
+        )}
+        <div
+          style={{
+            width: '52px',
+            height: '3px',
+            background: 'linear-gradient(90deg, #9a6f2a, #c9943a)',
+            margin: '1rem auto 0',
+            borderRadius: '99px',
+          }}
+        />
+      </div>
+
+      {/* ── Content ── */}
+      <div className="max-w-4xl mx-auto px-4 py-8">
         {/* Lessons List */}
         {lessons.length === 0 ? (
           <div className="text-center py-20">
-            <div className="bg-white rounded-xl shadow-md p-12 max-w-md mx-auto">
-              <FaBook className="text-5xl text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500 text-lg mb-4">
+            <div
+              className="rounded-xl p-12 max-w-md mx-auto"
+              style={{
+                background: 'rgba(255,255,255,0.82)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '1px solid rgba(200,170,100,0.25)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+              }}
+            >
+              <FaBook
+                className="text-5xl mx-auto mb-4"
+                style={{ color: '#c9943a' }}
+              />
+              <p
+                className="text-lg mb-4"
+                style={{ color: '#5c4a1e', fontFamily: "'Georgia', serif" }}
+              >
                 No lessons available in this category yet
               </p>
-              <p className="text-gray-400">
+              <p style={{ color: '#8a7550', fontFamily: 'system-ui, sans-serif' }}>
                 Check back soon for new lessons!
               </p>
             </div>
@@ -152,21 +291,41 @@ const LessonsList = ({ category, onBack, onLessonSelect }) => {
         {/* Progress Info */}
         {lessons.length > 0 && (
           <div className="mt-8">
-            <div className="bg-white rounded-xl shadow-md p-6">
+            <div
+              className="rounded-xl p-6"
+              style={{
+                background: 'rgba(255,255,255,0.82)',
+                backdropFilter: 'blur(10px)',
+                WebkitBackdropFilter: 'blur(10px)',
+                border: '1px solid rgba(200,170,100,0.25)',
+                boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+              }}
+            >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-lg font-bold text-gray-800 mb-1">
+                  <h3
+                    className="text-lg font-bold mb-1"
+                    style={{ color: '#1c1409', fontFamily: "'Georgia', serif" }}
+                  >
                     Your Progress
                   </h3>
-                  <p className="text-gray-600">
+                  <p style={{ color: '#5c4a1e', fontFamily: 'system-ui, sans-serif' }}>
                     {lessons.length} lesson{lessons.length !== 1 ? 's' : ''} available in this category
                   </p>
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-bold text-blue-600">
+                  <div
+                    className="text-3xl font-bold"
+                    style={{ color: '#9a6f2a', fontFamily: "'Georgia', serif" }}
+                  >
                     0/{lessons.length}
                   </div>
-                  <p className="text-sm text-gray-500">Completed</p>
+                  <p
+                    className="text-sm"
+                    style={{ color: '#8a7550', fontFamily: 'system-ui, sans-serif' }}
+                  >
+                    Completed
+                  </p>
                 </div>
               </div>
             </div>
