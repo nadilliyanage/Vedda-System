@@ -30,13 +30,16 @@ const AdminLayout = () => {
   if (authLoading) {
     return (
       <div
-        className="min-h-screen pt-20 flex items-center justify-center"
+        className="min-h-screen pt-20 flex items-center justify-center relative"
         style={{
-          background:
-            "linear-gradient(160deg, #13100a 0%, #1a140b 60%, #0f0d07 100%)",
+          backgroundImage: "url('/assets/background-images/background-1.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundAttachment: "fixed",
         }}
       >
-        <div className="text-xl" style={{ color: "rgba(212,180,131,0.70)" }}>
+        <div className="absolute inset-0" style={{ background: "rgba(10,7,2,0.62)" }} />
+        <div className="text-xl relative z-10" style={{ color: "rgba(212,180,131,0.70)" }}>
           Loading...
         </div>
       </div>
@@ -50,18 +53,23 @@ const AdminLayout = () => {
 
   return (
     <div
-      className="min-h-screen"
+      className="min-h-screen relative"
       style={{
-        background:
-          "linear-gradient(160deg, #13100a 0%, #1a140b 60%, #0f0d07 100%)",
+        backgroundImage: "url('/assets/background-images/background-1.png')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed",
       }}
     >
+      <div className="absolute inset-0" style={{ background: "rgba(10,7,2,0.62)", pointerEvents: "none", zIndex: 0 }} />
+      <div className="relative z-10">
       <Header />
       <div className="pt-15">
         <AdminSidebar />
         <div className="ml-64 p-6">
           <Outlet />
         </div>
+      </div>
       </div>
     </div>
   );

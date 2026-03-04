@@ -76,10 +76,10 @@ const AdminSidebar = () => {
     <div
       className="w-64 h-screen fixed left-0 top-16 overflow-y-auto"
       style={{
-        background: "rgba(16, 12, 4, 0.97)",
+        background: "rgba(22, 16, 5, 0.82)",
         backdropFilter: "blur(20px)",
         WebkitBackdropFilter: "blur(20px)",
-        borderRight: "1px solid rgba(200, 165, 90, 0.18)",
+        borderRight: "1px solid rgba(200, 165, 90, 0.30)",
       }}
     >
       <div className="p-6">

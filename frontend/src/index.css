@@ -101,25 +101,25 @@ html {
 /* ── Admin Panel Theme ── */
 
 .admin-glass {
-  background: rgba(255, 248, 230, 0.06);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(200, 165, 90, 0.18);
+  background: rgba(20, 14, 4, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(200, 165, 90, 0.28);
   border-radius: 0.75rem;
 }
 
 .admin-glass-strong {
-  background: rgba(255, 248, 230, 0.09);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(200, 165, 90, 0.24);
+  background: rgba(20, 14, 4, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(200, 165, 90, 0.32);
   border-radius: 0.75rem;
 }
 
 .admin-input {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  background: rgba(0, 0, 0, 0.38);
+  background: rgba(0, 0, 0, 0.30);
   border: 1px solid rgba(200, 165, 90, 0.28);
   border-radius: 0.5rem;
   color: rgba(245, 233, 200, 0.88);
@@ -144,7 +144,7 @@ html {
 .admin-select {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.38);
   border: 1px solid rgba(200, 165, 90, 0.28);
   border-radius: 0.5rem;
   color: rgba(245, 233, 200, 0.88);
@@ -166,7 +166,7 @@ html {
 .admin-textarea {
   width: 100%;
   padding: 0.5rem 0.75rem;
-  background: rgba(0, 0, 0, 0.38);
+  background: rgba(0, 0, 0, 0.30);
   border: 1px solid rgba(200, 165, 90, 0.28);
   border-radius: 0.5rem;
   color: rgba(245, 233, 200, 0.88);
@@ -262,7 +262,7 @@ html {
 }
 
 .admin-table-head {
-  background: rgba(0, 0, 0, 0.32);
+  background: rgba(0, 0, 0, 0.28);
 }
 
 .admin-table-th {
@@ -334,10 +334,10 @@ html {
 }
 
 .admin-stat-card {
-  background: rgba(255, 248, 230, 0.06);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(200, 165, 90, 0.18);
+  background: rgba(20, 14, 4, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(200, 165, 90, 0.28);
   border-radius: 0.75rem;
   padding: 1.5rem;
 }
