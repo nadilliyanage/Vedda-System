@@ -374,3 +374,11 @@ html {
   font-weight: 500 !important;
   padding: 0.5rem 1.25rem !important;
 }
+
+/* ── Auth form inputs ── */
+.auth-input::placeholder {
+  color: rgba(212, 180, 131, 0.42);
+}
+.auth-input:focus::placeholder {
+  color: rgba(212, 180, 131, 0.28);
+}
