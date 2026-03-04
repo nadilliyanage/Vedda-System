@@ -330,7 +330,7 @@ const LearningChallenges = ({ onBack }) => {
               }}
             >
               <FaTrophy style={{ fontSize: '0.85rem' }} />
-              Learning Path
+              Challenges
             </div>
           </div>
         </div>
@@ -377,7 +377,7 @@ const LearningChallenges = ({ onBack }) => {
             padding: '0 1rem',
           }}
         >
-          Learning{' '}
+          Challenge{' '}
           <span
             style={{
               color: '#9a6f2a',
