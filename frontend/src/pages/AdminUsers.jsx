@@ -110,102 +110,118 @@ const AdminUsers = () => {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold mb-2" style={{ color: "#f5e9c8" }}>
           User Management
         </h1>
-        <p className="text-gray-600">Manage all users in the system</p>
+        <p style={{ color: "rgba(212,180,131,0.70)" }}>
+          Manage all users in the system
+        </p>
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+        <div
+          className="px-4 py-3 rounded-lg mb-6"
+          style={{
+            background: "rgba(220,38,38,0.14)",
+            border: "1px solid rgba(220,38,38,0.30)",
+            color: "#fca5a5",
+          }}
+        >
           {error}
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h2 className="text-xl font-semibold text-gray-900">
+      <div className="admin-glass overflow-hidden">
+        <div
+          className="px-6 py-4"
+          style={{ borderBottom: "1px solid rgba(200,165,90,0.18)" }}
+        >
+          <h2 className="text-xl font-semibold" style={{ color: "#f5e9c8" }}>
             All Users ({users.length})
           </h2>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+            <thead className="admin-table-head">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Username
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Email
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Role
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Joined
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Last Login
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
+                <th className="admin-table-th">Username</th>
+                <th className="admin-table-th">Email</th>
+                <th className="admin-table-th">Role</th>
+                <th className="admin-table-th">Joined</th>
+                <th className="admin-table-th">Last Login</th>
+                <th className="admin-table-th">Actions</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody>
               {users.map((userItem) => (
-                <tr key={userItem._id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm font-medium text-gray-900">
+                <tr key={userItem._id} className="admin-table-row">
+                  <td className="admin-table-td">
+                    <div
+                      className="text-sm font-semibold"
+                      style={{ color: "#f5e9c8" }}
+                    >
                       {userItem.username}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-600">
+                  <td className="admin-table-td">
+                    <div
+                      className="text-sm"
+                      style={{ color: "rgba(212,180,131,0.70)" }}
+                    >
                       {userItem.email}
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="admin-table-td">
                     <select
                       value={userItem.role}
                       onChange={(e) =>
                         handleRoleChange(userItem._id, e.target.value)
                       }
                       disabled={userItem._id === user?.id}
-                      className={`text-sm px-3 py-1 rounded-full font-medium ${
-                        userItem.role === "admin"
-                          ? "bg-purple-100 text-purple-800"
-                          : userItem.role === "elder"
-                            ? "bg-green-100 text-green-800"
-                            : "bg-blue-100 text-blue-800"
-                      } ${
+                      className={`admin-select text-sm px-3 py-1 rounded-full font-medium ${
                         userItem._id === user?.id
                           ? "cursor-not-allowed opacity-60"
                           : "cursor-pointer"
                       }`}
+                      style={{
+                        color:
+                          userItem.role === "admin"
+                            ? "#c084fc"
+                            : userItem.role === "elder"
+                              ? "#86efac"
+                              : "#93c5fd",
+                      }}
                     >
                       <option value="user">User</option>
                       <option value="admin">Admin</option>
                       <option value="elder">Elder</option>
                     </select>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="admin-table-td">
                     {formatDate(userItem.createdAt)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                  <td className="admin-table-td">
                     {formatDate(userItem.lastLogin)}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                  <td className="admin-table-td">
                     <button
                       onClick={() =>
                         handleDeleteUser(userItem._id, userItem.username)
                       }
                       disabled={userItem._id === user?.id}
-                      className={`text-red-600 hover:text-red-800 font-medium ${
+                      className={`font-medium transition-colors ${
                         userItem._id === user?.id
                           ? "cursor-not-allowed opacity-40"
                           : "cursor-pointer"
                       }`}
+                      style={{ color: "#fca5a5" }}
+                      onMouseEnter={(e) => {
+                        if (userItem._id !== user?.id)
+                          e.currentTarget.style.color = "#f87171";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = "#fca5a5";
+                      }}
                     >
                       Delete
                     </button>
@@ -223,11 +239,22 @@ const AdminUsers = () => {
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm"
           onClick={handleBackdropClick}
         >
-          <div className="bg-white rounded-2xl p-8 shadow-2xl transform transition-all duration-200 scale-100 max-w-md w-full mx-4">
+          <div
+            className="rounded-2xl p-8 shadow-2xl transform transition-all duration-200 scale-100 max-w-md w-full mx-4"
+            style={{
+              background: "rgba(20,14,4,0.95)",
+              border: "1px solid rgba(200,165,90,0.25)",
+              backdropFilter: "blur(20px)",
+            }}
+          >
             <div className="flex flex-col items-center space-y-6">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+              <div
+                className="w-16 h-16 rounded-full flex items-center justify-center"
+                style={{ background: "rgba(220,38,38,0.18)" }}
+              >
                 <svg
-                  className="w-8 h-8 text-red-600"
+                  className="w-8 h-8"
+                  style={{ color: "#fca5a5" }}
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -240,12 +267,15 @@ const AdminUsers = () => {
               </div>
 
               <div className="text-center">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3
+                  className="text-xl font-semibold mb-2"
+                  style={{ color: "#f5e9c8" }}
+                >
                   Delete User
                 </h3>
-                <p className="text-gray-600">
+                <p style={{ color: "rgba(212,180,131,0.75)" }}>
                   Are you sure you want to delete user{" "}
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-semibold" style={{ color: "#f5e9c8" }}>
                     {userToDelete?.username}
                   </span>
                   ? This action cannot be undone.
@@ -255,13 +285,13 @@ const AdminUsers = () => {
               <div className="flex space-x-4 w-full">
                 <button
                   onClick={cancelDelete}
-                  className="flex-1 px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors duration-200 font-medium"
+                  className="admin-btn-secondary flex-1 px-6 py-3"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={confirmDelete}
-                  className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 font-medium"
+                  className="admin-btn-danger flex-1 px-6 py-3"
                 >
                   Yes, Delete
                 </button>

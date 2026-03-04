@@ -97,3 +97,288 @@ html {
   border-color: rgba(154, 111, 42, 0.55);
   background: rgba(255, 248, 230, 0.58);
 }
+
+/* ── Admin Panel Theme ── */
+
+.admin-glass {
+  background: rgba(20, 14, 4, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(200, 165, 90, 0.28);
+  border-radius: 0.75rem;
+}
+
+.admin-glass-strong {
+  background: rgba(20, 14, 4, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(200, 165, 90, 0.32);
+  border-radius: 0.75rem;
+}
+
+.admin-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.30);
+  border: 1px solid rgba(200, 165, 90, 0.28);
+  border-radius: 0.5rem;
+  color: rgba(245, 233, 200, 0.88);
+  transition: border-color 200ms, box-shadow 200ms;
+}
+
+.admin-input::placeholder {
+  color: rgba(212, 180, 131, 0.38);
+}
+
+.admin-input:focus {
+  outline: none;
+  border-color: rgba(154, 111, 42, 0.55);
+  box-shadow: 0 0 0 2px rgba(154, 111, 42, 0.28);
+}
+
+.admin-input:read-only {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.admin-select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.38);
+  border: 1px solid rgba(200, 165, 90, 0.28);
+  border-radius: 0.5rem;
+  color: rgba(245, 233, 200, 0.88);
+  cursor: pointer;
+  transition: border-color 200ms;
+}
+
+.admin-select:focus {
+  outline: none;
+  border-color: rgba(154, 111, 42, 0.55);
+  box-shadow: 0 0 0 2px rgba(154, 111, 42, 0.28);
+}
+
+.admin-select option {
+  background: #1a140b;
+  color: rgba(245, 233, 200, 0.88);
+}
+
+.admin-textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: rgba(0, 0, 0, 0.30);
+  border: 1px solid rgba(200, 165, 90, 0.28);
+  border-radius: 0.5rem;
+  color: rgba(245, 233, 200, 0.88);
+  resize: none;
+  transition: border-color 200ms, box-shadow 200ms;
+}
+
+.admin-textarea::placeholder {
+  color: rgba(212, 180, 131, 0.38);
+}
+
+.admin-textarea:focus {
+  outline: none;
+  border-color: rgba(154, 111, 42, 0.55);
+  box-shadow: 0 0 0 2px rgba(154, 111, 42, 0.28);
+}
+
+.admin-btn-primary {
+  background: linear-gradient(135deg, rgba(154, 111, 42, 0.90) 0%, rgba(185, 138, 55, 0.93) 100%);
+  color: rgba(255, 248, 230, 0.96);
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(212, 175, 90, 0.45);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  transition: all 200ms;
+  cursor: pointer;
+}
+
+.admin-btn-primary:hover {
+  background: linear-gradient(135deg, rgba(130, 92, 32, 0.95) 0%, rgba(154, 111, 42, 0.97) 100%);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.30);
+}
+
+.admin-btn-primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.admin-btn-success {
+  background: rgba(22, 101, 52, 0.75);
+  color: rgba(187, 247, 208, 0.95);
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(34, 197, 94, 0.30);
+  transition: all 200ms;
+  cursor: pointer;
+}
+
+.admin-btn-success:hover {
+  background: rgba(20, 83, 45, 0.90);
+}
+
+.admin-btn-success:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.admin-btn-secondary {
+  background: rgba(255, 248, 230, 0.09);
+  border: 1px solid rgba(200, 165, 90, 0.28);
+  color: rgba(212, 180, 131, 0.85);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 200ms;
+  cursor: pointer;
+}
+
+.admin-btn-secondary:hover {
+  background: rgba(255, 248, 230, 0.16);
+}
+
+.admin-btn-danger {
+  background: rgba(185, 28, 28, 0.70);
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(220, 38, 38, 0.40);
+  transition: all 200ms;
+  cursor: pointer;
+}
+
+.admin-btn-danger:hover {
+  background: rgba(153, 27, 27, 0.88);
+}
+
+.admin-btn-danger:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.admin-table-head {
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.admin-table-th {
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: rgba(212, 180, 131, 0.65);
+}
+
+.admin-table-row {
+  border-bottom: 1px solid rgba(200, 165, 90, 0.09);
+  transition: background 150ms;
+}
+
+.admin-table-row:hover {
+  background: rgba(200, 165, 90, 0.07);
+}
+
+.admin-table-td {
+  padding: 0.9rem 1.5rem;
+  font-size: 0.875rem;
+  color: rgba(245, 233, 200, 0.78);
+}
+
+.admin-divider {
+  border-color: rgba(200, 165, 90, 0.18);
+}
+
+.admin-badge-pending {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(217, 119, 6, 0.20);
+  color: #fbbf24;
+  border: 1px solid rgba(217, 119, 6, 0.32);
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.admin-badge-approved {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(22, 163, 74, 0.18);
+  color: #86efac;
+  border: 1px solid rgba(22, 163, 74, 0.28);
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.admin-badge-rejected {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(220, 38, 38, 0.18);
+  color: #fca5a5;
+  border: 1px solid rgba(220, 38, 38, 0.28);
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.admin-stat-card {
+  background: rgba(20, 14, 4, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(200, 165, 90, 0.28);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+
+/* SweetAlert2 — Vedda dark earthy theme */
+.swal-vedda-popup {
+  border: 1px solid rgba(200, 165, 90, 0.28) !important;
+  border-radius: 0.875rem !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.70) !important;
+}
+.swal-vedda-popup .swal2-title {
+  color: #f5e9c8 !important;
+  font-size: 1.25rem !important;
+}
+.swal-vedda-popup .swal2-html-container {
+  color: rgba(212, 180, 131, 0.70) !important;
+}
+.swal-vedda-confirm {
+  border: 1px solid rgba(220, 38, 38, 0.45) !important;
+  border-radius: 0.5rem !important;
+  font-weight: 600 !important;
+  padding: 0.5rem 1.25rem !important;
+}
+.swal-vedda-confirm-green {
+  border: 1px solid rgba(22, 163, 74, 0.45) !important;
+  border-radius: 0.5rem !important;
+  font-weight: 600 !important;
+  padding: 0.5rem 1.25rem !important;
+}
+.swal-vedda-cancel {
+  border: 1px solid rgba(200, 165, 90, 0.30) !important;
+  border-radius: 0.5rem !important;
+  color: rgba(212, 180, 131, 0.85) !important;
+  font-weight: 500 !important;
+  padding: 0.5rem 1.25rem !important;
+}
+
+/* ── Auth form inputs ── */
+.auth-input::placeholder {
+  color: rgba(212, 180, 131, 0.42);
+}
+.auth-input:focus::placeholder {
+  color: rgba(212, 180, 131, 0.28);
+}

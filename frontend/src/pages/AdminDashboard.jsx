@@ -88,10 +88,10 @@ const AdminDashboard = () => {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-2">
+        <h1 className="text-4xl font-bold mb-2" style={{ color: "#f5e9c8" }}>
           {user?.role === "admin" ? "Admin Dashboard" : "Elder Dashboard"}
         </h1>
-        <p className="text-gray-600">
+        <p style={{ color: "rgba(212,180,131,0.70)" }}>
           {user?.role === "admin"
             ? "Manage users and system settings"
             : "Manage words and artifacts"}
@@ -99,7 +99,14 @@ const AdminDashboard = () => {
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">
+        <div
+          className="px-4 py-3 rounded-lg mb-6"
+          style={{
+            background: "rgba(220,38,38,0.14)",
+            border: "1px solid rgba(220,38,38,0.30)",
+            color: "#fca5a5",
+          }}
+        >
           {error}
         </div>
       )}
@@ -108,27 +115,59 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {user?.role === "admin" && (
           <>
-            <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500">
-              <div className="text-sm text-gray-600 mb-1">Total Users</div>
-              <div className="text-3xl font-bold text-gray-900">
+            <div
+              className="admin-stat-card"
+              style={{ borderLeft: "4px solid #6366f1" }}
+            >
+              <div
+                className="text-sm mb-1"
+                style={{ color: "rgba(212,180,131,0.65)" }}
+              >
+                Total Users
+              </div>
+              <div className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
                 {stats.totalUsers}
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-purple-500">
-              <div className="text-sm text-gray-600 mb-1">Admins</div>
-              <div className="text-3xl font-bold text-gray-900">
+            <div
+              className="admin-stat-card"
+              style={{ borderLeft: "4px solid #a855f7" }}
+            >
+              <div
+                className="text-sm mb-1"
+                style={{ color: "rgba(212,180,131,0.65)" }}
+              >
+                Admins
+              </div>
+              <div className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
                 {stats.adminCount}
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500">
-              <div className="text-sm text-gray-600 mb-1">Elders</div>
-              <div className="text-3xl font-bold text-gray-900">
+            <div
+              className="admin-stat-card"
+              style={{ borderLeft: "4px solid #22c55e" }}
+            >
+              <div
+                className="text-sm mb-1"
+                style={{ color: "rgba(212,180,131,0.65)" }}
+              >
+                Elders
+              </div>
+              <div className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
                 {stats.elderCount}
               </div>
             </div>
-            <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-yellow-500">
-              <div className="text-sm text-gray-600 mb-1">Regular Users</div>
-              <div className="text-3xl font-bold text-gray-900">
+            <div
+              className="admin-stat-card"
+              style={{ borderLeft: "4px solid #eab308" }}
+            >
+              <div
+                className="text-sm mb-1"
+                style={{ color: "rgba(212,180,131,0.65)" }}
+              >
+                Regular Users
+              </div>
+              <div className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
                 {stats.userCount}
               </div>
             </div>
@@ -136,15 +175,31 @@ const AdminDashboard = () => {
         )}
 
         {/* Word and Artifact counts - visible to both admin and elder */}
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-indigo-500">
-          <div className="text-sm text-gray-600 mb-1">Total Words</div>
-          <div className="text-3xl font-bold text-gray-900">
+        <div
+          className="admin-stat-card"
+          style={{ borderLeft: "4px solid #818cf8" }}
+        >
+          <div
+            className="text-sm mb-1"
+            style={{ color: "rgba(212,180,131,0.65)" }}
+          >
+            Total Words
+          </div>
+          <div className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
             {stats.wordCount}
           </div>
         </div>
-        <div className="bg-white rounded-lg shadow-md p-6 border-l-4 border-teal-500">
-          <div className="text-sm text-gray-600 mb-1">Total Artifacts</div>
-          <div className="text-3xl font-bold text-gray-900">
+        <div
+          className="admin-stat-card"
+          style={{ borderLeft: "4px solid #14b8a6" }}
+        >
+          <div
+            className="text-sm mb-1"
+            style={{ color: "rgba(212,180,131,0.65)" }}
+          >
+            Total Artifacts
+          </div>
+          <div className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
             {stats.artifactCount}
           </div>
         </div>

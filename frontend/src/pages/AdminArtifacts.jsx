@@ -130,16 +130,16 @@ const AdminArtifacts = () => {
     <div>
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">
+        <h1 className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
           Artifact Management
         </h1>
-        <p className="text-gray-600 mt-2">
+        <p className="mt-2" style={{ color: "rgba(212,180,131,0.70)" }}>
           Manage cultural artifacts with AI-powered metadata tagging
         </p>
       </div>
 
       {/* Filters & Actions */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="admin-glass p-6 mb-6">
         <div className="flex flex-col lg:flex-row gap-4">
           {/* Search */}
           <div className="flex-1">
@@ -152,10 +152,11 @@ const AdminArtifacts = () => {
                   setPagination((prev) => ({ ...prev, page: 1 }));
                 }}
                 placeholder="Search artifacts..."
-                className="w-full px-4 py-2 pl-10 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="admin-input w-full pl-10"
               />
               <Search
-                className="absolute left-3 top-2.5 text-gray-400"
+                className="absolute left-3 top-2.5"
+                style={{ color: "rgba(212,180,131,0.45)" }}
                 size={20}
               />
             </div>
@@ -166,7 +167,7 @@ const AdminArtifacts = () => {
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="admin-select w-full"
             >
               <option value="">All Categories</option>
               <option value="tools">Tools</option>
@@ -183,7 +184,7 @@ const AdminArtifacts = () => {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="admin-select w-full"
             >
               <option value="">All Status</option>
               <option value="draft">Draft</option>
@@ -196,13 +197,13 @@ const AdminArtifacts = () => {
           <div className="flex gap-2">
             <button
               onClick={() => setRefreshTrigger((prev) => prev + 1)}
-              className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
+              className="admin-btn-secondary px-4 py-2 flex items-center gap-2"
             >
               <RefreshCw size={20} />
             </button>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 whitespace-nowrap"
+              className="admin-btn-primary px-6 py-2 flex items-center gap-2 whitespace-nowrap"
             >
               <Plus size={20} />
               Add Artifact
@@ -211,10 +212,18 @@ const AdminArtifacts = () => {
         </div>
 
         {/* Stats */}
-        <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between text-sm text-gray-600">
+        <div
+          className="mt-4 pt-4 flex items-center justify-between text-sm"
+          style={{
+            borderTop: "1px solid rgba(200,165,90,0.18)",
+            color: "rgba(212,180,131,0.65)",
+          }}
+        >
           <span>
-            Showing <strong>{artifacts.length}</strong> of{" "}
-            <strong>{pagination.total}</strong> artifacts
+            Showing{" "}
+            <strong style={{ color: "#d4b483" }}>{artifacts.length}</strong> of{" "}
+            <strong style={{ color: "#d4b483" }}>{pagination.total}</strong>{" "}
+            artifacts
           </span>
           {(searchTerm || categoryFilter || statusFilter) && (
             <button
@@ -224,7 +233,13 @@ const AdminArtifacts = () => {
                 setStatusFilter("");
                 setPagination((prev) => ({ ...prev, page: 1 }));
               }}
-              className="text-blue-600 hover:text-blue-700 font-medium"
+              style={{ color: "#d4b483" }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.color = "#f5e9c8";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.color = "#d4b483";
+              }}
             >
               Clear Filters
             </button>
@@ -260,7 +275,7 @@ const AdminArtifacts = () => {
                   }))
                 }
                 disabled={pagination.page === 1}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="admin-btn-secondary px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Previous
               </button>
@@ -273,8 +288,8 @@ const AdminArtifacts = () => {
                   }
                   className={`px-4 py-2 rounded-lg ${
                     pagination.page === i + 1
-                      ? "bg-blue-600 text-white"
-                      : "border border-gray-300 hover:bg-gray-50"
+                      ? "admin-btn-primary"
+                      : "admin-btn-secondary"
                   }`}
                 >
                   {i + 1}
@@ -289,7 +304,7 @@ const AdminArtifacts = () => {
                   }))
                 }
                 disabled={pagination.page === pagination.pages}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="admin-btn-secondary px-4 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Next
               </button>
@@ -297,21 +312,24 @@ const AdminArtifacts = () => {
           )}
         </>
       ) : (
-        <div className="bg-white rounded-lg shadow-md p-12 text-center">
-          <div className="text-gray-400 mb-4">
+        <div className="admin-glass p-12 text-center">
+          <div className="mb-4" style={{ color: "rgba(212,180,131,0.40)" }}>
             <Filter size={64} className="mx-auto" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-700 mb-2">
+          <h3
+            className="text-xl font-semibold mb-2"
+            style={{ color: "#f5e9c8" }}
+          >
             No artifacts found
           </h3>
-          <p className="text-gray-500 mb-6">
+          <p className="mb-6" style={{ color: "rgba(212,180,131,0.65)" }}>
             {searchTerm || categoryFilter || statusFilter
               ? "Try adjusting your filters"
               : "Get started by adding your first artifact"}
           </p>
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors inline-flex items-center gap-2"
+            className="admin-btn-primary px-6 py-3 inline-flex items-center gap-2"
           >
             <Plus size={20} />
             Add Your First Artifact
@@ -345,11 +363,22 @@ const AdminArtifacts = () => {
           className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 backdrop-blur-sm"
           onClick={handleBackdropClick}
         >
-          <div className="bg-white rounded-2xl p-8 shadow-2xl transform transition-all duration-200 scale-100 max-w-md w-full mx-4">
+          <div
+            className="rounded-2xl p-8 shadow-2xl transform transition-all duration-200 scale-100 max-w-md w-full mx-4"
+            style={{
+              background: "rgba(20,14,4,0.95)",
+              border: "1px solid rgba(200,165,90,0.25)",
+              backdropFilter: "blur(20px)",
+            }}
+          >
             <div className="flex flex-col items-center space-y-6">
-              <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center">
+              <div
+                className="w-16 h-16 rounded-full flex items-center justify-center"
+                style={{ background: "rgba(220,38,38,0.18)" }}
+              >
                 <svg
-                  className="w-8 h-8 text-red-600"
+                  className="w-8 h-8"
+                  style={{ color: "#fca5a5" }}
                   fill="currentColor"
                   viewBox="0 0 20 20"
                 >
@@ -362,12 +391,15 @@ const AdminArtifacts = () => {
               </div>
 
               <div className="text-center">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                <h3
+                  className="text-xl font-semibold mb-2"
+                  style={{ color: "#f5e9c8" }}
+                >
                   Delete Artifact
                 </h3>
-                <p className="text-gray-600">
+                <p style={{ color: "rgba(212,180,131,0.75)" }}>
                   Are you sure you want to delete{" "}
-                  <span className="font-semibold text-gray-900">
+                  <span className="font-semibold" style={{ color: "#f5e9c8" }}>
                     &ldquo;{artifactToDelete.name}&rdquo;
                   </span>
                   ? This action cannot be undone.
@@ -377,13 +409,13 @@ const AdminArtifacts = () => {
               <div className="flex space-x-4 w-full">
                 <button
                   onClick={cancelDelete}
-                  className="flex-1 px-6 py-3 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors duration-200 font-medium"
+                  className="admin-btn-secondary flex-1 px-6 py-3"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={confirmDelete}
-                  className="flex-1 px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 font-medium"
+                  className="admin-btn-danger flex-1 px-6 py-3"
                 >
                   Yes, Delete
                 </button>

@@ -151,94 +151,103 @@ const AdminLessons = () => {
       <div>
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800"></h1>
-            <p className="text-gray-600 mt-2">
+            <h1
+              className="text-3xl font-bold"
+              style={{ color: "#f5e9c8" }}
+            ></h1>
+            <p className="mt-2" style={{ color: "rgba(212,180,131,0.70)" }}>
               Create and organize learning lessons
             </p>
           </div>
           <div className="flex gap-3">
             <button
               onClick={() => setActiveView("categories")}
-              className="bg-white border-2 border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors flex items-center gap-2"
+              className="admin-btn-secondary px-4 py-2 flex items-center gap-2 border border-blue-400/40"
+              style={{ color: "#93c5fd" }}
             >
               <FaList /> Manage Category
             </button>
             <button
               onClick={openAddForm}
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+              className="admin-btn-primary px-4 py-2 flex items-center gap-2"
             >
               <FaPlus /> Add Lesson
             </button>
           </div>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md">
+        <div className="admin-glass">
           {loading ? (
             <LoadingScreen message="Loading lessons..." />
           ) : lessons.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No lessons found</p>
-              <p className="text-gray-400 mt-2">
+              <p
+                className="text-lg"
+                style={{ color: "rgba(212,180,131,0.70)" }}
+              >
+                No lessons found
+              </p>
+              <p className="mt-2" style={{ color: "rgba(212,180,131,0.50)" }}>
                 Create your first lesson to get started
               </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full">
-                <thead className="bg-gray-50">
+                <thead className="admin-table-head">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      ID
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Category
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Topic
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Description
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Rewards
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
+                    <th className="admin-table-th">ID</th>
+                    <th className="admin-table-th">Category</th>
+                    <th className="admin-table-th">Topic</th>
+                    <th className="admin-table-th">Description</th>
+                    <th className="admin-table-th">Rewards</th>
+                    <th className="admin-table-th">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody>
                   {lessons.map((lesson) => (
-                    <tr key={lesson.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <tr key={lesson.id} className="admin-table-row">
+                      <td
+                        className="admin-table-td whitespace-nowrap text-sm font-medium"
+                        style={{ color: "#f5e9c8" }}
+                      >
                         {lesson.id}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <span className="px-2 py-1 rounded-full text-xs bg-blue-100 text-blue-800">
+                      <td className="admin-table-td whitespace-nowrap text-sm">
+                        <span className="px-2 py-1 rounded-full text-xs bg-sky-900/25 text-sky-300 border border-sky-500/25">
                           {getCategoryName(lesson.categoryId)}
                         </span>
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-900">
+                      <td
+                        className="admin-table-td text-sm"
+                        style={{ color: "#f5e9c8" }}
+                      >
                         {lesson.topic}
                       </td>
-                      <td className="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
+                      <td
+                        className="admin-table-td text-sm max-w-xs truncate"
+                        style={{ color: "rgba(212,180,131,0.70)" }}
+                      >
                         {lesson.description}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td
+                        className="admin-table-td whitespace-nowrap text-sm"
+                        style={{ color: "rgba(212,180,131,0.70)" }}
+                      >
                         {lesson.xp} XP
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <td className="admin-table-td whitespace-nowrap text-sm font-medium">
                         <div className="flex gap-2">
                           <button
                             onClick={() => openViewForm(lesson)}
-                            className="text-blue-600 hover:text-blue-900"
+                            className="text-blue-400 hover:text-blue-300"
                             title="View"
                           >
                             <FaEye />
                           </button>
                           <button
                             onClick={() => openEditForm(lesson)}
-                            className="text-green-600 hover:text-green-900"
+                            className="text-green-400 hover:text-green-300"
                             title="Edit"
                           >
                             <FaEdit />
@@ -250,7 +259,7 @@ const AdminLessons = () => {
                                 lessonId: lesson.id,
                               })
                             }
-                            className="text-red-600 hover:text-red-900"
+                            className="text-red-400 hover:text-red-300"
                             title="Delete"
                           >
                             <FaTrash />
@@ -283,48 +292,67 @@ const AdminLessons = () => {
     return (
       <div>
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">View Lesson</h1>
+          <h1 className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
+            View Lesson
+          </h1>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="admin-glass p-6">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Category
               </label>
-              <p className="text-gray-900">
+              <p style={{ color: "#f5e9c8" }}>
                 {getCategoryName(currentLesson.categoryId)}
               </p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Topic
               </label>
-              <p className="text-gray-900">{currentLesson.topic}</p>
+              <p style={{ color: "#f5e9c8" }}>{currentLesson.topic}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Description
               </label>
-              <p className="text-gray-900">{currentLesson.description}</p>
+              <p style={{ color: "#f5e9c8" }}>{currentLesson.description}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Content
               </label>
-              <div className="border rounded-lg p-4 bg-gray-50 prose max-w-none">
+              <div className="admin-glass p-4 rounded-lg">
                 {currentLesson.content ? (
                   <div
                     dangerouslySetInnerHTML={{ __html: currentLesson.content }}
                   />
                 ) : (
-                  <p className="text-gray-500">No content available</p>
+                  <p style={{ color: "rgba(212,180,131,0.55)" }}>
+                    No content available
+                  </p>
                 )}
               </div>
             </div>
             {currentLesson.imageUrl && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   Image
                 </label>
                 <img
@@ -336,7 +364,10 @@ const AdminLessons = () => {
             )}
             {currentLesson.audioUrl && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   Audio
                 </label>
                 <audio controls className="w-full max-w-md">
@@ -347,24 +378,33 @@ const AdminLessons = () => {
             )}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   XP Reward
                 </label>
-                <p className="text-gray-900">{currentLesson.xp}</p>
+                <p style={{ color: "#f5e9c8" }}>{currentLesson.xp}</p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   Coins Reward
                 </label>
-                <p className="text-gray-900">{currentLesson.coins}</p>
+                <p style={{ color: "#f5e9c8" }}>{currentLesson.coins}</p>
               </div>
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
+          <div
+            className="flex justify-end gap-3 mt-6 pt-6"
+            style={{ borderTop: "1px solid rgba(200,165,90,0.18)" }}
+          >
             <button
               onClick={() => setActiveView("list")}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+              className="admin-btn-secondary px-4 py-2"
             >
               Back to List
             </button>
@@ -378,16 +418,19 @@ const AdminLessons = () => {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">
+        <h1 className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
           {activeView === "add" ? "Add Lesson" : "Edit Lesson"}
         </h1>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="admin-glass p-6">
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Lesson ID
               </label>
               <input
@@ -396,14 +439,17 @@ const AdminLessons = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, id: e.target.value })
                 }
-                className="w-full border rounded-lg px-3 py-2"
+                className="admin-input w-full"
                 placeholder="e.g., lesson1"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Select Category
               </label>
               <select
@@ -411,7 +457,7 @@ const AdminLessons = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, categoryId: e.target.value })
                 }
-                className="w-full border rounded-lg px-3 py-2"
+                className="admin-select w-full"
                 required
               >
                 <option value="">Choose a category...</option>
@@ -424,7 +470,10 @@ const AdminLessons = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Topic
               </label>
               <input
@@ -433,14 +482,17 @@ const AdminLessons = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, topic: e.target.value })
                 }
-                className="w-full border rounded-lg px-3 py-2"
+                className="admin-input w-full"
                 placeholder="Enter lesson topic"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Description
               </label>
               <textarea
@@ -448,7 +500,7 @@ const AdminLessons = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, description: e.target.value })
                 }
-                className="w-full border rounded-lg px-3 py-2"
+                className="admin-textarea w-full"
                 rows="3"
                 placeholder="Brief description of the lesson"
                 required
@@ -456,7 +508,10 @@ const AdminLessons = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Lesson Content
               </label>
               <TextEditor
@@ -491,7 +546,10 @@ const AdminLessons = () => {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   XP Reward
                 </label>
                 <input
@@ -500,13 +558,16 @@ const AdminLessons = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, xp: e.target.value })
                   }
-                  className="w-full border rounded-lg px-3 py-2"
+                  className="admin-input w-full"
                   min="0"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   Coins Reward
                 </label>
                 <input
@@ -515,7 +576,7 @@ const AdminLessons = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, coins: e.target.value })
                   }
-                  className="w-full border rounded-lg px-3 py-2"
+                  className="admin-input w-full"
                   min="0"
                   required
                 />
@@ -523,10 +584,13 @@ const AdminLessons = () => {
             </div>
           </div>
 
-          <div className="flex justify-between items-center mt-6 pt-6 border-t border-gray-200">
+          <div
+            className="flex justify-between items-center mt-6 pt-6"
+            style={{ borderTop: "1px solid rgba(200,165,90,0.18)" }}
+          >
             <button
               type="button"
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 flex items-center gap-2"
+              className="admin-btn-primary px-4 py-2 flex items-center gap-2"
               onClick={() =>
                 toast.info("Exercise attachment feature coming soon")
               }
@@ -538,14 +602,11 @@ const AdminLessons = () => {
               <button
                 type="button"
                 onClick={() => setActiveView("list")}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                className="admin-btn-secondary px-4 py-2"
               >
                 Cancel
               </button>
-              <button
-                type="submit"
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-              >
+              <button type="submit" className="admin-btn-primary px-4 py-2">
                 Submit
               </button>
             </div>
