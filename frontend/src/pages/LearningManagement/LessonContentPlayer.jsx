@@ -65,40 +65,162 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
   const hasNext = currentLessonIndex < allLessons.length - 1;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 pt-16">
-      <div className="max-w-5xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-6">
-          <button
-            onClick={onBack}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors mb-4"
-          >
-            <FaArrowLeft /> Back to Lessons
-          </button>
-          
-          <div className="text-center mb-2">
-            <h1 className="text-4xl font-bold text-gray-800">
-              {currentLesson.topic}
-            </h1>
-            <p className="text-lg text-gray-600 mt-2">
-              {category.name} - Lesson {currentLessonIndex + 1} of {allLessons.length}
-            </p>
+    <div
+      className="min-h-screen mt-[60px]"
+      style={{
+        backgroundImage: `url('/assets/background-images/background-1.png')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* ── Glassmorphic nav bar ── */}
+      <div
+        style={{
+          background: 'rgba(28,20,8,0.55)',
+          backdropFilter: 'blur(14px)',
+          WebkitBackdropFilter: 'blur(14px)',
+          borderBottom: '1px solid rgba(200,170,100,0.18)',
+          boxShadow: '0 2px 16px rgba(0,0,0,0.20)',
+        }}
+      >
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <button
+              onClick={onBack}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                color: 'rgba(255,248,230,0.90)',
+                background: 'rgba(255,255,255,0.08)',
+                border: '1px solid rgba(200,165,90,0.25)',
+                borderRadius: '9px',
+                padding: '0.4rem 0.9rem',
+                fontFamily: 'system-ui, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.88rem',
+                cursor: 'pointer',
+                transition: 'background 0.2s',
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = 'rgba(200,165,90,0.18)')
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = 'rgba(255,255,255,0.08)')
+              }
+            >
+              <FaArrowLeft style={{ fontSize: '0.8rem' }} />
+              Back to Lessons
+            </button>
+            <div
+              style={{
+                color: '#d4b483',
+                fontFamily: 'system-ui, sans-serif',
+                fontWeight: '600',
+                fontSize: '0.9rem',
+              }}
+            >
+              {category.name} &mdash; Lesson {currentLessonIndex + 1} of {allLessons.length}
+            </div>
           </div>
         </div>
+      </div>
 
+      {/* ── Hero section ── */}
+      <div
+        style={{
+          background:
+            'linear-gradient(to bottom, rgba(255,255,255,0.88) 0%, rgba(255,255,255,0.65) 60%, rgba(255,255,255,0) 100%)',
+          paddingTop: '1.5rem',
+          paddingBottom: '1.5rem',
+          textAlign: 'center',
+        }}
+      >
+        <span
+          style={{
+            display: 'inline-block',
+            background: 'rgba(255,255,255,0.60)',
+            border: '1px solid rgba(100,80,40,0.22)',
+            borderRadius: '999px',
+            padding: '0.28rem 1rem',
+            fontSize: '0.73rem',
+            letterSpacing: '0.16em',
+            textTransform: 'uppercase',
+            color: '#5c4a1e',
+            marginBottom: '0.6rem',
+            fontFamily: 'system-ui, sans-serif',
+          }}
+        >
+          📖 {category.name}
+        </span>
+        <h1
+          style={{
+            fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
+            fontWeight: '800',
+            color: '#1c1409',
+            lineHeight: 1.2,
+            margin: '0 auto 0.4rem',
+            maxWidth: '800px',
+            fontFamily: "'Georgia', serif",
+            letterSpacing: '-0.3px',
+            textShadow: '0 1px 0 rgba(255,255,255,0.8)',
+            padding: '0 1rem',
+          }}
+        >
+          {currentLesson.topic}
+        </h1>
+        <p
+          style={{
+            fontSize: '0.95rem',
+            color: '#9a6f2a',
+            fontFamily: 'system-ui, sans-serif',
+            fontWeight: '600',
+          }}
+        >
+          Lesson {currentLessonIndex + 1} of {allLessons.length}
+        </p>
+        <div
+          style={{
+            width: '52px',
+            height: '3px',
+            background: 'linear-gradient(90deg, #9a6f2a, #c9943a)',
+            margin: '0.8rem auto 0',
+            borderRadius: '99px',
+          }}
+        />
+      </div>
+
+      {/* ── Content ── */}
+      <div className="max-w-5xl mx-auto px-4 py-8">
         {/* Content Container */}
-        <div className="bg-white rounded-2xl shadow-xl p-8 mb-8 min-h-[400px]">
+        <div
+          className="rounded-2xl p-8 mb-6 min-h-[400px]"
+          style={{
+            background: 'rgba(255,255,255,0.88)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            border: '1px solid rgba(200,170,100,0.25)',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+          }}
+        >
           {/* Description */}
           {currentLesson.description && (
-            <div className="mb-6 pb-6 border-b border-gray-200">
-              <p className="text-lg text-gray-700 leading-relaxed">
+            <div
+              className="mb-6 pb-6"
+              style={{ borderBottom: '1px solid rgba(200,170,100,0.30)' }}
+            >
+              <p
+                className="text-lg leading-relaxed"
+                style={{ color: '#3d2e0f', fontFamily: "'Georgia', serif", fontStyle: 'italic' }}
+              >
                 {currentLesson.description}
               </p>
             </div>
           )}
 
           {/* Rich Text Content */}
-          <div 
+          <div
             className="prose prose-lg max-w-none mb-6 lesson-content"
             dangerouslySetInnerHTML={{ __html: currentLesson.content || '<p class="text-gray-500">No content available for this lesson.</p>' }}
           />
@@ -117,15 +239,17 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
 
           {/* Audio Player */}
           {currentLesson.audioUrl && (
-            <div className="my-8 bg-gray-50 rounded-lg p-6">
-              <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                <FaPlay className="text-blue-600" /> Audio Pronunciation
-              </h3>
-              <audio
-                controls
-                className="w-full"
-                style={{ maxWidth: '600px' }}
+            <div
+              className="my-8 rounded-lg p-6"
+              style={{ background: 'rgba(200,170,100,0.10)', border: '1px solid rgba(200,170,100,0.25)' }}
+            >
+              <h3
+                className="text-lg font-semibold mb-3 flex items-center gap-2"
+                style={{ color: '#5c4a1e', fontFamily: "'Georgia', serif" }}
               >
+                <FaPlay style={{ color: '#9a6f2a' }} /> Audio Pronunciation
+              </h3>
+              <audio controls className="w-full" style={{ maxWidth: '600px' }}>
                 <source src={currentLesson.audioUrl} type="audio/mpeg" />
                 Your browser does not support the audio element.
               </audio>
@@ -133,11 +257,23 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
           )}
 
           {/* Rewards Info */}
-          <div className="mt-8 pt-6 border-t border-gray-200">
+          <div
+            className="mt-8 pt-6"
+            style={{ borderTop: '1px solid rgba(200,170,100,0.30)' }}
+          >
             <div className="flex items-center justify-center gap-6">
-              <div className="bg-yellow-50 border-2 border-yellow-400 rounded-lg px-6 py-3">
-                <div className="text-2xl font-bold text-yellow-600">
-                  {currentLesson.xp} XP 
+              <div
+                className="rounded-lg px-6 py-3"
+                style={{
+                  background: 'rgba(200,170,100,0.15)',
+                  border: '2px solid rgba(200,165,90,0.50)',
+                }}
+              >
+                <div
+                  className="text-2xl font-bold"
+                  style={{ color: '#9a6f2a', fontFamily: "'Georgia', serif" }}
+                >
+                  {currentLesson.xp} XP
                 </div>
               </div>
               <button
@@ -157,17 +293,45 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
         </div>
 
         {/* Navigation and Actions Footer */}
-        <div className="bg-white rounded-2xl shadow-xl p-6">
+        <div
+          className="rounded-2xl p-6"
+          style={{
+            background: 'rgba(255,255,255,0.88)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            border: '1px solid rgba(200,170,100,0.25)',
+            boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
+          }}
+        >
           <div className="flex items-center justify-between gap-4">
             {/* Previous Button */}
             <button
               onClick={handlePrevious}
               disabled={!hasPrevious}
-              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+              style={
                 hasPrevious
-                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-300'
-                  : 'bg-gray-100 text-gray-400 cursor-not-allowed border-2 border-gray-200'
-              }`}
+                  ? {
+                      display: 'flex', alignItems: 'center', gap: '0.5rem',
+                      background: 'rgba(200,170,100,0.12)',
+                      border: '2px solid rgba(200,165,90,0.40)',
+                      color: '#5c4a1e',
+                      borderRadius: '8px',
+                      padding: '0.65rem 1.2rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'background 0.2s',
+                    }
+                  : {
+                      display: 'flex', alignItems: 'center', gap: '0.5rem',
+                      background: 'rgba(200,200,200,0.15)',
+                      border: '2px solid rgba(200,200,200,0.30)',
+                      color: '#aaa',
+                      borderRadius: '8px',
+                      padding: '0.65rem 1.2rem',
+                      fontWeight: '600',
+                      cursor: 'not-allowed',
+                    }
+              }
             >
               <FaChevronLeft />
               <span className="hidden sm:inline">Previous</span>
@@ -176,7 +340,10 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
             {/* Practice Button */}
             <button
               onClick={handlePractice}
-              className="flex-1 max-w-md bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-8 py-4 rounded-lg font-bold text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+              className="flex-1 max-w-md text-white px-8 py-4 rounded-lg font-bold text-lg shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
+              style={{
+                background: 'linear-gradient(135deg, #9a6f2a, #c9943a)',
+              }}
             >
               Start Practice Exercises
             </button>
@@ -185,11 +352,30 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
             <button
               onClick={handleNext}
               disabled={!hasNext}
-              className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all ${
+              style={
                 hasNext
-                  ? 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-gray-300'
-                  : 'bg-gray-100 text-gray-400 cursor-not-allowed border-2 border-gray-200'
-              }`}
+                  ? {
+                      display: 'flex', alignItems: 'center', gap: '0.5rem',
+                      background: 'rgba(200,170,100,0.12)',
+                      border: '2px solid rgba(200,165,90,0.40)',
+                      color: '#5c4a1e',
+                      borderRadius: '8px',
+                      padding: '0.65rem 1.2rem',
+                      fontWeight: '600',
+                      cursor: 'pointer',
+                      transition: 'background 0.2s',
+                    }
+                  : {
+                      display: 'flex', alignItems: 'center', gap: '0.5rem',
+                      background: 'rgba(200,200,200,0.15)',
+                      border: '2px solid rgba(200,200,200,0.30)',
+                      color: '#aaa',
+                      borderRadius: '8px',
+                      padding: '0.65rem 1.2rem',
+                      fontWeight: '600',
+                      cursor: 'not-allowed',
+                    }
+              }
             >
               <span className="hidden sm:inline">Next</span>
               <FaChevronRight />
@@ -202,19 +388,21 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
               {allLessons.map((_, index) => (
                 <div
                   key={index}
-                  className={`h-2 rounded-full transition-all ${
-                    index === currentLessonIndex
-                      ? 'w-8 bg-blue-600'
-                      : index < currentLessonIndex
-                      ? 'w-2 bg-green-500'
-                      : 'w-2 bg-gray-300'
-                  }`}
+                  className="h-2 rounded-full transition-all"
+                  style={{
+                    width: index === currentLessonIndex ? '2rem' : '0.5rem',
+                    background:
+                      index === currentLessonIndex
+                        ? '#9a6f2a'
+                        : index < currentLessonIndex
+                        ? '#c9943a'
+                        : 'rgba(200,170,100,0.30)',
+                  }}
                 />
               ))}
             </div>
           </div>
         </div>
-
       </div>
 
       {/* Custom styles for lesson content */}
@@ -230,6 +418,7 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
         .lesson-content p {
           margin-bottom: 1rem;
           line-height: 1.8;
+          color: #3d2e0f;
         }
         
         .lesson-content h1,
@@ -238,6 +427,8 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
           margin-top: 1.5rem;
           margin-bottom: 1rem;
           font-weight: 700;
+          color: #1c1409;
+          font-family: 'Georgia', serif;
         }
         
         .lesson-content ul,
@@ -248,6 +439,11 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
         
         .lesson-content li {
           margin-bottom: 0.5rem;
+          color: #3d2e0f;
+        }
+
+        .lesson-content strong {
+          color: #9a6f2a;
         }
       `}</style>
     </div>
