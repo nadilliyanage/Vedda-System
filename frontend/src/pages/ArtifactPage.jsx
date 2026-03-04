@@ -115,8 +115,8 @@ const ArtifactPage = () => {
 
         {/* Title */}
         <h1
-          className="font-extrabold text-[#1c1409] leading-tight mx-auto mb-2 max-w-3xl px-4 font-serif tracking-tight whitespace-nowrap text-[40px]"
-          style={{ textShadow: "0 1px 0 rgba(255,255,255,0.8)" }}
+          className="font-extrabold text-[#1c1409] leading-tight mx-auto mb-2 px-4 font-serif tracking-tight"
+          style={{ fontSize: "clamp(1.8rem, 5vw, 3.2rem)", textShadow: "0 1px 0 rgba(255,255,255,0.8)" }}
         >
           Vedda{" "}
           <span
