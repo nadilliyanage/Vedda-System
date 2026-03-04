@@ -342,12 +342,22 @@ const AdminExercises = () => {
 
   const renderQuestionPreview = (question) => {
     return (
-      <div className="border-2 border-gray-200 rounded-lg p-4 mb-3 bg-white">
+      <div className="admin-glass p-4 mb-3">
         <div className="flex justify-between items-start mb-2">
           <div>
-            <span className="font-semibold text-gray-700">Question:</span>
-            <span className="ml-2 text-gray-900">{question.prompt}</span>
-            <span className="ml-2 text-xs text-gray-500">
+            <span
+              className="font-semibold"
+              style={{ color: "rgba(212,180,131,0.80)" }}
+            >
+              Question:
+            </span>
+            <span className="ml-2" style={{ color: "#f5e9c8" }}>
+              {question.prompt}
+            </span>
+            <span
+              className="ml-2 text-xs"
+              style={{ color: "rgba(212,180,131,0.55)" }}
+            >
               ({question.type.replace("_", " ")})
             </span>
           </div>
@@ -364,15 +374,26 @@ const AdminExercises = () => {
                     disabled
                     className="w-4 h-4"
                   />
-                  <span className="font-medium">{option.id}.</span>
-                  <span>{option.text}</span>
+                  <span
+                    className="font-medium"
+                    style={{ color: "rgba(212,180,131,0.80)" }}
+                  >
+                    {option.id}.
+                  </span>
+                  <span style={{ color: "#f5e9c8" }}>{option.text}</span>
                 </div>
               ))}
             </div>
           )}
 
           {question.type === "text_input" && (
-            <div className="border rounded px-3 py-2 bg-gray-50 text-gray-600">
+            <div
+              className="rounded px-3 py-2"
+              style={{
+                background: "rgba(0,0,0,0.25)",
+                color: "rgba(212,180,131,0.70)",
+              }}
+            >
               Your answer: <span className="italic">(Text input)</span>
             </div>
           )}
@@ -381,11 +402,23 @@ const AdminExercises = () => {
             <div className="space-y-2">
               {question.pairs.map((pair, idx) => (
                 <div key={idx} className="flex items-center gap-2">
-                  <span className="bg-blue-100 px-3 py-1 rounded">
+                  <span
+                    className="px-3 py-1 rounded"
+                    style={{
+                      background: "rgba(59,130,246,0.12)",
+                      color: "#93c5fd",
+                    }}
+                  >
                     {pair.left}
                   </span>
-                  <span>=</span>
-                  <span className="bg-green-100 px-3 py-1 rounded">
+                  <span style={{ color: "rgba(212,180,131,0.55)" }}>=</span>
+                  <span
+                    className="px-3 py-1 rounded"
+                    style={{
+                      background: "rgba(22,163,74,0.12)",
+                      color: "#86efac",
+                    }}
+                  >
                     {pair.right}
                   </span>
                 </div>
@@ -394,7 +427,10 @@ const AdminExercises = () => {
           )}
         </div>
 
-        <div className="mt-2 text-xs text-gray-500">
+        <div
+          className="mt-2 text-xs"
+          style={{ color: "rgba(212,180,131,0.55)" }}
+        >
           {question.xp} XP • {question.points} Points • {question.timeLimitSec}s
         </div>
       </div>
@@ -407,86 +443,94 @@ const AdminExercises = () => {
       <div>
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800"></h1>
-            <p className="text-gray-600 mt-2">
+            <h1
+              className="text-3xl font-bold"
+              style={{ color: "#f5e9c8" }}
+            ></h1>
+            <p className="mt-2" style={{ color: "rgba(212,180,131,0.70)" }}>
               Create practice exercises with questions
             </p>
           </div>
           <button
             onClick={openAddForm}
-            className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+            className="admin-btn-success px-4 py-2 flex items-center gap-2"
           >
             <FaPlus /> Add New
           </button>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md">
+        <div className="admin-glass">
           {loading ? (
             <LoadingScreen message="Loading exercises..." />
           ) : exercises.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No exercises found</p>
-              <p className="text-gray-400 mt-2">
+              <p
+                className="text-lg"
+                style={{ color: "rgba(212,180,131,0.70)" }}
+              >
+                No exercises found
+              </p>
+              <p className="mt-2" style={{ color: "rgba(212,180,131,0.50)" }}>
                 Create your first exercise to get started
               </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full">
-                <thead className="bg-gray-50">
+                <thead className="admin-table-head">
                   <tr>
-                    <th className="hidden px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      ID
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Lesson
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Topic
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Type
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Rewards
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Actions
-                    </th>
+                    <th className="hidden admin-table-th">ID</th>
+                    <th className="admin-table-th">Lesson</th>
+                    <th className="admin-table-th">Topic</th>
+                    <th className="admin-table-th">Type</th>
+                    <th className="admin-table-th">Rewards</th>
+                    <th className="admin-table-th">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody>
                   {exercises.map((exercise) => (
-                    <tr key={exercise.id}>
-                      <td className="hidden px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                    <tr key={exercise.id} className="admin-table-row">
+                      <td
+                        className="hidden admin-table-td whitespace-nowrap text-sm font-medium"
+                        style={{ color: "#f5e9c8" }}
+                      >
                         {exercise.id}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        <span className="px-2 py-1 rounded-full text-xs bg-green-100 text-green-800">
+                      <td className="admin-table-td whitespace-nowrap text-sm">
+                        <span className="px-2 py-1 rounded-full text-xs bg-green-900/25 text-green-300 border border-green-500/25">
                           {getLessonName(exercise.lessonId)}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td
+                        className="admin-table-td whitespace-nowrap text-sm"
+                        style={{ color: "#f5e9c8" }}
+                      >
                         Ex {exercise.exerciseNumber}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td
+                        className="admin-table-td whitespace-nowrap text-sm"
+                        style={{ color: "rgba(212,180,131,0.70)" }}
+                      >
                         {exercise.question?.type?.replace("_", " ") || "N/A"}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      <td
+                        className="admin-table-td whitespace-nowrap text-sm"
+                        style={{ color: "rgba(212,180,131,0.70)" }}
+                      >
                         {exercise.question?.xp || 0} XP
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <td className="admin-table-td whitespace-nowrap text-sm font-medium">
                         <div className="flex gap-2">
                           <button
                             onClick={() => openViewForm(exercise)}
-                            className="text-blue-600 hover:text-blue-900"
+                            className="text-blue-400 hover:text-blue-300"
                             title="View"
                           >
                             <FaEye />
                           </button>
                           <button
                             onClick={() => openEditForm(exercise)}
-                            className="text-green-600 hover:text-green-900"
+                            className="text-green-400 hover:text-green-300"
                             title="Edit"
                           >
                             <FaEdit />
@@ -498,7 +542,7 @@ const AdminExercises = () => {
                                 exerciseId: exercise.id,
                               })
                             }
-                            className="text-red-600 hover:text-red-900"
+                            className="text-red-400 hover:text-red-300"
                             title="Delete"
                           >
                             <FaTrash />
@@ -531,33 +575,44 @@ const AdminExercises = () => {
     return (
       <div>
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">View Exercise</h1>
+          <h1 className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
+            View Exercise
+          </h1>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="admin-glass p-6">
           <div className="space-y-4 mb-6">
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   Lesson
                 </label>
-                <p className="text-gray-900">
+                <p style={{ color: "#f5e9c8" }}>
                   {getLessonName(currentExercise.lessonId)}
                 </p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   Category
                 </label>
-                <p className="text-gray-900">
+                <p style={{ color: "#f5e9c8" }}>
                   {currentExercise.categoryId || "N/A"}
                 </p>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   Exercise Number
                 </label>
-                <p className="text-gray-900">
+                <p style={{ color: "#f5e9c8" }}>
                   Ex {currentExercise.exerciseNumber}
                 </p>
               </div>
@@ -565,20 +620,28 @@ const AdminExercises = () => {
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-gray-800 mb-3">
+            <h3
+              className="text-lg font-semibold mb-3"
+              style={{ color: "#f5e9c8" }}
+            >
               Question
             </h3>
             {currentExercise.question ? (
               renderQuestionPreview(currentExercise.question)
             ) : (
-              <p className="text-gray-500">No question added</p>
+              <p style={{ color: "rgba(212,180,131,0.55)" }}>
+                No question added
+              </p>
             )}
           </div>
 
-          <div className="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
+          <div
+            className="flex justify-end gap-3 mt-6 pt-6"
+            style={{ borderTop: "1px solid rgba(200,165,90,0.18)" }}
+          >
             <button
               onClick={() => setActiveView("list")}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+              className="admin-btn-secondary px-4 py-2"
             >
               Back to List
             </button>
@@ -592,28 +655,41 @@ const AdminExercises = () => {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">
+        <h1 className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
           {activeView === "add" ? "Add Exercise" : "Edit Exercise"}
         </h1>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="admin-glass p-6">
         {/* Top Level Settings */}
-        <div className="mb-6 pb-6 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+        <div
+          className="mb-6 pb-6"
+          style={{ borderBottom: "1px solid rgba(200,165,90,0.18)" }}
+        >
+          <h3
+            className="text-lg font-semibold mb-4"
+            style={{ color: "#f5e9c8" }}
+          >
             Exercise Settings
           </h3>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Category
               </label>
               <select
                 value={formData.categoryId}
                 onChange={(e) =>
-                  setFormData({ ...formData, categoryId: e.target.value, lessonId: "" })
+                  setFormData({
+                    ...formData,
+                    categoryId: e.target.value,
+                    lessonId: "",
+                  })
                 }
-                className="w-full border rounded-lg px-3 py-2"
+                className="admin-select w-full"
               >
                 <option value="">Choose category...</option>
                 {categories.map((category) => (
@@ -625,7 +701,10 @@ const AdminExercises = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Select Lesson
               </label>
               <select
@@ -633,13 +712,17 @@ const AdminExercises = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, lessonId: e.target.value })
                 }
-                className="w-full border rounded-lg px-3 py-2"
+                className="admin-select w-full"
                 required
                 disabled={!formData.categoryId}
               >
                 <option value="">Choose a lesson...</option>
                 {lessons
-                  .filter(lesson => !formData.categoryId || lesson.categoryId === formData.categoryId)
+                  .filter(
+                    (lesson) =>
+                      !formData.categoryId ||
+                      lesson.categoryId === formData.categoryId,
+                  )
                   .map((lesson) => (
                     <option key={lesson.id} value={lesson.id}>
                       {lesson.topic}
@@ -649,7 +732,10 @@ const AdminExercises = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Exercise Number
               </label>
               <input
@@ -658,7 +744,7 @@ const AdminExercises = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, exerciseNumber: e.target.value })
                 }
-                className="w-full border rounded-lg px-3 py-2"
+                className="admin-input w-full"
                 placeholder="e.g., 1"
                 required
               />
@@ -667,13 +753,24 @@ const AdminExercises = () => {
         </div>
 
         {/* Question Builder */}
-        <div className="mb-6 pb-6 border-b-2 border-dashed border-gray-300">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">Question</h3>
+        <div
+          className="mb-6 pb-6"
+          style={{ borderBottom: "2px dashed rgba(200,165,90,0.20)" }}
+        >
+          <h3
+            className="text-lg font-semibold mb-4"
+            style={{ color: "#f5e9c8" }}
+          >
+            Question
+          </h3>
 
           <div className="space-y-4">
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   Type
                 </label>
                 <select
@@ -684,7 +781,7 @@ const AdminExercises = () => {
                       question: { ...formData.question, type: e.target.value },
                     })
                   }
-                  className="w-full border rounded-lg px-3 py-2"
+                  className="admin-select w-full"
                 >
                   <option value="multiple_choice">Multiple Choice</option>
                   <option value="text_input">Text Input</option>
@@ -692,7 +789,10 @@ const AdminExercises = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   XP Reward
                 </label>
                 <input
@@ -704,12 +804,15 @@ const AdminExercises = () => {
                       question: { ...formData.question, xp: e.target.value },
                     })
                   }
-                  className="w-full border rounded-lg px-3 py-2"
+                  className="admin-input w-full"
                   min="0"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   Points
                 </label>
                 <input
@@ -724,14 +827,17 @@ const AdminExercises = () => {
                       },
                     })
                   }
-                  className="w-full border rounded-lg px-3 py-2"
+                  className="admin-input w-full"
                   min="0"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Prompt
               </label>
               <textarea
@@ -742,7 +848,7 @@ const AdminExercises = () => {
                     question: { ...formData.question, prompt: e.target.value },
                   })
                 }
-                className="w-full border rounded-lg px-3 py-2"
+                className="admin-textarea w-full"
                 rows="2"
                 placeholder="Enter question prompt"
               />
@@ -750,7 +856,10 @@ const AdminExercises = () => {
 
             {/* Skill Tags */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                className="block text-sm font-medium mb-2"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
                 Skill Tags
               </label>
               <div className="flex flex-wrap gap-2">
@@ -781,7 +890,10 @@ const AdminExercises = () => {
                 })}
               </div>
               {formData.skillTags.length > 0 && (
-                <p className="text-xs text-gray-500 mt-2">
+                <p
+                  className="text-xs mt-2"
+                  style={{ color: "rgba(212,180,131,0.55)" }}
+                >
                   Selected: {formData.skillTags.length} tag(s)
                 </p>
               )}
@@ -790,7 +902,10 @@ const AdminExercises = () => {
             {/* Type-specific fields */}
             {formData.question.type === "multiple_choice" && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   Options
                 </label>
                 {formData.question.options.map((option, index) => (
@@ -804,14 +919,19 @@ const AdminExercises = () => {
                       className="w-5 h-5"
                       title="Mark as correct"
                     />
-                    <span className="font-medium">{option.id}.</span>
+                    <span
+                      className="font-medium"
+                      style={{ color: "rgba(212,180,131,0.80)" }}
+                    >
+                      {option.id}.
+                    </span>
                     <input
                       type="text"
                       value={option.text}
                       onChange={(e) =>
                         updateOption(index, "text", e.target.value)
                       }
-                      className="flex-1 border rounded-lg px-3 py-2"
+                      className="admin-input flex-1"
                       placeholder={`Option ${option.id}`}
                     />
                     {formData.question.options.length > 2 && (
@@ -837,7 +957,10 @@ const AdminExercises = () => {
 
             {formData.question.type === "text_input" && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label
+                  className="block text-sm font-medium mb-1"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   Expected Answer
                 </label>
                 <input
@@ -852,7 +975,7 @@ const AdminExercises = () => {
                       },
                     })
                   }
-                  className="w-full border rounded-lg px-3 py-2"
+                  className="admin-input w-full"
                   placeholder="Enter expected answer"
                 />
               </div>
@@ -860,7 +983,10 @@ const AdminExercises = () => {
 
             {formData.question.type === "match_pairs" && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  className="block text-sm font-medium mb-2"
+                  style={{ color: "rgba(212,180,131,0.80)" }}
+                >
                   Pairs
                 </label>
                 {formData.question.pairs.map((pair, index) => (
@@ -871,17 +997,22 @@ const AdminExercises = () => {
                       onChange={(e) =>
                         updatePair(index, "left", e.target.value)
                       }
-                      className="flex-1 border rounded-lg px-3 py-2"
+                      className="admin-input flex-1"
                       placeholder="Left side"
                     />
-                    <span className="self-center text-gray-400">=</span>
+                    <span
+                      className="self-center"
+                      style={{ color: "rgba(212,180,131,0.55)" }}
+                    >
+                      =
+                    </span>
                     <input
                       type="text"
                       value={pair.right}
                       onChange={(e) =>
                         updatePair(index, "right", e.target.value)
                       }
-                      className="flex-1 border rounded-lg px-3 py-2"
+                      className="admin-input flex-1"
                       placeholder="Right side"
                     />
                     {formData.question.pairs.length > 1 && (
@@ -909,33 +1040,44 @@ const AdminExercises = () => {
 
         {/* Question Preview */}
         <div className="mb-6">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+          <h3
+            className="text-lg font-semibold mb-4"
+            style={{ color: "#f5e9c8" }}
+          >
             Question Preview
           </h3>
           {formData.question.prompt ? (
             <div>{renderQuestionPreview(formData.question)}</div>
           ) : (
-            <div className="text-center py-8 bg-gray-50 rounded-lg border-2 border-dashed border-gray-300">
-              <p className="text-gray-500">
+            <div
+              className="text-center py-8 rounded-lg"
+              style={{
+                background: "rgba(0,0,0,0.18)",
+                border: "2px dashed rgba(200,165,90,0.25)",
+              }}
+            >
+              <p style={{ color: "rgba(212,180,131,0.55)" }}>
                 Fill in the question details above to see a preview.
               </p>
             </div>
           )}
         </div>
 
-        {/* Footer */}
-        <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
+        <div
+          className="flex justify-end gap-3 pt-6"
+          style={{ borderTop: "1px solid rgba(200,165,90,0.18)" }}
+        >
           <button
             type="button"
             onClick={() => setActiveView("list")}
-            className="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+            className="admin-btn-secondary px-6 py-2"
           >
             Cancel
           </button>
           <button
             type="button"
             onClick={handleSubmit}
-            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+            className="admin-btn-success px-6 py-2"
           >
             Save Exercise
           </button>

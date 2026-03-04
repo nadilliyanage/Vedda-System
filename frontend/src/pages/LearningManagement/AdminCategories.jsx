@@ -1,24 +1,27 @@
-import { useState, useEffect } from 'react';
-import toast from 'react-hot-toast';
-import { FaEye, FaEdit, FaTrash, FaPlus, FaArrowLeft } from 'react-icons/fa';
-import { categoriesAPI } from '../../services/learningAPI';
-import ConfirmDialog from '../../components/common/ConfirmDialog';
-import LoadingScreen from '../../components/ui/LoadingScreen';
+import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
+import { FaEye, FaEdit, FaTrash, FaPlus, FaArrowLeft } from "react-icons/fa";
+import { categoriesAPI } from "../../services/learningAPI";
+import ConfirmDialog from "../../components/common/ConfirmDialog";
+import LoadingScreen from "../../components/ui/LoadingScreen";
 
 const AdminCategories = ({ onBack }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activeView, setActiveView] = useState('list'); // 'list', 'add', 'edit', 'view'
+  const [activeView, setActiveView] = useState("list"); // 'list', 'add', 'edit', 'view'
   const [currentCategory, setCurrentCategory] = useState(null);
-  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, categoryId: null });
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    categoryId: null,
+  });
   const [formData, setFormData] = useState({
-    id: '',
-    name: '',
-    description: ''
+    id: "",
+    name: "",
+    description: "",
   });
 
   useEffect(() => {
-    if (activeView === 'list') {
+    if (activeView === "list") {
       fetchCategories();
     }
   }, [activeView]);
@@ -29,7 +32,7 @@ const AdminCategories = ({ onBack }) => {
       const response = await categoriesAPI.getAll();
       setCategories(response.data);
     } catch (error) {
-      toast.error('Failed to fetch categories');
+      toast.error("Failed to fetch categories");
       console.error(error);
     } finally {
       setLoading(false);
@@ -38,45 +41,45 @@ const AdminCategories = ({ onBack }) => {
 
   const openAddForm = () => {
     setFormData({
-      id: '',
-      name: '',
-      description: ''
+      id: "",
+      name: "",
+      description: "",
     });
     setCurrentCategory(null);
-    setActiveView('add');
+    setActiveView("add");
   };
 
   const openEditForm = (category) => {
     setFormData({
       id: category.id,
       _id: category._id,
-      name: category.name || '',
-      description: category.description || ''
+      name: category.name || "",
+      description: category.description || "",
     });
     setCurrentCategory(category);
-    setActiveView('edit');
+    setActiveView("edit");
   };
 
   const openViewForm = (category) => {
     setCurrentCategory(category);
-    setActiveView('view');
+    setActiveView("view");
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     try {
-      if (activeView === 'add') {
+      if (activeView === "add") {
         await categoriesAPI.create(formData);
-        toast.success('Category created successfully');
-      } else if (activeView === 'edit') {
+        toast.success("Category created successfully");
+      } else if (activeView === "edit") {
         await categoriesAPI.update(formData._id, formData);
-        toast.success('Category updated successfully');
+        toast.success("Category updated successfully");
       }
 
-      setActiveView('list');
+      setActiveView("list");
     } catch (error) {
-      toast.error(error.response?.data?.error || 'Failed to save category');
+      toast.error(error.response?.data?.error || "Failed to save category");
       console.error(error);
     }
   };
@@ -84,22 +87,27 @@ const AdminCategories = ({ onBack }) => {
   const handleDelete = async () => {
     try {
       await categoriesAPI.delete(confirmDialog.categoryId);
-      toast.success('Category deleted successfully');
+      toast.success("Category deleted successfully");
       fetchCategories();
     } catch (error) {
-      toast.error('Failed to delete category');
+      toast.error("Failed to delete category");
       console.error(error);
     }
   };
 
   // List View
-  if (activeView === 'list') {
+  if (activeView === "list") {
     return (
       <div>
         <div className="mb-6">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors mb-4"
+            className="flex items-center gap-2 transition-colors mb-4"
+            style={{ color: "rgba(212,180,131,0.75)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#f5e9c8")}
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color = "rgba(212,180,131,0.75)")
+            }
           >
             <FaArrowLeft /> Back to Lessons
           </button>
@@ -107,61 +115,92 @@ const AdminCategories = ({ onBack }) => {
 
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">Manage Category</h1>
-            <p className="text-gray-600 mt-2">Organize lessons by categories</p>
+            <h1 className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
+              Manage Category
+            </h1>
+            <p className="mt-2" style={{ color: "rgba(212,180,131,0.70)" }}>
+              Organize lessons by categories
+            </p>
           </div>
           <button
             onClick={openAddForm}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+            className="admin-btn-primary px-4 py-2 flex items-center gap-2"
           >
             <FaPlus /> Add New
           </button>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md">
+        <div className="admin-glass">
           {loading ? (
             <LoadingScreen message="Loading categories..." />
           ) : categories.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 text-lg">No categories found</p>
-              <p className="text-gray-400 mt-2">Create your first category to get started</p>
+              <p
+                className="text-lg"
+                style={{ color: "rgba(212,180,131,0.70)" }}
+              >
+                No categories found
+              </p>
+              <p className="mt-2" style={{ color: "rgba(212,180,131,0.50)" }}>
+                Create your first category to get started
+              </p>
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="min-w-full">
-                <thead className="bg-gray-50">
+                <thead className="admin-table-head">
                   <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    <th className="admin-table-th">ID</th>
+                    <th className="admin-table-th">Name</th>
+                    <th className="admin-table-th">Description</th>
+                    <th className="admin-table-th">Actions</th>
                   </tr>
                 </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
+                <tbody>
                   {categories.map((category) => (
-                    <tr key={category.id}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{category.id}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{category.name}</td>
-                      <td className="px-6 py-4 text-sm text-gray-500 max-w-md truncate">{category.description}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <tr key={category.id} className="admin-table-row">
+                      <td
+                        className="admin-table-td whitespace-nowrap text-sm font-medium"
+                        style={{ color: "#f5e9c8" }}
+                      >
+                        {category.id}
+                      </td>
+                      <td
+                        className="admin-table-td whitespace-nowrap text-sm"
+                        style={{ color: "#f5e9c8" }}
+                      >
+                        {category.name}
+                      </td>
+                      <td
+                        className="admin-table-td text-sm max-w-md truncate"
+                        style={{ color: "rgba(212,180,131,0.70)" }}
+                      >
+                        {category.description}
+                      </td>
+                      <td className="admin-table-td whitespace-nowrap text-sm font-medium">
                         <div className="flex gap-2">
                           <button
                             onClick={() => openViewForm(category)}
-                            className="text-blue-600 hover:text-blue-900"
+                            className="text-blue-400 hover:text-blue-300"
                             title="View"
                           >
                             <FaEye />
                           </button>
                           <button
                             onClick={() => openEditForm(category)}
-                            className="text-green-600 hover:text-green-900"
+                            className="text-green-400 hover:text-green-300"
                             title="Edit"
                           >
                             <FaEdit />
                           </button>
                           <button
-                            onClick={() => setConfirmDialog({ isOpen: true, categoryId: category.id })}
-                            className="text-red-600 hover:text-red-900"
+                            onClick={() =>
+                              setConfirmDialog({
+                                isOpen: true,
+                                categoryId: category.id,
+                              })
+                            }
+                            className="text-red-400 hover:text-red-300"
                             title="Delete"
                           >
                             <FaTrash />
@@ -190,29 +229,44 @@ const AdminCategories = ({ onBack }) => {
   }
 
   // View Form
-  if (activeView === 'view' && currentCategory) {
+  if (activeView === "view" && currentCategory) {
     return (
       <div>
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">View Category</h1>
+          <h1 className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
+            View Category
+          </h1>
         </div>
 
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="admin-glass p-6">
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
-              <p className="text-gray-900">{currentCategory.name}</p>
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
+                Name
+              </label>
+              <p style={{ color: "#f5e9c8" }}>{currentCategory.name}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
-              <p className="text-gray-900">{currentCategory.description}</p>
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
+                Description
+              </label>
+              <p style={{ color: "#f5e9c8" }}>{currentCategory.description}</p>
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
+          <div
+            className="flex justify-end gap-3 mt-6 pt-6"
+            style={{ borderTop: "1px solid rgba(200,165,90,0.18)" }}
+          >
             <button
-              onClick={() => setActiveView('list')}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+              onClick={() => setActiveView("list")}
+              className="admin-btn-secondary px-4 py-2"
             >
               Back to List
             </button>
@@ -226,44 +280,65 @@ const AdminCategories = ({ onBack }) => {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">
-          {activeView === 'add' ? 'Add Category' : 'Edit Category'}
+        <h1 className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
+          {activeView === "add" ? "Add Category" : "Edit Category"}
         </h1>
       </div>
 
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="admin-glass p-6">
         <form onSubmit={handleSubmit}>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Category ID</label>
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
+                Category ID
+              </label>
               <input
                 type="text"
                 value={formData.id}
-                onChange={(e) => setFormData({ ...formData, id: e.target.value })}
-                className="w-full border rounded-lg px-3 py-2"
+                onChange={(e) =>
+                  setFormData({ ...formData, id: e.target.value })
+                }
+                className="admin-input w-full"
                 placeholder="e.g., cat1"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
+                Name
+              </label>
               <input
                 type="text"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="w-full border rounded-lg px-3 py-2"
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
+                className="admin-input w-full"
                 placeholder="Enter category name"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <label
+                className="block text-sm font-medium mb-1"
+                style={{ color: "rgba(212,180,131,0.80)" }}
+              >
+                Description
+              </label>
               <textarea
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="w-full border rounded-lg px-3 py-2"
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
+                className="admin-textarea w-full"
                 rows="5"
                 placeholder="Enter category description"
                 required
@@ -271,18 +346,18 @@ const AdminCategories = ({ onBack }) => {
             </div>
           </div>
 
-          <div className="flex justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
+          <div
+            className="flex justify-end gap-3 mt-6 pt-6"
+            style={{ borderTop: "1px solid rgba(200,165,90,0.18)" }}
+          >
             <button
               type="button"
-              onClick={() => setActiveView('list')}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+              onClick={() => setActiveView("list")}
+              className="admin-btn-secondary px-4 py-2"
             >
               Cancel
             </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-            >
+            <button type="submit" className="admin-btn-primary px-4 py-2">
               Submit
             </button>
           </div>

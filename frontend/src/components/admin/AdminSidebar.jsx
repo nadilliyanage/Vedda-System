@@ -4,7 +4,9 @@ import {
   HiUsers,
   HiCog,
   HiBookOpen,
+  HiTranslate,
   HiCollection,
+  HiChatAlt,
 } from "react-icons/hi";
 import { useAuth } from "../../contexts/AuthContext";
 import LoadingScreen from "../ui/LoadingScreen";
@@ -33,7 +35,7 @@ const AdminSidebar = () => {
     },
     {
       path: "/admin/words",
-      icon: HiBookOpen,
+      icon: HiTranslate,
       label: "Word Management",
       roles: ["admin", "elder"],
     },
@@ -51,7 +53,7 @@ const AdminSidebar = () => {
     },
     {
       path: "/admin/feedback",
-      icon: HiBookOpen,
+      icon: HiChatAlt,
       label: "Feedback",
       roles: ["admin", "elder"],
     },
@@ -71,13 +73,27 @@ const AdminSidebar = () => {
   };
 
   return (
-    <div className="w-64 bg-white h-screen fixed left-0 top-16 border-r border-gray-200 overflow-y-auto">
+    <div
+      className="w-64 h-screen fixed left-0 top-16 overflow-y-auto"
+      style={{
+        background: "rgba(16, 12, 4, 0.97)",
+        backdropFilter: "blur(20px)",
+        WebkitBackdropFilter: "blur(20px)",
+        borderRight: "1px solid rgba(200, 165, 90, 0.18)",
+      }}
+    >
       <div className="p-6">
-        <h2 className="text-lg font-semibold text-gray-800 mb-6">
+        <h2
+          className="text-sm font-bold mb-6 tracking-widest uppercase"
+          style={{
+            color: "rgba(212, 180, 131, 0.55)",
+            letterSpacing: "0.14em",
+          }}
+        >
           Admin Panel
         </h2>
 
-        <nav className="space-y-2">
+        <nav className="space-y-1">
           {menuItems
             .filter((item) => item.roles.includes(user?.role))
             .map((item) => {
@@ -88,16 +104,38 @@ const AdminSidebar = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  className={`flex items-center gap-3 py-3 rounded-lg transition-all duration-200 ${
-                    active
-                      ? "bg-blue-50 text-blue-600 font-medium"
-                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                  }`}
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200"
+                  style={{
+                    background: active
+                      ? "rgba(154, 111, 42, 0.28)"
+                      : "transparent",
+                    color: active ? "#d4b483" : "rgba(212, 180, 131, 0.60)",
+                    fontWeight: active ? "600" : "400",
+                    borderLeft: active
+                      ? "3px solid rgba(200, 165, 90, 0.70)"
+                      : "3px solid transparent",
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!active) {
+                      e.currentTarget.style.background =
+                        "rgba(255,248,230,0.06)";
+                      e.currentTarget.style.color = "rgba(212,180,131,0.90)";
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!active) {
+                      e.currentTarget.style.background = "transparent";
+                      e.currentTarget.style.color = "rgba(212,180,131,0.60)";
+                    }
+                  }}
                 >
                   <Icon
-                    className={`w-5 h-5 ${active ? "text-blue-600" : "text-gray-400"}`}
+                    className="w-4 h-4 flex-shrink-0"
+                    style={{
+                      color: active ? "#d4b483" : "rgba(212,180,131,0.45)",
+                    }}
                   />
-                  <span>{item.label}</span>
+                  <span className="text-sm">{item.label}</span>
                 </Link>
               );
             })}

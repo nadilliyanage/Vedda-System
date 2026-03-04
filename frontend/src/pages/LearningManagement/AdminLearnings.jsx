@@ -48,10 +48,10 @@ const AdminLearnings = () => {
     return (
       <div>
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">
+          <h1 className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
             Learning Management
           </h1>
-          <p className="text-gray-600 mt-2">
+          <p className="mt-2" style={{ color: "rgba(212,180,131,0.70)" }}>
             Manage lessons, exercises, and challenges for the Vedda System
           </p>
         </div>
@@ -76,8 +76,6 @@ const AdminLearnings = () => {
             );
           })}
         </div>
-
-        
       </div>
     );
   }
@@ -88,12 +86,19 @@ const AdminLearnings = () => {
       <div className="mb-6">
         <button
           onClick={handleBackToMain}
-          className="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors mb-4"
+          className="flex items-center gap-2 transition-colors mb-4"
+          style={{ color: "rgba(212,180,131,0.70)" }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.color = "#d4b483";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.color = "rgba(212,180,131,0.70)";
+          }}
         >
           <FaArrowLeft /> Back to Learning Management
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-800">
+        <h1 className="text-3xl font-bold" style={{ color: "#f5e9c8" }}>
           {activeView === "lessons" && "Manage Lessons"}
           {activeView === "exercises" && "Manage Exercises"}
           {activeView === "challenges" && "Manage Challenges"}

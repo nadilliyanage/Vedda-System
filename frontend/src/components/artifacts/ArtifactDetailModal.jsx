@@ -1,6 +1,14 @@
 import PropTypes from "prop-types";
 import { useState, useEffect } from "react";
-import { FaTimes, FaCalendarAlt, FaRuler, FaLeaf, FaMapMarkerAlt, FaTag, FaEdit } from "react-icons/fa";
+import {
+  FaTimes,
+  FaCalendarAlt,
+  FaRuler,
+  FaLeaf,
+  FaMapMarkerAlt,
+  FaTag,
+  FaEdit,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { getArtifacts } from "../../services/artifactService";
 import FeedbackFormModal from "./FeedbackFormModal";
@@ -39,26 +47,49 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
       if (response.success) {
         // Filter out the current artifact and get max 3 related
         const related = (response.artifacts || [])
-          .filter(a => a._id !== artifact._id)
+          .filter((a) => a._id !== artifact._id)
           .slice(0, 3);
         setRelatedArtifacts(related);
       }
     } catch (error) {
-      console.error('Error fetching related artifacts:', error);
+      console.error("Error fetching related artifacts:", error);
     }
   };
 
   if (!artifact) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto"
+      style={{ background: "rgba(0,0,0,0.72)", backdropFilter: "blur(6px)" }}
+    >
+      <div
+        className="rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto relative"
+        style={{
+          background: "rgba(18,12,3,0.97)",
+          border: "1px solid rgba(200,165,90,0.22)",
+          boxShadow: "0 24px 80px rgba(0,0,0,0.70)",
+        }}
+      >
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors"
+          className="absolute top-4 right-4 z-10 rounded-full p-2 transition-colors"
+          style={{
+            background: "rgba(255,248,230,0.08)",
+            border: "1px solid rgba(200,165,90,0.22)",
+            color: "rgba(212,180,131,0.70)",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "rgba(200,165,90,0.18)";
+            e.currentTarget.style.color = "#f5e9c8";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "rgba(255,248,230,0.08)";
+            e.currentTarget.style.color = "rgba(212,180,131,0.70)";
+          }}
         >
-          <FaTimes className="text-gray-600 text-xl" />
+          <FaTimes className="text-xl" />
         </button>
 
         {/* Image Header */}
@@ -68,7 +99,7 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
           if (artifact.imageUrl) allImages.push(artifact.imageUrl);
           if (artifact.images?.length > 0) {
             artifact.images.forEach((img) => {
-              const url = typeof img === 'string' ? img : img.url;
+              const url = typeof img === "string" ? img : img.url;
               if (url && url !== artifact.imageUrl) allImages.push(url);
             });
           }
@@ -82,11 +113,27 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
                   alt={artifact.name}
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
-                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
+                <div
+                  className="absolute bottom-0 left-0 right-0 p-6"
+                  style={{
+                    background:
+                      "linear-gradient(to top, rgba(10,6,1,0.92) 0%, transparent 100%)",
+                  }}
+                >
+                  <h2
+                    className="text-3xl md:text-4xl font-bold mb-2"
+                    style={{ color: "#f5e9c8" }}
+                  >
                     {artifact.name}
                   </h2>
-                  <span className="inline-block bg-purple-500 text-white px-3 py-1 rounded-full text-sm font-medium capitalize">
+                  <span
+                    className="inline-block px-3 py-1 rounded-full text-sm font-medium capitalize"
+                    style={{
+                      background: "rgba(200,165,90,0.22)",
+                      color: "#d4b483",
+                      border: "1px solid rgba(200,165,90,0.35)",
+                    }}
+                  >
                     {artifact.category}
                   </span>
                 </div>
@@ -94,16 +141,28 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
 
               {/* Thumbnail strip — only show if more than 1 image */}
               {allImages.length > 1 && (
-                <div className="flex gap-2 p-3 bg-gray-50 overflow-x-auto">
+                <div
+                  className="flex gap-2 p-3 overflow-x-auto"
+                  style={{
+                    background: "rgba(0,0,0,0.25)",
+                    borderBottom: "1px solid rgba(200,165,90,0.15)",
+                  }}
+                >
                   {allImages.map((url, i) => (
                     <button
                       key={i}
                       onClick={() => setSelectedImage(url)}
-                      className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                        (activeImage === url)
-                          ? 'border-purple-500 ring-2 ring-purple-300'
-                          : 'border-gray-200 hover:border-gray-400'
-                      }`}
+                      className="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden transition-all"
+                      style={{
+                        border:
+                          activeImage === url
+                            ? "2px solid rgba(200,165,90,0.80)"
+                            : "2px solid rgba(200,165,90,0.20)",
+                        boxShadow:
+                          activeImage === url
+                            ? "0 0 0 2px rgba(200,165,90,0.20)"
+                            : "none",
+                      }}
                     >
                       <img
                         src={url}
@@ -123,10 +182,27 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
           {/* Quick Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
             {artifact.location && (
-              <div className="bg-purple-50 rounded-lg p-4">
-                <FaMapMarkerAlt className="text-purple-600 text-2xl mb-2" />
-                <p className="text-xs text-gray-600 mb-1">Location</p>
-                <p className="font-semibold text-gray-800 text-sm">
+              <div
+                className="rounded-lg p-4"
+                style={{
+                  background: "rgba(200,165,90,0.08)",
+                  border: "1px solid rgba(200,165,90,0.18)",
+                }}
+              >
+                <FaMapMarkerAlt
+                  className="text-2xl mb-2"
+                  style={{ color: "rgba(212,180,131,0.70)" }}
+                />
+                <p
+                  className="text-xs mb-1"
+                  style={{ color: "rgba(212,180,131,0.55)" }}
+                >
+                  Location
+                </p>
+                <p
+                  className="font-semibold text-sm"
+                  style={{ color: "#f5e9c8" }}
+                >
                   {artifact.location}
                 </p>
               </div>
@@ -135,21 +211,43 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
 
           {/* Description */}
           <section className="mb-6">
-            <h3 className="text-2xl font-bold text-gray-800 mb-3">About</h3>
-            <p className="text-gray-700 leading-relaxed">{artifact.description}</p>
+            <h3
+              className="text-2xl font-bold mb-3"
+              style={{ color: "#f5e9c8" }}
+            >
+              About
+            </h3>
+            <p
+              className="leading-relaxed"
+              style={{ color: "rgba(212,180,131,0.80)" }}
+            >
+              {artifact.description}
+            </p>
           </section>
 
           {/* Tags */}
           {artifact.tags && artifact.tags.length > 0 && (
             <section className="mb-6">
-              <h3 className="text-2xl font-bold text-gray-800 mb-3">
-                <FaTag className="inline mr-2" />Tags
+              <h3
+                className="text-2xl font-bold mb-3"
+                style={{ color: "#f5e9c8" }}
+              >
+                <FaTag
+                  className="inline mr-2"
+                  style={{ color: "rgba(212,180,131,0.65)" }}
+                />
+                Tags
               </h3>
               <div className="flex flex-wrap gap-2">
                 {artifact.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="bg-blue-100 text-blue-800 px-4 py-2 rounded-full text-sm font-medium"
+                    className="px-4 py-2 rounded-full text-sm font-medium"
+                    style={{
+                      background: "rgba(255,248,230,0.07)",
+                      color: "rgba(212,180,131,0.85)",
+                      border: "1px solid rgba(200,165,90,0.22)",
+                    }}
                   >
                     {tag}
                   </span>
@@ -162,7 +260,22 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
           <section className="mb-6">
             <button
               onClick={handleSuggestEdit}
-              className="w-full px-4 py-3 border border-1 border-gray-200 hover:border-gray-400 rounded-lg transition-all font-medium flex items-center justify-center gap-2 shadow-md hover:shadow-lg"
+              className="w-full px-4 py-3 rounded-lg transition-all font-medium flex items-center justify-center gap-2"
+              style={{
+                background: "rgba(255,248,230,0.05)",
+                border: "1px solid rgba(200,165,90,0.28)",
+                color: "rgba(212,180,131,0.80)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "rgba(200,165,90,0.12)";
+                e.currentTarget.style.color = "#f5e9c8";
+                e.currentTarget.style.borderColor = "rgba(200,165,90,0.55)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "rgba(255,248,230,0.05)";
+                e.currentTarget.style.color = "rgba(212,180,131,0.80)";
+                e.currentTarget.style.borderColor = "rgba(200,165,90,0.28)";
+              }}
             >
               <FaEdit />
               Suggest an Edit
@@ -172,27 +285,51 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
           {/* Related Artifacts */}
           {relatedArtifacts.length > 0 && (
             <section className="mb-6">
-              <h3 className="text-2xl font-bold text-gray-800 mb-4">
+              <h3
+                className="text-2xl font-bold mb-4"
+                style={{ color: "#f5e9c8" }}
+              >
                 Related Artifacts
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {relatedArtifacts.map((relatedArtifact) => (
                   <div
                     key={relatedArtifact._id}
-                    onClick={() => {
-                      onArtifactClick(relatedArtifact);
+                    onClick={() => onArtifactClick(relatedArtifact)}
+                    className="rounded-lg p-3 cursor-pointer transition-all"
+                    style={{
+                      background: "rgba(255,248,230,0.05)",
+                      border: "1px solid rgba(200,165,90,0.18)",
                     }}
-                    className="bg-white border-2 border-gray-200 rounded-lg p-4 cursor-pointer hover:border-purple-500 hover:shadow-md transition-all"
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background =
+                        "rgba(200,165,90,0.10)";
+                      e.currentTarget.style.borderColor =
+                        "rgba(200,165,90,0.40)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background =
+                        "rgba(255,248,230,0.05)";
+                      e.currentTarget.style.borderColor =
+                        "rgba(200,165,90,0.18)";
+                    }}
                   >
                     <img
                       src={relatedArtifact.imageUrl}
                       alt={relatedArtifact.name}
                       className="w-full h-32 object-cover rounded-lg mb-3"
+                      style={{ border: "1px solid rgba(200,165,90,0.15)" }}
                     />
-                    <h4 className="font-bold text-gray-800 mb-1 text-sm">
+                    <h4
+                      className="font-bold mb-1 text-sm"
+                      style={{ color: "#f5e9c8" }}
+                    >
                       {relatedArtifact.name}
                     </h4>
-                    <p className="text-xs text-purple-600 capitalize">
+                    <p
+                      className="text-xs capitalize"
+                      style={{ color: "rgba(212,180,131,0.60)" }}
+                    >
                       {relatedArtifact.category}
                     </p>
                   </div>
