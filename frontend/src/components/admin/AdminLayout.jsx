@@ -38,8 +38,14 @@ const AdminLayout = () => {
           backgroundAttachment: "fixed",
         }}
       >
-        <div className="absolute inset-0" style={{ background: "rgba(10,7,2,0.62)" }} />
-        <div className="text-xl relative z-10" style={{ color: "rgba(212,180,131,0.70)" }}>
+        <div
+          className="absolute inset-0"
+          style={{ background: "rgba(10,7,2,0.62)" }}
+        />
+        <div
+          className="text-xl relative z-10"
+          style={{ color: "rgba(212,180,131,0.70)" }}
+        >
           Loading...
         </div>
       </div>
@@ -61,15 +67,22 @@ const AdminLayout = () => {
         backgroundAttachment: "fixed",
       }}
     >
-      <div className="absolute inset-0" style={{ background: "rgba(10,7,2,0.62)", pointerEvents: "none", zIndex: 0 }} />
+      <div
+        className="absolute inset-0"
+        style={{
+          background: "rgba(10,7,2,0.62)",
+          pointerEvents: "none",
+          zIndex: 0,
+        }}
+      />
       <div className="relative z-10">
-      <Header />
-      <div className="pt-15">
-        <AdminSidebar />
-        <div className="ml-64 p-6">
-          <Outlet />
+        <Header />
+        <div className="pt-15">
+          <AdminSidebar />
+          <div className="ml-64 p-6">
+            <Outlet />
+          </div>
         </div>
-      </div>
       </div>
     </div>
   );
