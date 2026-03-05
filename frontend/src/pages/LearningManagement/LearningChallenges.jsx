@@ -403,7 +403,7 @@ const LearningChallenges = ({ onBack }) => {
         </p>
 
         {/* User Stats Bar */}
-        <div className="flex items-center justify-center gap-4 flex-wrap pb-2">
+        {/* <div className="flex items-center justify-center gap-4 flex-wrap pb-2">
           <div
             className="flex items-center gap-2 px-4 py-2 rounded-full shadow"
             style={{ background: 'rgba(251,146,60,0.18)', border: '1px solid rgba(251,146,60,0.40)' }}
@@ -425,7 +425,7 @@ const LearningChallenges = ({ onBack }) => {
             <FaGem style={{ color: '#3b82f6', fontSize: '1.1rem' }} />
             <span className="font-bold" style={{ color: '#1d4ed8' }}>{userProgress.totalCoins} coins</span>
           </div>
-        </div>
+        </div> */}
 
         <div
           style={{
@@ -522,9 +522,18 @@ const LearningChallenges = ({ onBack }) => {
           {/* Center - Challenge Path */}
           <div className="lg:col-span-2">
             {/* Path Container */}
-            <div className="relative">
+            <div
+              className="relative rounded-2xl px-6 py-8"
+              style={{
+                background: 'rgba(255,255,255,0.55)',
+                backdropFilter: 'blur(14px)',
+                WebkitBackdropFilter: 'blur(14px)',
+                border: '1.5px solid rgba(180,160,220,0.30)',
+                boxShadow: '0 6px 32px rgba(80,60,160,0.10)',
+              }}
+            >
               {/* Vertical Path Line */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-300 via-purple-300 to-green-300 opacity-30" />
+              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-500 via-purple-500 to-green-500 opacity-70" />
 
               {/* Challenges */}
               <div className="relative">
