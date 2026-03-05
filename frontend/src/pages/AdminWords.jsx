@@ -855,7 +855,8 @@ const AdminWords = () => {
               placeholder="Search words (Vedda, Sinhala, English, Type, Example)..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="admin-input w-full pl-10"
+              className="admin-input w-full"
+              style={{ paddingLeft: "2.5rem" }}
             />
             <svg
               className="absolute left-3 top-3 h-5 w-5"
