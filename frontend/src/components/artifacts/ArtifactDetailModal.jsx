@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { FaTimes, FaCalendarAlt, FaRuler, FaLeaf, FaMapMarkerAlt, FaTag, FaEdit } from "react-icons/fa";
+import { FaTimes, FaMapMarkerAlt, FaTag, FaEdit, FaChevronLeft, FaChevronRight, FaExpand } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { getArtifacts } from "../../services/artifactService";
 import FeedbackFormModal from "./FeedbackFormModal";
@@ -12,8 +12,41 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
   const [relatedArtifacts, setRelatedArtifacts] = useState([]);
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [lightboxIndex, setLightboxIndex] = useState(null); // null = closed
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Build full image list (memoised inline, declared early so hooks beneath can use it)
+  const allImages = (() => {
+    const imgs = [];
+    if (artifact?.imageUrl) imgs.push(artifact.imageUrl);
+    if (artifact?.images?.length > 0) {
+      artifact.images.forEach((img) => {
+        const url = typeof img === "string" ? img : img.url;
+        if (url && url !== artifact.imageUrl) imgs.push(url);
+      });
+    }
+    return imgs;
+  })();
+
+  const openLightbox = useCallback((index) => setLightboxIndex(index), []);
+  const closeLightbox = useCallback(() => setLightboxIndex(null), []);
+  const goPrev = useCallback(() =>
+    setLightboxIndex((i) => (i - 1 + allImages.length) % allImages.length), [allImages.length]);
+  const goNext = useCallback(() =>
+    setLightboxIndex((i) => (i + 1) % allImages.length), [allImages.length]);
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    if (lightboxIndex === null) return;
+    const handler = (e) => {
+      if (e.key === "ArrowLeft")  goPrev();
+      if (e.key === "ArrowRight") goNext();
+      if (e.key === "Escape")     closeLightbox();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [lightboxIndex, goPrev, goNext, closeLightbox]);
 
   const handleSuggestEdit = () => {
     if (!isAuthenticated) {
@@ -38,7 +71,6 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
         limit: 3,
       });
       if (response.success) {
-        // Filter out the current artifact and get max 3 related
         const related = (response.artifacts || [])
           .filter(a => a._id !== artifact._id)
           .slice(0, 3);
@@ -86,24 +118,36 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
       >
 
 
+
         {/* Image Header */}
         {(() => {
-          const allImages = [];
-          if (artifact.imageUrl) allImages.push(artifact.imageUrl);
-          if (artifact.images?.length > 0) {
-            artifact.images.forEach((img) => {
-              const url = typeof img === "string" ? img : img.url;
-              if (url && url !== artifact.imageUrl) allImages.push(url);
-            });
-          }
           const activeImage = selectedImage || allImages[0];
+          const activeIndex = allImages.indexOf(activeImage);
 
           return (
             <>
-              <div className="relative h-64 md:h-80 overflow-hidden rounded-t-2xl">
-                <img src={activeImage} alt={artifact.name} className="w-full h-full object-cover" />
+              {/* Main image — click to open fullscreen lightbox */}
+              <div
+                className="relative overflow-hidden rounded-t-2xl cursor-zoom-in group"
+                style={{ background: "#1c1409", minHeight: "18rem", maxHeight: "26rem" }}
+                onClick={() => openLightbox(activeIndex >= 0 ? activeIndex : 0)}
+              >
+                <img
+                  src={activeImage}
+                  alt={artifact.name}
+                  className="w-full h-full object-contain"
+                  style={{ maxHeight: "26rem", display: "block", margin: "0 auto" }}
+                />
                 {/* Gradient overlay */}
-                <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(28,20,8,0.82) 0%, rgba(28,20,8,0.20) 55%, transparent 100%)" }} />
+                <div className="absolute inset-0 pointer-events-none"
+                  style={{ background: "linear-gradient(to top, rgba(28,20,8,0.82) 0%, rgba(28,20,8,0.10) 50%, transparent 100%)" }} />
+                {/* Expand hint icon */}
+                <div
+                  className="absolute top-3 right-3 rounded-full p-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{ background: "rgba(28,20,8,0.65)", border: "1px solid rgba(200,165,90,0.35)", backdropFilter: "blur(6px)" }}
+                >
+                  <FaExpand className="text-sm text-amber-100" />
+                </div>
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 font-serif" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.5)" }}>
                     {artifact.name}
@@ -138,6 +182,7 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
             </>
           );
         })()}
+
 
         {/* Content */}
         <div className="p-6 md:p-8">
@@ -248,8 +293,6 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
         </div>
 
       </div>
-      {/* Portal FeedbackFormModal to document.body so backdropFilter on the
-          parent overlay cannot break its position:fixed behaviour */}
       {showFeedbackForm && createPortal(
         <FeedbackFormModal
           isOpen={showFeedbackForm}
@@ -258,6 +301,73 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
         />,
         document.body
       )}
+
+      {/* ── Fullscreen Lightbox ── */}
+      {lightboxIndex !== null && createPortal(
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center"
+          style={{ background: "rgba(8,6,2,0.50)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
+          onClick={closeLightbox}
+        >
+          {/* Image */}
+          <img
+            src={allImages[lightboxIndex]}
+            alt={`${artifact.name} – image ${lightboxIndex + 1}`}
+            className="max-w-full max-h-full rounded-xl shadow-2xl"
+            style={{ maxWidth: "90vw", maxHeight: "90vh", objectFit: "contain", userSelect: "none" }}
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          {/* Image counter */}
+          {allImages.length > 1 && (
+            <div
+              className="absolute bottom-6 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-sm font-semibold"
+              style={{ background: "rgba(28,20,8,0.72)", border: "1px solid rgba(200,165,90,0.35)", color: "rgba(255,248,220,0.90)", backdropFilter: "blur(8px)" }}
+            >
+              {lightboxIndex + 1} / {allImages.length}
+            </div>
+          )}
+
+          {/* Close button */}
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 rounded-full p-2.5 transition-colors"
+            style={{ background: "rgba(28,20,8,0.70)", border: "1px solid rgba(200,165,90,0.35)", color: "rgba(255,248,230,0.90)", backdropFilter: "blur(8px)" }}
+            onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(200,165,90,0.28)")}
+            onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(28,20,8,0.70)")}
+          >
+            <FaTimes className="text-lg" />
+          </button>
+
+          {/* Prev button */}
+          {allImages.length > 1 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); goPrev(); }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full p-3 transition-all"
+              style={{ background: "rgba(28,20,8,0.70)", border: "1px solid rgba(200,165,90,0.35)", color: "rgba(255,248,230,0.90)", backdropFilter: "blur(8px)" }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(200,165,90,0.28)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(28,20,8,0.70)")}
+            >
+              <FaChevronLeft className="text-xl" />
+            </button>
+          )}
+
+          {/* Next button */}
+          {allImages.length > 1 && (
+            <button
+              onClick={(e) => { e.stopPropagation(); goNext(); }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full p-3 transition-all"
+              style={{ background: "rgba(28,20,8,0.70)", border: "1px solid rgba(200,165,90,0.35)", color: "rgba(255,248,230,0.90)", backdropFilter: "blur(8px)" }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(200,165,90,0.28)")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "rgba(28,20,8,0.70)")}
+            >
+              <FaChevronRight className="text-xl" />
+            </button>
+          )}
+        </div>,
+        document.body
+      )}
+
     </div>
     </>
   );
