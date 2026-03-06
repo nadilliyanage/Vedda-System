@@ -26,13 +26,11 @@ export const modelAPI = {
    * @param {boolean} params.hasVeddaIpa - Filter only words with vedda_ipa
    */
   getWords: (params = {}) => {
-    const { limit = 100, skip = 0, hasVeddaIpa = true } = params;
+    const { limit = 100, skip = 0, hasVeddaIpa = true, english_word } = params;
+    const queryParams = { limit, skip, has_vedda_ipa: hasVeddaIpa };
+    if (english_word) queryParams.english_word = english_word;
     return axios.get(`${API_BASE}/api/3d-models/words/ipa-only`, {
-      params: {
-        limit,
-        skip,
-        has_vedda_ipa: hasVeddaIpa
-      }
+      params: queryParams
     });
   },
 

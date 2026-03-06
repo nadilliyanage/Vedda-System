@@ -244,7 +244,7 @@ class ModelService:
             if has_vedda_ipa:
                 query['vedda_ipa'] = {'$exists': True, '$ne': ''}
             if english_word:
-                query['english_word'] = {'$regex': f'^{english_word}$', '$options': 'i'}
+                query['english_word'] = {'$regex': english_word, '$options': 'i'}
             
             # Get total count
             total = collection.count_documents(query)
