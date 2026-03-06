@@ -360,42 +360,83 @@ const ProfilePage = () => {
                       color: "rgba(245,233,200,0.78)",
                     }}
                   >
-                    {item.suggestedChanges &&
-                    Object.keys(item.suggestedChanges).length > 0 ? (
-                      <ul className="list-disc list-inside space-y-1">
-                        {Object.entries(item.suggestedChanges).map(
-                          ([key, value]) => {
-                            if (!value) return null;
-                            const displayValue = Array.isArray(value)
-                              ? value.join(", ")
-                              : value;
-                            return (
-                              <li key={key} className="truncate">
-                                <span className="font-medium capitalize">
-                                  {key}:
-                                </span>{" "}
-                                {displayValue}
-                              </li>
-                            );
-                          },
-                        )}
-                      </ul>
-                    ) : item.suggestedImages &&
-                      item.suggestedImages.length > 0 ? (
-                      <p
-                        className="italic"
-                        style={{ color: "rgba(212,180,131,0.55)" }}
-                      >
-                        Suggested {item.suggestedImages.length} image(s).
-                      </p>
-                    ) : (
-                      <p
-                        className="italic"
-                        style={{ color: "rgba(212,180,131,0.55)" }}
-                      >
-                        No details provided.
-                      </p>
-                    )}
+                    {(() => {
+                      const hasChanges =
+                        item.suggestedChanges &&
+                        Object.values(item.suggestedChanges).some((v) =>
+                          Array.isArray(v) ? v.length > 0 : !!v,
+                        );
+                      const hasImages =
+                        item.suggestedImages &&
+                        item.suggestedImages.length > 0;
+
+                      if (!hasChanges && !hasImages) {
+                        return (
+                          <p
+                            className="italic"
+                            style={{ color: "rgba(212,180,131,0.55)" }}
+                          >
+                            No details provided.
+                          </p>
+                        );
+                      }
+
+                      return (
+                        <>
+                          {hasChanges && (
+                            <ul className="list-disc list-inside space-y-1">
+                              {Object.entries(item.suggestedChanges).map(
+                                ([key, value]) => {
+                                  if (Array.isArray(value)
+                                    ? value.length === 0
+                                    : !value) return null;
+                                  const displayValue = Array.isArray(value)
+                                    ? value.join(", ")
+                                    : value;
+                                  return (
+                                    <li key={key} className="truncate">
+                                      <span className="font-medium capitalize">
+                                        {key}:
+                                      </span>{" "}
+                                      {displayValue}
+                                    </li>
+                                  );
+                                },
+                              )}
+                            </ul>
+                          )}
+                          {hasImages && (
+                            <div className={hasChanges ? "mt-2" : ""}>
+                              <p
+                                className="mb-1.5 text-xs font-medium"
+                                style={{ color: "rgba(212,180,131,0.55)" }}
+                              >
+                                Suggested image{item.suggestedImages.length > 1 ? "s" : ""}
+                              </p>
+                              <div className="flex flex-wrap gap-2">
+                                {item.suggestedImages.map((img, i) => (
+                                  <a
+                                    key={i}
+                                    href={img.url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    <img
+                                      src={img.url}
+                                      alt={`Suggested ${i + 1}`}
+                                      className="h-20 w-20 object-cover rounded-lg transition-opacity hover:opacity-80"
+                                      style={{
+                                        border: "1px solid rgba(200,165,90,0.25)",
+                                      }}
+                                    />
+                                  </a>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      );
+                    })()}
                   </div>
 
                   {item.status !== "pending" && item.reviewNote && (
