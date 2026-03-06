@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
-import { FaEye, FaEdit, FaTrash, FaPlus, FaList } from "react-icons/fa";
+import { FaEye, FaEdit, FaTrash, FaPlus, FaList, FaSearch, FaTimes } from "react-icons/fa";
 import AdminCategories from "./AdminCategories";
 import TextEditor from "./TextEditor";
 import { lessonsAPI, categoriesAPI } from "../../services/learningAPI";
@@ -17,6 +17,8 @@ const AdminLessons = () => {
     isOpen: false,
     lessonId: null,
   });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
   const [formData, setFormData] = useState({
     id: "",
     _id: "",
@@ -140,6 +142,26 @@ const AdminLessons = () => {
     return category ? category.name : "N/A";
   };
 
+  const filteredLessons = useMemo(() => {
+    return lessons.filter((lesson) => {
+      const matchesSearch =
+        !searchTerm ||
+        lesson.topic?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        lesson.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        lesson.id?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory =
+        !filterCategory || lesson.categoryId === filterCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [lessons, searchTerm, filterCategory]);
+
+  const clearFilters = () => {
+    setSearchTerm("");
+    setFilterCategory("");
+  };
+
+  const hasActiveFilters = searchTerm || filterCategory;
+
   // Categories Management View
   if (activeView === "categories") {
     return <AdminCategories onBack={() => setActiveView("list")} />;
@@ -176,19 +198,70 @@ const AdminLessons = () => {
           </div>
         </div>
 
+        {/* Filter Bar */}
+        <div className="admin-glass p-4 mb-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="relative flex-1 min-w-[200px] max-w-sm">
+              <FaSearch
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-sm"
+                style={{ color: "rgba(212,180,131,0.45)" }}
+              />
+              <input
+                type="text"
+                placeholder="Search by topic, description, or ID..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="admin-input py-2 w-full text-sm"
+                style={{ paddingLeft: "2.25rem" }}
+              />
+            </div>
+            <select
+              value={filterCategory}
+              onChange={(e) => setFilterCategory(e.target.value)}
+              className="admin-input py-2 text-sm min-w-[160px]"
+            >
+              <option value="">All Categories</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg transition-colors"
+                style={{ color: "#f87171" }}
+              >
+                <FaTimes /> Clear
+              </button>
+            )}
+            {hasActiveFilters && (
+              <span
+                className="text-xs ml-auto"
+                style={{ color: "rgba(212,180,131,0.55)" }}
+              >
+                {filteredLessons.length} of {lessons.length} lessons
+              </span>
+            )}
+          </div>
+        </div>
+
         <div className="admin-glass">
           {loading ? (
             <LoadingScreen message="Loading lessons..." />
-          ) : lessons.length === 0 ? (
+          ) : filteredLessons.length === 0 ? (
             <div className="text-center py-12">
               <p
                 className="text-lg"
                 style={{ color: "rgba(212,180,131,0.70)" }}
               >
-                No lessons found
+                {hasActiveFilters ? "No lessons match your filters" : "No lessons found"}
               </p>
               <p className="mt-2" style={{ color: "rgba(212,180,131,0.50)" }}>
-                Create your first lesson to get started
+                {hasActiveFilters
+                  ? "Try adjusting your search or filter criteria"
+                  : "Create your first lesson to get started"}
               </p>
             </div>
           ) : (
@@ -205,7 +278,7 @@ const AdminLessons = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {lessons.map((lesson) => (
+                  {filteredLessons.map((lesson) => (
                     <tr key={lesson.id} className="admin-table-row">
                       <td
                         className="admin-table-td whitespace-nowrap text-sm font-medium"

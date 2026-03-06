@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
-import { FaEye, FaEdit, FaTrash, FaPlus, FaSave } from "react-icons/fa";
+import { FaEye, FaEdit, FaTrash, FaPlus, FaSave, FaSearch, FaTimes } from "react-icons/fa";
 import {
   challengesAPI,
   lessonsAPI,
@@ -21,6 +21,8 @@ const AdminChallenges = () => {
     isOpen: false,
     challengeId: null,
   });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterType, setFilterType] = useState("");
 
   // Top-level form data
   const [formData, setFormData] = useState({
@@ -264,6 +266,26 @@ const AdminChallenges = () => {
     return lesson ? lesson.topic : "N/A";
   };
 
+  const filteredChallenges = useMemo(() => {
+    return challenges.filter((challenge) => {
+      const matchesSearch =
+        !searchTerm ||
+        challenge.id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        challenge.question?.prompt?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        String(challenge.challengeNumber)?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesType =
+        !filterType || challenge.question?.type === filterType;
+      return matchesSearch && matchesType;
+    });
+  }, [challenges, searchTerm, filterType]);
+
+  const clearFilters = () => {
+    setSearchTerm("");
+    setFilterType("");
+  };
+
+  const hasActiveFilters = searchTerm || filterType;
+
   const addOption = () => {
     const nextId = String.fromCharCode(65 + formData.question.options.length); // A, B, C, D...
     setFormData({
@@ -459,19 +481,68 @@ const AdminChallenges = () => {
           </button>
         </div>
 
+        {/* Filter Bar */}
+        <div className="admin-glass p-4 mb-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="relative flex-1 min-w-[200px] max-w-sm">
+              <FaSearch
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-sm"
+                style={{ color: "rgba(212,180,131,0.45)" }}
+              />
+              <input
+                type="text"
+                placeholder="Search by prompt, number, or ID..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="admin-input py-2 w-full text-sm"
+                style={{ paddingLeft: "2.25rem" }}
+              />
+            </div>
+            <select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+              className="admin-input py-2 text-sm min-w-[150px]"
+            >
+              <option value="">All Types</option>
+              <option value="multiple_choice">Multiple Choice</option>
+              <option value="text_input">Text Input</option>
+              <option value="match_pairs">Match Pairs</option>
+            </select>
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg transition-colors"
+                style={{ color: "#f87171" }}
+              >
+                <FaTimes /> Clear
+              </button>
+            )}
+            {hasActiveFilters && (
+              <span
+                className="text-xs ml-auto"
+                style={{ color: "rgba(212,180,131,0.55)" }}
+              >
+                {filteredChallenges.length} of {challenges.length} challenges
+              </span>
+            )}
+          </div>
+        </div>
+
         <div className="admin-glass">
           {loading ? (
             <LoadingScreen message="Loading challenges..." />
-          ) : challenges.length === 0 ? (
+          ) : filteredChallenges.length === 0 ? (
             <div className="text-center py-12">
               <p
                 className="text-lg"
                 style={{ color: "rgba(212,180,131,0.70)" }}
               >
-                No challenges found
+                {hasActiveFilters ? "No challenges match your filters" : "No challenges found"}
               </p>
               <p className="mt-2" style={{ color: "rgba(212,180,131,0.50)" }}>
-                Create your first challenge to get started
+                {hasActiveFilters
+                  ? "Try adjusting your search or filter criteria"
+                  : "Create your first challenge to get started"}
               </p>
             </div>
           ) : (
@@ -487,7 +558,7 @@ const AdminChallenges = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {challenges.map((challenge) => (
+                  {filteredChallenges.map((challenge) => (
                     <tr key={challenge.id} className="admin-table-row">
                       <td
                         className="hidden admin-table-td whitespace-nowrap text-sm font-medium"
