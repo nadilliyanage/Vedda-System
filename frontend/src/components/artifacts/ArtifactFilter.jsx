@@ -10,11 +10,24 @@ const ArtifactFilter = ({ selectedCategory, onCategoryChange }) => {
           <button
             key={category.id}
             onClick={() => onCategoryChange(category.id)}
-            className={`flex flex-col items-center p-3 rounded-lg transition-all duration-200 ${
+            className="flex flex-col items-center p-3 rounded-lg transition-all duration-200"
+            style={
               selectedCategory === category.id
-                ? "bg-purple-600 text-white shadow-lg scale-105"
-                : "bg-gray-50 text-gray-700 hover:bg-purple-50 hover:text-purple-600"
-            }`}
+                ? {
+                    background: "rgba(139,92,246,0.75)",
+                    border: "1px solid rgba(167,139,250,0.9)",
+                    backdropFilter: "blur(10px)",
+                    WebkitBackdropFilter: "blur(10px)",
+                    color: "#ddd6fe",
+                    boxShadow: "0 4px 16px rgba(139,92,246,0.18), inset 0 1px 0 rgba(255,255,255,0.12)",
+                    transform: "scale(1.05)",
+                  }
+                : {
+                    background: "rgba(255,255,255,0.35)",
+                    border: "1px solid rgba(200,165,90,0.18)",
+                    color: "#3d2e0f",
+                  }
+            }
           >
             <span className="text-2xl mb-2">{category.icon}</span>
             <span className="text-xs font-medium text-center">{category.name}</span>
