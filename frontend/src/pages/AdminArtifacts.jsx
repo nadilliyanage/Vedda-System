@@ -152,7 +152,8 @@ const AdminArtifacts = () => {
                   setPagination((prev) => ({ ...prev, page: 1 }));
                 }}
                 placeholder="Search artifacts..."
-                className="admin-input w-full pl-10"
+                className="admin-input w-full"
+                style={{ paddingLeft: "2.5rem" }}
               />
               <Search
                 className="absolute left-3 top-2.5"
