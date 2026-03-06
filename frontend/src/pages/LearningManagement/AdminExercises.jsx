@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import toast from "react-hot-toast";
-import { FaEye, FaEdit, FaTrash, FaPlus, FaSave } from "react-icons/fa";
+import { FaEye, FaEdit, FaTrash, FaPlus, FaSave, FaSearch, FaTimes } from "react-icons/fa";
 import {
   exercisesAPI,
   lessonsAPI,
@@ -21,6 +21,9 @@ const AdminExercises = () => {
     isOpen: false,
     exerciseId: null,
   });
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filterLesson, setFilterLesson] = useState("");
+  const [filterType, setFilterType] = useState("");
 
   // Top-level form data
   const [formData, setFormData] = useState({
@@ -264,6 +267,29 @@ const AdminExercises = () => {
     return lesson ? lesson.topic : "N/A";
   };
 
+  const filteredExercises = useMemo(() => {
+    return exercises.filter((exercise) => {
+      const matchesSearch =
+        !searchTerm ||
+        exercise.id?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        exercise.question?.prompt?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        getLessonName(exercise.lessonId)?.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesLesson =
+        !filterLesson || exercise.lessonId === filterLesson;
+      const matchesType =
+        !filterType || exercise.question?.type === filterType;
+      return matchesSearch && matchesLesson && matchesType;
+    });
+  }, [exercises, searchTerm, filterLesson, filterType, lessons]);
+
+  const clearFilters = () => {
+    setSearchTerm("");
+    setFilterLesson("");
+    setFilterType("");
+  };
+
+  const hasActiveFilters = searchTerm || filterLesson || filterType;
+
   const addOption = () => {
     const nextId = String.fromCharCode(65 + formData.question.options.length); // A, B, C, D...
     setFormData({
@@ -459,19 +485,80 @@ const AdminExercises = () => {
           </button>
         </div>
 
+        {/* Filter Bar */}
+        <div className="admin-glass p-4 mb-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="relative flex-1 min-w-[200px] max-w-sm">
+              <FaSearch
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-sm"
+                style={{ color: "rgba(212,180,131,0.45)" }}
+              />
+              <input
+                type="text"
+                placeholder="Search by prompt, lesson, or ID..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="admin-input py-2 w-full text-sm"
+                style={{ paddingLeft: "2.25rem" }}
+              />
+            </div>
+            <select
+              value={filterLesson}
+              onChange={(e) => setFilterLesson(e.target.value)}
+              className="admin-input py-2 text-sm min-w-[160px]"
+            >
+              <option value="">All Lessons</option>
+              {lessons.map((lesson) => (
+                <option key={lesson.id} value={lesson.id}>
+                  {lesson.topic}
+                </option>
+              ))}
+            </select>
+            <select
+              value={filterType}
+              onChange={(e) => setFilterType(e.target.value)}
+              className="admin-input py-2 text-sm min-w-[150px]"
+            >
+              <option value="">All Types</option>
+              <option value="multiple_choice">Multiple Choice</option>
+              <option value="text_input">Text Input</option>
+              <option value="match_pairs">Match Pairs</option>
+            </select>
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="flex items-center gap-1 px-3 py-2 text-sm rounded-lg transition-colors"
+                style={{ color: "#f87171" }}
+              >
+                <FaTimes /> Clear
+              </button>
+            )}
+            {hasActiveFilters && (
+              <span
+                className="text-xs ml-auto"
+                style={{ color: "rgba(212,180,131,0.55)" }}
+              >
+                {filteredExercises.length} of {exercises.length} exercises
+              </span>
+            )}
+          </div>
+        </div>
+
         <div className="admin-glass">
           {loading ? (
             <LoadingScreen message="Loading exercises..." />
-          ) : exercises.length === 0 ? (
+          ) : filteredExercises.length === 0 ? (
             <div className="text-center py-12">
               <p
                 className="text-lg"
                 style={{ color: "rgba(212,180,131,0.70)" }}
               >
-                No exercises found
+                {hasActiveFilters ? "No exercises match your filters" : "No exercises found"}
               </p>
               <p className="mt-2" style={{ color: "rgba(212,180,131,0.50)" }}>
-                Create your first exercise to get started
+                {hasActiveFilters
+                  ? "Try adjusting your search or filter criteria"
+                  : "Create your first exercise to get started"}
               </p>
             </div>
           ) : (
@@ -488,7 +575,7 @@ const AdminExercises = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {exercises.map((exercise) => (
+                  {filteredExercises.map((exercise) => (
                     <tr key={exercise.id} className="admin-table-row">
                       <td
                         className="hidden admin-table-td whitespace-nowrap text-sm font-medium"
