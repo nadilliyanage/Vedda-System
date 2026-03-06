@@ -16,16 +16,16 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
   const [expandedLessons, setExpandedLessons] = useState(new Set());
   const [expandedPersonalized, setExpandedPersonalized] = useState(true);
 
-  // Color palette for categories
+  // Color palette for categories (glassmorphic)
   const categoryColors = [
-    'from-green-500 to-green-600',
-    'from-orange-500 to-orange-600',
-    'from-purple-500 to-purple-600',
-    'from-blue-500 to-blue-600',
-    'from-red-500 to-red-600',
-    'from-indigo-500 to-indigo-600',
-    'from-pink-500 to-pink-600',
-    'from-teal-500 to-teal-600'
+    { bg: 'linear-gradient(135deg, rgba(34,197,94,0.72) 0%, rgba(22,163,74,0.72) 100%)',   shadow: 'rgba(22,163,74,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(249,115,22,0.72) 0%, rgba(234,88,12,0.72) 100%)',  shadow: 'rgba(234,88,12,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(168,85,247,0.72) 0%, rgba(147,51,234,0.72) 100%)', shadow: 'rgba(147,51,234,0.28)' },
+    { bg: 'linear-gradient(135deg, rgba(59,130,246,0.72) 0%, rgba(37,99,235,0.72) 100%)',  shadow: 'rgba(37,99,235,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(239,68,68,0.72) 0%, rgba(220,38,38,0.72) 100%)',   shadow: 'rgba(220,38,38,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(99,102,241,0.72) 0%, rgba(79,70,229,0.72) 100%)',  shadow: 'rgba(79,70,229,0.28)' },
+    { bg: 'linear-gradient(135deg, rgba(236,72,153,0.72) 0%, rgba(219,39,119,0.72) 100%)', shadow: 'rgba(219,39,119,0.28)' },
+    { bg: 'linear-gradient(135deg, rgba(20,184,166,0.72) 0%, rgba(13,148,136,0.72) 100%)', shadow: 'rgba(13,148,136,0.28)' },
   ];
 
   useEffect(() => {
@@ -431,9 +431,17 @@ const PracticeExercises = ({ initialCategory = null, initialLesson = null, onBac
                   {/* Level 1: Category Card */}
                   <div
                     onClick={() => toggleCategory(category.id)}
-                    className={`bg-gradient-to-r ${getCategoryColor(categoryIndex)} p-6 cursor-pointer hover:shadow-xl transition-all`}
+                    className="p-6 cursor-pointer hover:shadow-xl transition-all relative overflow-hidden"
+                    style={{
+                      background: getCategoryColor(categoryIndex).bg,
+                      backdropFilter: 'blur(14px)',
+                      WebkitBackdropFilter: 'blur(14px)',
+                      borderBottom: '1px solid rgba(255,255,255,0.18)',
+                      boxShadow: `inset 0 1px 0 rgba(255,255,255,0.20), 0 4px 20px ${getCategoryColor(categoryIndex).shadow}`,
+                    }}
                   >
-                    <div className="flex items-center justify-between text-white">
+                    <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%)' }} />
+                    <div className="flex items-center justify-between text-white relative z-10">
                       <div className="flex items-center gap-4">
                         <div className="text-2xl">
                           {isCategoryExpanded ? <FaChevronDown /> : <FaChevronRight />}
