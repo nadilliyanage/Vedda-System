@@ -8,18 +8,18 @@ const LessonSelection = ({ onBack, onCategorySelect }) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Color palette for categories
+  // Color palette for categories (glassmorphic)
   const colorPalette = [
-    'from-green-500 to-green-600',
-    'from-orange-500 to-orange-600',
-    'from-yellow-500 to-yellow-600',
-    'from-blue-500 to-blue-600',
-    'from-red-500 to-red-600',
-    'from-purple-500 to-purple-600',
-    'from-pink-500 to-pink-600',
-    'from-indigo-500 to-indigo-600',
-    'from-teal-500 to-teal-600',
-    'from-cyan-500 to-cyan-600'
+    { bg: 'linear-gradient(135deg, rgba(34,197,94,0.72) 0%, rgba(22,163,74,0.72) 100%)',   shadow: 'rgba(22,163,74,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(249,115,22,0.72) 0%, rgba(234,88,12,0.72) 100%)',  shadow: 'rgba(234,88,12,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(234,179,8,0.72) 0%, rgba(202,138,4,0.72) 100%)',   shadow: 'rgba(202,138,4,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(59,130,246,0.72) 0%, rgba(37,99,235,0.72) 100%)',  shadow: 'rgba(37,99,235,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(239,68,68,0.72) 0%, rgba(220,38,38,0.72) 100%)',   shadow: 'rgba(220,38,38,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(168,85,247,0.72) 0%, rgba(147,51,234,0.72) 100%)', shadow: 'rgba(147,51,234,0.28)' },
+    { bg: 'linear-gradient(135deg, rgba(236,72,153,0.72) 0%, rgba(219,39,119,0.72) 100%)', shadow: 'rgba(219,39,119,0.28)' },
+    { bg: 'linear-gradient(135deg, rgba(99,102,241,0.72) 0%, rgba(79,70,229,0.72) 100%)',  shadow: 'rgba(79,70,229,0.28)' },
+    { bg: 'linear-gradient(135deg, rgba(20,184,166,0.72) 0%, rgba(13,148,136,0.72) 100%)', shadow: 'rgba(13,148,136,0.28)' },
+    { bg: 'linear-gradient(135deg, rgba(6,182,212,0.72) 0%, rgba(8,145,178,0.72) 100%)',   shadow: 'rgba(8,145,178,0.28)' },
   ];
 
   useEffect(() => {
@@ -230,15 +230,23 @@ const LessonSelection = ({ onBack, onCategorySelect }) => {
                 className="group cursor-pointer transform transition-all duration-300 hover:scale-105"
               >
                 <div
-                  className={`bg-gradient-to-br ${getColorClass(index)} rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-12 text-white h-48 flex flex-col items-center justify-center text-center`}
+                  className="rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-12 text-white h-48 flex flex-col items-center justify-center text-center relative overflow-hidden"
+                  style={{
+                    background: getColorClass(index).bg,
+                    backdropFilter: 'blur(14px)',
+                    WebkitBackdropFilter: 'blur(14px)',
+                    border: '1px solid rgba(255,255,255,0.25)',
+                    boxShadow: `0 8px 32px ${getColorClass(index).shadow}, inset 0 1px 0 rgba(255,255,255,0.20)`,
+                  }}
                 >
-                  <h2 className="text-3xl font-bold mb-3">{category.name}</h2>
+                  <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%)' }} />
+                  <h2 className="text-3xl font-bold mb-3 relative z-10">{category.name}</h2>
                   {category.description && (
-                    <p className="text-white/90 text-lg">
+                    <p className="text-white/90 text-lg relative z-10">
                       {category.description}
                     </p>
                   )}
-                  <div className="mt-4 flex items-center text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="mt-4 flex items-center text-white font-semibold opacity-0 group-hover:opacity-100 transition-opacity relative z-10">
                     <span>Start Learning</span>
                     <svg
                       className="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform"
