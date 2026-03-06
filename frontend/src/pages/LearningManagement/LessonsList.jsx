@@ -8,18 +8,18 @@ const LessonsList = ({ category, onBack, onLessonSelect }) => {
   const [lessons, setLessons] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Color palette for lessons
+  // Color palette for lessons (glassmorphic)
   const colorPalette = [
-    'from-orange-500 to-orange-600',
-    'from-blue-500 to-blue-600',
-    'from-green-500 to-green-600',
-    'from-purple-500 to-purple-600',
-    'from-red-500 to-red-600',
-    'from-indigo-500 to-indigo-600',
-    'from-pink-500 to-pink-600',
-    'from-teal-500 to-teal-600',
-    'from-yellow-500 to-yellow-600',
-    'from-cyan-500 to-cyan-600'
+    { bg: 'linear-gradient(135deg, rgba(249,115,22,0.72) 0%, rgba(234,88,12,0.72) 100%)',  shadow: 'rgba(234,88,12,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(59,130,246,0.72) 0%, rgba(37,99,235,0.72) 100%)',  shadow: 'rgba(37,99,235,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(34,197,94,0.72) 0%, rgba(22,163,74,0.72) 100%)',   shadow: 'rgba(22,163,74,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(168,85,247,0.72) 0%, rgba(147,51,234,0.72) 100%)', shadow: 'rgba(147,51,234,0.28)' },
+    { bg: 'linear-gradient(135deg, rgba(239,68,68,0.72) 0%, rgba(220,38,38,0.72) 100%)',   shadow: 'rgba(220,38,38,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(99,102,241,0.72) 0%, rgba(79,70,229,0.72) 100%)',  shadow: 'rgba(79,70,229,0.28)' },
+    { bg: 'linear-gradient(135deg, rgba(236,72,153,0.72) 0%, rgba(219,39,119,0.72) 100%)', shadow: 'rgba(219,39,119,0.28)' },
+    { bg: 'linear-gradient(135deg, rgba(20,184,166,0.72) 0%, rgba(13,148,136,0.72) 100%)', shadow: 'rgba(13,148,136,0.28)' },
+    { bg: 'linear-gradient(135deg, rgba(234,179,8,0.72) 0%, rgba(202,138,4,0.72) 100%)',   shadow: 'rgba(202,138,4,0.30)' },
+    { bg: 'linear-gradient(135deg, rgba(6,182,212,0.72) 0%, rgba(8,145,178,0.72) 100%)',   shadow: 'rgba(8,145,178,0.28)' },
   ];
 
   const fetchLessons = async () => {
@@ -245,9 +245,17 @@ const LessonsList = ({ category, onBack, onLessonSelect }) => {
                 className="group cursor-pointer transform transition-all duration-300 hover:scale-102"
               >
                 <div
-                  className={`bg-gradient-to-r ${getColorClass(index)} rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 text-white`}
+                  className="rounded-xl hover:shadow-2xl transition-all duration-300 p-8 text-white relative overflow-hidden"
+                  style={{
+                    background: getColorClass(index).bg,
+                    backdropFilter: 'blur(14px)',
+                    WebkitBackdropFilter: 'blur(14px)',
+                    border: '1px solid rgba(255,255,255,0.25)',
+                    boxShadow: `0 8px 32px ${getColorClass(index).shadow}, inset 0 1px 0 rgba(255,255,255,0.20)`,
+                  }}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%)' }} />
+                  <div className="flex items-center justify-between relative z-10">
                     <div className="flex-1">
                       <h2 className="text-2xl font-bold mb-2">
                         {lesson.topic}
