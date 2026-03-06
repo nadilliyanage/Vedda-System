@@ -14,6 +14,7 @@ const AdminWords = () => {
   const [addMode, setAddMode] = useState("new"); // "new" or "copy"
   const [selectedVeddaWord, setSelectedVeddaWord] = useState(null);
   const [veddaSearchTerm, setVeddaSearchTerm] = useState("");
+  const [veddaDropdownOpen, setVeddaDropdownOpen] = useState(false);
 
   // Filter words based on search term
   const filteredWords = words.filter((word) => {
@@ -95,6 +96,7 @@ const AdminWords = () => {
     setAddMode(mode);
     setSelectedVeddaWord(null);
     setVeddaSearchTerm("");
+    setVeddaDropdownOpen(false);
     // Reset form when switching modes
     setFormData({
       vedda_word: "",
@@ -111,6 +113,7 @@ const AdminWords = () => {
   const handleVeddaWordSelect = (word) => {
     setSelectedVeddaWord(word);
     setVeddaSearchTerm(word.vedda_word);
+    setVeddaDropdownOpen(false);
     // Populate form with selected word's data, but clear sinhala_word for new entry
     setFormData({
       vedda_word: word.vedda_word,
@@ -492,50 +495,55 @@ const AdminWords = () => {
                 <input
                   type="text"
                   value={veddaSearchTerm}
-                  onChange={(e) => setVeddaSearchTerm(e.target.value)}
+                  onChange={(e) => {
+                    setVeddaSearchTerm(e.target.value);
+                    setVeddaDropdownOpen(true);
+                  }}
                   placeholder="Search for Vedda word..."
                   className="admin-input w-full"
                 />
-                {veddaSearchTerm && uniqueVeddaWords.length > 0 && (
-                  <div
-                    className="absolute z-10 w-full mt-1 rounded-md shadow-lg max-h-60 overflow-y-auto"
-                    style={{
-                      background: "rgba(26,20,11,0.97)",
-                      border: "1px solid rgba(200,165,90,0.22)",
-                      backdropFilter: "blur(12px)",
-                    }}
-                  >
-                    {uniqueVeddaWords.map((word) => (
-                      <button
-                        key={word.id}
-                        type="button"
-                        onClick={() => handleVeddaWordSelect(word)}
-                        className="w-full text-left px-4 py-2 transition-colors"
-                        style={{ color: "rgba(212,180,131,0.85)" }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background =
-                            "rgba(200,165,90,0.12)";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = "transparent";
-                        }}
-                      >
-                        <div
-                          className="font-medium"
-                          style={{ color: "#f5e9c8" }}
+                {veddaDropdownOpen &&
+                  veddaSearchTerm &&
+                  uniqueVeddaWords.length > 0 && (
+                    <div
+                      className="absolute z-10 w-full mt-1 rounded-md shadow-lg max-h-60 overflow-y-auto"
+                      style={{
+                        background: "rgba(26,20,11,0.97)",
+                        border: "1px solid rgba(200,165,90,0.22)",
+                        backdropFilter: "blur(12px)",
+                      }}
+                    >
+                      {uniqueVeddaWords.map((word) => (
+                        <button
+                          key={word.id}
+                          type="button"
+                          onClick={() => handleVeddaWordSelect(word)}
+                          className="w-full text-left px-4 py-2 transition-colors"
+                          style={{ color: "rgba(212,180,131,0.85)" }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.background =
+                              "rgba(200,165,90,0.12)";
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.background = "transparent";
+                          }}
                         >
-                          {word.vedda_word}
-                        </div>
-                        <div
-                          className="text-xs"
-                          style={{ color: "rgba(212,180,131,0.55)" }}
-                        >
-                          {word.sinhala_word} - {word.english_word}
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                )}
+                          <div
+                            className="font-medium"
+                            style={{ color: "#f5e9c8" }}
+                          >
+                            {word.vedda_word}
+                          </div>
+                          <div
+                            className="text-xs"
+                            style={{ color: "rgba(212,180,131,0.55)" }}
+                          >
+                            {word.sinhala_word} - {word.english_word}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
               </div>
               {selectedVeddaWord && (
                 <div
@@ -969,7 +977,10 @@ const AdminWords = () => {
                         <td className="admin-table-td">{word.english_word}</td>
                         <td
                           className="admin-table-td text-sm"
-                          style={{ color: "rgba(212,180,131,0.60)", fontStyle: "italic" }}
+                          style={{
+                            color: "rgba(212,180,131,0.60)",
+                            fontStyle: "italic",
+                          }}
                         >
                           {word.vedda_ipa || "—"}
                         </td>
