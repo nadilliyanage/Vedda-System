@@ -532,27 +532,30 @@ const LearningChallenges = ({ onBack }) => {
                 boxShadow: '0 6px 32px rgba(80,60,160,0.10)',
               }}
             >
-              {/* Vertical Path Line */}
-              <div className="absolute left-1/2 transform -translate-x-1/2 w-1 h-full bg-gradient-to-b from-blue-500 via-purple-500 to-green-500 opacity-70" />
-
               {/* Challenges */}
               <div className="relative">
-                {challenges.map((challenge, index) => (
-                  <div key={challenge.id}>
-                    <ChallengeNode 
-                      challenge={challenge} 
-                      index={index}
-                      state={getChallengeState(challenge, index)}
-                    />
-                    
-                    {isMilestone(index) && (
-                      <MilestoneNode 
+                {/* Challenges only — line lives here, stops before the trophy */}
+                <div className="relative">
+                  {/* Vertical Path Line — spans only the challenge nodes */}
+                  <div className="absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-blue-500 via-purple-500 to-green-500 opacity-70"
+                    style={{ top: '3rem', bottom: '3rem' }} />
+                  {challenges.map((challenge, index) => (
+                    <div key={challenge.id}>
+                      <ChallengeNode 
+                        challenge={challenge} 
                         index={index}
-                        unlocked={challenge.isCompleted === true}
+                        state={getChallengeState(challenge, index)}
                       />
-                    )}
-                  </div>
-                ))}
+                      
+                      {isMilestone(index) && (
+                        <MilestoneNode 
+                          index={index}
+                          unlocked={challenge.isCompleted === true}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
 
                 {/* End Trophy */}
                 <div className="flex items-center justify-center mt-12">

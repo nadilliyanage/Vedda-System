@@ -176,13 +176,23 @@ const VeddaLearning = () => {
                   onClick={() => setActiveView('learn')}
                   className="group cursor-pointer transform transition-all duration-300 hover:scale-105"
               >
-                <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-white h-80 flex flex-col items-center justify-center text-center">
-                  <FaBook className="text-7xl mb-6 group-hover:scale-110 transition-transform duration-300" />
-                  <h2 className="text-3xl font-bold mb-4">Learn</h2>
-                  <p className="text-green-100 text-lg">
+                <div
+                  className="rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-white h-80 flex flex-col items-center justify-center text-center relative overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(59,130,246,0.72) 0%, rgba(37,99,235,0.72) 100%)',
+                    backdropFilter: 'blur(14px)',
+                    WebkitBackdropFilter: 'blur(14px)',
+                    border: '1px solid rgba(255,255,255,0.25)',
+                    boxShadow: '0 8px 32px rgba(37,99,235,0.30), inset 0 1px 0 rgba(255,255,255,0.20)',
+                  }}
+                >
+                  <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%)' }} />
+                  <FaBook className="text-7xl mb-6 group-hover:scale-110 transition-transform duration-300 relative z-10" />
+                  <h2 className="text-3xl font-bold mb-4 relative z-10">Learn</h2>
+                  <p className="text-blue-100 text-lg relative z-10">
                     Explore structured lessons and build your vocabulary
                   </p>
-                  <div className="mt-6 flex items-center text-white font-semibold">
+                  <div className="mt-6 flex items-center text-white font-semibold relative z-10">
                     <span>Start Learning</span>
                     <svg
                         className="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform"
@@ -206,13 +216,23 @@ const VeddaLearning = () => {
                   onClick={() => setActiveView('practice')}
                   className="group cursor-pointer transform transition-all duration-300 hover:scale-105"
               >
-                <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-white h-80 flex flex-col items-center justify-center text-center">
-                  <FaDumbbell className="text-7xl mb-6 group-hover:scale-110 transition-transform duration-300" />
-                  <h2 className="text-3xl font-bold mb-4">Practice</h2>
-                  <p className="text-orange-100 text-lg">
+                <div
+                  className="rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-white h-80 flex flex-col items-center justify-center text-center relative overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(249,115,22,0.72) 0%, rgba(234,88,12,0.72) 100%)',
+                    backdropFilter: 'blur(14px)',
+                    WebkitBackdropFilter: 'blur(14px)',
+                    border: '1px solid rgba(255,255,255,0.25)',
+                    boxShadow: '0 8px 32px rgba(234,88,12,0.30), inset 0 1px 0 rgba(255,255,255,0.20)',
+                  }}
+                >
+                  <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%)' }} />
+                  <FaDumbbell className="text-7xl mb-6 group-hover:scale-110 transition-transform duration-300 relative z-10" />
+                  <h2 className="text-3xl font-bold mb-4 relative z-10">Practice</h2>
+                  <p className="text-orange-100 text-lg relative z-10">
                     Reinforce your skills with interactive exercises
                   </p>
-                  <div className="mt-6 flex items-center text-white font-semibold">
+                  <div className="mt-6 flex items-center text-white font-semibold relative z-10">
                     <span>Start Practicing</span>
                     <svg
                         className="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform"
@@ -236,13 +256,23 @@ const VeddaLearning = () => {
                   onClick={() => setActiveView('challenges')}
                   className="group cursor-pointer transform transition-all duration-300 hover:scale-105"
               >
-                <div className="bg-gradient-to-br from-green-500 to-green-600 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-white h-80 flex flex-col items-center justify-center text-center">
-                  <FaTrophy className="text-7xl mb-6 group-hover:scale-110 transition-transform duration-300" />
-                  <h2 className="text-3xl font-bold mb-4">Challenges</h2>
-                  <p className="text-green-100 text-lg">
+                <div
+                  className="rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-white h-80 flex flex-col items-center justify-center text-center relative overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(34,197,94,0.72) 0%, rgba(22,163,74,0.72) 100%)',
+                    backdropFilter: 'blur(14px)',
+                    WebkitBackdropFilter: 'blur(14px)',
+                    border: '1px solid rgba(255,255,255,0.25)',
+                    boxShadow: '0 8px 32px rgba(22,163,74,0.30), inset 0 1px 0 rgba(255,255,255,0.20)',
+                  }}
+                >
+                  <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%)' }} />
+                  <FaTrophy className="text-7xl mb-6 group-hover:scale-110 transition-transform duration-300 relative z-10" />
+                  <h2 className="text-3xl font-bold mb-4 relative z-10">Challenges</h2>
+                  <p className="text-green-100 text-lg relative z-10">
                     Test your knowledge with gamified quizzes
                   </p>
-                  <div className="mt-6 flex items-center text-white font-semibold">
+                  <div className="mt-6 flex items-center text-white font-semibold relative z-10">
                     <span>Take Challenge</span>
                     <svg
                         className="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform"
@@ -266,13 +296,23 @@ const VeddaLearning = () => {
                   onClick={() => setActiveView('performance')}
                   className="group cursor-pointer transform transition-all duration-300 hover:scale-105"
               >
-                <div className="bg-gradient-to-br from-purple-500 to-teal-500 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-white h-80 flex flex-col items-center justify-center text-center">
-                  <FaChartLine className="text-7xl mb-6 group-hover:scale-110 transition-transform duration-300" />
-                  <h2 className="text-3xl font-bold mb-4">Performance</h2>
-                  <p className="text-purple-100 text-lg">
+                <div
+                  className="rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 text-white h-80 flex flex-col items-center justify-center text-center relative overflow-hidden"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(168,85,247,0.72) 0%, rgba(20,184,166,0.72) 100%)',
+                    backdropFilter: 'blur(14px)',
+                    WebkitBackdropFilter: 'blur(14px)',
+                    border: '1px solid rgba(255,255,255,0.25)',
+                    boxShadow: '0 8px 32px rgba(168,85,247,0.28), inset 0 1px 0 rgba(255,255,255,0.20)',
+                  }}
+                >
+                  <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%)' }} />
+                  <FaChartLine className="text-7xl mb-6 group-hover:scale-110 transition-transform duration-300 relative z-10" />
+                  <h2 className="text-3xl font-bold mb-4 relative z-10">Performance</h2>
+                  <p className="text-purple-100 text-lg relative z-10">
                     View your learning progress and performance insights
                   </p>
-                  <div className="mt-6 flex items-center text-white font-semibold">
+                  <div className="mt-6 flex items-center text-white font-semibold relative z-10">
                     <span>View Performance</span>
                     <svg
                         className="w-5 h-5 ml-2 transform group-hover:translate-x-2 transition-transform"
