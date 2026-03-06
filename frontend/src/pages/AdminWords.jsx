@@ -893,6 +893,7 @@ const AdminWords = () => {
                   <th className="admin-table-th">Vedda</th>
                   <th className="admin-table-th">Sinhala</th>
                   <th className="admin-table-th">English</th>
+                  <th className="admin-table-th">Vedda IPA</th>
                   <th className="admin-table-th">Actions</th>
                 </tr>
               </thead>
@@ -930,6 +931,15 @@ const AdminWords = () => {
                           />
                         </td>
                         <td className="admin-table-td">
+                          <input
+                            type="text"
+                            name="vedda_ipa"
+                            value={editFormData.vedda_ipa}
+                            onChange={handleEditInputChange}
+                            className="admin-input w-full py-1 text-sm"
+                          />
+                        </td>
+                        <td className="admin-table-td">
                           <div className="flex gap-2">
                             <button
                               onClick={handleUpdateWord}
@@ -957,6 +967,12 @@ const AdminWords = () => {
                         </td>
                         <td className="admin-table-td">{word.sinhala_word}</td>
                         <td className="admin-table-td">{word.english_word}</td>
+                        <td
+                          className="admin-table-td text-sm"
+                          style={{ color: "rgba(212,180,131,0.60)", fontStyle: "italic" }}
+                        >
+                          {word.vedda_ipa || "—"}
+                        </td>
                         <td className="admin-table-td">
                           <div className="flex gap-2">
                             <button
