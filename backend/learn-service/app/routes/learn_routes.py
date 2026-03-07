@@ -101,6 +101,78 @@ def get_dashboard():
     })
 
 
+@learn_bp.get("/challenge-stat")
+def get_challenge_stat():
+    db = get_db()
+    user_id = request.args.get("user_id")
+
+    if not user_id:
+        return jsonify({"error": "user_id query parameter is required"}), 400
+
+    # Get all challenge attempts for the user
+    challenge_attempts = list(db.user_attempts.find({
+        "user_id": user_id,
+        "attempt_type": "challenge"
+    }))
+
+    # Calculate accuracy
+    total_attempts = len(challenge_attempts)
+    if total_attempts == 0:
+        accuracy = 0
+        best_streak = 0
+        total_time_spent = 0
+    else:
+        correct_attempts = sum(1 for attempt in challenge_attempts if attempt.get("is_correct", False))
+        accuracy = round((correct_attempts / total_attempts) * 100, 2)
+
+        # Calculate best streak
+        best_streak = calculate_challenge_best_streak(challenge_attempts)
+
+        # Calculate total time spent (sum of time_spent)
+        total_time_spent = sum(attempt.get("time_spent", 0) or 0 for attempt in challenge_attempts)
+
+    return jsonify({
+        "accuracy": accuracy,
+        "bestStreak": best_streak,
+        "totalTimeSpent": total_time_spent
+    })
+
+
+def calculate_challenge_best_streak(attempts):
+    """
+    Calculate the best streak of consecutive days with challenge attempts.
+    Uses the timestamp field from user attempts.
+    """
+    if not attempts:
+        return 0
+
+    # Extract unique dates from attempts
+    dates = set()
+    for attempt in attempts:
+        if "timestamp" in attempt and attempt["timestamp"]:
+            dates.add(attempt["timestamp"].date())
+
+    if not dates:
+        return 0
+
+    # Sort dates
+    sorted_dates = sorted(dates)
+
+    # Calculate best streak
+    best_streak = 1
+    current_streak = 1
+
+    for i in range(1, len(sorted_dates)):
+        # Check if consecutive days
+        if (sorted_dates[i] - sorted_dates[i-1]).days == 1:
+            current_streak += 1
+            best_streak = max(best_streak, current_streak)
+        else:
+            current_streak = 1
+
+    return best_streak
+
+
 def calculate_streak(db, user_id):
     attempts = db.user_attempts.find(
         {"user_id": user_id},

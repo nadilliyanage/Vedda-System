@@ -5,13 +5,12 @@ import {
   FaStar, 
   FaLock, 
   FaCheckCircle,
-  FaFire,
   FaGem,
   FaMedal,
   FaCrown,
   FaBolt
 } from 'react-icons/fa';
-import { challengesAPI } from '../../services/learningAPI';
+import { challengesAPI, userStatAPI } from '../../services/learningAPI';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 import ChallengeModal from './ChallengeModal';
@@ -21,24 +20,30 @@ const LearningChallenges = ({ onBack }) => {
   const { user } = useAuth();
   const [challenges, setChallenges] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userProgress, setUserProgress] = useState({
-    currentStreak: 5,
-    totalXP: 2878,
-    totalCoins: 5653,
-    badges: ['beginner', 'fast_learner', 'word_master']
-  });
   const [selectedChallenge, setSelectedChallenge] = useState(null);
   const [showChallengeModal, setShowChallengeModal] = useState(false);
+  const [challengeStats, setChallengeStats] = useState({
+    accuracy: null,
+    bestStreak: null,
+    totalTimeSpent: null,
+  });
 
   useEffect(() => {
     fetchChallenges();
+    fetchChallengeStats();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchChallenges = async () => {
     try {
       const response = await challengesAPI.getAll(user?.id);
-      const challengesData = response.data;
+      const raw = response.data;
+
+      // Normalize isCompleted to a real boolean regardless of what the backend sends
+      const challengesData = raw.map(c => ({
+        ...c,
+        isCompleted: c.isCompleted === true || c.isCompleted === 'true' || c.isCompleted === 1,
+      }));
 
       // Ensure first challenge is enabled by default if it doesn't have isEnabled set
       if (challengesData.length > 0 && !challengesData[0].isEnabled && !challengesData[0].isCompleted) {
@@ -52,6 +57,36 @@ const LearningChallenges = ({ onBack }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchChallengeStats = async (delayMs = 0) => {
+    try {
+      if (delayMs > 0) {
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+      }
+      const response = await userStatAPI.getChallengeStats(user?.id);
+      const { accuracy, bestStreak, totalTimeSpent } = response.data;
+      setChallengeStats({ accuracy, bestStreak, totalTimeSpent });
+    } catch (error) {
+      console.error('Failed to fetch challenge stats:', error);
+    }
+  };
+
+  // Format seconds into human-readable time
+  // < 60s  → "29 s"
+  // >= 60s → "1 m 40 s"
+  // >= 3600s → "1 h 2 m"
+  const formatTimeSpent = (seconds) => {
+    if (seconds === null || seconds === undefined) return '—';
+    const s = Math.round(seconds);
+    if (s < 60) return `${s} s`;
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const rem = s % 60;
+    if (h > 0) {
+      return rem > 0 ? `${h} h ${m} m ${rem} s` : `${h} h ${m} m`;
+    }
+    return rem > 0 ? `${m} m ${rem} s` : `${m} m`;
   };
 
 
@@ -115,12 +150,8 @@ const LearningChallenges = ({ onBack }) => {
       return updated;
     });
 
-    setUserProgress(prev => ({
-      ...prev,
-      totalXP: prev.totalXP + earnedXP,
-      totalCoins: prev.totalCoins + earnedCoins,
-      currentStreak: prev.currentStreak + 1
-    }));
+    // Re-fetch latest stats after a short delay so backend has time to persist
+    fetchChallengeStats(1500);
 
     setShowChallengeModal(false);
     toast.success(`+${earnedXP} XP! +${earnedCoins} coins!`);
@@ -149,9 +180,8 @@ const LearningChallenges = ({ onBack }) => {
   ];
 
   const ChallengeNode = ({ challenge, index, state }) => {
-    const isEven = index % 2 === 0;
-    const offset = isEven ? 'left' : 'right';
-    
+    const offset = index % 2 === 0 ? 'left' : 'right';
+
     const stateStyles = {
       completed: 'bg-gradient-to-br from-green-400 to-green-600 shadow-lg scale-100',
       unlocked: 'bg-gradient-to-br from-blue-400 to-blue-600 shadow-xl scale-110 animate-pulse-slow',
@@ -245,7 +275,6 @@ const LearningChallenges = ({ onBack }) => {
   };
 
   const MilestoneNode = ({ index, unlocked }) => {
-    const isEven = index % 2 === 0;
 
     return (
       <div className="flex items-center justify-center mb-12 relative">
@@ -606,21 +635,25 @@ const LearningChallenges = ({ onBack }) => {
                 <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4">
                   <div className="text-xs text-green-600 font-semibold mb-1">Accuracy Rate</div>
                   <div className="text-3xl font-bold text-green-700">
-                    94%
+                    {challengeStats.accuracy !== null
+                      ? `${challengeStats.accuracy.toFixed(1)}%`
+                      : '—'}
                   </div>
                 </div>
 
                 <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-4">
                   <div className="text-xs text-purple-600 font-semibold mb-1">Best Streak</div>
                   <div className="text-3xl font-bold text-purple-700">
-                    {userProgress.currentStreak} days
+                    {challengeStats.bestStreak !== null
+                      ? `${challengeStats.bestStreak} day${challengeStats.bestStreak !== 1 ? 's' : ''}`
+                      : '—'}
                   </div>
                 </div>
 
                 <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4">
                   <div className="text-xs text-orange-600 font-semibold mb-1">Time Spent</div>
                   <div className="text-3xl font-bold text-orange-700">
-                    4.5h
+                    {formatTimeSpent(challengeStats.totalTimeSpent)}
                   </div>
                 </div>
               </div>
@@ -633,7 +666,10 @@ const LearningChallenges = ({ onBack }) => {
       {showChallengeModal && selectedChallenge && (
         <ChallengeModal
           challenge={selectedChallenge}
-          onClose={() => setShowChallengeModal(false)}
+          onClose={() => {
+            setShowChallengeModal(false);
+            fetchChallengeStats(1500);
+          }}
           onComplete={handleChallengeComplete}
         />
       )}
