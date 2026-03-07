@@ -6,6 +6,7 @@ from app.services.learn_service import (
     save_user_lesson_progress
 )
 from app.services.user_stats_service import get_leaderboard
+from app.services.lesson_cache_service import get_all_lessons
 
 from app.db.mongo import get_db
 from datetime import datetime, timedelta
@@ -64,9 +65,10 @@ def get_dashboard():
     db = get_db()
     user_id = request.args.get("user_id")
 
-    total_lessons = db.lessons.count_documents({})
+    # Get total lessons from cache instead of database
+    total_lessons = len(get_all_lessons())
     total_exercises = db.exercises.count_documents({"type": "MANUAL"})
-    # Lessons completed
+    # ...existing code...
     lessons_completed = db.user_lessons.count_documents({
         "user_id": user_id,
         "completed": True
@@ -76,7 +78,7 @@ def get_dashboard():
     manual_exercise_ids = {
         str(e["_id"]) for e in db.exercises.find({"type": "MANUAL"}, {"_id": 1})
     }
-    completed_exercise_ids = db.user_attempts.distinct("exercise_id", {"user_id": user_id})
+    completed_exercise_ids = db.user_attempts.distinct("exercise_id", {"user_id": user_id, "is_correct": True})
     exercises_completed = len([eid for eid in completed_exercise_ids if eid in manual_exercise_ids])
 
     # Average score

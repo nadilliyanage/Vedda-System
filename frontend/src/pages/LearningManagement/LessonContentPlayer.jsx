@@ -3,18 +3,18 @@ import { FaArrowLeft, FaArrowRight, FaChevronLeft, FaChevronRight, FaPlay, FaChe
 import {exercisesAPI} from "../../services/learningAPI.js";
 import { useAuth } from '../../contexts/AuthContext';
 
-const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice }) => {
+const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice, onLessonUpdate }) => {
   const { user } = useAuth();
   const [currentLessonIndex, setCurrentLessonIndex] = useState(0);
   const [currentLesson, setCurrentLesson] = useState(lesson);
-  const [lessonDone, setLessonDone] = useState(false);
+  const [lessonDone, setLessonDone] = useState(Boolean(lesson?.completed));
 
   useEffect(() => {
     // Find the index of the current lesson in the category's lessons
     const index = allLessons.findIndex(l => l.id === lesson.id);
     setCurrentLessonIndex(index);
     setCurrentLesson(lesson);
-    setLessonDone(false);
+    setLessonDone(Boolean(lesson?.completed));
     const userId = user?.id;
 
     if (lesson) {
@@ -32,6 +32,7 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
       const prevLesson = allLessons[currentLessonIndex - 1];
       setCurrentLesson(prevLesson);
       setCurrentLessonIndex(currentLessonIndex - 1);
+      setLessonDone(Boolean(prevLesson?.completed));
     }
   };
 
@@ -40,6 +41,7 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
       const nextLesson = allLessons[currentLessonIndex + 1];
       setCurrentLesson(nextLesson);
       setCurrentLessonIndex(currentLessonIndex + 1);
+      setLessonDone(Boolean(nextLesson?.completed));
     }
     
   };
@@ -47,11 +49,26 @@ const LessonContentPlayer = ({ lesson, category, allLessons, onBack, onPractice 
   const handleMarkAsDone = async () => {
     const userId = user?.id;
     if (currentLesson) {
-      exercisesAPI.startExercise({
+      await exercisesAPI.startExercise({
         user_id: userId,
         lesson_id: currentLesson._id,
         completed: true
       });
+
+      // Update the currentLesson's completed property
+      const updatedLesson = { ...currentLesson, completed: true };
+      setCurrentLesson(updatedLesson);
+
+      // Update in the allLessons array
+      const lessonIndex = allLessons.findIndex(l => l._id === currentLesson._id);
+      if (lessonIndex !== -1) {
+        allLessons[lessonIndex] = updatedLesson;
+      }
+
+      // Notify parent if callback exists
+      if (onLessonUpdate) {
+        onLessonUpdate(updatedLesson, allLessons);
+      }
     }
     setLessonDone(true);
   };
