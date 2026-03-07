@@ -362,7 +362,7 @@ const PerformanceView = ({ onBack }) => {
         </div>
 
         {/* Achievements Section */}
-        <div className="mt-8 rounded-xl p-8" style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(200,170,100,0.25)', boxShadow: '0 4px 24px rgba(0,0,0,0.10)' }}>
+        {/* <div className="mt-8 rounded-xl p-8" style={{ background: 'rgba(255,255,255,0.85)', backdropFilter: 'blur(10px)', border: '1px solid rgba(200,170,100,0.25)', boxShadow: '0 4px 24px rgba(0,0,0,0.10)' }}>
           <h2 className="text-2xl font-bold mb-6" style={{ fontFamily: 'Georgia, serif', color: '#1c1409' }}>Achievements</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="flex flex-col items-center p-4 rounded-lg" style={{ background: 'rgba(200,170,100,0.14)', border: '1px solid rgba(200,165,90,0.30)' }}>
@@ -382,7 +382,7 @@ const PerformanceView = ({ onBack }) => {
               <p className="text-sm font-semibold" style={{ color: '#5c4a1e' }}>Top Performer</p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );

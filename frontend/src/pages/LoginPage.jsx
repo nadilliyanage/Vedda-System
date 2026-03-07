@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import toast from "react-hot-toast";
 import PropTypes from "prop-types";
@@ -18,6 +18,7 @@ const inputStyle = {
 
 const LoginPage = ({ onSwitchToRegister }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
@@ -33,7 +34,9 @@ const LoginPage = ({ onSwitchToRegister }) => {
     setLoading(false);
     if (result.success) {
       toast.success("Login successful!");
-      navigate("/");
+      // Check if there's a redirect destination in location state
+      const redirectTo = location.state?.from || "/";
+      navigate(redirectTo);
     } else {
       toast.error(result.message || "Login failed. Please try again.");
     }
