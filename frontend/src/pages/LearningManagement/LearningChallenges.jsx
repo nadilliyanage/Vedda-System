@@ -126,12 +126,26 @@ const LearningChallenges = ({ onBack }) => {
     toast.success(`+${earnedXP} XP! +${earnedCoins} coins!`);
   };
 
+  // Calculate earned badges based on completion percentage
+  const completedCount = challenges.filter(isChallengeCompleted).length;
+  const totalCount = challenges.length;
+  const completionPercentage = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
+  const allChallengesCompleted = totalCount > 0 && completedCount === totalCount;
+
+  // Each badge unlocks at 20% increments
+  const earnedBadgeIds = [];
+  if (completionPercentage >= 20) earnedBadgeIds.push('beginner');
+  if (completionPercentage >= 40) earnedBadgeIds.push('fast_learner');
+  if (completionPercentage >= 60) earnedBadgeIds.push('word_master');
+  if (completionPercentage >= 80) earnedBadgeIds.push('champion');
+  if (completionPercentage >= 100) earnedBadgeIds.push('legend');
+
   const badges = [
-    { id: 'beginner', icon: FaMedal, color: 'text-gray-400', name: 'Beginner', desc: 'Complete 1 challenge' },
-    { id: 'fast_learner', icon: FaBolt, color: 'text-yellow-500', name: 'Fast Learner', desc: 'Complete 5 in a row' },
-    { id: 'word_master', icon: FaCrown, color: 'text-purple-500', name: 'Word Master', desc: 'Complete 10 challenges' },
-    { id: 'champion', icon: FaTrophy, color: 'text-yellow-600', name: 'Champion', desc: 'Complete 20 challenges' },
-    { id: 'legend', icon: FaStar, color: 'text-blue-500', name: 'Legend', desc: 'Complete all challenges' }
+    { id: 'beginner', icon: FaMedal, color: 'text-gray-400', name: 'Beginner', desc: 'Complete 20% of challenges', threshold: 20 },
+    { id: 'fast_learner', icon: FaBolt, color: 'text-yellow-500', name: 'Fast Learner', desc: 'Complete 40% of challenges', threshold: 40 },
+    { id: 'word_master', icon: FaCrown, color: 'text-purple-500', name: 'Word Master', desc: 'Complete 60% of challenges', threshold: 60 },
+    { id: 'champion', icon: FaTrophy, color: 'text-yellow-600', name: 'Champion', desc: 'Complete 80% of challenges', threshold: 80 },
+    { id: 'legend', icon: FaStar, color: 'text-blue-500', name: 'Legend', desc: 'Complete all challenges', threshold: 100 }
   ];
 
   const ChallengeNode = ({ challenge, index, state }) => {
@@ -232,7 +246,7 @@ const LearningChallenges = ({ onBack }) => {
 
   const MilestoneNode = ({ index, unlocked }) => {
     const isEven = index % 2 === 0;
-    
+
     return (
       <div className="flex items-center justify-center mb-12 relative">
         {/* Milestone Chest */}
@@ -248,9 +262,6 @@ const LearningChallenges = ({ onBack }) => {
           
           {unlocked && (
             <>
-              <div className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center animate-ping">
-                !
-              </div>
               <div className="absolute -bottom-8 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
                 +50 XP Bonus!
               </div>
@@ -465,8 +476,8 @@ const LearningChallenges = ({ onBack }) => {
               <div className="space-y-3">
                 {badges.map(badge => {
                   const BadgeIcon = badge.icon;
-                  const earned = userProgress.badges.includes(badge.id);
-                  
+                  const earned = earnedBadgeIds.includes(badge.id);
+
                   return (
                     <div 
                       key={badge.id}
@@ -493,28 +504,6 @@ const LearningChallenges = ({ onBack }) => {
                     </div>
                   );
                 })}
-              </div>
-
-              {/* Progress */}
-              <div
-                className="mt-6 pt-6"
-                style={{ borderTop: '1px solid rgba(200,170,100,0.30)' }}
-              >
-                <div
-                  className="text-sm font-semibold mb-2"
-                  style={{ color: '#5c4a1e' }}
-                >
-                  Progress: {challenges.filter(c => c.isCompleted).length}/{challenges.length}
-                </div>
-                <div className="w-full rounded-full h-3" style={{ background: 'rgba(200,170,100,0.20)' }}>
-                  <div 
-                    className="h-3 rounded-full transition-all duration-500"
-                    style={{
-                      width: `${challenges.length > 0 ? (challenges.filter(c => c.isCompleted).length / challenges.length) * 100 : 0}%`,
-                      background: 'linear-gradient(90deg, #9a6f2a, #c9943a)',
-                    }}
-                  />
-                </div>
               </div>
             </div>
           </div>
@@ -550,7 +539,7 @@ const LearningChallenges = ({ onBack }) => {
                       {isMilestone(index) && (
                         <MilestoneNode 
                           index={index}
-                          unlocked={challenge.isCompleted === true}
+                          unlocked={isChallengeCompleted(challenge)}
                         />
                       )}
                     </div>
@@ -559,10 +548,28 @@ const LearningChallenges = ({ onBack }) => {
 
                 {/* End Trophy */}
                 <div className="flex items-center justify-center mt-12">
-                  <div className="bg-gradient-to-br from-purple-500 to-pink-500 w-40 h-40 rounded-full flex flex-col items-center justify-center text-white shadow-2xl">
-                    <FaCrown className="text-6xl mb-2" />
-                    <div className="font-bold">Complete!</div>
-                  </div>
+                  {allChallengesCompleted ? (
+                    <div className="relative trophy-glow trophy-pop bg-gradient-to-br from-purple-500 to-pink-500 w-40 h-40 rounded-full flex flex-col items-center justify-center text-white shadow-2xl">
+                      <div className="pulse-ring" />
+                      <FaCrown className="text-6xl mb-2 animate-bounce-slow" />
+                      <div className="font-bold">Complete!</div>
+                      <span className="absolute -top-2 -right-1 text-xl">✨</span>
+                      <span className="absolute -bottom-1 -left-2 text-lg">🎉</span>
+                    </div>
+                  ) : (
+                    <div
+                      className="relative w-40 h-40 rounded-full flex flex-col items-center justify-center text-gray-600 shadow-lg"
+                      style={{
+                        background: 'linear-gradient(135deg, #d1d5db, #9ca3af)',
+                        border: '2px solid rgba(107,114,128,0.35)',
+                        opacity: 0.8,
+                      }}
+                    >
+                      <FaCrown className="text-6xl mb-2 text-gray-500" />
+                      <div className="font-bold text-sm text-center px-3">Complete all challenges</div>
+                      {/*<FaLock className="absolute top-5 right-5 text-lg text-gray-700" />*/}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -590,9 +597,9 @@ const LearningChallenges = ({ onBack }) => {
               
               <div className="space-y-4">
                 <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4">
-                  <div className="text-xs text-blue-600 font-semibold mb-1">Total Challenges</div>
+                  <div className="text-xs text-blue-600 font-semibold mb-1">Progress</div>
                   <div className="text-3xl font-bold text-blue-700">
-                    {challenges.filter(c => c.isCompleted).length}
+                    {completedCount}/{challenges.length}
                   </div>
                 </div>
 
@@ -636,27 +643,60 @@ const LearningChallenges = ({ onBack }) => {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.8; }
         }
-        
+
         @keyframes spin-slow {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
-        
+
         @keyframes bounce-slow {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-10px); }
         }
-        
+
+        @keyframes trophy-glow {
+          0%, 100% { box-shadow: 0 0 0 rgba(236,72,153,0.0), 0 18px 34px rgba(0,0,0,0.28); }
+          50% { box-shadow: 0 0 26px rgba(236,72,153,0.55), 0 18px 34px rgba(0,0,0,0.28); }
+        }
+
+        @keyframes trophy-pop {
+          0% { transform: scale(0.95); }
+          60% { transform: scale(1.06); }
+          100% { transform: scale(1); }
+        }
+
+        @keyframes pulse-ring {
+          0% { transform: scale(0.85); opacity: 0.7; }
+          100% { transform: scale(1.25); opacity: 0; }
+        }
+
         .animate-pulse-slow {
           animation: pulse-slow 2s ease-in-out infinite;
         }
-        
+
         .animate-spin-slow {
           animation: spin-slow 3s linear infinite;
         }
-        
+
         .animate-bounce-slow {
           animation: bounce-slow 2s ease-in-out infinite;
+        }
+
+        .trophy-glow {
+          animation: trophy-glow 2.2s ease-in-out infinite;
+        }
+
+        .trophy-pop {
+          animation: trophy-pop 450ms ease-out;
+        }
+
+        .pulse-ring {
+          position: absolute;
+          inset: -10px;
+          border-radius: 9999px;
+          border: 3px solid rgba(236,72,153,0.45);
+          animation: pulse-ring 1.7s ease-out infinite;
+          pointer-events: none;
         }
       `}</style>
     </div>

@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 import { FaBook, FaDumbbell, FaTrophy, FaArrowLeft, FaChartLine } from 'react-icons/fa';
+import { exercisesAPI } from '../../services/learningAPI';
+import { useAuth } from '../../contexts/AuthContext';
+import LoadingScreen from '../../components/ui/LoadingScreen';
 import LessonSelection from './LessonSelection';
 import LessonsList from './LessonsList';
 import LessonContentPlayer from './LessonContentPlayer';
@@ -12,11 +16,13 @@ import LearningChallenges from './LearningChallenges';
 
 const VeddaLearning = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [activeView, setActiveView] = useState('main'); // 'main', 'learn', 'practice', 'challenges', 'performance', 'quiz'
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [selectedExercise, setSelectedExercise] = useState(null);
   const [allLessons, setAllLessons] = useState([]);
+  const [loadingPersonalized, setLoadingPersonalized] = useState(false);
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -40,6 +46,52 @@ const VeddaLearning = () => {
     setSelectedLesson(lesson);
     setSelectedCategory(category);
     setActiveView('quiz');
+  };
+
+  const handleTryAnotherPersonalized = async () => {
+    const userId = user?.id;
+    if (!userId) {
+      toast.error('Please log in to access personalized exercises');
+      return;
+    }
+
+    try {
+      setLoadingPersonalized(true);
+      const response = await exercisesAPI.generatePersonalized(userId);
+      const exercise = response.data;
+
+      // Format the exercise with title and topics
+      const formattedExercise = {
+        ...exercise,
+        title: `Personalized Practice`,
+        difficulty: exercise.difficulty || 'medium',
+        topics: exercise.skillTags || ['Personalized Review']
+      };
+
+      // Create mock lesson and category for AI-generated exercises
+      const aiLesson = {
+        id: 'ai-generated',
+        topic: 'Personalized Practice',
+        description: 'AI-generated personalized practice'
+      };
+
+      const aiCategory = {
+        id: 'ai-personalized',
+        name: 'Personalized Practice',
+        description: 'AI-generated exercises tailored for you'
+      };
+
+      // Update state and start the new exercise
+      setSelectedExercise(formattedExercise);
+      setSelectedLesson(aiLesson);
+      setSelectedCategory(aiCategory);
+      // activeView is already 'quiz', no need to change it
+    } catch (error) {
+      console.error('Failed to generate personalized exercise:', error);
+      toast.error('Failed to generate personalized exercise');
+    } finally {
+      setLoadingPersonalized(false);
+    }
   };
 
   const handleBackToCategories = () => {
@@ -417,12 +469,16 @@ const VeddaLearning = () => {
   // Quiz view - Exercise Quiz Runner
   if (activeView === 'quiz' && selectedExercise && selectedLesson && selectedCategory) {
     return (
-        <ExerciseQuizRunner
-            exercise={selectedExercise}
-            lesson={selectedLesson}
-            category={selectedCategory}
-            onClose={() => setActiveView('practice')}
-        />
+        <>
+          {loadingPersonalized && <LoadingScreen message="Generating another personalized exercise..." />}
+          <ExerciseQuizRunner
+              exercise={selectedExercise}
+              lesson={selectedLesson}
+              category={selectedCategory}
+              onClose={() => setActiveView('practice')}
+              onTryAnother={selectedLesson?.id === 'ai-generated' ? handleTryAnotherPersonalized : null}
+          />
+        </>
     );
   }
 

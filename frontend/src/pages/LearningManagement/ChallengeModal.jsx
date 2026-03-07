@@ -407,13 +407,6 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
               </button>
             ) : (
               <>
-                <button
-                  onClick={handleReset}
-                  className="flex items-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all"
-                  style={{ background: 'rgba(255,255,255,0.80)', border: '2px solid rgba(200,165,90,0.40)', color: '#6b4a10' }}
-                >
-                  <FaRedo /> Try Again
-                </button>
                 {submitted && (
                   <button
                     onClick={() => {
@@ -424,7 +417,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
                         onComplete(challenge._id || challenge.id, earnedXP, earnedCoins);
                       } else {
                         // If incorrect, just close the modal
-                        onClose();
+                        handleReset();
                       }
                     }}
                     className="flex items-center gap-2 px-5 py-3 text-white rounded-xl font-bold hover:opacity-90 transition-all"
