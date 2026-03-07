@@ -260,10 +260,6 @@ const LearningChallenges = ({ onBack }) => {
             </div>
           </div>
           
-          <p className="text-sm line-clamp-2" style={{ color: '#3d2e0f' }}>
-            {challenge.question?.prompt}
-          </p>
-          
           {state === 'locked' && (
             <div className="mt-2 text-xs italic" style={{ color: '#8a7550' }}>
               Complete previous challenge to unlock
