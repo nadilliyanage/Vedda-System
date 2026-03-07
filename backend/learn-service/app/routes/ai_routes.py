@@ -30,10 +30,19 @@ def generate_personalized_exercise():
     # Use timestamp-based exercise number for variety
     exercise_number = int(time.time()) % 1000  # Changes every second
 
-    exercise, usage = generate_personalized_exercise_for_user(
-        user_id=user_id,
-        exercise_number=exercise_number
-    )
+    try:
+        exercise, usage = generate_personalized_exercise_for_user(
+            user_id=user_id,
+            exercise_number=exercise_number
+        )
+    except (ValueError, AssertionError) as e:
+        # Model returned invalid structure (e.g. wrong option count for MC).
+        # Retry once — generate_exercise_with_rag will pick a new random type.
+        print(f"[WARN] Exercise generation failed ({e}), retrying...")
+        exercise, usage = generate_personalized_exercise_for_user(
+            user_id=user_id,
+            exercise_number=exercise_number + 1
+        )
 
     exercise["type"] = "AI_GENERATED"
     exercise["user_id"] = user_id
@@ -42,10 +51,6 @@ def generate_personalized_exercise():
     result = get_collection("exercises").insert_one(exercise)
     exercise["_id"] = str(result.inserted_id)
 
-    # return jsonify({
-    #     "exercise": exercise,
-    #     "token_usage": usage
-    # })
     return exercise
 
 @ai_bp.post("/classify-mistake")
