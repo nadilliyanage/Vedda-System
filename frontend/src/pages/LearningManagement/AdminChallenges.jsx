@@ -897,7 +897,7 @@ const AdminChallenges = () => {
               >
                 Skill Tags
               </label>
-              <div className="flCh flex-wrap gap-2">
+              <div className="flex flex-wrap gap-2">
                 {SKILL_TAGS.map((tag) => {
                   const isSelected = formData.skillTags.includes(tag.id);
                   const colorScheme = TAG_COLORS[tag.color];
@@ -944,7 +944,7 @@ const AdminChallenges = () => {
                   Options
                 </label>
                 {formData.question.options.map((option, index) => (
-                  <div key={index} className="flCh items-center gap-2 mb-2">
+                  <div key={index} className="flex items-center gap-2 mb-2">
                     <input
                       type="checkbox"
                       checked={option.correct}
@@ -1025,7 +1025,7 @@ const AdminChallenges = () => {
                   Pairs
                 </label>
                 {formData.question.pairs.map((pair, index) => (
-                  <div key={index} className="flCh gap-2 mb-2">
+                  <div key={index} className="flex gap-2 mb-2">
                     <input
                       type="text"
                       value={pair.left}
@@ -1099,7 +1099,7 @@ const AdminChallenges = () => {
         </div>
 
         <div
-          className="flCh justify-end gap-3 pt-6"
+          className="flex justify-end gap-3 pt-6"
           style={{ borderTop: "1px solid rgba(200,165,90,0.18)" }}
         >
           <button

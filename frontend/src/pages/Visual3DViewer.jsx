@@ -147,7 +147,7 @@ const Visual3DViewer = () => {
           </button>
           <span style={{
             color: '#d4b483',
-            fontFamily: "'Georgia', serif",
+            fontFamily: 'system-ui, sans-serif',
             fontWeight: '700',
             fontSize: '1rem',
             letterSpacing: '-0.2px',
