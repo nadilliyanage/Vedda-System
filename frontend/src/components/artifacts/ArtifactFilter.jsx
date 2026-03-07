@@ -29,7 +29,22 @@ const ArtifactFilter = ({ selectedCategory, onCategoryChange }) => {
                   }
             }
           >
-            <span className="text-xl mb-1">{category.icon}</span>
+            <span
+              className="text-xl mb-1 flex items-center justify-center"
+              style={
+                selectedCategory === category.id
+                  ? {
+                      background: "rgba(255,255,255,0.90)",
+                      borderRadius: "50%",
+                      width: "2rem",
+                      height: "2rem",
+                      filter: "drop-shadow(0 1px 4px rgba(0,0,0,0.20))",
+                    }
+                  : {}
+              }
+            >
+              {category.icon}
+            </span>
             <span className="text-xs font-medium text-center">{category.name}</span>
           </button>
         ))}
