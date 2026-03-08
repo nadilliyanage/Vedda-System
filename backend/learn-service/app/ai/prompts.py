@@ -43,10 +43,18 @@ STRICT RULES (DO NOT VIOLATE):
 - If the CONTEXT does not contain enough sentence examples, use the closest matching example as-is
 - Generate the EXACT exercise type requested (multiple_choice OR text_input)
 
+EXERCISE FORMAT RULES — READ BEFORE GENERATING:
+- "___" (blank placeholder) is ONLY allowed in the prompt when the error type is "missing_word".
+  For spelling_error, word_order_error, and other — NEVER use "___" in the prompt. No exceptions.
+- spelling_error → prompt must ask about spelling (e.g. "What is the Vedda word for X?" or "Which is the correct spelling?"). No blanks.
+- word_order_error → prompt must ask learner to arrange shuffled words. No blanks.
+- other → prompt must ask for translation or vocabulary. No blanks.
+
 For multiple_choice:
 - Exactly 4 options, exactly ONE correct
 - correct_answer MUST match the correct option text exactly
 - All option sentences/words MUST come from CONTEXT examples verbatim
+- spelling_error MC: 3 wrong options = misspelled variants of the correct word, NOT different words
 
 For text_input:
 - The "answer" field MUST contain the correct Vedda word OR full Vedda sentence taken verbatim from CONTEXT
@@ -111,10 +119,25 @@ The application uses exactly 4 error types. Apply the matching rule below:
 
 • spelling_error
   → The learner misspells individual Vedda words.
-  → Generate a single-word vocabulary exercise.
-  → Prompt: "What is the Vedda word for \\"[English term]\\"?"
-  → The answer is the single correct Vedda word.
-  → May use multiple_choice OR text_input.
+  → Generate a single-word vocabulary exercise OR a sentence-based exercise — both are fine.
+  → Prompt examples:
+     - "What is the Vedda word for \\"[English term]\\"?"
+     - "Which of the following is the CORRECT spelling of the Vedda word for \\"[English term]\\"?"
+
+  → For text_input:
+     - The learner types the word freely, so no extra action needed.
+     - answer = the single correctly spelled Vedda word.
+
+  → For multiple_choice (IMPORTANT — spelling-focused options):
+     - The prompt must ask the learner to identify the CORRECT spelling.
+     - Example prompt: "Which is the correct spelling of the Vedda word for \\"bee\\"?"
+     - All 4 options MUST look like plausible spellings of the SAME word:
+         * 1 option = the correct spelling (e.g. "potti")
+         * 3 options = deliberately misspelled variants of that SAME word
+           (e.g. "pothi", "poti", "ppotti") — swap/drop/double letters.
+     - Do NOT use completely different Vedda words as wrong options.
+     - This directly tests whether the learner knows the correct spelling.
+     - correct_answer = the correctly spelled Vedda word.
 
 • other
   → Generate a single-word vocabulary or simple translation exercise.
@@ -127,7 +150,9 @@ CRITICAL RULES:
   MC options = 4 single Vedda words (1 correct, 3 plausible wrong words from CONTEXT).
 - For word_order_error: answer = FULL correctly ordered Vedda sentence (verbatim from CONTEXT).
   MC options = 4 full sentences using the same words in different orders.
-- For spelling_error and other: answer = single Vedda word or short phrase.
+- For spelling_error: answer = single correctly spelled Vedda word.
+  MC options = 1 correct spelling + 3 misspelled variants of the SAME word (not different words).
+- For other: answer = single Vedda word or short phrase.
   MC options = single Vedda words."""
 
 GEN_USER_TEMPLATE = """
@@ -139,6 +164,13 @@ TARGET SKILL TAGS:
 
 COMMON LEARNER ERRORS:
 {error_types}
+
+FORMAT LOCK — OBEY BEFORE READING ANYTHING ELSE:
+The error type(s) for this generation are: {error_types}
+- If error type is "spelling_error" → generate a SPELLING exercise. FORBIDDEN to use "___" in prompt.
+- If error type is "word_order_error" → generate a WORD ORDER exercise. FORBIDDEN to use "___" in prompt.
+- If error type is "other" → generate a VOCABULARY exercise. FORBIDDEN to use "___" in prompt.
+- ONLY if error type is "missing_word" → fill-in-the-blank with "___" is allowed.
 
 {error_type_guide}
 
@@ -189,7 +221,10 @@ Per error type:
     ALL 4 options MUST be full Vedda sentences using the SAME words in different orders.
     1 option = correct order. 3 options = wrong word orders.
 - spelling_error / other:
-    All option texts must be single Vedda words from CONTEXT.
+    For spelling_error: prompt asks learner to pick the CORRECT spelling.
+    1 option = correct Vedda word spelling.
+    3 options = misspelled variants of that SAME word (swap/drop/double letters) — NOT different words.
+    For other: all option texts must be single Vedda words from CONTEXT.
     1 option = correct word. 3 options = plausible but wrong Vedda words."""
 
 GEN_MC_JSON_TEMPLATE = """{{
