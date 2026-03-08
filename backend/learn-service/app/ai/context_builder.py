@@ -171,7 +171,8 @@ def build_context_for_feedback(
 def build_context_for_exercise_generation(
     docs: list[dict],
     skills: list[str],
-    error_types: list[str]
+    error_types: list[str],
+    used_examples: list[str] | None = None
 ) -> str:
     """
     Build specialized context for exercise generation.
@@ -181,12 +182,16 @@ def build_context_for_exercise_generation(
         docs: Retrieved knowledge documents
         skills: Target skills for the exercise
         error_types: Error types to focus on
+        used_examples: Sentences already used in previous exercises — will be
+                       excluded from the context so the model picks fresh ones.
 
     Returns:
         Context optimized for exercise generation
     """
     if not docs:
         return "No knowledge available for these skills."
+
+    used_set = {s.lower().strip().rstrip(".") for s in (used_examples or [])}
 
     lines = []
     lines.append("=== VEDDA LANGUAGE KNOWLEDGE FOR EXERCISE CREATION ===\n")
@@ -198,19 +203,26 @@ def build_context_for_exercise_generation(
         if content:
             lines.append(f"Rule: {content}")
 
-        # Include all available examples
+        # Include all available examples — but skip ones already used
         example = doc.get("example", "").strip()
-        if example:
+        if example and example.lower().rstrip(".") not in used_set:
             lines.append(f"Example: {example}")
 
         examples_array = doc.get("examples", [])
         for ex in examples_array:
             sentence = ex.get("sentence", "").strip()
             meaning = ex.get("meaning", "").strip()
-            if sentence and meaning:
+            if sentence and meaning and sentence.lower().rstrip(".") not in used_set:
                 lines.append(f"Example: {sentence} = {meaning}")
 
         lines.append("---")
+
+    # Tell the model explicitly which examples to avoid
+    if used_set:
+        lines.append("\nDO NOT USE these example sentences — they were used in previous exercises:")
+        for s in used_set:
+            lines.append(f"  - {s}")
+        lines.append("Choose DIFFERENT examples from the ones listed above.\n")
 
     lines.append("\nUse these rules and examples to create a challenging exercise")
     lines.append("that helps the learner practice these specific skills and avoid these errors.")
