@@ -1,17 +1,22 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import LoginPage from "../../pages/LoginPage";
 import RegisterPage from "../../pages/RegisterPage";
 
 const AuthPage = ({ initialMode = "login" }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAuthenticated } = useAuth();
   const [isLogin, setIsLogin] = useState(initialMode === "login");
 
   useEffect(() => {
-    if (isAuthenticated) navigate("/");
-  }, [isAuthenticated, navigate]);
+    // If already authenticated, redirect to intended destination or home
+    if (isAuthenticated) {
+      const redirectTo = location.state?.from || "/";
+      navigate(redirectTo);
+    }
+  }, [isAuthenticated, navigate, location.state]);
 
   useEffect(() => {
     setIsLogin(initialMode === "login");

@@ -2,6 +2,13 @@ from bson import ObjectId
 from ..db.mongo import get_collection
 from ..models.common import serialize_mongo_doc
 from ..services.user_stats_service import get_completed_exercise_ids, get_completed_challenge_ids
+from ..services.lesson_cache_service import (
+    get_all_lessons,
+    get_lesson_by_id,
+    invalidate_cache_after_create,
+    invalidate_cache_after_update,
+    invalidate_cache_after_delete
+)
 from flask import g
 
 # ---------- Challenges ----------
@@ -152,10 +159,30 @@ def admin_delete_category(category_id: str):
 
 # ---------- Lessons ----------
 
-def admin_list_lessons():
-    col = get_collection("lessons")
-    lessons = list(col.find({}))
-    return [serialize_mongo_doc(l) for l in lessons]
+def admin_list_lessons(user_id: str = None):
+    # Fetch from cache instead of directly from database
+    lessons = get_all_lessons()
+
+    # If user_id is provided, annotate with completion status
+    if user_id:
+        col = get_collection("user_lessons")
+        # Get all completed lesson IDs for this user
+        completed_user_lessons = col.find({
+            "user_id": user_id,
+            "completed": True
+        })
+        completed_lesson_ids = {ul.get("lesson_id") for ul in completed_user_lessons}
+
+        # Add completed flag to each lesson
+        for lesson in lessons:
+            lesson_id = lesson.get("_id")
+            lesson["completed"] = lesson_id in completed_lesson_ids
+    else:
+        # No user_id provided, mark all as not completed
+        for lesson in lessons:
+            lesson["completed"] = False
+
+    return lessons
 
 
 def admin_create_lesson(data: dict):
@@ -172,15 +199,17 @@ def admin_create_lesson(data: dict):
         return {"success": False, "error": "Lesson ID already exists"}, 400
 
     col.insert_one(data)
+    # Invalidate cache after creating a lesson
+    invalidate_cache_after_create(data)
     return {"success": True, "message": "Lesson created successfully", "id": data["id"]}, 201
 
 
 def admin_get_lesson(lesson_id: str):
-    col = get_collection("lessons")
-    lesson = col.find_one({"id": lesson_id})
+    # Fetch from cache instead of directly from database
+    lesson = get_lesson_by_id(lesson_id)
     if not lesson:
         return {"error": "Lesson not found"}, 404
-    return serialize_mongo_doc(lesson), 200
+    return lesson, 200
 
 
 def admin_update_lesson(lesson_id: str, data: dict):
@@ -195,6 +224,8 @@ def admin_update_lesson(lesson_id: str, data: dict):
     result = col.update_one({"_id": ObjectId(lesson_id)}, {"$set": data})
 
     if result.modified_count > 0:
+        # Invalidate cache after updating a lesson
+        invalidate_cache_after_update(lesson_id, data)
         return {"success": True, "message": "Lesson updated successfully"}, 200
     else:
         return {"success": True, "message": "No changes made"}, 200
@@ -205,6 +236,8 @@ def admin_delete_lesson(lesson_id: str):
     result = col.delete_one({"id": lesson_id})
 
     if result.deleted_count > 0:
+        # Invalidate cache after deleting a lesson
+        invalidate_cache_after_delete(lesson_id)
         return {"success": True, "message": "Lesson deleted successfully"}, 200
     else:
         return {"success": False, "error": "Lesson not found"}, 404

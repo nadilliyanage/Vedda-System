@@ -9,7 +9,7 @@ from ..db.mongo import ( get_collection, get_db)
 from ..ai.service import ( get_feedback_with_rag, generate_exercise_with_rag )
 from ..ai.effectiveness_tracker import update_knowledge_effectiveness, track_knowledge_usage
 from ..ml.predictor import classify_mistake
-from ..services.user_stats_service import (add_user_attempt_and_update_stat, get_weak_skills_and_errors)
+from ..services.user_stats_service import (add_user_attempt_and_update_stat, get_weak_skills_and_errors, update_last_exercise_type, update_last_practice_error, update_last_generated_exercise_id)
 
 ai_bp = Blueprint("ai", __name__)
 
@@ -30,10 +30,19 @@ def generate_personalized_exercise():
     # Use timestamp-based exercise number for variety
     exercise_number = int(time.time()) % 1000  # Changes every second
 
-    exercise, usage = generate_personalized_exercise_for_user(
-        user_id=user_id,
-        exercise_number=exercise_number
-    )
+    try:
+        exercise, usage = generate_personalized_exercise_for_user(
+            user_id=user_id,
+            exercise_number=exercise_number
+        )
+    except (ValueError, AssertionError) as e:
+        # Model returned invalid structure (e.g. wrong option count for MC).
+        # Retry once — generate_exercise_with_rag will pick a new random type.
+        print(f"[WARN] Exercise generation failed ({e}), retrying...")
+        exercise, usage = generate_personalized_exercise_for_user(
+            user_id=user_id,
+            exercise_number=exercise_number + 1
+        )
 
     exercise["type"] = "AI_GENERATED"
     exercise["user_id"] = user_id
@@ -42,10 +51,21 @@ def generate_personalized_exercise():
     result = get_collection("exercises").insert_one(exercise)
     exercise["_id"] = str(result.inserted_id)
 
-    # return jsonify({
-    #     "exercise": exercise,
-    #     "token_usage": usage
-    # })
+    # Asynchronously save the new exercise ID so the next generation avoids its examples
+    Thread(
+        target=update_last_generated_exercise_id,
+        kwargs={"user_id": user_id, "exercise_id": exercise["_id"]},
+        daemon=True
+    ).start()
+
+    # Asynchronously record the exercise type that was last generated for this user.
+    generated_q_type = exercise.get("question", {}).get("type", "unknown")
+    Thread(
+        target=update_last_exercise_type,
+        kwargs={"user_id": user_id, "exercise_type": generated_q_type},
+        daemon=True
+    ).start()
+
     return exercise
 
 @ai_bp.post("/classify-mistake")
@@ -67,8 +87,9 @@ def submit_answer():
     exercise_id = payload["exercise_id"]
     student_answer = payload.get("user_answer", "")
     is_challenge = payload.get("is_challenge", False)
+    time_spent = payload.get("time_spent")  # Get time_spent from request
 
-    # Fetch document from the appropriate collection
+    # ...existing code...
     try:
         object_id = ObjectId(exercise_id)
     except Exception:
@@ -154,6 +175,7 @@ def submit_answer():
             "attempt_type": attempt_type,
             "error_type": error_type,
             "points": exercise_points,
+            "time_spent": time_spent,
         },
         daemon=True
     ).start()
@@ -185,15 +207,37 @@ def generate_personalized_exercise_for_user(user_id: str, exercise_number: int =
     # 1. Fetch user stats
     user_stats = db.user_stats.find_one({"user_id": user_id})
     if not user_stats:
-        # Create default stats for new user
         user_stats = {
             "user_id": user_id,
             "skill_stats": {},
             "error_stats": {}
         }
 
-    # 2. Extract weak skills + error types
-    weak_skills, top_errors = get_weak_skills_and_errors(user_stats)
+    # 1b. Fetch the last generated exercise to extract used example sentences.
+    #     This prevents the model from reusing the same sentence on consecutive generations.
+    used_examples = []
+    last_ex_id = user_stats.get("last_generated_exercise_id")
+    if last_ex_id:
+        try:
+            from bson import ObjectId
+            last_ex = get_collection("exercises").find_one({"_id": ObjectId(last_ex_id)})
+            if last_ex:
+                q = last_ex.get("question", {})
+                # Collect the prompt text and the correct answer — both are sentences/words to avoid
+                prompt = q.get("prompt", "").strip()
+                correct = q.get("correct_answer", "").strip()
+                answer = q.get("answer", "").strip()
+                if prompt:
+                    used_examples.append(prompt)
+                if correct:
+                    used_examples.append(correct)
+                if answer and answer != correct:
+                    used_examples.append(answer)
+        except Exception as e:
+            print(f"[WARN] Could not fetch last exercise for variety: {e}")
+
+    # 2. Extract weak skills + error types (includes last_practice_error from user_stats)
+    weak_skills, top_errors, last_practice_error = get_weak_skills_and_errors(user_stats)
 
     # 3. Get all available skills from knowledge base
     knowledge_coll = db["vedda_knowledge"]
@@ -223,11 +267,29 @@ def generate_personalized_exercise_for_user(user_id: str, exercise_number: int =
 
     # 5. Rotate error types for variety
     if not top_errors:
-        top_errors = ["spelling_error"]
-    elif len(top_errors) > 1:
+        # Fall back to last practiced error types if available, else default
+        top_errors = last_practice_error if last_practice_error else ["spelling_error"]
+
+    # Remove previously practiced error types to avoid repetition
+    # filtered_errors = errors the user hasn't practiced recently
+    last_practice_set = set(last_practice_error)
+    filtered_errors = [e for e in top_errors if e not in last_practice_set]
+
+    # If filtering removed everything, fall back to full top_errors
+    if not filtered_errors:
+        filtered_errors = top_errors
+
+    if len(filtered_errors) > 1:
         # Randomly pick subset
-        num_errors = random.randint(1, min(2, len(top_errors)))
-        top_errors = random.sample(top_errors, num_errors)
+        num_errors = random.randint(1, min(2, len(filtered_errors)))
+        filtered_errors = random.sample(filtered_errors, num_errors)
+
+    # Asynchronously save the selected error types to user_stats as last_practice_error
+    Thread(
+        target=update_last_practice_error,
+        kwargs={"user_id": user_id, "error_types": filtered_errors},
+        daemon=True
+    ).start()
 
     # 6. Vary difficulty randomly for more variety
     difficulty_levels = ["beginner", "beginner", "intermediate"]  # Weight toward beginner
@@ -236,9 +298,10 @@ def generate_personalized_exercise_for_user(user_id: str, exercise_number: int =
     # 7. Call AI exercise generator with varied parameters
     exercise, usage = generate_exercise_with_rag(
         skills=weak_skills,
-        error_types=top_errors,
+        error_types=filtered_errors,
         exercise_number=exercise_number,
-        difficulty=difficulty
+        difficulty=difficulty,
+        used_examples=used_examples
     )
 
     return exercise, usage

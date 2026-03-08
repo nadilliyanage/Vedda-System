@@ -58,6 +58,15 @@ _uss_mod.get_completed_exercise_ids = MagicMock(return_value=[])
 _uss_mod.get_completed_challenge_ids = MagicMock(return_value=[])
 sys.modules["app.services.user_stats_service"] = _uss_mod
 
+# app.services.lesson_cache_service stub — avoids cache / DB init
+_lcs_mod = types.ModuleType("app.services.lesson_cache_service")
+_lcs_mod.get_all_lessons = MagicMock(return_value=[])
+_lcs_mod.get_lesson_by_id = MagicMock(return_value=None)
+_lcs_mod.invalidate_cache_after_create = MagicMock()
+_lcs_mod.invalidate_cache_after_update = MagicMock()
+_lcs_mod.invalidate_cache_after_delete = MagicMock()
+sys.modules["app.services.lesson_cache_service"] = _lcs_mod
+
 # ---------------------------------------------------------------------------
 # Add service root to sys.path.
 # Replace flask.g (a Werkzeug LocalProxy) with a plain MagicMock BEFORE
@@ -91,6 +100,7 @@ from app.services.admin_service import (  # noqa: E402
     admin_delete_exercise,
 )
 import app.services.admin_service as _admin_mod  # noqa: E402 — kept for patch.object
+import app.services.lesson_cache_service as _lcs_mod_ref  # noqa: E402 — kept for patch.object
 
 
 # ---------------------------------------------------------------------------
@@ -587,18 +597,24 @@ class TestAdminDeleteCategory(unittest.TestCase):
 
 class TestAdminListLessons(unittest.TestCase):
 
-    @patch.object(_admin_mod, "get_collection")
-    def test_returns_serialized_list(self, mock_get_col):
-        col = _fresh_col()
-        col.find.return_value = [
-            {"_id": ObjectId(), "id": "l1", "topic": "Colors", "categoryId": "cat1"},
+    @patch.object(_admin_mod, "get_all_lessons")
+    def test_returns_serialized_list(self, mock_get_all):
+        mock_get_all.return_value = [
+            {"_id": str(ObjectId()), "id": "l1", "topic": "Colors", "categoryId": "cat1"},
         ]
-        mock_get_col.return_value = col
 
         result = admin_list_lessons()
 
         self.assertEqual(len(result), 1)
         self.assertIsInstance(result[0]["_id"], str)
+
+    @patch.object(_admin_mod, "get_all_lessons")
+    def test_returns_empty_list_when_no_lessons(self, mock_get_all):
+        mock_get_all.return_value = []
+
+        result = admin_list_lessons()
+
+        self.assertEqual(result, [])
 
 
 # ---------------------------------------------------------------------------
@@ -651,22 +667,19 @@ class TestAdminCreateLesson(unittest.TestCase):
 
 class TestAdminGetLesson(unittest.TestCase):
 
-    @patch.object(_admin_mod, "get_collection")
-    def test_returns_lesson_when_found(self, mock_get_col):
-        col = _fresh_col()
-        col.find_one.return_value = {"_id": ObjectId(), "id": "l1", "topic": "Colors"}
-        mock_get_col.return_value = col
+    @patch.object(_admin_mod, "get_lesson_by_id")
+    def test_returns_lesson_when_found(self, mock_get_by_id):
+        mock_get_by_id.return_value = {"_id": str(ObjectId()), "id": "l1", "topic": "Colors"}
 
         response, status = admin_get_lesson("l1")
 
         self.assertEqual(status, 200)
         self.assertIsInstance(response["_id"], str)
+        self.assertEqual(response["id"], "l1")
 
-    @patch.object(_admin_mod, "get_collection")
-    def test_returns_404_when_not_found(self, mock_get_col):
-        col = _fresh_col()
-        col.find_one.return_value = None
-        mock_get_col.return_value = col
+    @patch.object(_admin_mod, "get_lesson_by_id")
+    def test_returns_404_when_not_found(self, mock_get_by_id):
+        mock_get_by_id.return_value = None
 
         response, status = admin_get_lesson("nonexistent")
 

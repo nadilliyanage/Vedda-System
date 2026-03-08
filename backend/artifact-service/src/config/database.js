@@ -15,13 +15,15 @@ const connectDB = async () => {
   }
 };
 
-// Handle connection events
-mongoose.connection.on('disconnected', () => {
-  console.log('⚠️ MongoDB disconnected');
-});
+// Handle connection events (suppressed in test mode)
+if (process.env.NODE_ENV !== 'test') {
+  mongoose.connection.on('disconnected', () => {
+    console.log('⚠️ MongoDB disconnected');
+  });
 
-mongoose.connection.on('error', (err) => {
-  console.error(`❌ MongoDB error: ${err}`);
-});
+  mongoose.connection.on('error', (err) => {
+    console.error(`❌ MongoDB error: ${err}`);
+  });
+}
 
 module.exports = connectDB;

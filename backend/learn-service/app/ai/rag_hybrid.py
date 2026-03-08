@@ -8,6 +8,9 @@ from ..db.mongo import get_db
 from .embedding_service import generate_embedding
 from .similarity import cosine_similarity_batch
 
+# Error types that require sentence-level knowledge documents
+_SENTENCE_LEVEL_ERROR_TYPES = {"missing_word", "word_order_error"}
+
 
 def hybrid_retrieve(
     db,
@@ -17,13 +20,14 @@ def hybrid_retrieve(
     exercise_type: str | None = None,
     difficulty: str | None = None,
     weak_skills: list[str] | None = None,
-    limit: int = 5
+    limit: int = 5,
+    for_exercise: bool = False
 ) -> list[dict]:
     """
     Advanced hybrid retrieval combining symbolic filtering and semantic search.
 
     Retrieval Pipeline:
-    1. Symbolic filtering (skill_tags, difficulty)
+    1. Symbolic filtering (skill_tags, difficulty, is_sentence_type)
     2. Semantic scoring (cosine similarity with query embedding)
     3. Re-ranking with boost factors
     4. Sort and return top-k
@@ -37,6 +41,9 @@ def hybrid_retrieve(
         difficulty: Difficulty level (e.g., "beginner", "intermediate", "advanced")
         weak_skills: Skills the learner struggles with (for boosting)
         limit: Maximum number of documents to return
+        for_exercise: If True, applies extra filters for exercise generation
+                      (e.g. is_sentence_type=True for sentence-level error types).
+                      If False (feedback), no extra filters are applied.
 
     Returns:
         List of knowledge documents ranked by relevance score
@@ -50,14 +57,24 @@ def hybrid_retrieve(
     # Filter by skill tags (documents must match at least one skill tag)
     if skill_tags:
         query["skill_tags"] = {"$in": skill_tags}
-
-    # Filter by difficulty if specified
-    if difficulty:
-        query["difficulty"] = difficulty
+    print(f"Top error types: {error_types}")
+    # For exercise generation only: if the error types require sentence-level
+    # knowledge (missing_word, word_order_error), restrict to documents that
+    # are tagged as sentence-type so the model has proper sentence examples.
+    needs_sentence_docs = for_exercise and bool(set(error_types) & _SENTENCE_LEVEL_ERROR_TYPES)
+    if needs_sentence_docs:
+        query["is_sentence_type"] = True
 
     # Retrieve candidate documents
     knowledge_coll = db["vedda_knowledge"]
     candidates = list(knowledge_coll.find(query))
+
+    # If is_sentence_type filter returned nothing, fall back to all docs matching
+    # the skill tags — better to have some context than none (empty context → hallucination).
+    if not candidates and needs_sentence_docs:
+        fallback_query = {k: v for k, v in query.items() if k != "is_sentence_type"}
+        candidates = list(knowledge_coll.find(fallback_query))
+        print(f"[RAG] is_sentence_type filter returned 0 docs — fell back to {len(candidates)} unfiltered docs")
 
     if not candidates:
         print(f"No candidates found for query: {query}")

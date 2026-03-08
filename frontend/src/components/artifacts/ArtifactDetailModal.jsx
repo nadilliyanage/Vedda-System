@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import { FaTimes, FaMapMarkerAlt, FaTag, FaEdit, FaChevronLeft, FaChevronRight, FaExpand } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { getArtifacts } from "../../services/artifactService";
+import { translateWord } from "../../services/dictionaryService";
 import FeedbackFormModal from "./FeedbackFormModal";
 import { useAuth } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
@@ -13,6 +14,7 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [lightboxIndex, setLightboxIndex] = useState(null); // null = closed
+  const [veddaWord, setVeddaWord] = useState(null);
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -62,7 +64,48 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
     if (artifact?.category) {
       fetchRelatedArtifacts();
     }
+    if (artifact?.veddaName) {
+      setVeddaWord(artifact.veddaName);
+    } else if (artifact?.name) {
+      fetchVeddaWord(artifact.name);
+    }
   }, [artifact]);
+
+  const fetchVeddaWord = async (name) => {
+    setVeddaWord(null);
+    const words = name.toLowerCase().split(' ').filter(w => w !== 'vedda');
+
+    // Try exact match first
+    try {
+      const result = await translateWord(name, 'english', 'vedda');
+      if (result.success && result.translation) {
+        setVeddaWord(result.translation);
+        return;
+      }
+    } catch (_) { /* continue */ }
+
+    // Try base word (without "vedda")
+    if (words.length > 0) {
+      try {
+        const result = await translateWord(words.join(' '), 'english', 'vedda');
+        if (result.success && result.translation) {
+          setVeddaWord(result.translation);
+          return;
+        }
+      } catch (_) { /* continue */ }
+    }
+
+    // Try individual words
+    for (const word of words) {
+      try {
+        const result = await translateWord(word, 'english', 'vedda');
+        if (result.success && result.translation) {
+          setVeddaWord(result.translation);
+          return;
+        }
+      } catch (_) { /* continue */ }
+    }
+  };
 
   const fetchRelatedArtifacts = async () => {
     try {
@@ -149,9 +192,14 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
                   <FaExpand className="text-sm text-amber-100" />
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-2 font-serif" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.5)" }}>
+                  <h2 className="text-3xl md:text-4xl font-bold text-white mb-1 font-serif" style={{ textShadow: "0 2px 8px rgba(0,0,0,0.5)" }}>
                     {artifact.name}
                   </h2>
+                  {veddaWord && (
+                    <p className="text-lg font-semibold mb-2" style={{ color: "rgba(220,190,255,0.92)", textShadow: "0 1px 4px rgba(0,0,0,0.5)" }}>
+                      {veddaWord} <span className="text-sm font-normal" style={{ color: "rgba(200,175,240,0.75)" }}>(Vedda)</span>
+                    </p>
+                  )}
                   <span
                     className="inline-block px-3 py-1 rounded-full text-sm font-semibold text-white capitalize"
                     style={{ background: "linear-gradient(135deg, #7c3fa8, #4a6fa8)", boxShadow: "0 2px 8px rgba(124,63,168,0.40)" }}

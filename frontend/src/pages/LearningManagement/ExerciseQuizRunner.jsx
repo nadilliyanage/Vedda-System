@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import { FaTimes, FaCheckCircle, FaTimesCircle, FaSpinner, FaRedo } from 'react-icons/fa';
+import { FaTimes, FaCheckCircle, FaTimesCircle, FaSpinner, FaRedo, FaMagic } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import { exercisesAPI } from '../../services/learningAPI';
 import { useAuth } from '../../contexts/AuthContext';
 
-const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
+const ExerciseQuizRunner = ({ exercise, lesson, category, onClose, onTryAnother }) => {
   const { user } = useAuth();
   const [answers, setAnswers] = useState({});
   const [submitted, setSubmitted] = useState(false);
@@ -13,6 +13,12 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
   const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
 
   useEffect(() => {
+    // Reset all state when exercise changes
+    setSubmitted(false);
+    setResults(null);
+    setAiSummary('');
+    setIsGeneratingSummary(false);
+
     // Initialize answer based on question type
     if (exercise.question?.type === 'multiple_choice') {
       setAnswers({ [exercise.question.questionNo]: [] });
@@ -608,19 +614,47 @@ const ExerciseQuizRunner = ({ exercise, lesson, category, onClose }) => {
           {!submitted ? (
             <button
               onClick={handleSubmit}
-              className="px-8 py-3 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
-              style={{ background: 'linear-gradient(135deg, #9a6f2a, #c9943a)' }}
+              className="px-8 py-3 text-white rounded-lg font-bold transition-all transform hover:scale-105"
+              style={{
+                background: 'linear-gradient(135deg, #7a4f10, #b8751e)',
+                border: '2px solid rgba(255,255,255,0.75)',
+                boxShadow: '0 4px 18px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.25)',
+                textShadow: '0 1px 3px rgba(0,0,0,0.6)',
+              }}
             >
               Submit
             </button>
           ) : (
-            <button
-              onClick={handleRefresh}
-              className="flex items-center gap-2 px-6 py-3 text-white rounded-lg font-bold shadow-lg hover:shadow-xl transition-all transform hover:scale-105"
-              style={{ background: 'linear-gradient(135deg, #9a6f2a, #c9943a)' }}
-            >
-              <FaRedo /> Try Again
-            </button>
+            <>
+              <button
+                onClick={handleRefresh}
+                className="flex items-center gap-2 px-6 py-3 text-white rounded-lg font-bold transition-all transform hover:scale-105"
+                style={{
+                  background: 'linear-gradient(135deg, #7a4f10, #b8751e)',
+                  border: '2px solid rgba(255,255,255,0.75)',
+                  boxShadow: '0 4px 18px rgba(0,0,0,0.55), 0 0 0 1px rgba(0,0,0,0.25)',
+                  textShadow: '0 1px 3px rgba(0,0,0,0.6)',
+                }}
+              >
+                <FaRedo /> Try Again
+              </button>
+
+              {/* Show "Try Another" button for personalized exercises */}
+              {onTryAnother && lesson?.id === 'ai-generated' && (
+                <button
+                  onClick={onTryAnother}
+                  className="flex items-center gap-2 px-6 py-3 text-white rounded-lg font-bold transition-all transform hover:scale-105"
+                  style={{
+                    background: 'linear-gradient(135deg, #7c3aed, #a855f7)',
+                    border: '2px solid rgba(255,255,255,0.75)',
+                    boxShadow: '0 4px 18px rgba(124,58,237,0.55), 0 0 0 1px rgba(0,0,0,0.25)',
+                    textShadow: '0 1px 3px rgba(0,0,0,0.6)',
+                  }}
+                >
+                  <FaMagic /> Try Another
+                </button>
+              )}
+            </>
           )}
         </div>
       </div>

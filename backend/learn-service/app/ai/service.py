@@ -5,7 +5,8 @@ from ..ai.prompts import (
     FEEDBACK_SYSTEM, FEEDBACK_USER_TEMPLATE,
     GEN_SYSTEM, GEN_USER_TEMPLATE,
     GEN_MC_INSTRUCTIONS, GEN_MC_JSON_TEMPLATE,
-    GEN_TEXT_INPUT_INSTRUCTIONS, GEN_TEXT_INPUT_JSON_TEMPLATE
+    GEN_TEXT_INPUT_INSTRUCTIONS, GEN_TEXT_INPUT_JSON_TEMPLATE,
+    SENTENCE_LEVEL_ERROR_TYPES, _ERROR_TYPE_GUIDE
 )
 from ..ai.rag import build_rag_context
 from ..ai.rag_hybrid import hybrid_retrieve
@@ -90,9 +91,10 @@ def get_feedback_with_rag(*, sentence: str, correct_answer: str, student_answer:
         skill_tags=skill_tags,
         error_types=[error_type] if error_type else top_errors,
         exercise_type=None,  # Not relevant for feedback
-        difficulty=None,  # Don't filter by difficulty for feedback
+        difficulty=None,     # Don't filter by difficulty for feedback
         weak_skills=weak_skills,
-        limit=5
+        limit=5,
+        for_exercise=False   # no is_sentence_type filter for feedback
     )
 
     # Build specialized context for feedback
@@ -138,7 +140,8 @@ def generate_exercise_with_rag(
     error_types: list[str],
     exercise_number: int = 1,
     difficulty: str = "beginner",
-    exercise_type: str = "multiple_choice"
+    exercise_type: str = "multiple_choice",
+    used_examples: list[str] | None = None
 ) -> tuple[dict, dict]:
     """
     Generate exercise using advanced hybrid RAG.
@@ -149,6 +152,7 @@ def generate_exercise_with_rag(
         exercise_number: Exercise number in sequence
         difficulty: Difficulty level
         exercise_type: Type of exercise to generate
+        used_examples: Sentences already used in previous exercises to avoid repeating
 
     Returns:
         Tuple of (exercise_data, usage_stats)
@@ -166,6 +170,12 @@ def generate_exercise_with_rag(
     ]
     query_text = random.choice(query_variations)
 
+    # Randomly pick exercise type.
+    # Both sentence-level error types (missing_word, word_order_error) now support
+    # multiple_choice AND text_input — the prompt rules ensure options/answers are
+    # full sentences when needed. So we always randomise freely.
+    exercise_type = random.choice(["multiple_choice", "text_input"])
+
     # Retrieve relevant knowledge using hybrid RAG
     # Request more docs and randomly sample for variety
     retrieved_docs = hybrid_retrieve(
@@ -175,8 +185,9 @@ def generate_exercise_with_rag(
         error_types=error_types,
         exercise_type=exercise_type,
         difficulty=difficulty,
-        weak_skills=skills,  # All target skills are weak
-        limit=8  # Get more docs
+        weak_skills=skills,
+        limit=8,
+        for_exercise=True   # enables is_sentence_type filter for sentence-level errors
     )
 
     # Randomly sample from retrieved docs for variety
@@ -188,15 +199,14 @@ def generate_exercise_with_rag(
         rag_knowledge = build_context_for_exercise_generation(
             docs=retrieved_docs,
             skills=skills,
-            error_types=error_types
+            error_types=error_types,
+            used_examples=used_examples
         )
     else:
         # Fallback to old RAG
         rag_knowledge = build_rag_context(skills)
 
-    # Randomly pick exercise type
-    exercise_type = random.choice(["multiple_choice", "text_input"])
-
+    print(rag_knowledge)
     # Build type-specific instructions and JSON template
     if exercise_type == "text_input":
         type_specific_instructions = GEN_TEXT_INPUT_INSTRUCTIONS
@@ -211,10 +221,14 @@ def generate_exercise_with_rag(
             skill_tags=", ".join(f'"{s}"' for s in skills)
         )
 
+    # Render the error-type guide with the actual error types
+    error_type_guide = _ERROR_TYPE_GUIDE.format(error_types=", ".join(error_types))
+
     user_prompt = GEN_USER_TEMPLATE.format(
         context=rag_knowledge,
         skill_tags=", ".join(skills),
         error_types=", ".join(error_types),
+        error_type_guide=error_type_guide,
         exercise_type=exercise_type,
         exercise_number=str(exercise_number),
         type_specific_instructions=type_specific_instructions,
@@ -222,10 +236,10 @@ def generate_exercise_with_rag(
     )
 
     raw, usage = call_openai_json(
-        model=Config.OPENAI_MODEL_GEN,   # gpt-4o / gpt-4o-mini
+        model=Config.OPENAI_MODEL_GEN,
         system_prompt=GEN_SYSTEM,
         user_prompt=user_prompt,
-        temperature=0.8   # INCREASED: Higher temperature for variety (was 0.3)
+        temperature=0.8
     )
 
     data = _safe_json_loads(raw)
@@ -233,16 +247,32 @@ def generate_exercise_with_rag(
     if not isinstance(data, dict):
         raise ValueError("Expected a single JSON object from the model.")
 
-    # Hard validation
-    assert data["categoryId"] == "z0"
-    q_type = data["question"]["type"]
-    assert q_type in ("multiple_choice", "text_input"), f"Unexpected question type: {q_type}"
+    # Soft validation — accept whatever valid type the model returned.
+    # Hard asserts on type mismatch caused MC exercises to crash silently,
+    # making it appear the service always returned text_input.
+    if data.get("categoryId") != "z0":
+        raise ValueError("categoryId must be 'z0'")
+
+    q_type = data.get("question", {}).get("type")
+    if q_type not in ("multiple_choice", "text_input"):
+        raise ValueError(f"Unexpected question type: {q_type}")
 
     if q_type == "multiple_choice":
-        assert len(data["question"]["options"]) == 4
+        options = data["question"].get("options", [])
+        if len(options) != 4:
+            raise ValueError(f"multiple_choice exercise must have exactly 4 options, got {len(options)}")
+        # Hard safety: strip trailing full stops from every option text and correct_answer
+        for opt in options:
+            opt["text"] = opt.get("text", "").rstrip(".")
+        data["question"]["correct_answer"] = data["question"].get("correct_answer", "").rstrip(".")
     else:
-        assert data["question"].get("answer"), "text_input exercise must have an answer field"
-        assert data["question"].get("correct_answer"), "text_input exercise must have a correct_answer field"
+        if not data["question"].get("answer"):
+            raise ValueError("text_input exercise must have an answer field")
+        if not data["question"].get("correct_answer"):
+            raise ValueError("text_input exercise must have a correct_answer field")
+        # Hard safety: strip trailing full stops from answer and correct_answer
+        data["question"]["answer"] = data["question"]["answer"].rstrip(".")
+        data["question"]["correct_answer"] = data["question"]["correct_answer"].rstrip(".")
 
     # Store knowledge IDs for effectiveness tracking
     if retrieved_docs:
