@@ -29,6 +29,7 @@ export const ipaToViseme = {
   
   // /ɔ/, /o/, /oː/ → Oh (rounded open)
   'ɔ': { primary: ['Oh'], secondary: [], weight: 0.9, duration: 150 },
+  'ɔː': { primary: ['Oh'], secondary: [], weight: 0.95, duration: 200 },
   'o': { primary: ['Oh'], secondary: [], weight: 0.85, duration: 145 },
   'oː': { primary: ['Oh'], secondary: [], weight: 0.9, duration: 200 },
   
@@ -91,6 +92,7 @@ export const ipaToViseme = {
   // Velar stops → KGHNG
   'k': { primary: ['KGHNG'], secondary: [], weight: 0.8, duration: 100 },
   'g': { primary: ['KGHNG'], secondary: [], weight: 0.8, duration: 110 },
+  'ɡ': { primary: ['KGHNG'], secondary: [], weight: 0.8, duration: 110 },
   'ŋ': { primary: ['KGHNG'], secondary: [], weight: 0.7, duration: 140 }, // sing
   
   // W-sound → WOO
@@ -142,6 +144,111 @@ export const phonemeToViseme = {
   'ch': { primary: ['ChJ'], secondary: [], weight: 0.9, duration: 130 },
   'sh': { primary: ['ChJ'], secondary: [], weight: 0.9, duration: 140 },
 };
+
+const IPA_MULTI_CHAR_SYMBOLS = [
+  'tʃ',
+  'dʒ',
+  'aɪ',
+  'aʊ',
+  'ɔɪ',
+  'eɪ',
+  'oʊ',
+  'aː',
+  'iː',
+  'uː',
+  'oː',
+  'ɔː',
+  'eː',
+];
+
+const IPA_VOWELS = new Set([
+  'a',
+  'aː',
+  'æ',
+  'ɑ',
+  'ə',
+  'ɛ',
+  'e',
+  'eː',
+  'ɚ',
+  'ɜ',
+  'ɪ',
+  'i',
+  'iː',
+  'ɒ',
+  'ɔ',
+  'ɔː',
+  'o',
+  'oː',
+  'ʊ',
+  'u',
+  'uː',
+  'ʌ',
+  'y',
+  'aɪ',
+  'aʊ',
+  'ɔɪ',
+  'eɪ',
+  'oʊ',
+]);
+
+export function normalizeIpaString(ipaString) {
+  if (!ipaString) return '';
+
+  return ipaString
+    .trim()
+    .replace(/\//g, '')
+    .replace(/[ˈˌ.]/g, '')
+    .replace(/\u0361+/g, '\u0361')
+    .replace(/t\u0361ʃ/g, 'tʃ')
+    .replace(/d\u0361ʒ/g, 'dʒ')
+    .replace(/\u0361/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function tokenizeIpa(ipaString) {
+  const cleaned = normalizeIpaString(ipaString);
+  const tokens = [];
+  let index = 0;
+
+  while (index < cleaned.length) {
+    let matched = false;
+
+    for (const symbol of IPA_MULTI_CHAR_SYMBOLS) {
+      if (cleaned.substr(index, symbol.length) === symbol) {
+        tokens.push(symbol);
+        index += symbol.length;
+        matched = true;
+        break;
+      }
+    }
+
+    if (matched) continue;
+
+    const char = cleaned[index];
+    if (char === ' ' || char === '-') {
+      tokens.push('_pause');
+    } else {
+      tokens.push(char);
+    }
+    index++;
+  }
+
+  return tokens;
+}
+
+function isIpaVowel(token) {
+  return IPA_VOWELS.has(token);
+}
+
+function isGeminateBoundary(tokens, index) {
+  const current = tokens[index];
+  const next = tokens[index + 1];
+  const afterNext = tokens[index + 2];
+
+  return current && next && current === next && !isIpaVowel(current) && isIpaVowel(afterNext);
+}
 
 // Helper function to find best matching morph target
 export function findBestMorphMatch(shapeNames, availableMorphs) {
@@ -207,6 +314,7 @@ export function ipaToPhoneticEnglish(ipaString) {
     'i': 'ee',
     'iː': 'ee',
     'ɔ': 'aw',
+    'ɔː': 'aw',
     'o': 'oh',
     'oː': 'oh',
     'u': 'oo',
@@ -233,6 +341,7 @@ export function ipaToPhoneticEnglish(ipaString) {
     'd': 'd',
     'k': 'k',
     'g': 'g',
+    'ɡ': 'g',
     'f': 'f',
     'v': 'v',
     'θ': 'th',
@@ -255,54 +364,30 @@ export function ipaToPhoneticEnglish(ipaString) {
     'c': 'k',
     'ɟ': 'g',
   };
-  
+
+  const tokens = tokenizeIpa(ipaString);
   let result = '';
-  let i = 0;
-  // Normalize IPA string:
-  //  1. Remove stress markers and syllable breaks
-  //  2. Collapse duplicate combining ties (U+0361) e.g. d͡͡ʒ → d͡ʒ
-  //  3. Normalize tied affricates to plain digraphs (t͡ʃ → tʃ, d͡ʒ → dʒ)
-  //     so the single multiChar lookup handles both notations
-  const cleaned = ipaString
-    .replace(/[ˈˌ.]/g, '')
-    .replace(/\u0361+/g, '\u0361')
-    .replace(/t\u0361ʃ/g, 'tʃ')
-    .replace(/d\u0361ʒ/g, 'dʒ');
-  
-  while (i < cleaned.length) {
-    let matched = false;
-    
-    // Try multi-character symbols first (longest match first)
-    const multiChar = ['tʃ', 't͡ʃ', 'dʒ', 'd͡ʒ', 'aɪ', 'aʊ', 'ɔɪ', 'eɪ', 'oʊ', 'aː', 'iː', 'uː', 'oː', 'eː'];
-    for (const symbol of multiChar) {
-      if (cleaned.substr(i, symbol.length) === symbol) {
-        result += ipaToEnglish[symbol] || symbol;
-        i += symbol.length;
-        matched = true;
-        break;
-      }
+
+  for (let index = 0; index < tokens.length; index++) {
+    const token = tokens[index];
+
+    if (token === '_pause') {
+      result += ' ';
+      continue;
     }
-    
-    // Try single character
-    if (!matched) {
-      const char = cleaned[i];
-      if (ipaToEnglish[char]) {
-        result += ipaToEnglish[char];
-      } else if (char === ':' || char === 'ː') {
-        // Skip length markers
-      } else if (char === ' ' || char === '-') {
-        result += ' ';
-      } else {
-        // Keep unknown characters as-is
-        result += char;
-      }
-      i++;
+
+    if (token === ':' || token === 'ː') {
+      continue;
+    }
+
+    result += ipaToEnglish[token] || token;
+
+    if (isGeminateBoundary(tokens, index)) {
+      result += ' ';
     }
   }
-  
-  // Collapse geminate (doubled) consonants — TTS inserts a schwa between them
-  // e.g. "jj" → "je-j", "pp" → "pe-p". A single letter is sufficient.
-  result = result.replace(/([bcdfghjklmnpqrstvwxyz])\1+/gi, '$1');
+
+  result = result.replace(/\s+/g, ' ').trim();
 
   console.log('IPA to Phonetic English:', ipaString, '→', result);
   return result;
@@ -311,62 +396,36 @@ export function ipaToPhoneticEnglish(ipaString) {
 // Parse IPA transcription to phonemes for accurate animation
 export function ipaToPhonemes(ipaString) {
   if (!ipaString) return [];
-  
+
   const phonemes = [];
-  let i = 0;
-  
-  // Normalize IPA string:
-  //  1. Remove stress markers and syllable breaks
-  //  2. Collapse duplicate combining ties (U+0361) e.g. d͡͡ʒ → d͡ʒ
-  //  3. Normalize tied affricates to plain digraphs so lookup works uniformly
-  const cleaned = ipaString
-    .replace(/[ˈˌ.]/g, '')
-    .replace(/\u0361+/g, '\u0361')
-    .replace(/t\u0361ʃ/g, 'tʃ')
-    .replace(/d\u0361ʒ/g, 'dʒ');
+  const cleaned = normalizeIpaString(ipaString);
 
   console.log('Parsing IPA string:', cleaned);
-  
-  while (i < cleaned.length) {
-    let matched = false;
-    
-    // Try to match multi-character IPA symbols first (longest match first)
-    const multiChar = ['tʃ', 't͡ʃ', 'dʒ', 'd͡ʒ', 'aɪ', 'aʊ', 'ɔɪ', 'eɪ', 'oʊ', 'aː', 'iː', 'uː', 'oː', 'eː'];
-    for (const symbol of multiChar) {
-      if (cleaned.substr(i, symbol.length) === symbol) {
-        phonemes.push(symbol);
-        console.log(`Matched multi-char: ${symbol}`);
-        i += symbol.length;
-        matched = true;
-        break;
-      }
+
+  for (const token of tokenizeIpa(cleaned)) {
+    if (token === '_pause') {
+      phonemes.push('_pause');
+      console.log('Adding pause');
+      continue;
     }
-    
-    // Try single character IPA symbols
-    if (!matched) {
-      const char = cleaned[i];
-      
-      if (ipaToViseme[char]) {
-        phonemes.push(char);
-        console.log(`Matched single char: ${char} → ${ipaToViseme[char].primary[0]}`);
-        i++;
-      } else if (char === ':' || char === 'ː') {
-        // Length marker - already handled by long vowel variants
-        console.log('Skipping length marker');
-        i++;
-      } else if (char === ' ' || char === '-') {
-        // Space or hyphen - treat as pause
-        phonemes.push('_pause');
-        console.log('Adding pause');
-        i++;
+
+    if (token === ':' || token === 'ː') {
+      console.log('Skipping length marker');
+      continue;
+    }
+
+    if (ipaToViseme[token]) {
+      phonemes.push(token);
+      if (token.length > 1) {
+        console.log(`Matched multi-char: ${token}`);
       } else {
-        // Unknown IPA symbol - log and use fallback
-        console.warn(`Unknown IPA symbol: ${char} (U+${char.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0')})`);
-        // Use schwa as fallback
-        phonemes.push('ə');
-        i++;
+        console.log(`Matched single char: ${token} → ${ipaToViseme[token].primary[0]}`);
       }
+      continue;
     }
+
+    console.warn(`Unknown IPA symbol: ${token} (U+${token.charCodeAt(0).toString(16).toUpperCase().padStart(4, '0')})`);
+    phonemes.push('ə');
   }
   
   console.log('Final phonemes array:', phonemes);
