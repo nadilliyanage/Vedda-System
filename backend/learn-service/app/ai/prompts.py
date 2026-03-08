@@ -36,16 +36,20 @@ STRICT RULES (DO NOT VIOLATE):
 - Do NOT change field names
 - Do NOT change JSON structure
 - categoryId MUST always be "z0"
-- Use ONLY Vedda words from CONTEXT
+- Use ONLY Vedda words AND sentence patterns that appear VERBATIM in the CONTEXT
 - Do NOT invent new words
+- Do NOT construct new sentences by mixing words from different examples
+- Every Vedda sentence you produce MUST appear EXACTLY in the CONTEXT examples — copy it, do not create it
+- If the CONTEXT does not contain enough sentence examples, use the closest matching example as-is
 - Generate the EXACT exercise type requested (multiple_choice OR text_input)
 
 For multiple_choice:
 - Exactly 4 options, exactly ONE correct
 - correct_answer MUST match the correct option text exactly
+- All option sentences/words MUST come from CONTEXT examples verbatim
 
 For text_input:
-- The "answer" field MUST contain the correct Vedda word OR full Vedda sentence/phrase
+- The "answer" field MUST contain the correct Vedda word OR full Vedda sentence taken verbatim from CONTEXT
 - correct_answer MUST equal the answer field exactly
 - Do NOT include options or correctOptions fields
 """
@@ -59,30 +63,50 @@ The learner's COMMON ERRORS are: {error_types}
 The application uses exactly 4 error types. Apply the matching rule below:
 
 • missing_word
-  → The learner struggles to produce COMPLETE Vedda sentences (they omit words).
-  → Generate a FULL-SENTENCE TRANSLATION exercise.
-  → Give the learner a complete English sentence and ask them to produce the full correct Vedda sentence.
-  → Example prompt: "Translate this sentence into Vedda: \\"I eat rice.\\"  (type the full sentence)"
-  → The answer MUST be the complete correct Vedda sentence (e.g. "mama batha kanna").
-  → If multiple_choice: all 4 options MUST be full Vedda sentences — NOT single words.
-     - 1 option is the correct full sentence
-     - 3 options are plausible but wrong full sentences (wrong word, extra word, or missing a word)
-  → If text_input: the learner types the full correct Vedda sentence.
-  → The "answer" and "correct_answer" fields MUST be the full Vedda sentence.
-  → May use multiple_choice OR text_input.
+  → The learner struggles to complete Vedda sentences (they omit words).
+  → You MUST select a CONTEXT example sentence that has AT LEAST 3 words. If no 3-word sentence
+    exists in CONTEXT, pick the longest available sentence. Do NOT use 1-word or 2-word answers.
+
+  → For text_input:
+     - Show the chosen sentence with exactly ONE word replaced by "___".
+     - The prompt should be: the incomplete Vedda sentence followed by the COMPLETE English translation in brackets.
+     - The English translation in brackets MUST be the full sentence — NOT with ___, show the actual English word.
+     - Example prompt: "Fill in the missing Vedda word: \\"Meaththo ___ balanawa.\\" (I see a leaf.)"
+     - The answer is ONLY the single missing Vedda word (e.g. "kola"), NOT the full sentence.
+     - The answer must NOT contain a full stop / period (.). Strip it if the word ends with one.
+     - correct_answer = the missing word only, no trailing punctuation.
+
+  → For multiple_choice:
+     - Show the incomplete sentence (one word replaced by "___") in the prompt.
+     - The English translation in brackets MUST show the complete meaning — NOT with ___.
+     - Example prompt: "Fill in the missing word: \\"Meaththo ___ balanawa.\\" (I see a leaf.)"
+     - All 4 options MUST be SINGLE Vedda words that could plausibly fill the blank.
+       - 1 option is the correct missing word (from CONTEXT).
+       - 3 options are OTHER Vedda words from CONTEXT that are plausible but wrong for this slot.
+     - correct_answer = the correct single missing word, no trailing punctuation.
+     - Options must NOT contain full stops / periods (.). Strip them if present.
+     - This tests whether the learner knows which word belongs in the sentence.
+
+  → SENTENCE SELECTION RULES:
+     - MUST pick a sentence with 3 or more words from CONTEXT. if no such sentence exists, pick the longest available sentence.
+     - Remove the most meaningful content word (noun or verb) to create the blank.
+     - The remaining words in the prompt must still make partial sense in English.
+
+  → The "answer" and "correct_answer" fields = the single missing word (NOT the full sentence).
 
 • word_order_error
   → The learner writes the right words but in the wrong order.
   → Generate a SENTENCE CONSTRUCTION exercise.
-  → Give the learner a set of shuffled Vedda words and ask them to arrange them into the correct sentence.
-  → The prompt must list the scrambled Vedda words in square brackets, each followed by its English meaning.
+  → Pick a complete sentence from CONTEXT examples. Shuffle its words for the prompt.
+  → The prompt must list the shuffled Vedda words in square brackets, each followed by its English meaning.
   → Example prompt: "Arrange these Vedda words into the correct sentence: [kanna (eat), mama (I), batha (rice)]"
-  → The answer is the full correctly ordered Vedda sentence (e.g. "mama batha kanna").
-  → If multiple_choice: all 4 options MUST be full Vedda sentences with different word orders.
-     - 1 option is the correctly ordered sentence
+  → The answer is the full correctly ordered Vedda sentence taken VERBATIM from CONTEXT.
+  → DO NOT invent a sentence — shuffle an existing CONTEXT example sentence.
+  → If multiple_choice: all 4 options MUST be full Vedda sentences (same words, different orders).
+     - 1 option is the correctly ordered sentence (verbatim from CONTEXT)
      - 3 options use the same words in wrong orders
-  → If text_input: the learner types the correctly ordered full sentence.
-  → The "answer" and "correct_answer" fields MUST be the full Vedda sentence.
+  → If text_input: the learner types the correctly ordered full sentence (verbatim from CONTEXT).
+  → The "answer" and "correct_answer" fields MUST be the verbatim CONTEXT sentence.
   → May use multiple_choice OR text_input.
 
 • spelling_error
@@ -98,11 +122,13 @@ The application uses exactly 4 error types. Apply the matching rule below:
   → May use multiple_choice OR text_input.
 
 CRITICAL RULES:
-- For missing_word: answer = FULL Vedda sentence. NEVER a single word. NEVER a fill-in-the-blank.
-- For word_order_error: answer = FULL correctly ordered Vedda sentence. NEVER a single word.
-- For missing_word and word_order_error with multiple_choice: ALL 4 options must be complete sentences.
+- For missing_word: MUST use a sentence with 3+ words from CONTEXT. Remove one content word → make it "___".
+  answer = the single missing word ONLY (e.g. "kola"). NEVER the full sentence.
+  MC options = 4 single Vedda words (1 correct, 3 plausible wrong words from CONTEXT).
+- For word_order_error: answer = FULL correctly ordered Vedda sentence (verbatim from CONTEXT).
+  MC options = 4 full sentences using the same words in different orders.
 - For spelling_error and other: answer = single Vedda word or short phrase.
-"""
+  MC options = single Vedda words."""
 
 GEN_USER_TEMPLATE = """
 CONTEXT (Vedda vocabulary and examples):
@@ -119,9 +145,16 @@ COMMON LEARNER ERRORS:
 TASK:
 Generate ONE unique Vedda language exercise that DIRECTLY targets the learner's error type(s) above.
 
+CRITICAL — CONTEXT IS THE ONLY SOURCE OF TRUTH:
+- Every Vedda word and sentence you use MUST appear in the CONTEXT above
+- For sentence-level exercises (missing_word, word_order_error): pick a full example sentence
+  from CONTEXT and build the exercise around it — do NOT compose a new sentence
+- If CONTEXT lacks enough examples, use the closest available example as-is
+- NEVER translate English phrases into Vedda yourself — only use pre-existing CONTEXT examples
+
 IMPORTANT - CREATE VARIETY:
 - Each exercise MUST be different from previous ones
-- Use different Vedda words/sentences from the CONTEXT
+- Use different examples from the CONTEXT each time
 - Use exercise number {exercise_number} as inspiration for variety
 
 General constraints (apply after error-type rules above):
@@ -143,12 +176,21 @@ Return JSON EXACTLY in this format:
 GEN_MC_INSTRUCTIONS = """Options constraints:
 - Exactly 4 options
 - Only ONE option is correct (can be A, B, C, or D - vary the position!)
-- Incorrect options must be plausible but clearly wrong
 - Shuffle the correct answer position for variety
-- If the exercise type is missing_word or word_order_error:
-    ALL 4 options MUST be complete Vedda sentences — single words are NOT allowed as options.
-- If the exercise type is spelling_error or other:
-    All option texts must be single Vedda words from CONTEXT."""
+- correct_answer and all option "text" values MUST NOT contain a full stop / period (.). Strip trailing punctuation.
+
+Per error type:
+- missing_word:
+    The prompt shows a Vedda sentence with "___" + COMPLETE English translation in brackets (no ___ in English).
+    Options are SINGLE Vedda words that could fill the blank — no full stops.
+    1 option = the correct missing word. 3 options = other Vedda words from CONTEXT (plausible but wrong).
+    Do NOT use full sentences as options.
+- word_order_error:
+    ALL 4 options MUST be full Vedda sentences using the SAME words in different orders.
+    1 option = correct order. 3 options = wrong word orders.
+- spelling_error / other:
+    All option texts must be single Vedda words from CONTEXT.
+    1 option = correct word. 3 options = plausible but wrong Vedda words."""
 
 GEN_MC_JSON_TEMPLATE = """{{
   "categoryId": "z0",
@@ -174,10 +216,13 @@ GEN_MC_JSON_TEMPLATE = """{{
 }}"""
 
 GEN_TEXT_INPUT_INSTRUCTIONS = """Answer constraints:
-- If the exercise targets missing_word: answer = the FULL correct Vedda sentence (not just one word)
+- If the exercise targets missing_word:
+    prompt = the Vedda sentence with ONE word replaced by "___" + COMPLETE English translation in brackets (no ___ in English)
+    answer = the single missing Vedda word ONLY (e.g. "kola") — NOT the full sentence
 - If the exercise targets word_order_error: answer = the full correctly ordered Vedda sentence
 - If the exercise targets spelling_error or other: answer = a single correct Vedda word or short phrase
 - correct_answer and answer fields MUST be identical
+- answer and correct_answer MUST NOT contain a full stop / period (.). Strip trailing punctuation.
 - Do NOT include options or correctOptions fields"""
 
 GEN_TEXT_INPUT_JSON_TEMPLATE = """{{

@@ -239,7 +239,10 @@ def get_weak_skills_and_errors(user_stats, min_attempts=5, threshold=0.6):
         reverse=True
     )[:2]
 
-    return weak_skills, top_errors
+    # Also return the last practiced error types saved from previous exercise generations
+    last_practice_error = user_stats.get("last_practice_error", [])
+
+    return weak_skills, top_errors, last_practice_error
 
 def safe_int(val):
     try:
@@ -295,3 +298,37 @@ def _user_attempts_col():
 
 def _user_stat_col():
     return get_collection("user_stats")
+
+
+def update_last_exercise_type(user_id: str, exercise_type: str):
+    """
+    Persists the most recently generated exercise type for a user.
+    Stored as 'last_exercise_type' in the user_stats document.
+    Intended to be called asynchronously so it never blocks the main response.
+    """
+    try:
+        stats_col = _user_stat_col()
+        stats_col.update_one(
+            {"user_id": user_id},
+            {"$set": {"last_exercise_type": exercise_type, "last_updated": datetime.utcnow()}},
+            upsert=True
+        )
+    except Exception as e:
+        print(f"[WARN] update_last_exercise_type failed for user {user_id}: {e}")
+
+
+def update_last_practice_error(user_id: str, error_types: list):
+    """
+    Persists the most recently practiced error types for a user.
+    Stored as 'last_practice_error' in the user_stats document.
+    Intended to be called asynchronously so it never blocks the main response.
+    """
+    try:
+        stats_col = _user_stat_col()
+        stats_col.update_one(
+            {"user_id": user_id},
+            {"$set": {"last_practice_error": error_types, "last_updated": datetime.utcnow()}},
+            upsert=True
+        )
+    except Exception as e:
+        print(f"[WARN] update_last_practice_error failed for user {user_id}: {e}")

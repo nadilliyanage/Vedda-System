@@ -91,9 +91,10 @@ def get_feedback_with_rag(*, sentence: str, correct_answer: str, student_answer:
         skill_tags=skill_tags,
         error_types=[error_type] if error_type else top_errors,
         exercise_type=None,  # Not relevant for feedback
-        difficulty=None,  # Don't filter by difficulty for feedback
+        difficulty=None,     # Don't filter by difficulty for feedback
         weak_skills=weak_skills,
-        limit=5
+        limit=5,
+        for_exercise=False   # no is_sentence_type filter for feedback
     )
 
     # Build specialized context for feedback
@@ -183,7 +184,8 @@ def generate_exercise_with_rag(
         exercise_type=exercise_type,
         difficulty=difficulty,
         weak_skills=skills,
-        limit=8
+        limit=8,
+        for_exercise=True   # enables is_sentence_type filter for sentence-level errors
     )
 
     # Randomly sample from retrieved docs for variety
@@ -201,6 +203,7 @@ def generate_exercise_with_rag(
         # Fallback to old RAG
         rag_knowledge = build_rag_context(skills)
 
+    print(rag_knowledge)
     # Build type-specific instructions and JSON template
     if exercise_type == "text_input":
         type_specific_instructions = GEN_TEXT_INPUT_INSTRUCTIONS
@@ -254,13 +257,19 @@ def generate_exercise_with_rag(
     if q_type == "multiple_choice":
         options = data["question"].get("options", [])
         if len(options) != 4:
-            # Model returned MC with wrong option count — raise so caller can retry
             raise ValueError(f"multiple_choice exercise must have exactly 4 options, got {len(options)}")
+        # Hard safety: strip trailing full stops from every option text and correct_answer
+        for opt in options:
+            opt["text"] = opt.get("text", "").rstrip(".")
+        data["question"]["correct_answer"] = data["question"].get("correct_answer", "").rstrip(".")
     else:
         if not data["question"].get("answer"):
             raise ValueError("text_input exercise must have an answer field")
         if not data["question"].get("correct_answer"):
             raise ValueError("text_input exercise must have a correct_answer field")
+        # Hard safety: strip trailing full stops from answer and correct_answer
+        data["question"]["answer"] = data["question"]["answer"].rstrip(".")
+        data["question"]["correct_answer"] = data["question"]["correct_answer"].rstrip(".")
 
     # Store knowledge IDs for effectiveness tracking
     if retrieved_docs:
