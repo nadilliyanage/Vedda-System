@@ -67,8 +67,9 @@ def submit_answer():
     exercise_id = payload["exercise_id"]
     student_answer = payload.get("user_answer", "")
     is_challenge = payload.get("is_challenge", False)
+    time_spent = payload.get("time_spent")  # Get time_spent from request
 
-    # Fetch document from the appropriate collection
+    # ...existing code...
     try:
         object_id = ObjectId(exercise_id)
     except Exception:
@@ -154,6 +155,7 @@ def submit_answer():
             "attempt_type": attempt_type,
             "error_type": error_type,
             "points": exercise_points,
+            "time_spent": time_spent,
         },
         daemon=True
     ).start()

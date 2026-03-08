@@ -25,7 +25,7 @@ SERVICES = {
         'health': '/health'
     },
     'learn': {
-        'url': os.getenv('LEARN_SERVICE_URL', 'http://localhost:5006'),
+        'url': os.getenv('LEARN_SERVICE_URL', 'http://127.0.0.1:5006'),
         'health': '/health'
     },
     'dictionary': {
@@ -78,7 +78,6 @@ PUBLIC_ROUTE_PREFIXES = [
     '/api/translate',
     '/api/dictionary',
     '/api/history',
-    '/api/learn',
     '/api/tts',
     '/api/stt',
     '/api/3d-models',

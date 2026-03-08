@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { FaArrowLeft, FaBook } from 'react-icons/fa';
+import { FaArrowLeft, FaBook, FaCheckCircle } from 'react-icons/fa';
 import { lessonsAPI } from '../../services/learningAPI';
 import LoadingScreen from '../../components/ui/LoadingScreen';
 
@@ -255,6 +255,24 @@ const LessonsList = ({ category, onBack, onLessonSelect }) => {
                   }}
                 >
                   <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%)' }} />
+
+                  {/* Completed Badge */}
+                  {lesson.completed && (
+                    <div
+                      className="absolute top-4 right-4 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full font-semibold text-sm"
+                      style={{
+                        background: 'rgba(34, 197, 94, 0.95)',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                        border: '1px solid rgba(255,255,255,0.3)',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+                      }}
+                    >
+                      <FaCheckCircle />
+                      <span>Completed</span>
+                    </div>
+                  )}
+
                   <div className="flex items-center justify-between relative z-10">
                     <div className="flex-1">
                       <h2 className="text-2xl font-bold mb-2">
@@ -297,48 +315,48 @@ const LessonsList = ({ category, onBack, onLessonSelect }) => {
         )}
 
         {/* Progress Info */}
-        {lessons.length > 0 && (
-          <div className="mt-8">
-            <div
-              className="rounded-xl p-6"
-              style={{
-                background: 'rgba(255,255,255,0.82)',
-                backdropFilter: 'blur(10px)',
-                WebkitBackdropFilter: 'blur(10px)',
-                border: '1px solid rgba(200,170,100,0.25)',
-                boxShadow: '0 4px 24px rgba(0,0,0,0.10)',
-              }}
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3
-                    className="text-lg font-bold mb-1"
-                    style={{ color: '#1c1409', fontFamily: "'Georgia', serif" }}
-                  >
-                    Your Progress
-                  </h3>
-                  <p style={{ color: '#5c4a1e', fontFamily: 'system-ui, sans-serif' }}>
-                    {lessons.length} lesson{lessons.length !== 1 ? 's' : ''} available in this category
-                  </p>
-                </div>
-                <div className="text-right">
-                  <div
-                    className="text-3xl font-bold"
-                    style={{ color: '#9a6f2a', fontFamily: "'Georgia', serif" }}
-                  >
-                    0/{lessons.length}
-                  </div>
-                  <p
-                    className="text-sm"
-                    style={{ color: '#8a7550', fontFamily: 'system-ui, sans-serif' }}
-                  >
-                    Completed
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/*{lessons.length > 0 && (*/}
+        {/*  <div className="mt-8">*/}
+        {/*    <div*/}
+        {/*      className="rounded-xl p-6"*/}
+        {/*      style={{*/}
+        {/*        background: 'rgba(255,255,255,0.82)',*/}
+        {/*        backdropFilter: 'blur(10px)',*/}
+        {/*        WebkitBackdropFilter: 'blur(10px)',*/}
+        {/*        border: '1px solid rgba(200,170,100,0.25)',*/}
+        {/*        boxShadow: '0 4px 24px rgba(0,0,0,0.10)',*/}
+        {/*      }}*/}
+        {/*    >*/}
+        {/*      <div className="flex items-center justify-between">*/}
+        {/*        <div>*/}
+        {/*          <h3*/}
+        {/*            className="text-lg font-bold mb-1"*/}
+        {/*            style={{ color: '#1c1409', fontFamily: "'Georgia', serif" }}*/}
+        {/*          >*/}
+        {/*            Your Progress*/}
+        {/*          </h3>*/}
+        {/*          <p style={{ color: '#5c4a1e', fontFamily: 'system-ui, sans-serif' }}>*/}
+        {/*            {lessons.length} lesson{lessons.length !== 1 ? 's' : ''} available in this category*/}
+        {/*          </p>*/}
+        {/*        </div>*/}
+        {/*        <div className="text-right">*/}
+        {/*          <div*/}
+        {/*            className="text-3xl font-bold"*/}
+        {/*            style={{ color: '#9a6f2a', fontFamily: "'Georgia', serif" }}*/}
+        {/*          >*/}
+        {/*            0/{lessons.length}*/}
+        {/*          </div>*/}
+        {/*          <p*/}
+        {/*            className="text-sm"*/}
+        {/*            style={{ color: '#8a7550', fontFamily: 'system-ui, sans-serif' }}*/}
+        {/*          >*/}
+        {/*            Completed*/}
+        {/*          </p>*/}
+        {/*        </div>*/}
+        {/*      </div>*/}
+        {/*    </div>*/}
+        {/*  </div>*/}
+        {/*)}*/}
       </div>
     </div>
   );

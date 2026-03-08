@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 
 from ..services import admin_service
 
@@ -77,7 +77,10 @@ def admin_delete_category(category_id):
 
 @admin_bp.get("/lessons")
 def admin_list_lessons():
-    data = admin_service.admin_list_lessons()
+    # Get current user from g (set by auth middleware)
+    current_user = g.get('current_user')
+    user_id = current_user.id if current_user else None
+    data = admin_service.admin_list_lessons(user_id=user_id)
     return jsonify(data), 200
 
 

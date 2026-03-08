@@ -36,6 +36,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
   const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
   const [timeLeft, setTimeLeft] = useState(question?.timeLimitSec || 45);
   const [timerActive, setTimerActive] = useState(true);
+  const [timeSpent, setTimeSpent] = useState(0);
 
   // ---------- initialise answer state ----------
   useEffect(() => {
@@ -81,6 +82,10 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
     // Don't allow submit if time ran out
     if (!timerActive && timeLeft === 0) return;
 
+    const totalTime = question?.timeLimitSec || 45;
+    const spent = totalTime - timeLeft;
+    setTimeSpent(spent);
+
     setSubmitted(true);
     setTimerActive(false);
 
@@ -88,8 +93,8 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
     setIsCorrect(correct);
 
     // Generate AI summary
-    generateAISummary(correct);
-    
+    generateAISummary(correct, spent);
+
     // Don't call onComplete here - let user see the result first
     // onComplete will be called when user clicks "Next Challenge"
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -114,7 +119,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
   }, [timerActive]);
 
   // ---------- AI summary ----------
-  const generateAISummary = async (correct) => {
+  const generateAISummary = async (correct, spent = 0) => {
     setIsGeneratingSummary(true);
     try {
       const userAnswer = answers[question?.questionNo];
@@ -139,7 +144,8 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
         user_id: userId,
         exercise_id: challenge._id || challenge.id,
         user_answer: userAnswerStr,
-        is_challenge: true
+        is_challenge: true,
+        time_spent: spent
       });
       const f = response.data.feedback;
       let s = f.is_correct ? '🎉 Perfect!\n\n' : '❌ Not quite right.\n\n';
@@ -407,13 +413,6 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
               </button>
             ) : (
               <>
-                <button
-                  onClick={handleReset}
-                  className="flex items-center gap-2 px-5 py-3 rounded-xl font-semibold transition-all"
-                  style={{ background: 'rgba(255,255,255,0.80)', border: '2px solid rgba(200,165,90,0.40)', color: '#6b4a10' }}
-                >
-                  <FaRedo /> Try Again
-                </button>
                 {submitted && (
                   <button
                     onClick={() => {
@@ -424,7 +423,7 @@ const ChallengeModal = ({ challenge, onClose, onComplete }) => {
                         onComplete(challenge._id || challenge.id, earnedXP, earnedCoins);
                       } else {
                         // If incorrect, just close the modal
-                        onClose();
+                        handleReset();
                       }
                     }}
                     className="flex items-center gap-2 px-5 py-3 text-white rounded-xl font-bold hover:opacity-90 transition-all"

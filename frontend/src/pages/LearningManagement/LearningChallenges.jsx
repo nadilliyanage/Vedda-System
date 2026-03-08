@@ -5,13 +5,12 @@ import {
   FaStar, 
   FaLock, 
   FaCheckCircle,
-  FaFire,
   FaGem,
   FaMedal,
   FaCrown,
   FaBolt
 } from 'react-icons/fa';
-import { challengesAPI } from '../../services/learningAPI';
+import { challengesAPI, userStatAPI } from '../../services/learningAPI';
 import { useAuth } from '../../contexts/AuthContext';
 import toast from 'react-hot-toast';
 import ChallengeModal from './ChallengeModal';
@@ -21,24 +20,30 @@ const LearningChallenges = ({ onBack }) => {
   const { user } = useAuth();
   const [challenges, setChallenges] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [userProgress, setUserProgress] = useState({
-    currentStreak: 5,
-    totalXP: 2878,
-    totalCoins: 5653,
-    badges: ['beginner', 'fast_learner', 'word_master']
-  });
   const [selectedChallenge, setSelectedChallenge] = useState(null);
   const [showChallengeModal, setShowChallengeModal] = useState(false);
+  const [challengeStats, setChallengeStats] = useState({
+    accuracy: null,
+    bestStreak: null,
+    totalTimeSpent: null,
+  });
 
   useEffect(() => {
     fetchChallenges();
+    fetchChallengeStats();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchChallenges = async () => {
     try {
       const response = await challengesAPI.getAll(user?.id);
-      const challengesData = response.data;
+      const raw = response.data;
+
+      // Normalize isCompleted to a real boolean regardless of what the backend sends
+      const challengesData = raw.map(c => ({
+        ...c,
+        isCompleted: c.isCompleted === true || c.isCompleted === 'true' || c.isCompleted === 1,
+      }));
 
       // Ensure first challenge is enabled by default if it doesn't have isEnabled set
       if (challengesData.length > 0 && !challengesData[0].isEnabled && !challengesData[0].isCompleted) {
@@ -52,6 +57,36 @@ const LearningChallenges = ({ onBack }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const fetchChallengeStats = async (delayMs = 0) => {
+    try {
+      if (delayMs > 0) {
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+      }
+      const response = await userStatAPI.getChallengeStats(user?.id);
+      const { accuracy, bestStreak, totalTimeSpent } = response.data;
+      setChallengeStats({ accuracy, bestStreak, totalTimeSpent });
+    } catch (error) {
+      console.error('Failed to fetch challenge stats:', error);
+    }
+  };
+
+  // Format seconds into human-readable time
+  // < 60s  → "29 s"
+  // >= 60s → "1 m 40 s"
+  // >= 3600s → "1 h 2 m"
+  const formatTimeSpent = (seconds) => {
+    if (seconds === null || seconds === undefined) return '—';
+    const s = Math.round(seconds);
+    if (s < 60) return `${s} s`;
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    const rem = s % 60;
+    if (h > 0) {
+      return rem > 0 ? `${h} h ${m} m ${rem} s` : `${h} h ${m} m`;
+    }
+    return rem > 0 ? `${m} m ${rem} s` : `${m} m`;
   };
 
 
@@ -115,29 +150,38 @@ const LearningChallenges = ({ onBack }) => {
       return updated;
     });
 
-    setUserProgress(prev => ({
-      ...prev,
-      totalXP: prev.totalXP + earnedXP,
-      totalCoins: prev.totalCoins + earnedCoins,
-      currentStreak: prev.currentStreak + 1
-    }));
+    // Re-fetch latest stats after a short delay so backend has time to persist
+    fetchChallengeStats(1500);
 
     setShowChallengeModal(false);
     toast.success(`+${earnedXP} XP! +${earnedCoins} coins!`);
   };
 
+  // Calculate earned badges based on completion percentage
+  const completedCount = challenges.filter(isChallengeCompleted).length;
+  const totalCount = challenges.length;
+  const completionPercentage = totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
+  const allChallengesCompleted = totalCount > 0 && completedCount === totalCount;
+
+  // Each badge unlocks at 20% increments
+  const earnedBadgeIds = [];
+  if (completionPercentage >= 20) earnedBadgeIds.push('beginner');
+  if (completionPercentage >= 40) earnedBadgeIds.push('fast_learner');
+  if (completionPercentage >= 60) earnedBadgeIds.push('word_master');
+  if (completionPercentage >= 80) earnedBadgeIds.push('champion');
+  if (completionPercentage >= 100) earnedBadgeIds.push('legend');
+
   const badges = [
-    { id: 'beginner', icon: FaMedal, color: 'text-gray-400', name: 'Beginner', desc: 'Complete 1 challenge' },
-    { id: 'fast_learner', icon: FaBolt, color: 'text-yellow-500', name: 'Fast Learner', desc: 'Complete 5 in a row' },
-    { id: 'word_master', icon: FaCrown, color: 'text-purple-500', name: 'Word Master', desc: 'Complete 10 challenges' },
-    { id: 'champion', icon: FaTrophy, color: 'text-yellow-600', name: 'Champion', desc: 'Complete 20 challenges' },
-    { id: 'legend', icon: FaStar, color: 'text-blue-500', name: 'Legend', desc: 'Complete all challenges' }
+    { id: 'beginner', icon: FaMedal, color: 'text-gray-400', name: 'Beginner', desc: 'Complete 20% of challenges', threshold: 20 },
+    { id: 'fast_learner', icon: FaBolt, color: 'text-yellow-500', name: 'Fast Learner', desc: 'Complete 40% of challenges', threshold: 40 },
+    { id: 'word_master', icon: FaCrown, color: 'text-purple-500', name: 'Word Master', desc: 'Complete 60% of challenges', threshold: 60 },
+    { id: 'champion', icon: FaTrophy, color: 'text-yellow-600', name: 'Champion', desc: 'Complete 80% of challenges', threshold: 80 },
+    { id: 'legend', icon: FaStar, color: 'text-blue-500', name: 'Legend', desc: 'Complete all challenges', threshold: 100 }
   ];
 
   const ChallengeNode = ({ challenge, index, state }) => {
-    const isEven = index % 2 === 0;
-    const offset = isEven ? 'left' : 'right';
-    
+    const offset = index % 2 === 0 ? 'left' : 'right';
+
     const stateStyles = {
       completed: 'bg-gradient-to-br from-green-400 to-green-600 shadow-lg scale-100',
       unlocked: 'bg-gradient-to-br from-blue-400 to-blue-600 shadow-xl scale-110 animate-pulse-slow',
@@ -216,10 +260,6 @@ const LearningChallenges = ({ onBack }) => {
             </div>
           </div>
           
-          <p className="text-sm line-clamp-2" style={{ color: '#3d2e0f' }}>
-            {challenge.question?.prompt}
-          </p>
-          
           {state === 'locked' && (
             <div className="mt-2 text-xs italic" style={{ color: '#8a7550' }}>
               Complete previous challenge to unlock
@@ -231,8 +271,7 @@ const LearningChallenges = ({ onBack }) => {
   };
 
   const MilestoneNode = ({ index, unlocked }) => {
-    const isEven = index % 2 === 0;
-    
+
     return (
       <div className="flex items-center justify-center mb-12 relative">
         {/* Milestone Chest */}
@@ -248,9 +287,6 @@ const LearningChallenges = ({ onBack }) => {
           
           {unlocked && (
             <>
-              <div className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center animate-ping">
-                !
-              </div>
               <div className="absolute -bottom-8 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-4 py-1 rounded-full text-xs font-bold shadow-lg">
                 +50 XP Bonus!
               </div>
@@ -465,8 +501,8 @@ const LearningChallenges = ({ onBack }) => {
               <div className="space-y-3">
                 {badges.map(badge => {
                   const BadgeIcon = badge.icon;
-                  const earned = userProgress.badges.includes(badge.id);
-                  
+                  const earned = earnedBadgeIds.includes(badge.id);
+
                   return (
                     <div 
                       key={badge.id}
@@ -493,28 +529,6 @@ const LearningChallenges = ({ onBack }) => {
                     </div>
                   );
                 })}
-              </div>
-
-              {/* Progress */}
-              <div
-                className="mt-6 pt-6"
-                style={{ borderTop: '1px solid rgba(200,170,100,0.30)' }}
-              >
-                <div
-                  className="text-sm font-semibold mb-2"
-                  style={{ color: '#5c4a1e' }}
-                >
-                  Progress: {challenges.filter(c => c.isCompleted).length}/{challenges.length}
-                </div>
-                <div className="w-full rounded-full h-3" style={{ background: 'rgba(200,170,100,0.20)' }}>
-                  <div 
-                    className="h-3 rounded-full transition-all duration-500"
-                    style={{
-                      width: `${challenges.length > 0 ? (challenges.filter(c => c.isCompleted).length / challenges.length) * 100 : 0}%`,
-                      background: 'linear-gradient(90deg, #9a6f2a, #c9943a)',
-                    }}
-                  />
-                </div>
               </div>
             </div>
           </div>
@@ -550,7 +564,7 @@ const LearningChallenges = ({ onBack }) => {
                       {isMilestone(index) && (
                         <MilestoneNode 
                           index={index}
-                          unlocked={challenge.isCompleted === true}
+                          unlocked={isChallengeCompleted(challenge)}
                         />
                       )}
                     </div>
@@ -559,10 +573,28 @@ const LearningChallenges = ({ onBack }) => {
 
                 {/* End Trophy */}
                 <div className="flex items-center justify-center mt-12">
-                  <div className="bg-gradient-to-br from-purple-500 to-pink-500 w-40 h-40 rounded-full flex flex-col items-center justify-center text-white shadow-2xl">
-                    <FaCrown className="text-6xl mb-2" />
-                    <div className="font-bold">Complete!</div>
-                  </div>
+                  {allChallengesCompleted ? (
+                    <div className="relative trophy-glow trophy-pop bg-gradient-to-br from-purple-500 to-pink-500 w-40 h-40 rounded-full flex flex-col items-center justify-center text-white shadow-2xl">
+                      <div className="pulse-ring" />
+                      <FaCrown className="text-6xl mb-2 animate-bounce-slow" />
+                      <div className="font-bold">Complete!</div>
+                      <span className="absolute -top-2 -right-1 text-xl">✨</span>
+                      <span className="absolute -bottom-1 -left-2 text-lg">🎉</span>
+                    </div>
+                  ) : (
+                    <div
+                      className="relative w-40 h-40 rounded-full flex flex-col items-center justify-center text-gray-600 shadow-lg"
+                      style={{
+                        background: 'linear-gradient(135deg, #d1d5db, #9ca3af)',
+                        border: '2px solid rgba(107,114,128,0.35)',
+                        opacity: 0.8,
+                      }}
+                    >
+                      <FaCrown className="text-6xl mb-2 text-gray-500" />
+                      <div className="font-bold text-sm text-center px-3">Complete all challenges</div>
+                      {/*<FaLock className="absolute top-5 right-5 text-lg text-gray-700" />*/}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -590,30 +622,34 @@ const LearningChallenges = ({ onBack }) => {
               
               <div className="space-y-4">
                 <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-4">
-                  <div className="text-xs text-blue-600 font-semibold mb-1">Total Challenges</div>
+                  <div className="text-xs text-blue-600 font-semibold mb-1">Progress</div>
                   <div className="text-3xl font-bold text-blue-700">
-                    {challenges.filter(c => c.isCompleted).length}
+                    {completedCount}/{challenges.length}
                   </div>
                 </div>
 
                 <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-4">
                   <div className="text-xs text-green-600 font-semibold mb-1">Accuracy Rate</div>
                   <div className="text-3xl font-bold text-green-700">
-                    94%
+                    {challengeStats.accuracy !== null
+                      ? `${challengeStats.accuracy.toFixed(1)}%`
+                      : '—'}
                   </div>
                 </div>
 
                 <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-lg p-4">
                   <div className="text-xs text-purple-600 font-semibold mb-1">Best Streak</div>
                   <div className="text-3xl font-bold text-purple-700">
-                    {userProgress.currentStreak} days
+                    {challengeStats.bestStreak !== null
+                      ? `${challengeStats.bestStreak} day${challengeStats.bestStreak !== 1 ? 's' : ''}`
+                      : '—'}
                   </div>
                 </div>
 
                 <div className="bg-gradient-to-r from-orange-50 to-orange-100 rounded-lg p-4">
                   <div className="text-xs text-orange-600 font-semibold mb-1">Time Spent</div>
                   <div className="text-3xl font-bold text-orange-700">
-                    4.5h
+                    {formatTimeSpent(challengeStats.totalTimeSpent)}
                   </div>
                 </div>
               </div>
@@ -626,7 +662,10 @@ const LearningChallenges = ({ onBack }) => {
       {showChallengeModal && selectedChallenge && (
         <ChallengeModal
           challenge={selectedChallenge}
-          onClose={() => setShowChallengeModal(false)}
+          onClose={() => {
+            setShowChallengeModal(false);
+            fetchChallengeStats(1500);
+          }}
           onComplete={handleChallengeComplete}
         />
       )}
@@ -636,27 +675,60 @@ const LearningChallenges = ({ onBack }) => {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.8; }
         }
-        
+
         @keyframes spin-slow {
           from { transform: rotate(0deg); }
           to { transform: rotate(360deg); }
         }
-        
+
         @keyframes bounce-slow {
           0%, 100% { transform: translateY(0); }
           50% { transform: translateY(-10px); }
         }
-        
+
+        @keyframes trophy-glow {
+          0%, 100% { box-shadow: 0 0 0 rgba(236,72,153,0.0), 0 18px 34px rgba(0,0,0,0.28); }
+          50% { box-shadow: 0 0 26px rgba(236,72,153,0.55), 0 18px 34px rgba(0,0,0,0.28); }
+        }
+
+        @keyframes trophy-pop {
+          0% { transform: scale(0.95); }
+          60% { transform: scale(1.06); }
+          100% { transform: scale(1); }
+        }
+
+        @keyframes pulse-ring {
+          0% { transform: scale(0.85); opacity: 0.7; }
+          100% { transform: scale(1.25); opacity: 0; }
+        }
+
         .animate-pulse-slow {
           animation: pulse-slow 2s ease-in-out infinite;
         }
-        
+
         .animate-spin-slow {
           animation: spin-slow 3s linear infinite;
         }
-        
+
         .animate-bounce-slow {
           animation: bounce-slow 2s ease-in-out infinite;
+        }
+
+        .trophy-glow {
+          animation: trophy-glow 2.2s ease-in-out infinite;
+        }
+
+        .trophy-pop {
+          animation: trophy-pop 450ms ease-out;
+        }
+
+        .pulse-ring {
+          position: absolute;
+          inset: -10px;
+          border-radius: 9999px;
+          border: 3px solid rgba(236,72,153,0.45);
+          animation: pulse-ring 1.7s ease-out infinite;
+          pointer-events: none;
         }
       `}</style>
     </div>

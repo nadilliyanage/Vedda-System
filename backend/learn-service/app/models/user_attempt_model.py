@@ -12,6 +12,7 @@ class UserAttempt:
     is_correct: bool
     error_type: Optional[str] = None
     attempt_type: str = "general"  # "general" for exercises, "challenge" for challenges
+    time_spent: Optional[int] = None  # Time spent in seconds
     timestamp: datetime = field(default_factory=datetime.utcnow)
     
     def to_dict(self):
@@ -23,6 +24,7 @@ class UserAttempt:
             "is_correct": self.is_correct,
             "error_type": self.error_type,
             "attempt_type": self.attempt_type,
+            "time_spent": self.time_spent,
             "timestamp": self.timestamp
         }
     
@@ -36,5 +38,6 @@ class UserAttempt:
             is_correct=data.get("is_correct", False),
             error_type=data.get("error_type"),
             attempt_type=data.get("attempt_type", "general"),
+            time_spent=data.get("time_spent"),
             timestamp=data.get("timestamp", datetime.utcnow())
         )

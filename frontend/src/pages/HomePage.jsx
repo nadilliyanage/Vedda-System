@@ -1,5 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { FaLanguage, FaBookOpen, FaLandmark, FaCube, FaArrowRight } from "react-icons/fa";
+import { useAuth } from "../contexts/AuthContext";
+import toast from "react-hot-toast";
 
 /* ─── Per-card accent colours ─── */
 const ACCENTS = {
@@ -131,6 +133,19 @@ const FeatureCard = ({ feature, onClick }) => {
 /* ── Page ── */
 const HomePage = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+
+  const handleFeatureClick = (feature) => {
+    // Check if user is trying to access Vocabulary Learning (id: 2)
+    if (feature.id === 2 && !user) {
+      toast.error('Please log in to access Vocabulary Learning');
+      navigate('/login', { state: { from: feature.path } });
+      return;
+    }
+
+    // Navigate to the feature
+    navigate(feature.path);
+  };
 
   return (
     <div style={{
@@ -225,7 +240,7 @@ const HomePage = () => {
             <FeatureCard
               key={feature.id}
               feature={feature}
-              onClick={() => navigate(feature.path)}
+              onClick={() => handleFeatureClick(feature)}
             />
           ))}
         </div>

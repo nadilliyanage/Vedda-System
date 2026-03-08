@@ -6,7 +6,7 @@ from ..ml.predictor import classify_mistake
 def add_user_attempt_and_update_stat(user_id: str, exercise_id: str, skill_tags: list,
                      is_correct: bool, correct_answer: str = None, student_answer: str = None,
                      attempt_type: str = "general", error_type: str = None,
-                     points: int = 0):
+                     points: int = 0, time_spent: int = None):
 
     save_user_attempt(
         user_id=user_id,
@@ -14,7 +14,8 @@ def add_user_attempt_and_update_stat(user_id: str, exercise_id: str, skill_tags:
         skill_tags=skill_tags,
         is_correct=is_correct,
         error_type=error_type,
-        attempt_type=attempt_type
+        attempt_type=attempt_type,
+        time_spent=time_spent
     )
 
     update_user_stats(
@@ -149,7 +150,8 @@ def add_user_attempt(user_id: str, exercise_id: str, skill_tags: list,
 
 
 def save_user_attempt(user_id: str, exercise_id: str, skill_tags: list,
-                      is_correct: bool, error_type: str = None, attempt_type: str = "general"):
+                      is_correct: bool, error_type: str = None, attempt_type: str = "general",
+                      time_spent: int = None):
     col = _user_attempts_col()
 
     # Create the user attempt model
@@ -160,6 +162,7 @@ def save_user_attempt(user_id: str, exercise_id: str, skill_tags: list,
         is_correct=is_correct,
         error_type=error_type,
         attempt_type=attempt_type,
+        time_spent=time_spent,
         timestamp=datetime.utcnow()
     )
 
