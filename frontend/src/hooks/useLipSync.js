@@ -678,7 +678,7 @@ export const useLipSync = (meshesWithMorphTargets) => {
 
       isAnimatingRef.current = true;
       setIsAnimating(true);
-      let currentPhonemeIndex = 0;
+      let currentPhonemeIndex = -1;
       let startTime = null;
       let hasEnded = false;
       let animationFrameId = null;

@@ -15,8 +15,9 @@ const VisualsPage = () => {
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
 
-  const [search, setSearch] = useState('');          // applied search
-  const [searchInput, setSearchInput] = useState(''); // typing state
+  const [search, setSearch] = useState('');
+  const [searchInput, setSearchInput] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [onlyWithIPA, setOnlyWithIPA] = useState(false); // filter toggle
 
   const fetchWords = useCallback(
@@ -81,13 +82,23 @@ const VisualsPage = () => {
     fetchWords(page, search, onlyWithIPA);
   }, [page, search, onlyWithIPA, fetchWords]);
 
-  const handleSearchSubmit = e => {
-    e.preventDefault();
-    setPage(1);
-    setSearch(searchInput.trim());
-  };
+  useEffect(() => {
+    const nextSearch = searchInput.trim();
+
+    const timeoutId = setTimeout(() => {
+      if (nextSearch === search) {
+        return;
+      }
+
+      setPage(1);
+      setSearch(nextSearch);
+    }, 250);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchInput, search]);
 
   const handleClearSearch = () => {
+    setIsSearchFocused(false);
     setSearchInput('');
     setSearch('');
     setPage(1);
@@ -108,6 +119,24 @@ const VisualsPage = () => {
 
   const handleAnimateWord = wordData => {
     navigate(`/3d-visuals/${wordData.id}`, { state: { wordData } });
+  };
+
+  const normalizedSearchInput = searchInput.trim().toLowerCase();
+  const suggestions = normalizedSearchInput && search === searchInput.trim()
+    ? words
+        .filter(word =>
+          word.englishWord?.toLowerCase().includes(normalizedSearchInput) ||
+          word.word?.toLowerCase().includes(normalizedSearchInput)
+        )
+        .slice(0, 6)
+    : [];
+
+  const handleSuggestionSelect = suggestion => {
+    const selectedValue = suggestion.englishWord || suggestion.word;
+    setSearchInput(selectedValue);
+    setSearch(selectedValue);
+    setPage(1);
+    setIsSearchFocused(false);
   };
 
   return (
@@ -234,10 +263,12 @@ const VisualsPage = () => {
           marginBottom: "1.5rem",
           boxShadow: "0 4px 20px rgba(0,0,0,0.10)",
           border: "1px solid rgba(255,255,255,0.60)",
+          position: "relative",
+          zIndex: 40,
         }}>
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 flex-wrap">
+          <div className="flex flex-col items-center gap-4">
             {/* IPA Filter Toggle */}
-            <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
+            {/* <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg">
               <label className="text-sm text-gray-700 font-medium">Only with IPA:</label>
               <button
                 onClick={handleToggleIPA}
@@ -252,48 +283,72 @@ const VisualsPage = () => {
                   }`}
                 />
               </button>
-            </div>
+            </div> */}
 
             {/* Search */}
-            <form onSubmit={handleSearchSubmit} className="flex gap-2">
-              <input
-                value={searchInput}
-                onChange={e => setSearchInput(e.target.value)}
-                placeholder="Search by English word..."
-                className="px-3 py-2 rounded-lg border border-gray-300 text-black"
-                disabled={isLoading}
-              />
+            <div className="flex w-full max-w-5xl flex-col items-center gap-2 sm:flex-row sm:items-start sm:justify-center">
+              <div className="relative z-50 flex w-full max-w-4xl flex-col gap-2">
+                <div className="relative flex w-full gap-2 justify-center">
+                  <div className="relative flex-1">
+                    <input
+                      value={searchInput}
+                      onChange={e => setSearchInput(e.target.value)}
+                      onFocus={() => setIsSearchFocused(true)}
+                      onBlur={() => setTimeout(() => setIsSearchFocused(false), 120)}
+                      placeholder="Search by English word..."
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 text-black"
+                    />
+                    {isSearchFocused && normalizedSearchInput && !isLoading && (
+                      <div className="absolute left-0 right-0 top-full z-[60] mt-2 max-h-72 overflow-y-auto rounded-lg border border-gray-200 bg-white shadow-lg">
+                        {suggestions.length > 0 ? (
+                          suggestions.map(suggestion => (
+                            <button
+                              key={suggestion.id}
+                              type="button"
+                              onMouseDown={() => handleSuggestionSelect(suggestion)}
+                              className="flex w-full items-start justify-between gap-3 border-b border-gray-100 px-3 py-2 text-left last:border-b-0 hover:bg-amber-50"
+                            >
+                              <span className="font-medium text-gray-900">{suggestion.word}</span>
+                              <span className="text-xs text-gray-500">{suggestion.englishWord || 'No English label'}</span>
+                            </button>
+                          ))
+                        ) : (
+                          <div className="px-3 py-2 text-sm text-gray-500">
+                            No matching words found.
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleClearSearch}
+                    className="shrink-0 px-4 py-3 bg-gray-300 rounded-lg"
+                    disabled={!search && !searchInput}
+                  >
+                    Clear
+                  </button>
+                </div>
+                {/* <span className="text-xs text-gray-500">
+                  Results update automatically while you type.
+                </span> */}
+              </div>
               <button
-                type="submit"
+                onClick={() => fetchWords(page, search)}
                 disabled={isLoading}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+                className="shrink-0 px-4 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors flex items-center gap-2"
               >
-                Search
+                <svg 
+                  className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} 
+                  fill="none" 
+                  viewBox="0 0 24 24" 
+                  stroke="currentColor"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                {isLoading ? 'Loading...' : 'Refresh'}
               </button>
-              <button
-                type="button"
-                onClick={handleClearSearch}
-                className="px-3 py-2 bg-gray-300 rounded-lg"
-                disabled={!search && !searchInput}
-              >
-                Clear
-              </button>
-            </form>
-            <button
-              onClick={() => fetchWords(page, search)}
-              disabled={isLoading}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors flex items-center gap-2"
-            >
-              <svg 
-                className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              {isLoading ? 'Loading...' : 'Refresh'}
-            </button>
+            </div>
           </div>
         </div>
 
