@@ -1,10 +1,11 @@
 import PropTypes from "prop-types";
 import { useState, useEffect, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { FaTimes, FaMapMarkerAlt, FaTag, FaEdit, FaChevronLeft, FaChevronRight, FaExpand } from "react-icons/fa";
+import { FaTimes, FaMapMarkerAlt, FaTag, FaEdit, FaChevronLeft, FaChevronRight, FaExpand, FaVolumeUp } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { getArtifacts } from "../../services/artifactService";
 import { translateWord } from "../../services/dictionaryService";
+import { modelAPI } from "../../services/modelAPI";
 import FeedbackFormModal from "./FeedbackFormModal";
 import { useAuth } from "../../contexts/AuthContext";
 import toast from "react-hot-toast";
@@ -15,6 +16,7 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [lightboxIndex, setLightboxIndex] = useState(null); // null = closed
   const [veddaWord, setVeddaWord] = useState(null);
+  const [veddaWordData, setVeddaWordData] = useState(null);
   const { user, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -64,46 +66,66 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
     if (artifact?.category) {
       fetchRelatedArtifacts();
     }
+    setVeddaWordData(null);
     if (artifact?.veddaName) {
       setVeddaWord(artifact.veddaName);
+      fetchWordData(artifact.veddaName);
     } else if (artifact?.name) {
       fetchVeddaWord(artifact.name);
     }
   }, [artifact]);
 
+  const fetchWordData = async (veddaWordStr) => {
+    try {
+      const response = await modelAPI.getWordByVedda(veddaWordStr);
+      const item = response.data?.data || response.data;
+      if (item && (item.id || item._id)) {
+        setVeddaWordData({
+          id: item._id || item.id,
+          word: item.vedda_word || '',
+          ipa: (item.vedda_ipa || '').replace(/^\/|\/$/g, ''),
+          sinhalaWord: item.sinhala_word || '',
+          englishWord: item.english_word || '',
+        });
+      }
+    } catch (_) { /* no 3D data available */ }
+  };
+
   const fetchVeddaWord = async (name) => {
     setVeddaWord(null);
     const words = name.toLowerCase().split(' ').filter(w => w !== 'vedda');
+    let found = null;
 
     // Try exact match first
     try {
       const result = await translateWord(name, 'english', 'vedda');
-      if (result.success && result.translation) {
-        setVeddaWord(result.translation);
-        return;
-      }
+      if (result.success && result.translation) found = result.translation;
     } catch (_) { /* continue */ }
 
     // Try base word (without "vedda")
-    if (words.length > 0) {
+    if (!found && words.length > 0) {
       try {
         const result = await translateWord(words.join(' '), 'english', 'vedda');
-        if (result.success && result.translation) {
-          setVeddaWord(result.translation);
-          return;
-        }
+        if (result.success && result.translation) found = result.translation;
       } catch (_) { /* continue */ }
     }
 
     // Try individual words
-    for (const word of words) {
-      try {
-        const result = await translateWord(word, 'english', 'vedda');
-        if (result.success && result.translation) {
-          setVeddaWord(result.translation);
-          return;
-        }
-      } catch (_) { /* continue */ }
+    if (!found) {
+      for (const word of words) {
+        try {
+          const result = await translateWord(word, 'english', 'vedda');
+          if (result.success && result.translation) {
+            found = result.translation;
+            break;
+          }
+        } catch (_) { /* continue */ }
+      }
+    }
+
+    if (found) {
+      setVeddaWord(found);
+      fetchWordData(found);
     }
   };
 
@@ -277,6 +299,36 @@ const ArtifactDetailModal = ({ artifact, onClose, onArtifactClick }) => {
                   </span>
                 ))}
               </div>
+            </section>
+          )}
+
+          {/* 3D Pronunciation */}
+          {veddaWordData && (
+            <section className="mb-6">
+              <button
+                onClick={() => navigate(`/3d-visuals/${veddaWordData.id}`, { state: { wordData: veddaWordData } })}
+                className="w-full px-4 py-3 rounded-xl transition-all font-semibold flex items-center justify-center gap-2"
+                style={{
+                  color: "rgba(255,248,230,0.95)",
+                  border: "1.5px solid rgba(124,63,168,0.50)",
+                  background: "linear-gradient(135deg, rgba(124,63,168,0.75), rgba(74,111,168,0.75))",
+                  backdropFilter: "blur(6px)",
+                  boxShadow: "0 4px 16px rgba(124,63,168,0.25)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = "linear-gradient(135deg, rgba(124,63,168,0.92), rgba(74,111,168,0.92))";
+                  e.currentTarget.style.boxShadow = "0 6px 24px rgba(124,63,168,0.40)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = "linear-gradient(135deg, rgba(124,63,168,0.75), rgba(74,111,168,0.75))";
+                  e.currentTarget.style.boxShadow = "0 4px 16px rgba(124,63,168,0.25)";
+                }}
+              >
+                <FaVolumeUp /> Hear Vedda Pronunciation
+                {veddaWordData.ipa && (
+                  <span className="ml-1 text-sm font-normal opacity-80">/{veddaWordData.ipa}/</span>
+                )}
+              </button>
             </section>
           )}
 

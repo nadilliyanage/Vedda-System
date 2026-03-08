@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { X, Upload, Sparkles, Loader2, TrendingUp } from 'lucide-react';
+import { X, Upload, Sparkles, Loader2, TrendingUp, Volume2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { identifyArtifact } from '../../services/artifactService';
 import { translateWord } from '../../services/dictionaryService';
+import { modelAPI } from '../../services/modelAPI';
 
 const IdentifyArtifactModal = ({ isOpen, onClose }) => {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [identifiedData, setIdentifiedData] = useState(null);
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
@@ -118,10 +121,29 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
       if (!veddaWord) {
         console.log('No Vedda translation found for:', result.artifact_name);
       }
+
+      // Try to get 3D word data for pronunciation navigation
+      let veddaWordData = null;
+      if (veddaWord) {
+        try {
+          const wordResponse = await modelAPI.getWordByVedda(veddaWord);
+          const item = wordResponse.data?.data || wordResponse.data;
+          if (item && (item.id || item._id)) {
+            veddaWordData = {
+              id: item._id || item.id,
+              word: item.vedda_word || '',
+              ipa: (item.vedda_ipa || '').replace(/^\/|\/$/g, ''),
+              sinhalaWord: item.sinhala_word || '',
+              englishWord: item.english_word || '',
+            };
+          }
+        } catch (_) { /* no 3D data available */ }
+      }
       
       setIdentifiedData({
         name: result.artifact_name,
         veddaWord: veddaWord,
+        veddaWordData: veddaWordData,
         description: result.description,
         category: result.category,
         tags: tags,
@@ -394,6 +416,34 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
                           ))}
                         </div>
                       </div>
+                    )}
+
+                    {/* 3D Pronunciation */}
+                    {identifiedData.veddaWordData && (
+                      <button
+                        onClick={() => navigate(`/3d-visuals/${identifiedData.veddaWordData.id}`, { state: { wordData: identifiedData.veddaWordData } })}
+                        className="w-full px-4 py-3 rounded-xl transition-all font-semibold flex items-center justify-center gap-2"
+                        style={{
+                          color: "rgba(255,248,230,0.95)",
+                          border: "1.5px solid rgba(124,63,168,0.50)",
+                          background: "linear-gradient(135deg, rgba(124,63,168,0.75), rgba(74,111,168,0.75))",
+                          backdropFilter: "blur(6px)",
+                          boxShadow: "0 4px 16px rgba(124,63,168,0.25)",
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = "linear-gradient(135deg, rgba(124,63,168,0.92), rgba(74,111,168,0.92))";
+                          e.currentTarget.style.boxShadow = "0 6px 24px rgba(124,63,168,0.40)";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = "linear-gradient(135deg, rgba(124,63,168,0.75), rgba(74,111,168,0.75))";
+                          e.currentTarget.style.boxShadow = "0 4px 16px rgba(124,63,168,0.25)";
+                        }}
+                      >
+                        <Volume2 size={18} /> Hear Vedda Pronunciation
+                        {identifiedData.veddaWordData.ipa && (
+                          <span className="ml-1 text-sm font-normal opacity-80">/{identifiedData.veddaWordData.ipa}/</span>
+                        )}
+                      </button>
                     )}
 
                     
