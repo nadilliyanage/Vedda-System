@@ -332,3 +332,21 @@ def update_last_practice_error(user_id: str, error_types: list):
         )
     except Exception as e:
         print(f"[WARN] update_last_practice_error failed for user {user_id}: {e}")
+
+
+def update_last_generated_exercise_id(user_id: str, exercise_id: str):
+    """
+    Saves the last generated exercise _id for a user into user_stats.
+    Used to avoid repeating the same example sentences in the next generation.
+    Intended to be called asynchronously.
+    """
+    try:
+        stats_col = _user_stat_col()
+        stats_col.update_one(
+            {"user_id": user_id},
+            {"$set": {"last_generated_exercise_id": exercise_id, "last_updated": datetime.utcnow()}},
+            upsert=True
+        )
+    except Exception as e:
+        print(f"[WARN] update_last_generated_exercise_id failed for user {user_id}: {e}")
+

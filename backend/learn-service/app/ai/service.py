@@ -140,7 +140,8 @@ def generate_exercise_with_rag(
     error_types: list[str],
     exercise_number: int = 1,
     difficulty: str = "beginner",
-    exercise_type: str = "multiple_choice"
+    exercise_type: str = "multiple_choice",
+    used_examples: list[str] | None = None
 ) -> tuple[dict, dict]:
     """
     Generate exercise using advanced hybrid RAG.
@@ -151,6 +152,7 @@ def generate_exercise_with_rag(
         exercise_number: Exercise number in sequence
         difficulty: Difficulty level
         exercise_type: Type of exercise to generate
+        used_examples: Sentences already used in previous exercises to avoid repeating
 
     Returns:
         Tuple of (exercise_data, usage_stats)
@@ -197,7 +199,8 @@ def generate_exercise_with_rag(
         rag_knowledge = build_context_for_exercise_generation(
             docs=retrieved_docs,
             skills=skills,
-            error_types=error_types
+            error_types=error_types,
+            used_examples=used_examples
         )
     else:
         # Fallback to old RAG
