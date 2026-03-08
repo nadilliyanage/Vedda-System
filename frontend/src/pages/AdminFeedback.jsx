@@ -269,7 +269,8 @@ const AdminFeedback = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search by username or artifact name..."
-                className="admin-input w-full pl-10"
+                className="admin-input w-full"
+                style={{ paddingLeft: "2.5rem" }}
               />
               <Search
                 className="absolute left-3 top-2.5"

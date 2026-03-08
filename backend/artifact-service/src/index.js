@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'test') require('dotenv').config();
 
 const connectDB = require('./config/database');
 const artifactRoutes = require('./routes/artifactRoutes');
@@ -11,14 +11,13 @@ const feedbackRoutes = require('./routes/feedbackRoutes');
 const app = express();
 const PORT = process.env.PORT || 5010;
 
-// Connect to Database
-connectDB();
-
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(morgan('dev'));
+if (process.env.NODE_ENV !== 'test') {
+  app.use(morgan('dev'));
+}
 
 // Health check endpoint
 app.get('/health', (req, res) => {
@@ -62,8 +61,13 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🚀 Artifact Service running on port ${PORT}`);
-  console.log(`📝 Environment: ${process.env.NODE_ENV}`);
-});
+// Start server only when not in test mode
+if (process.env.NODE_ENV !== 'test') {
+  connectDB();
+  app.listen(PORT, () => {
+    console.log(`Artifact Service running on port ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV}`);
+  });
+}
+
+module.exports = app;
