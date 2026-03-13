@@ -84,6 +84,133 @@ class VeddaTranslator:
             'lithuanian': 'lt',
             'estonian': 'et'
         }
+
+    def _generate_sinhala_normalization_candidates(self, word):
+        """Generate likely Sinhala base-form candidates for inflected words."""
+        if not word:
+            return []
+
+        # Ordered longest-first to avoid partial stripping before specific forms.
+        suffix_rules = [
+            ('වලින්', ''),
+            ('වලට', ''),
+            ('වලද', ''),
+            ('වලම', ''),
+            ('යන්ගෙන්', 'යා'),
+            ('යන්ට', 'යා'),
+            ('යන්ව', 'යා'),
+            ('යන්', 'යා'),
+            ('වරුන්', 'වරු'),
+            ('වරුට', 'වරු'),
+            ('වරුගේ', 'වරු'),
+            ('වරු', ''),
+            ('ලාගේ', 'ලා'),
+            ('ලාට', 'ලා'),
+            ('ලා', ''),
+            ('ගෙන්', ''),
+            ('කින්', 'ක'),
+            ('ෙන්', ''),
+            ('ගේ', ''),
+            ('ගෙ', ''),
+            ('ටත්', ''),
+            ('ටද', ''),
+            ('ටම', ''),
+            ('ට', ''),
+            ('ෙකු', 'ා'),
+            ('ෙක්', 'ා'),
+            ('වල්', ''),
+            ('වෝ', 'වා'),
+            ('වන්', 'වා'),
+            ('යෝ', 'යා'),
+            ('යන්', 'ය'),
+            ('න්', 'ා'),
+            ('ෝ', 'ා'),
+            ('කි', ''),
+            ('ක්', '')
+        ]
+
+        queue = [(word, 0)]
+        seen = {word}
+        candidates = []
+        max_depth = 2
+
+        while queue:
+            current_word, depth = queue.pop(0)
+
+            root_variants = []
+            if len(current_word) > 1 and current_word.endswith('හ'):
+                root_variants.append(current_word[:-1] + 'ස')
+            if len(current_word) > 2 and current_word.endswith('ස්'):
+                root_variants.append(current_word[:-2] + 'ස')
+
+            for root_variant in root_variants:
+                if root_variant not in seen:
+                    seen.add(root_variant)
+                    candidates.append(root_variant)
+                    if depth < max_depth:
+                        queue.append((root_variant, depth + 1))
+
+            if depth >= max_depth:
+                continue
+
+            for suffix, replacement in suffix_rules:
+                if len(current_word) > len(suffix) and current_word.endswith(suffix):
+                    candidate = current_word[:-len(suffix)] + replacement
+                    if candidate and candidate not in seen and candidate != current_word:
+                        seen.add(candidate)
+                        candidates.append(candidate)
+                        queue.append((candidate, depth + 1))
+
+        return candidates
+
+    def _batch_translate_sinhala_with_normalization(self, words, target_lang):
+        """Batch translate Sinhala words with base-form normalization fallback."""
+        exact_results = self.batch_translate_dictionary(words, 'sinhala', target_lang)
+
+        unresolved_words = []
+        for word in words:
+            result = exact_results.get(word, {})
+            if not result.get('found'):
+                unresolved_words.append(word)
+
+        if not unresolved_words:
+            return exact_results
+
+        variant_to_originals = {}
+        variant_words = []
+        for original_word in unresolved_words:
+            for candidate in self._generate_sinhala_normalization_candidates(original_word):
+                if candidate not in variant_to_originals:
+                    variant_to_originals[candidate] = []
+                    variant_words.append(candidate)
+                variant_to_originals[candidate].append(original_word)
+
+        if not variant_words:
+            return exact_results
+
+        variant_results = self.batch_translate_dictionary(variant_words, 'sinhala', target_lang)
+
+        normalized_hits = 0
+        for variant_word, variant_result in variant_results.items():
+            if not variant_result.get('found'):
+                continue
+
+            for original_word in variant_to_originals.get(variant_word, []):
+                original_result = exact_results.get(original_word, {})
+                if original_result.get('found'):
+                    continue
+
+                exact_results[original_word] = {
+                    'found': True,
+                    'translation': variant_result.get('translation', original_word),
+                    'normalized_from': variant_word
+                }
+                normalized_hits += 1
+
+        if normalized_hits > 0:
+            print(f"[TRANSLATE] Sinhala normalization fallback matched {normalized_hits} inflected word(s)")
+
+        return exact_results
     
     def _prewarm_connections(self):
         """Pre-establish connections to frequently used services for faster first request"""
@@ -363,7 +490,8 @@ class VeddaTranslator:
         dictionary_hits = 0
         
         # OPTIMIZED: Batch translate all words in ONE API call
-        batch_results = self.batch_translate_dictionary(sinhala_words, 'sinhala', 'vedda')
+        # Fallback: try Sinhala normalization candidates for inflected forms
+        batch_results = self._batch_translate_sinhala_with_normalization(sinhala_words, 'vedda')
         
         for sinhala_word in sinhala_words:
             if sinhala_word in batch_results and batch_results[sinhala_word]['found']:
