@@ -90,47 +90,78 @@ class VeddaTranslator:
         if not word:
             return []
 
-        candidates = []
-
-        irregular_variant_map = {
-            # Irregular/lexical variants that are not solved by suffix stripping
-            'වලසෙකු': ['වලහා'],
-            'වලසා': ['වලහා']
-        }
-
-        if word in irregular_variant_map:
-            candidates.extend(irregular_variant_map[word])
-
+        # Ordered longest-first to avoid partial stripping before specific forms.
         suffix_rules = [
-            ('ෙකු', 'ා'),
-            ('ෙක්', 'ා'),
-            ('වන්', 'වා'),
-            ('වෝ', 'වා'),
-            ('න්', 'ා'),
-            ('ෝ', 'ා'),
-            ('ට', ''),
-            ('ටත්', ''),
+            ('වලින්', ''),
+            ('වලට', ''),
+            ('වලද', ''),
+            ('වලම', ''),
+            ('යන්ගෙන්', 'යා'),
+            ('යන්ට', 'යා'),
+            ('යන්ව', 'යා'),
+            ('යන්', 'යා'),
+            ('වරුන්', 'වරු'),
+            ('වරුට', 'වරු'),
+            ('වරුගේ', 'වරු'),
+            ('වරු', ''),
+            ('ලාගේ', 'ලා'),
+            ('ලාට', 'ලා'),
+            ('ලා', ''),
+            ('ගෙන්', ''),
+            ('කින්', 'ක'),
+            ('ෙන්', ''),
             ('ගේ', ''),
             ('ගෙ', ''),
-            ('ව', ''),
+            ('ටත්', ''),
+            ('ටද', ''),
+            ('ටම', ''),
+            ('ට', ''),
+            ('ෙකු', 'ා'),
+            ('ෙක්', 'ා'),
+            ('වල්', ''),
+            ('වෝ', 'වා'),
+            ('වන්', 'වා'),
+            ('යෝ', 'යා'),
+            ('යන්', 'ය'),
+            ('න්', 'ා'),
+            ('ෝ', 'ා'),
             ('කි', ''),
             ('ක්', '')
         ]
 
-        for suffix, replacement in suffix_rules:
-            if len(word) > len(suffix) and word.endswith(suffix):
-                candidate = word[:-len(suffix)] + replacement
-                if candidate and candidate != word:
-                    candidates.append(candidate)
+        queue = [(word, 0)]
+        seen = {word}
+        candidates = []
+        max_depth = 2
 
-        unique_candidates = []
-        seen = set()
-        for candidate in candidates:
-            if candidate not in seen:
-                unique_candidates.append(candidate)
-                seen.add(candidate)
+        while queue:
+            current_word, depth = queue.pop(0)
 
-        return unique_candidates
+            root_variants = []
+            if len(current_word) > 1 and current_word.endswith('හ'):
+                root_variants.append(current_word[:-1] + 'ස')
+            if len(current_word) > 2 and current_word.endswith('ස්'):
+                root_variants.append(current_word[:-2] + 'ස')
+
+            for root_variant in root_variants:
+                if root_variant not in seen:
+                    seen.add(root_variant)
+                    candidates.append(root_variant)
+                    if depth < max_depth:
+                        queue.append((root_variant, depth + 1))
+
+            if depth >= max_depth:
+                continue
+
+            for suffix, replacement in suffix_rules:
+                if len(current_word) > len(suffix) and current_word.endswith(suffix):
+                    candidate = current_word[:-len(suffix)] + replacement
+                    if candidate and candidate not in seen and candidate != current_word:
+                        seen.add(candidate)
+                        candidates.append(candidate)
+                        queue.append((candidate, depth + 1))
+
+        return candidates
 
     def _batch_translate_sinhala_with_normalization(self, words, target_lang):
         """Batch translate Sinhala words with base-form normalization fallback."""
