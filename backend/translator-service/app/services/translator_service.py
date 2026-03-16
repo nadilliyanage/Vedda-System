@@ -86,27 +86,76 @@ class VeddaTranslator:
         }
 
     def _generate_sinhala_normalization_candidates(self, word):
-        """Generate likely Sinhala base-form candidates for inflected words."""
+        """Generate likely Sinhala base-form candidates for inflected Sinhala words."""
         if not word:
             return []
 
         # Ordered longest-first to avoid partial stripping before specific forms.
         suffix_rules = [
+            ('වලටත්', ''),
+            ('වලගෙ', ''),
+            ('වලේදී', ''),
+            ('වලදී', ''),
+            ('වලෙහි', ''),
+            ('වලහි', ''),
+            ('වලේ', ''),
+            ('වලෙ', ''),
+            ('වලගෙන්', ''),
             ('වලින්', ''),
             ('වලට', ''),
             ('වලද', ''),
             ('වලම', ''),
+            ('වලත්', ''),
+            ('යන්ටත්', 'යා'),
+            ('යන්ගේ', 'යා'),
             ('යන්ගෙන්', 'යා'),
+            ('යන්වත්', 'යා'),
+            ('යන්හි', 'යා'),
             ('යන්ට', 'යා'),
             ('යන්ව', 'යා'),
             ('යන්', 'යා'),
+            ('වරුන්ගේ', 'වරු'),
             ('වරුන්', 'වරු'),
             ('වරුට', 'වරු'),
             ('වරුගේ', 'වරු'),
+            ('වරුහි', 'වරු'),
             ('වරු', ''),
+            ('ලාගෙ', 'ලා'),
+            ('ලාගෙන්', 'ලා'),
             ('ලාගේ', 'ලා'),
+            ('ලාහි', 'ලා'),
             ('ලාට', 'ලා'),
             ('ලා', ''),
+            ('ුන්ටත්', ''),
+            ('ුන්ගේ', 'ුන්'),
+            ('ුන්ගෙන්', ''),
+            ('ුන්ගේ', ''),
+            ('ුන්ට', ''),
+            ('ුන්', ''),
+            ('න්ටත්', ''),
+            ('න්ගේ', 'න්'),
+            ('න්ගෙන්', ''),
+            ('න්ගේ', ''),
+            ('න්ට', ''),
+            ('යාගෙන්', 'යා'),
+            ('යාගේ', 'යා'),
+            ('යාට', 'යා'),
+            ('යාව', 'යා'),
+            ('යාහි', 'යා'),
+            ('ගේදී', ''),
+            ('ගේම', ''),
+            ('ගෙන්ම', ''),
+            ('කින්ම', 'ක'),
+            ('ටමත්', ''),
+            ('වත්', ''),
+            ('ගැන', ''),
+            ('සමඟ', ''),
+            ('සමග', ''),
+            ('ෙහි', ''),
+            ('හි', ''),
+            ('යෙහි', 'ය'),
+            ('යේ', 'ය'),
+            ('නු', 'න'),
             ('ගෙන්', ''),
             ('කින්', 'ක'),
             ('ෙන්', ''),
@@ -116,23 +165,53 @@ class VeddaTranslator:
             ('ටද', ''),
             ('ටම', ''),
             ('ට', ''),
+            ('ෙකුගෙන්', 'ා'),
+            ('ෙකුගේ', 'ා'),
+            ('ෙකුටත්', 'ා'),
+            ('ෙකුට', 'ා'),
+            ('ෙකුද', 'ා'),
+            ('ෙකුම', 'ා'),
             ('ෙකු', 'ා'),
             ('ෙක්', 'ා'),
             ('වල්', ''),
             ('වෝ', 'වා'),
             ('වන්', 'වා'),
+            ('මේ', 'ම'),
+            ('යේ', ''),
             ('යෝ', 'යා'),
             ('යන්', 'ය'),
             ('න්', 'ා'),
             ('ෝ', 'ා'),
+            ('ේ', ''),
+            ('ී', 'ි'),
+            ('ක්ද', ''),
+            ('ක්ම', ''),
+            ('කුත්', ''),
+            ('කුගෙන්', ''),
+            ('කුගේ', ''),
+            ('කුට', ''),
+            ('කු', ''),
             ('කි', ''),
             ('ක්', '')
+        ]
+
+        # Expansion rules for common plural/short-base -> dictionary base forms.
+        ending_expansion_rules = [
+            ('ි', 'ියා'),   # අලි -> අලියා
+            ('ු', 'ුවා')    # fallback pattern for some animate nouns
         ]
 
         queue = [(word, 0)]
         seen = {word}
         candidates = []
         max_depth = 2
+
+        # Add punctuation-stripped variant as a normalization candidate seed.
+        punctuation_trimmed = word.strip('.,!?;:"\'“”‘’()[]{}')
+        if punctuation_trimmed and punctuation_trimmed != word:
+            seen.add(punctuation_trimmed)
+            candidates.append(punctuation_trimmed)
+            queue.append((punctuation_trimmed, 0))
 
         while queue:
             current_word, depth = queue.pop(0)
@@ -142,6 +221,12 @@ class VeddaTranslator:
                 root_variants.append(current_word[:-1] + 'ස')
             if len(current_word) > 2 and current_word.endswith('ස්'):
                 root_variants.append(current_word[:-2] + 'ස')
+
+            for ending, replacement in ending_expansion_rules:
+                if len(current_word) > len(ending) and current_word.endswith(ending):
+                    expanded = current_word[:-len(ending)] + replacement
+                    if expanded not in seen:
+                        root_variants.append(expanded)
 
             for root_variant in root_variants:
                 if root_variant not in seen:
@@ -494,6 +579,12 @@ class VeddaTranslator:
         batch_results = self._batch_translate_sinhala_with_normalization(sinhala_words, 'vedda')
         
         for sinhala_word in sinhala_words:
+            preserve_suffix = ''
+            if sinhala_word.endswith('ගේ'):
+                preserve_suffix = 'ගේ'
+            elif sinhala_word.endswith('ට'):
+                preserve_suffix = 'ට'
+
             if sinhala_word in batch_results and batch_results[sinhala_word]['found']:
                 vedda_translation = batch_results[sinhala_word]['translation']
                 # Handle multi-word Vedda translations (e.g., "උයනවා" -> "පුච්චා කඩනවා")
@@ -513,6 +604,15 @@ class VeddaTranslator:
                 for vedda_word in vedda_phrase_words:
                     vedda_words.append(vedda_word)
                     word_sources.append(('vedda', translation_dict, vedda_word))
+
+                # Preserve Sinhala trailing markers in Vedda output when present in source.
+                # ගේ is attached directly (no space); ට is appended as a separate token.
+                if preserve_suffix and vedda_words and vedda_phrase_words:
+                    if preserve_suffix == 'ගේ':
+                        vedda_words[-1] = vedda_words[-1] + 'ගේ'
+                    elif vedda_phrase_words[-1] != preserve_suffix:
+                        vedda_words.append(preserve_suffix)
+                        word_sources.append(('sinhala', preserve_suffix, preserve_suffix))
                 
                 dictionary_hits += 1
             else:
