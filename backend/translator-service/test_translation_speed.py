@@ -16,18 +16,18 @@ print("="*60)
 try:
     response = requests.get("http://127.0.0.1:5001/health", timeout=5)
     if response.status_code != 200:
-        print("\n❌ Translator service not running!")
+        print("\n Translator service not running!")
         exit(1)
-    print("\n✅ Translator service is running\n")
+    print("\n Translator service is running\n")
 except:
-    print("\n❌ Could not connect to translator service")
+    print("\n Could not connect to translator service")
     exit(1)
 
 total_time = 0
 success_count = 0
 
 for i, test in enumerate(test_cases, 1):
-    print(f"\n📝 Test {i}: {test['source']} → {test['target']}")
+    print(f"\n Test {i}: {test['source']} → {test['target']}")
     print(f"   Input: \"{test['text']}\"")
     
     start_time = time.perf_counter()
@@ -44,26 +44,26 @@ for i, test in enumerate(test_cases, 1):
     
     if response.status_code == 200:
         result = response.json()
-        print(f"   ✅ Success!")
+        print(f"   Success!")
         print(f"   Translation: \"{result.get('translated_text', '')}\"")
         print(f"   Time: {elapsed_ms:.2f} ms")
         print(f"   Confidence: {result.get('confidence', 0):.2f}")
         total_time += elapsed_ms
         success_count += 1
     else:
-        print(f"   ❌ Failed: HTTP {response.status_code}")
+        print(f"   Failed: HTTP {response.status_code}")
 
 if success_count > 0:
     avg_time = total_time / success_count
     print(f"\n" + "="*60)
-    print(f"📊 RESULTS:")
+    print(f" RESULTS:")
     print(f"   Successful: {success_count}/{len(test_cases)}")
     print(f"   Average time: {avg_time:.2f} ms")
     print(f"   Total time: {total_time:.2f} ms")
     print("="*60)
     
-    print("\n💡 Performance Summary:")
+    print("\n Performance Summary:")
     print("   - With connection pooling: ~450-550ms per translation")
     print("   - Previous (no pooling): ~2,500ms per translation")
     print("   - Original (no optimization): ~12,000-17,000ms")
-    print("   - Total improvement: 96-97% faster! 🚀")
+    print("   - Total improvement: 96-97% faster! ")

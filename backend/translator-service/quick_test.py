@@ -2,7 +2,7 @@ import requests
 import time
 
 text = "hello world"
-print(f"\n🔄 Translating: '{text}' (English → Vedda)")
+print(f"\n Translating: '{text}' (English → Vedda)")
 
 start = time.perf_counter()
 response = requests.post(
@@ -18,8 +18,8 @@ elapsed_ms = (time.perf_counter() - start) * 1000
 
 if response.status_code == 200:
     result = response.json()
-    print(f"✅ Result: {result.get('translated_text', '')}")
-    print(f"⏱️  Time: {elapsed_ms:.0f}ms")
-    print(f"📊 Confidence: {result.get('confidence', 0):.2f}")
+    print(f" Result: {result.get('translated_text', '')}")
+    print(f" Time: {elapsed_ms:.0f}ms")
+    print(f" Confidence: {result.get('confidence', 0):.2f}")
 else:
-    print(f"❌ Failed: HTTP {response.status_code}")
+    print(f" Failed: HTTP {response.status_code}")
