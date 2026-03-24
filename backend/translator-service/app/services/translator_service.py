@@ -92,6 +92,72 @@ class VeddaTranslator:
 
         # Ordered longest-first to avoid partial stripping before specific forms.
         suffix_rules = [
+            # ===== VERB CONJUGATION SUFFIXES =====
+            # Vedda doesn't use Sinhala person-based verb conjugations
+            # All forms should normalize to base form (verb root + න or නවා)
+
+            # Past tense forms (longest first)
+            # Strip suffixes to get past root, then verb_root_transformations will convert to present form
+            ('ෙමුය', ''),       # we ate (formal) - කෑවෙමුය → කෑව → කනවා
+            ('ෙවූය', ''),       # happened (formal)
+            ('ෙරූ', ''),        # became (plural)
+            ('ෝය', ''),         # formal past
+            ('ේය', ''),         # they ate (formal) - කෑවේය → කෑව → කනවා
+            ('ාය', ''),         # ate (formal) - කෑවාය → කෑව → කනවා
+            ('ෙමු', ''),        # we ate - කෑවෙමු → කෑව → කනවා
+            ('ෙව්', ''),        # happened
+            ('ේම', ''),         # emphatic past
+            ('ෙම', ''),         # variant past
+            ('ෙව', ''),         # happened variant
+            ('ො', ''),          # past marker
+            ('ා', ''),          # past simple - කෑවා → කෑව → කනවා (but also used in nouns - handle carefully)
+
+            # Present/Future tense person markers (longest first)
+            ('මුද', 'නවා'),     # question form "do we?"
+            ('මිද', 'නවා'),     # question form "do I?"
+            ('තිද', 'නවා'),     # question form "do they?"
+            ('මෝ', 'නවා'),      # hortative "let's" - කමෝ → කනවා
+            ('මු', 'නවා'),       # we - කමු → කනවා
+            ('මි', 'නවා'),       # I - කමි → කනවා
+            ('ති', 'නවා'),       # they/you formal - කති → කනවා
+            ('තු', 'නවා'),       # you plural
+            ('ත්', 'නවා'),       # verb marker
+            ('ම', 'නවා'),        # short form
+
+            # Progressive/Continuous forms
+            ('මින්', 'නවා'),    # progressive "while eating"
+            ('නවාය', 'නවා'),    # formal present continuous
+            ('නවා', 'නවා'),     # present continuous - already base form
+            ('න්නේ', 'නවා'),    # emphatic present
+            ('න්නෙ', 'නවා'),    # colloquial emphatic
+            ('ද්දී', 'නවා'),    # while doing - කද්දී → කනවා
+
+            # Perfect/Completed forms
+            ('ලයි', 'නවා'),     # completed action
+            ('ලූ', 'නවා'),      # completed plural
+            ('ලා', 'නවා'),      # having done - කාලා → කනවා
+            ('ල', 'නවා'),       # completed
+
+            # Infinitive and other verb forms
+            ('න්නට', 'නවා'),    # "in order to do"
+            ('න්න', 'නවා'),     # infinitive "to do" - කන්න → කනවා
+            ('නු', 'නවා'),       # future/habitual marker
+
+            # Imperative forms
+            ('මින්', 'නවා'),    # polite command
+            ('න්', 'නවා'),      # base imperative
+
+            # Negative verb forms
+            ('ත් නැහැ', 'නවා'), # doesn't (with space - rare in single word)
+            ('නෙ', 'නවා'),      # negative colloquial
+
+            # Other verb markers
+            ('යි', ''),          # copula "is/are" - can be removed
+            ('වා', 'නවා'),      # past/action marker
+            ('යෙ', 'නවා'),      # informal past
+            ('ආ', 'නවා'),       # came/went past marker
+
+            # ===== NOUN SUFFIXES (existing) =====
             ('වලටත්', ''),
             ('වලගෙ', ''),
             ('වලේදී', ''),
@@ -201,6 +267,63 @@ class VeddaTranslator:
             ('ු', 'ුවා')    # fallback pattern for some animate nouns
         ]
 
+        # Verb root vowel transformations (past tense → base form)
+        # These handle cases where past tense changes the verb root vowel
+        # Transform to FULL dictionary form (typically present continuous: verb + නවා)
+        verb_root_transformations = [
+            # Common irregular verb patterns (past root → present continuous form)
+            ('කෑව', 'කනවා'),      # ate → eat: කෑවා/කෑවෙමු/කෑවේය → කනවා
+            ('කා', 'කනවා'),        # eating → eat (also handles කාලා)
+            ('ගිය', 'යනවා'),       # went → go
+            ('ගිහි', 'යනවා'),      # went (variant) → go
+            ('ආව', 'එනවා'),       # came → come
+            ('ආ', 'එනවා'),         # came (short) → come
+            ('ගත්ත', 'ගනවා'),     # took → take
+            ('ගත්', 'ගනවා'),       # took (short) → take
+            ('දුන්න', 'දෙනවා'),   # gave → give
+            ('දුන්', 'දෙනවා'),     # gave (short) → give
+            ('දී', 'දෙනවා'),       # gave (variant) → give
+            ('හිටි', 'ඉන්නවා'),    # sat → sit/stay
+            ('හිටිය', 'ඉන්නවා'),   # sat (variant) → sit/stay
+            ('ඉඳි', 'ඉන්නවා'),     # sat (colloquial) → sit/stay
+            ('බිව්ව', 'බොනවා'),    # drank → drink
+            ('බීව', 'බොනවා'),      # drank variant → drink
+            ('බී', 'බොනවා'),        # drank (short) → drink
+            ('කීව', 'කියනවා'),     # said → say
+            ('කී', 'කියනවා'),       # said (short) → say
+            ('දැක්ක', 'දකිනවා'),  # saw → see
+            ('දැක්', 'දකිනවා'),    # saw (short) → see
+            ('බැලු', 'බලනවා'),      # looked → look
+            ('බැලූ', 'බලනවා'),     # looked (variant) → look
+            ('බැල', 'බලනවා'),      # looked (short) → look
+            ('ඇහු', 'අහනවා'),       # heard/asked → hear/ask
+            ('ඇසු', 'අහනවා'),       # heard/asked (variant) → hear/ask
+            ('ඇහූ', 'අහනවා'),      # heard/asked (variant) → hear/ask
+            ('හැදු', 'හදනවා'),     # made → make
+            ('හැද', 'හදනවා'),      # made (short) → make
+            ('පැන', 'පනිනවා'),     # jumped → jump
+            ('ගහ', 'ගහනවා'),       # hit → hit
+            ('ගැහු', 'ගහනවා'),      # hit (past) → hit
+            ('ගැහූ', 'ගහනවා'),     # hit (variant) → hit
+            ('උඩ', 'උඩනවා'),       # cooked → cook (උයනවා)
+            ('උයා', 'උයනවා'),      # cooked → cook
+            ('උයල', 'උයනවා'),      # having cooked → cook
+            ('ලියා', 'ලියනවා'),    # wrote → write
+            ('ලිව්', 'ලියනවා'),    # wrote (variant) → write
+            ('ලිව', 'ලියනවා'),     # wrote (short) → write
+            ('කළ', 'කරනවා'),        # did → do
+            ('කරපු', 'කරනවා'),     # did (past participle) → do
+            ('කළා', 'කරනවා'),      # did (past) → do
+            ('කර', 'කරනවා'),        # do (imperative/short) → do
+            ('වූ', 'වෙනවා'),        # became → become (වූවා → වෙනවා)
+            ('වී', 'වෙනවා'),        # became (variant) → become
+            ('වෙච්ච', 'වෙනවා'),    # happened (colloquial) → happen
+            ('හැම', 'හමනවා'),      # turned → turn
+            ('හැඹ', 'හඹනවා'),      # chased → chase
+            ('වැඩ', 'වැඩනවා'),      # worked → work (වැඩකරනවා)
+            ('වැඩ', 'වැඩනවා'),      # grew → grow
+        ]
+
         queue = [(word, 0)]
         seen = {word}
         candidates = []
@@ -221,6 +344,22 @@ class VeddaTranslator:
                 root_variants.append(current_word[:-1] + 'ස')
             if len(current_word) > 2 and current_word.endswith('ස්'):
                 root_variants.append(current_word[:-2] + 'ස')
+
+            # Apply verb root transformations for past→base conversion
+            for past_form, base_form in verb_root_transformations:
+                if current_word.startswith(past_form):
+                    # Replace past root with base root, keeping any remaining suffix
+                    remainder = current_word[len(past_form):]
+                    transformed = base_form + remainder
+                    if transformed not in seen:
+                        root_variants.append(transformed)
+                # Also try if the word ends with the past form
+                if current_word.endswith(past_form):
+                    # Replace past ending with base ending
+                    prefix = current_word[:-len(past_form)]
+                    transformed = prefix + base_form
+                    if transformed not in seen and transformed != current_word:
+                        root_variants.append(transformed)
 
             for ending, replacement in ending_expansion_rules:
                 if len(current_word) > len(ending) and current_word.endswith(ending):
@@ -573,51 +712,98 @@ class VeddaTranslator:
         vedda_words = []
         word_sources = []  # Track whether each word came from dictionary or is Sinhala fallback
         dictionary_hits = 0
-        
-        # OPTIMIZED: Batch translate all words in ONE API call
-        # Fallback: try Sinhala normalization candidates for inflected forms
-        batch_results = self._batch_translate_sinhala_with_normalization(sinhala_words, 'vedda')
-        
-        for sinhala_word in sinhala_words:
-            preserve_suffix = ''
-            if sinhala_word.endswith('ගේ'):
-                preserve_suffix = 'ගේ'
-            elif sinhala_word.endswith('ට'):
-                preserve_suffix = 'ට'
+        processed_indices = set()  # Track which Sinhala words have been processed
 
-            if sinhala_word in batch_results and batch_results[sinhala_word]['found']:
-                vedda_translation = batch_results[sinhala_word]['translation']
-                # Handle multi-word Vedda translations (e.g., "උයනවා" -> "පුච්චා කඩනවා")
-                vedda_phrase_words = [w.strip() for w in vedda_translation.split() if w.strip()]
-                
-                # Build full translation dict from batch result
-                translation_dict = {
-                    'vedda': vedda_translation,
-                    'sinhala': sinhala_word,
-                    'vedda_ipa': '',  # Batch endpoint returns just translation
-                    'sinhala_ipa': '',
-                    'english': '',
-                    'english_ipa': ''
-                }
-                
-                # Add each word from the multi-word translation
-                for vedda_word in vedda_phrase_words:
-                    vedda_words.append(vedda_word)
-                    word_sources.append(('vedda', translation_dict, vedda_word))
+        # STEP 1: Try multi-word phrase matching with normalization
+        # This handles cases like "විවාහ වෙමු" → "විවාහ වෙනවා" → "කැකුළියෙක්‌ ඇන්න මංගච්චනවා"
+        i = 0
+        while i < len(sinhala_words):
+            if i in processed_indices:
+                i += 1
+                continue
 
-                # Preserve Sinhala trailing markers in Vedda output when present in source.
-                # ගේ is attached directly (no space); ට is appended as a separate token.
-                if preserve_suffix and vedda_words and vedda_phrase_words:
-                    if preserve_suffix == 'ගේ':
-                        vedda_words[-1] = vedda_words[-1] + 'ගේ'
-                    elif vedda_phrase_words[-1] != preserve_suffix:
-                        vedda_words.append(preserve_suffix)
-                        word_sources.append(('sinhala', preserve_suffix, preserve_suffix))
-                
-                dictionary_hits += 1
-            else:
-                vedda_words.append(sinhala_word)
-                word_sources.append(('sinhala', sinhala_word, sinhala_word))
+            # Try progressively longer phrases (up to 5 words)
+            matched = False
+            for phrase_len in range(min(5, len(sinhala_words) - i), 0, -1):
+                phrase = ' '.join(sinhala_words[i:i+phrase_len])
+
+                # Try exact match first, then normalization candidates
+                batch_results = self._batch_translate_sinhala_with_normalization([phrase], 'vedda')
+
+                if phrase in batch_results and batch_results[phrase]['found']:
+                    vedda_translation = batch_results[phrase]['translation']
+                    print(f"[TRANSLATE] ✓ Found Sinhala phrase match: '{phrase}' → '{vedda_translation}'")
+
+                    # Handle multi-word Vedda translations
+                    vedda_phrase_words = [w.strip() for w in vedda_translation.split() if w.strip()]
+
+                    translation_dict = {
+                        'vedda': vedda_translation,
+                        'sinhala': phrase,
+                        'vedda_ipa': '',
+                        'sinhala_ipa': '',
+                        'english': '',
+                        'english_ipa': ''
+                    }
+
+                    # Add each word from the multi-word translation
+                    for vedda_word in vedda_phrase_words:
+                        vedda_words.append(vedda_word)
+                        word_sources.append(('vedda', translation_dict, vedda_word))
+
+                    # Mark all words in this phrase as processed
+                    for j in range(i, i + phrase_len):
+                        processed_indices.add(j)
+
+                    dictionary_hits += 1
+                    matched = True
+                    i += phrase_len
+                    break
+
+            if not matched:
+                # STEP 2: No phrase match, try single word with normalization
+                sinhala_word = sinhala_words[i]
+                preserve_suffix = ''
+                if sinhala_word.endswith('ගේ'):
+                    preserve_suffix = 'ගේ'
+                elif sinhala_word.endswith('ට'):
+                    preserve_suffix = 'ට'
+
+                batch_results = self._batch_translate_sinhala_with_normalization([sinhala_word], 'vedda')
+
+                if sinhala_word in batch_results and batch_results[sinhala_word]['found']:
+                    vedda_translation = batch_results[sinhala_word]['translation']
+                    vedda_phrase_words = [w.strip() for w in vedda_translation.split() if w.strip()]
+
+                    translation_dict = {
+                        'vedda': vedda_translation,
+                        'sinhala': sinhala_word,
+                        'vedda_ipa': '',
+                        'sinhala_ipa': '',
+                        'english': '',
+                        'english_ipa': ''
+                    }
+
+                    for vedda_word in vedda_phrase_words:
+                        vedda_words.append(vedda_word)
+                        word_sources.append(('vedda', translation_dict, vedda_word))
+
+                    # Preserve Sinhala trailing markers
+                    if preserve_suffix and vedda_words and vedda_phrase_words:
+                        if preserve_suffix == 'ගේ':
+                            vedda_words[-1] = vedda_words[-1] + 'ගේ'
+                        elif vedda_phrase_words[-1] != preserve_suffix:
+                            vedda_words.append(preserve_suffix)
+                            word_sources.append(('sinhala', preserve_suffix, preserve_suffix))
+
+                    dictionary_hits += 1
+                else:
+                    # Fallback: keep Sinhala word
+                    vedda_words.append(sinhala_word)
+                    word_sources.append(('sinhala', sinhala_word, sinhala_word))
+
+                processed_indices.add(i)
+                i += 1
         
         final_text = ' '.join(vedda_words)
         dict_coverage = dictionary_hits / len(sinhala_words) if sinhala_words else 0

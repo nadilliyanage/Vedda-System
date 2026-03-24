@@ -16,7 +16,7 @@ print("="*60)
 times = []
 
 for i, (text, source, target) in enumerate(tests, 1):
-    print(f"\n🔄 Test {i}: '{text}' ({source} → {target})")
+    print(f"\n Test {i}: '{text}' ({source} → {target})")
     
     start = time.perf_counter()
     response = requests.post(
@@ -32,15 +32,15 @@ for i, (text, source, target) in enumerate(tests, 1):
     
     if response.status_code == 200:
         result = response.json()
-        print(f"   ✅ Result: {result.get('translated_text', '')}")
-        print(f"   ⏱️  Time: {elapsed_ms:.0f}ms")
+        print(f" Result: {result.get('translated_text', '')}")
+        print(f" Time: {elapsed_ms:.0f}ms")
         times.append(elapsed_ms)
     else:
         print(f"   ❌ Failed: HTTP {response.status_code}")
 
 if times:
     print(f"\n" + "="*60)
-    print(f"📊 RESULTS:")
+    print(f" RESULTS:")
     print(f"   First request: {times[0]:.0f}ms (cold start)")
     if len(times) > 1:
         avg_warm = sum(times[1:]) / len(times[1:])
