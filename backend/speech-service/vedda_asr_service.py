@@ -9,23 +9,26 @@ import librosa
 import os
 from pathlib import Path
 
-# Model path resolution: env var > fine-tuned-v8 > colab-final > v4 > v2 (stable fallback)
+# Model path resolution: env var > production model (vedda_whisper_finetuned)
 def _resolve_model_path():
+    # Check environment variable override
     env = os.environ.get('VEDDA_ASR_MODEL_PATH')
     if env and os.path.exists(env):
+        print(f"[INFO] Using model from VEDDA_ASR_MODEL_PATH: {env}")
         return env
-    # NEW: Phase 8 fine-tuned model (68% accuracy)
-    finetuned_v8 = 'vedda_whisper_finetuned'
-    if os.path.exists(finetuned_v8):
-        print(f"[INFO] Using Phase 8 fine-tuned model (68% accuracy)")
-        return finetuned_v8
-    colab_final = 'vedda-asr-model/models/whisper-vedda-final'
-    if os.path.exists(colab_final):
-        return colab_final
-    v4 = 'vedda-asr-model/models/whisper-frozen-v4/final'
-    if os.path.exists(v4):
-        return v4
-    return 'vedda-asr-model/models/whisper-frozen-v2/final'
+    
+    # Use production fine-tuned model (76.06% accuracy on 355 samples)
+    production_model = 'vedda_whisper_finetuned'
+    if os.path.exists(production_model):
+        print(f"[INFO] Using vedda_whisper_finetuned (Production - 76.06% accuracy)")
+        return production_model
+    
+    # If production model missing, raise error (don't silently fall back to old models)
+    raise FileNotFoundError(
+        f"vedda_whisper_finetuned model not found!\n"
+        f"Expected at: {os.path.abspath(production_model)}\n"
+        f"Setup instructions: see README.md Step 2"
+    )
 
 class VeddaASRService:
     """Speech recognition service for Vedda language using trained Whisper model"""

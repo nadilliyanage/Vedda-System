@@ -219,6 +219,42 @@ Service starts on `http://0.0.0.0:5007`.
 
 ---
 
+## Reducing Docker Image Size
+
+The production model `vedda_whisper_finetuned` achieves **76.06% accuracy** — significantly better than legacy models. You can safely **delete old models** to reduce image size:
+
+### Old Models (Safe to Delete)
+
+These models are no longer used:
+
+- `vedda-asr-model/models/whisper-vedda-final/` — 0% accuracy (baseline)
+- `vedda-asr-model/models/whisper-frozen-v4/final/` — 13.5% accuracy
+- `vedda-asr-model/models/whisper-frozen-v2/final/` — legacy (not on disk)
+
+### Cleanup
+
+```bash
+# Remove old models (saves ~600-800MB)
+rm -rf vedda-asr-model/models/whisper-vedda-final/
+rm -rf vedda-asr-model/models/whisper-frozen-v4/
+
+# Verify only production model remains
+ls vedda_whisper_finetuned/
+# Output: config.json, model.safetensors, tokenizer.json, etc.
+```
+
+### Docker Image Size Impact
+
+| State                                 | Size       | Notes                      |
+| ------------------------------------- | ---------- | -------------------------- |
+| With all models                       | ~1.2GB     | Production + legacy models |
+| **With only vedda_whisper_finetuned** | **~600MB** | ✅ Recommended             |
+| Old models only                       | ~600MB     | Don't use — worse accuracy |
+
+**No risk** — if `vedda_whisper_finetuned/` is missing, service will show a clear error message instead of silently using lower-accuracy fallback.
+
+---
+
 ## vedda_whisper_finetuned Model
 
 The `vedda_whisper_finetuned` model represents the **production-ready Vedda ASR system**. It's the culmination of 7 preceding phases of data validation, curation, and model development, resulting in a **fine-tuned Whisper model ready for deployment**.
