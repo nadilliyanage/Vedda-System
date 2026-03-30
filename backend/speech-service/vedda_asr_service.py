@@ -9,11 +9,16 @@ import librosa
 import os
 from pathlib import Path
 
-# Model path resolution: env var > colab-final > v4 > v2 (stable fallback)
+# Model path resolution: env var > fine-tuned-v8 > colab-final > v4 > v2 (stable fallback)
 def _resolve_model_path():
     env = os.environ.get('VEDDA_ASR_MODEL_PATH')
     if env and os.path.exists(env):
         return env
+    # NEW: Phase 8 fine-tuned model (68% accuracy)
+    finetuned_v8 = 'vedda_whisper_finetuned'
+    if os.path.exists(finetuned_v8):
+        print(f"[INFO] Using Phase 8 fine-tuned model (68% accuracy)")
+        return finetuned_v8
     colab_final = 'vedda-asr-model/models/whisper-vedda-final'
     if os.path.exists(colab_final):
         return colab_final
@@ -138,9 +143,9 @@ class VeddaASRService:
             return {
                 'text': text,
                 'language': 'Vedda',
-                'confidence': 0.85,  # Approximate confidence
+                'confidence': 0.68,  # Phase 8 fine-tuned model accuracy
                 'duration': duration,
-                'model': 'whisper-vedda-fine-tuned'
+                'model': 'vedda_whisper_finetuned_v8'
             }
         
         except Exception as e:

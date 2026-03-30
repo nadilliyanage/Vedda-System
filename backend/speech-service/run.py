@@ -279,6 +279,7 @@ def health_check():
     return jsonify({'status': 'healthy', 'service': 'TTS Service'})
 
 if __name__ == '__main__':
-    print("Starting TTS Service on port 5007...")
+    port = int(os.environ.get('PORT', 5007))
+    print(f"Starting TTS Service on port {port}...")
     print("Supported languages:", list(GTTS_LANGUAGE_MAP.keys()))
-    app.run(host='0.0.0.0', port=5007, debug=True)
+    app.run(host='0.0.0.0', port=port, debug=True)

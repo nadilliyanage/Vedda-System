@@ -36,8 +36,11 @@ diagnosis_results.txt
 train_v4_log.txt
 
 # ============================================================
-# vedda-asr-model — large binary / generated files
+# Large model directories (keep locally, don't commit to Git)
 # ============================================================
+
+# Fine-tuned Whisper model (~500MB)
+vedda_whisper_finetuned/
 
 # Trained model weights (each checkpoint is ~150 MB)
 vedda-asr-model/models/

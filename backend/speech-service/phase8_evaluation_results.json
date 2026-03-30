@@ -1,0 +1,10 @@
+{
+  "evaluation_date": "2026-03-30 17:50:33.459969",
+  "test_samples": 50,
+  "baseline_wer": 3.239130434782609,
+  "finetuned_wer": 0.15217391304347827,
+  "baseline_cer": 5.328087167070218,
+  "finetuned_cer": 0.031476997578692496,
+  "baseline_exact_match": 0.0,
+  "finetuned_exact_match": 0.68
+}

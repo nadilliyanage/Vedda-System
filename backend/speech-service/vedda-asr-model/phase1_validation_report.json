@@ -1,0 +1,23 @@
+{
+  "total_samples": 385,
+  "validation_statuses": {
+    "auto_verified": 385
+  },
+  "ter_stats": {
+    "mean": 0.5180582151098357,
+    "median": 0.5217391304347826,
+    "std": 0.28815473052355944,
+    "min": 0.0,
+    "max": 1.0
+  },
+  "wer_stats": {
+    "mean": 0.9403722468008183,
+    "median": 1.0
+  },
+  "cer_stats": {
+    "mean": 0.5336191116447583,
+    "median": 0.5217391304347826
+  },
+  "quality_confidence_mean": 0.759036454215806,
+  "timestamp": "2026-03-30T10:23:18.408270"
+}

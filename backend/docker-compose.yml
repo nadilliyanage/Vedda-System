@@ -117,8 +117,10 @@ services:
     environment:
       - FLASK_ENV=development
       - PORT=5007
+      - VEDDA_ASR_MODEL_PATH=/app/vedda_whisper_finetuned
     volumes:
       - ./speech-service/vedda-asr-model:/app/vedda-asr-model
+      - ./speech-service/vedda_whisper_finetuned:/app/vedda_whisper_finetuned
     networks:
       - vedda-network
 
