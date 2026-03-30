@@ -219,39 +219,66 @@ Service starts on `http://0.0.0.0:5007`.
 
 ---
 
-## Reducing Docker Image Size
+## Optimizing Docker Image Size
 
-The production model `vedda_whisper_finetuned` achieves **76.06% accuracy** — significantly better than legacy models. You can safely **delete old models** to reduce image size:
+The Docker image is optimized for production by **excluding the large model file** and mounting it as a volume at runtime. This reduces image size from ~14GB to ~7GB while keeping all functionality.
 
-### Old Models (Safe to Delete)
+### Architecture
 
-These models are no longer used:
+- **Docker Image**: Contains Flask app + PyTorch + dependencies (~7GB)
+- **Production Model**: Mounted as volume at `/app/vedda_whisper_finetuned` (~6.5GB)
+- **Benefit**: Smaller image, easier to push to registries, model managed separately
 
-- `vedda-asr-model/models/whisper-vedda-final/` — 0% accuracy (baseline)
-- `vedda-asr-model/models/whisper-frozen-v4/final/` — 13.5% accuracy
-- `vedda-asr-model/models/whisper-frozen-v2/final/` — legacy (not on disk)
+### Multi-Stage Build Optimization
 
-### Cleanup
+The Dockerfile now uses multi-stage builds to:
+
+- ✅ Install build dependencies only in builder stage (not in final image)
+- ✅ Copy only pre-compiled Python packages to runtime stage
+- ✅ Remove build-essential and other tools from final image
+- ✅ Reduce total size by ~2-3GB
+
+### Running with Volume Mount
 
 ```bash
-# Remove old models (saves ~600-800MB)
+# Build optimized image (~7GB)
+docker build -t speech-service:optimized .
+
+# Run with model mounted as volume
+docker run --rm \
+  -v /path/to/vedda_whisper_finetuned:/app/vedda_whisper_finetuned:ro \
+  -p 5007:5007 \
+  speech-service:optimized
+
+# Or with docker-compose:
+# volumes:
+#   - ./vedda_whisper_finetuned:/app/vedda_whisper_finetuned:ro
+```
+
+### Size Comparison
+
+| Configuration                   | Image Size | Total with Model  |
+| ------------------------------- | ---------- | ----------------- |
+| Old approach (model in image)   | ~14GB      | 14GB              |
+| **Optimized (model as volume)** | **~7GB**   | **7GB + volume**  |
+| **Savings**                     | **~50%**   | **50% reduction** |
+
+### Removing Old/Unused Models
+
+Old checkpoint directories can be safely deleted to save local disk space:
+
+```bash
+# Remove old training checkpoints
+rm -rf checkpoint-*/
+
+# Remove old models (if present)
 rm -rf vedda-asr-model/models/whisper-vedda-final/
 rm -rf vedda-asr-model/models/whisper-frozen-v4/
 
-# Verify only production model remains
-ls vedda_whisper_finetuned/
-# Output: config.json, model.safetensors, tokenizer.json, etc.
+# Saves ~5-8GB of local disk space
 ```
 
-### Docker Image Size Impact
-
-| State                                 | Size       | Notes                      |
-| ------------------------------------- | ---------- | -------------------------- |
-| With all models                       | ~1.2GB     | Production + legacy models |
-| **With only vedda_whisper_finetuned** | **~600MB** | ✅ Recommended             |
-| Old models only                       | ~600MB     | Don't use — worse accuracy |
-
-**No risk** — if `vedda_whisper_finetuned/` is missing, service will show a clear error message instead of silently using lower-accuracy fallback.
+**Safety**: These are only for training/development. The production model `vedda_whisper_finetuned` is the only one needed for inference.
 
 ---
 

@@ -1,22 +1,33 @@
-# Speech Service Dockerfile
-# Uses fine-tuned Whisper model for Vedda ASR (68% accuracy)
+# Speech Service Dockerfile (Multi-stage for size optimization)
+# Uses fine-tuned Whisper model for Vedda ASR (76.06% accuracy)
+FROM python:3.9-slim as builder
+
+WORKDIR /tmp/build
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy and install Python dependencies to temporary location
+COPY requirements.txt .
+RUN pip install --user --no-cache-dir -r requirements.txt && \
+    pip install --user --no-cache-dir torch==2.0.0 --index-url https://download.pytorch.org/whl/cpu
+
+# Final runtime stage (smaller base)
 FROM python:3.9-slim
 
 WORKDIR /app
 
-# Install system dependencies for audio processing and build tools
+# Install only runtime dependencies (no build-essential)
 RUN apt-get update && apt-get install -y \
     libsndfile1 \
     ffmpeg \
-    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
-COPY requirements.txt .
-
-# Install Python dependencies (torch CPU only, not GPU)
-RUN pip install --no-cache-dir -r requirements.txt && \
-    pip install --no-cache-dir torch==2.0.0 --index-url https://download.pytorch.org/whl/cpu
+# Copy pre-built Python packages from builder
+COPY --from=builder /root/.local /root/.local
+ENV PATH=/root/.local/bin:$PATH
 
 # Copy application code
 COPY . .
