@@ -1,25 +1,32 @@
 # Large model files - provided via volume mount at runtime
+
 vedda-asr-model/
 models/
+vedda_whisper_finetuned/
+checkpoint-_/
+\*\*/checkpoint_
 
 # Python cache
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
+
+**pycache**/
+_.pyc
+_.pyo
+\*.pyd
 
 # Logs
+
 logs/
-*.log
+\*.log
 eval_log.txt
 train_v4_log.txt
 
 # Dev/test/training scripts
-retrain_v3_balanced.py
+
+retrain*v3_balanced.py
 run_v4_eval.bat
 eval_vedda_final.py
 eval_vedda_final_results.json
-test_*.py
+test*\*.py
 diagnose_model.py
 augment_data.py
 check_train_data.py
@@ -31,6 +38,7 @@ accuracy_report.json
 test_results.json
 
 # Env and git
+
 .env
 .gitignore
 README.md

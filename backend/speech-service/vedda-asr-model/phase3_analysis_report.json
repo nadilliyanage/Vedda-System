@@ -1,0 +1,18 @@
+{
+  "confidence_distribution": {
+    "excellent": 150,
+    "good": 205,
+    "fair": 30,
+    "poor": 0
+  },
+  "noise_distribution": {
+    "low": 248,
+    "medium": 137
+  },
+  "problematic_samples": 1,
+  "recommendations": [
+    "Manual review of problematic samples recommended",
+    "Consider re-recording samples with high noise levels",
+    "Focus on samples with 0.6+ confidence for initial training"
+  ]
+}

@@ -1,0 +1,2136 @@
+{
+  "total_samples": 355,
+  "average_confidence": 0.7775159280955158,
+  "samples": [
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_110_20260211_231344_476c8be5.wav",
+      "text": "හොච්ච දික්කා",
+      "confidence": 0.8666666666666667,
+      "training_weight": 0.8666666666666667
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_378_20260212_021138_0961ecb2.wav",
+      "text": "ගැට මන්දා",
+      "confidence": 0.9111111111111112,
+      "training_weight": 0.9111111111111112
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_128_20260211_232656_2fe948b2.wav",
+      "text": "චප්පිල ඇත්තන්ගේ ගෙඩි පොජ්ජ",
+      "confidence": 0.8,
+      "training_weight": 0.8
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_324_20260212_014114_32736b8e.wav",
+      "text": "ඔය ඇත්තන්නේ නම් පොජ්ජ මොන්නෙක",
+      "confidence": 0.6617241379310345,
+      "training_weight": 0.6617241379310345
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_023_20260211_094349_e86d25ff.wav",
+      "text": "හොට පොජ්ජ",
+      "confidence": 0.9555555555555555,
+      "training_weight": 0.9555555555555555
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_240_20260212_005900_22c48eea.wav",
+      "text": "ලැක බොක පොජ්ජ මන්දෝ වෙනචා",
+      "confidence": 0.67,
+      "training_weight": 0.67
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_371_20260212_020818_4f0a5e6c.wav",
+      "text": "රුකුල් පොජ්ජ",
+      "confidence": 0.9333333333333333,
+      "training_weight": 0.9333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_345_20260212_015542_ac76a074.wav",
+      "text": "සන්තෝස පොජ්ජක් මන්දො වෙනවා",
+      "confidence": 0.6638461538461539,
+      "training_weight": 0.6638461538461539
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_031_20260211_095227_055963af.wav",
+      "text": "බෙලි පොජ්ජ",
+      "confidence": 0.7899999999999999,
+      "training_weight": 0.7899999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_058_20260211_101112_aaac871a.wav",
+      "text": "එකමයි",
+      "confidence": 0.6799999999999999,
+      "training_weight": 0.6799999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_296_20260212_012337_2bfd728b.wav",
+      "text": "චප්පිල ඇත්තන්ට",
+      "confidence": 0.7714285714285714,
+      "training_weight": 0.7714285714285714
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_086_20260211_102659_3d09e9aa.wav",
+      "text": "වැඩි තැනක්‌",
+      "confidence": 0.7818181818181817,
+      "training_weight": 0.7818181818181817
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_310_20260212_013349_6d788ef1.wav",
+      "text": "කැකුළො ගුටි පොජ්ජ මන්දො කරගන්න කොදොයි",
+      "confidence": 0.6721621621621622,
+      "training_weight": 0.6721621621621622
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_328_20260212_014414_4d772217.wav",
+      "text": "මේ කැලෑ පොජ්ජ මේ ඇත්තන්නේ කට්ටි පොජ්ජට හොඳමයි",
+      "confidence": 0.6511111111111111,
+      "training_weight": 0.6511111111111111
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_370_20260212_020753_15a4b860.wav",
+      "text": "තේරුම් පොජ්ජ කොදුයි",
+      "confidence": 0.8047368421052632,
+      "training_weight": 0.8047368421052632
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_315_20260212_013623_91d253cb.wav",
+      "text": "කැකුලා කරකුරු ගච්චන රුකුල් පොජ්ජට මංගැච්චුවා",
+      "confidence": 0.8254545454545454,
+      "training_weight": 0.8254545454545454
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_006_20260211_092651_baaacaaf.wav",
+      "text": "අම්මිලැත්තෝ",
+      "confidence": 0.7818181818181817,
+      "training_weight": 0.7818181818181817
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_174_20260211_235033_df298a86.wav",
+      "text": "චන්නියලැත්තෝ",
+      "confidence": 0.9333333333333333,
+      "training_weight": 0.9333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_046_20260211_100410_8ff948eb.wav",
+      "text": "නෑනලාත්තෝ",
+      "confidence": 0.6433333333333333,
+      "training_weight": 0.6433333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_246_20260212_010145_40d5e3c2.wav",
+      "text": "මංගච්චමු",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_120_20260211_232019_4f614b83.wav",
+      "text": "දිය මැච්චී",
+      "confidence": 0.8300000000000001,
+      "training_weight": 0.8300000000000001
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_075_20260211_102106_cb4f38de.wav",
+      "text": "බෙදුම්තැන මන්දු කරන ලකුණු පොජ්ජ",
+      "confidence": 0.7938709677419354,
+      "training_weight": 0.7938709677419354
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_106_20260211_231115_cf9d5294.wav",
+      "text": "පිටගැටයා",
+      "confidence": 0.75,
+      "training_weight": 0.75
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_353_20260212_020049_851520a4.wav",
+      "text": "පොතු පොජ්ජක්",
+      "confidence": 0.9333333333333333,
+      "training_weight": 0.9333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_074_20260211_102045_814ccb48.wav",
+      "text": "බෙදුම්තැන මන්දෝ කරන ලකුණු පොජ්ජ",
+      "confidence": 0.8196774193548386,
+      "training_weight": 0.8196774193548386
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_210_20260212_004320_3f948ad8.wav",
+      "text": "හිත්‌ පොජ්ජ හොද කොදොයි",
+      "confidence": 0.7454545454545454,
+      "training_weight": 0.7454545454545454
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_004_20260211_092511_a5c99029.wav",
+      "text": "බුද්ධිලඇත්තෝ",
+      "confidence": 0.8333333333333333,
+      "training_weight": 0.8333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_019_20260211_093750_995df3e5.wav",
+      "text": "දෙකමෙක්",
+      "confidence": 0.8857142857142857,
+      "training_weight": 0.8857142857142857
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_320_20260212_013832_c8fac246.wav",
+      "text": "මේ ඇත්තොන්ට ලෙඩ පොජ්ජ මන්දොවෙලා",
+      "confidence": 0.7035483870967741,
+      "training_weight": 0.7035483870967741
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_241_20260212_005922_190519cd.wav",
+      "text": "දිය දමනවා",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_319_20260212_013810_9c63edf8.wav",
+      "text": "මේ ඇත්තෝ තැනමක් කතා දාමු",
+      "confidence": 0.6933333333333334,
+      "training_weight": 0.6933333333333334
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_064_20260211_101419_7a47ff98.wav",
+      "text": "හතමයි",
+      "confidence": 0.76,
+      "training_weight": 0.76
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_231_20260212_005315_2627d2ff.wav",
+      "text": "තියෙනවා",
+      "confidence": 0.8857142857142857,
+      "training_weight": 0.8857142857142857
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_096_20260211_230556_a13c2526.wav",
+      "text": "කටු කැච්චා",
+      "confidence": 0.8,
+      "training_weight": 0.8
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_079_20260211_102411_83b2fad7.wav",
+      "text": "මුළු තැනේ රූපතැන",
+      "confidence": 0.61,
+      "training_weight": 0.61
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_222_20260212_004859_1eaf633d.wav",
+      "text": "ඔටා දමනවා",
+      "confidence": 0.6888888888888889,
+      "training_weight": 0.6888888888888889
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_115_20260211_231733_d40a04f2.wav",
+      "text": "එළු මඤ්ඤා",
+      "confidence": 0.8666666666666667,
+      "training_weight": 0.8666666666666667
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_204_20260212_003931_bf31341f.wav",
+      "text": "බාසා පොජ්ජ",
+      "confidence": 0.9200000000000002,
+      "training_weight": 0.9200000000000002
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_116_20260211_231754_b8867c9b.wav",
+      "text": "පන්නි",
+      "confidence": 0.9200000000000002,
+      "training_weight": 0.9200000000000002
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_227_20260212_005113_3cca7b93.wav",
+      "text": "ඇහි රුකුලට මන්දෝ කරනවා",
+      "confidence": 0.71,
+      "training_weight": 0.71
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_357_20260212_020236_451538b3.wav",
+      "text": "වළ පොජ්ජක්",
+      "confidence": 0.76,
+      "training_weight": 0.76
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_302_20260212_012823_a2aff0cd.wav",
+      "text": "ඉච්චර කාල මැච්චේ",
+      "confidence": 0.825,
+      "training_weight": 0.825
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_077_20260211_102206_d1832b09.wav",
+      "text": "කොටු පොජ්ජ",
+      "confidence": 0.87,
+      "training_weight": 0.87
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_095_20260211_230526_fe3194fe.wav",
+      "text": "කංකුනා",
+      "confidence": 0.9333333333333333,
+      "training_weight": 0.9333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_247_20260212_010207_e73fc3e8.wav",
+      "text": "විට පොජ්ජක්",
+      "confidence": 0.8545454545454545,
+      "training_weight": 0.8545454545454545
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_017_20260211_093603_d140eda2.wav",
+      "text": "මාම කැච්චක්‌ හොඳමැයි",
+      "confidence": 0.61,
+      "training_weight": 0.61
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_068_20260211_101656_2da6ab75.wav",
+      "text": "එකතු තැන මන්දෝ කරන ලකුණු පොජ්ජ",
+      "confidence": 0.8033333333333333,
+      "training_weight": 0.8033333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_140_20260211_233510_06b53cc9.wav",
+      "text": "කළු කෝමන්තැන වටාපු හූරා",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_008_20260211_092841_b79fbf6b.wav",
+      "text": "දෙයියලැත්තෝ",
+      "confidence": 0.9272727272727272,
+      "training_weight": 0.9272727272727272
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_176_20260211_235130_b640c221.wav",
+      "text": "කැකුළියෙක්‌ ඇන්න මංගච්චනවා",
+      "confidence": 0.7692307692307692,
+      "training_weight": 0.7692307692307692
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_233_20260212_005403_2ba0433e.wav",
+      "text": "පටාරිනවා",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_339_20260212_015326_12116088.wav",
+      "text": "ලංකා පොජ්ජ",
+      "confidence": 0.7899999999999999,
+      "training_weight": 0.7899999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_372_20260212_020838_ef71134c.wav",
+      "text": "රුකුල් පොජ්ජ කොදුයි",
+      "confidence": 0.7626315789473683,
+      "training_weight": 0.7626315789473683
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_111_20260211_231439_e5a4253a.wav",
+      "text": "කුක්කා",
+      "confidence": 0.9333333333333333,
+      "training_weight": 0.9333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_355_20260212_020137_33780529.wav",
+      "text": "පටෑරගන්නවා",
+      "confidence": 0.72,
+      "training_weight": 0.72
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_374_20260212_021002_13d9aab4.wav",
+      "text": "කන්කුනා",
+      "confidence": 0.8857142857142857,
+      "training_weight": 0.8857142857142857
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_285_20260212_011926_fddca2fa.wav",
+      "text": "ගම් පොජ්ජට",
+      "confidence": 0.9200000000000002,
+      "training_weight": 0.9200000000000002
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_061_20260211_101248_77ca6376.wav",
+      "text": "හතරමයි",
+      "confidence": 0.8,
+      "training_weight": 0.8
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_251_20260212_010358_f46d4af7.wav",
+      "text": "කැකුළො",
+      "confidence": 0.8666666666666667,
+      "training_weight": 0.8666666666666667
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_365_20260212_020559_e6d22296.wav",
+      "text": "රුකම් පොජ්ජක් පටෑරිලා",
+      "confidence": 0.6623809523809524,
+      "training_weight": 0.6623809523809524
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_159_20260211_234351_5d02885e.wav",
+      "text": "ඉර පොජ්ජ",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_249_20260212_010314_5a1b2adf.wav",
+      "text": "කැවිල්ලාන්න",
+      "confidence": 0.8181818181818181,
+      "training_weight": 0.8181818181818181
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_018_20260211_093709_485e07d8.wav",
+      "text": "එකමෙක්",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_297_20260212_012447_640bc9d5.wav",
+      "text": "වන්නියලැත්තෝ පරම්පරා පොජ්ජේ",
+      "confidence": 0.7618518518518518,
+      "training_weight": 0.7618518518518518
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_025_20260211_094519_a51ecadb.wav",
+      "text": "ඇහි රැකුල",
+      "confidence": 0.6888888888888889,
+      "training_weight": 0.6888888888888889
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_138_20260211_233328_b9ad39e6.wav",
+      "text": "රජාකාරී",
+      "confidence": 0.7142857142857142,
+      "training_weight": 0.7142857142857142
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_354_20260212_020117_5de0b327.wav",
+      "text": "පටෑරගෙන",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_313_20260212_013523_9488772f.wav",
+      "text": "අල පොජ්ජ තැනමක්‌ කැවිල්ලාන්න",
+      "confidence": 0.7385714285714285,
+      "training_weight": 0.7385714285714285
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_168_20260211_234735_5947ccd6.wav",
+      "text": "මඳු පොජ්ජ",
+      "confidence": 0.8222222222222222,
+      "training_weight": 0.8222222222222222
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_344_20260212_015520_fe21a2aa.wav",
+      "text": "හිත් පොජ්ජ මන්දො වෙනවා",
+      "confidence": 0.6372727272727272,
+      "training_weight": 0.6372727272727272
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_377_20260212_021118_03201222.wav",
+      "text": "මුන්දි",
+      "confidence": 0.7333333333333334,
+      "training_weight": 0.7333333333333334
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_293_20260212_012226_bfaed3b1.wav",
+      "text": "උඩතැනට",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_225_20260212_005014_0e192575.wav",
+      "text": "කතා දමනවා",
+      "confidence": 0.7777777777777777,
+      "training_weight": 0.7777777777777777
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_164_20260211_234539_7e94ea29.wav",
+      "text": "ඉර පොජ්ජ උඩ තැනට මන්දෝ වුනා",
+      "confidence": 0.7470370370370369,
+      "training_weight": 0.7470370370370369
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_126_20260211_232609_2c65eabd.wav",
+      "text": "දෙපටුල්ලංතැන",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_280_20260212_011730_f8a0f335.wav",
+      "text": "හූරා",
+      "confidence": 0.8,
+      "training_weight": 0.8
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_121_20260211_232101_850e49e3.wav",
+      "text": "කඳඅරණි",
+      "confidence": 0.7333333333333334,
+      "training_weight": 0.7333333333333334
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_197_20260212_003631_36a5f9cf.wav",
+      "text": "රට පොජ්ජ",
+      "confidence": 0.95,
+      "training_weight": 0.95
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_166_20260211_234700_367114ad.wav",
+      "text": "හබක්‌ පොජ්ජ",
+      "confidence": 0.8545454545454545,
+      "training_weight": 0.8545454545454545
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_020_20260211_093821_6e61e8eb.wav",
+      "text": "තුනමෙක්",
+      "confidence": 0.7714285714285714,
+      "training_weight": 0.7714285714285714
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_156_20260211_234251_f74c089d.wav",
+      "text": "ඇල්‌ පොජ්ජ",
+      "confidence": 0.96,
+      "training_weight": 0.96
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_081_20260211_102505_40daf414.wav",
+      "text": "කාල තැනයි",
+      "confidence": 0.8666666666666667,
+      "training_weight": 0.8666666666666667
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_133_20260211_232955_67c1551c.wav",
+      "text": "විට පොජ්ජ",
+      "confidence": 0.9111111111111112,
+      "training_weight": 0.9111111111111112
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_295_20260212_012302_676fd1e4.wav",
+      "text": "කැකුළෙක්‌",
+      "confidence": 0.7333333333333334,
+      "training_weight": 0.7333333333333334
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_038_20260211_095704_a1b04e27.wav",
+      "text": "අක්කිලැත්තෝ",
+      "confidence": 0.7281818181818182,
+      "training_weight": 0.7281818181818182
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_360_20260212_020334_a23907b4.wav",
+      "text": "කඳුළු පොජ්ජක්",
+      "confidence": 0.9384615384615385,
+      "training_weight": 0.9384615384615385
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_359_20260212_020314_8d7c2943.wav",
+      "text": "වළ පොජ්ජක් පටෑරිලා",
+      "confidence": 0.711111111111111,
+      "training_weight": 0.711111111111111
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_182_20260211_235345_44ba8524.wav",
+      "text": "කඳ අරනී",
+      "confidence": 0.7142857142857142,
+      "training_weight": 0.7142857142857142
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_183_20260211_235408_133586c4.wav",
+      "text": "රුකුල් පොජ්ජ",
+      "confidence": 0.9333333333333333,
+      "training_weight": 0.9333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_113_20260211_231553_4c29271e.wav",
+      "text": "රැකූල්‌ පොප්ජේ පොල්ලැච්චා",
+      "confidence": 0.728,
+      "training_weight": 0.728
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_153_20260211_234155_6880d8c5.wav",
+      "text": "උඩ තැනෙං මංගච්චන දඬු කැච්ච",
+      "confidence": 0.7869230769230768,
+      "training_weight": 0.7869230769230768
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_007_20260211_092734_0ea9d704.wav",
+      "text": "අප්පිලැත්තෝ",
+      "confidence": 0.709090909090909,
+      "training_weight": 0.709090909090909
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_287_20260212_012017_4ba88d74.wav",
+      "text": "දියරැච්චාවත්",
+      "confidence": 0.8333333333333333,
+      "training_weight": 0.8333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_011_20260211_093044_cdfa46da.wav",
+      "text": "පය පොජ්ජ",
+      "confidence": 0.9000000000000001,
+      "training_weight": 0.9000000000000001
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_178_20260211_235222_619b20c8.wav",
+      "text": "දෙබාජකාරිලා ඇත්තෝ",
+      "confidence": 0.6470588235294117,
+      "training_weight": 0.6470588235294117
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_105_20260211_231041_c6a67dd1.wav",
+      "text": "චප්පි",
+      "confidence": 0.9200000000000002,
+      "training_weight": 0.9200000000000002
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_224_20260212_004948_2cc8f2f5.wav",
+      "text": "කරකුරු ගච්චනවා",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_193_20260212_003433_0d93c0ad.wav",
+      "text": "කතා පෙට්ට්‌ පොජ්ජ",
+      "confidence": 0.9529411764705882,
+      "training_weight": 0.9529411764705882
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_211_20260212_004222_e15ff940.wav",
+      "text": "මේ තැන මේ",
+      "confidence": 0.7777777777777777,
+      "training_weight": 0.7777777777777777
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_305_20260212_013124_740c09ed.wav",
+      "text": "ඒ කාල පොජ්ජේ",
+      "confidence": 0.9000000000000001,
+      "training_weight": 0.9000000000000001
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_154_20260211_234211_a9e058fb.wav",
+      "text": "කැලෑ පොජ්ජ",
+      "confidence": 0.8799999999999999,
+      "training_weight": 0.8799999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_091_20260211_230310_5c0e9f28.wav",
+      "text": "තැනක්‌ නියක්‌",
+      "confidence": 0.8461538461538463,
+      "training_weight": 0.8461538461538463
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_177_20260211_235158_4f8b10f7.wav",
+      "text": "හිංගිලා ඇත්තෝ",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_148_20260211_233859_0ed1088d.wav",
+      "text": "කපා කන යමකෙ",
+      "confidence": 0.6363636363636364,
+      "training_weight": 0.6363636363636364
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_212_20260212_004355_04a1abda.wav",
+      "text": "ඒ තැන මේ",
+      "confidence": 0.6499999999999999,
+      "training_weight": 0.6499999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_094_20260211_230451_672dda58.wav",
+      "text": "කලුමඤ්ඤා",
+      "confidence": 0.8,
+      "training_weight": 0.8
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_071_20260211_101906_47dc9ae8.wav",
+      "text": "අඩුතැන මන්දු කරන ලකුණු පොජ්ජ",
+      "confidence": 0.8671428571428572,
+      "training_weight": 0.8671428571428572
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_125_20260211_232449_47bab790.wav",
+      "text": "ගුලි පොජ්ජ",
+      "confidence": 0.8799999999999999,
+      "training_weight": 0.8799999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_098_20260211_230643_0d46a996.wav",
+      "text": "බොක්කි",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_144_20260211_233722_528e5cf9.wav",
+      "text": "ගල්‌ රැක්ක",
+      "confidence": 0.8,
+      "training_weight": 0.8
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_291_20260212_012140_01bfffab.wav",
+      "text": "කැකුළී",
+      "confidence": 0.6666666666666666,
+      "training_weight": 0.6666666666666666
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_099_20260211_230718_bf8ffc89.wav",
+      "text": "පොල්ලැච්චා",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_274_20260212_011526_47111065.wav",
+      "text": "ලෙඩ පොජ්ජ මන්දොවෙලා",
+      "confidence": 0.6573684210526316,
+      "training_weight": 0.6573684210526316
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_070_20260211_101823_93fd37a8.wav",
+      "text": "අඩුතැන මන්දෝ කරන ලකුණු පොජ්ජ",
+      "confidence": 0.7528571428571429,
+      "training_weight": 0.7528571428571429
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_024_20260211_094437_2729dd9d.wav",
+      "text": "නලල්‌ පොජ්ජ",
+      "confidence": 0.8009090909090909,
+      "training_weight": 0.8009090909090909
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_037_20260211_095833_c3dfc017.wav",
+      "text": "අයියලැත්තෝ",
+      "confidence": 0.8799999999999999,
+      "training_weight": 0.8799999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_124_20260211_232312_47987994.wav",
+      "text": "අල පොජ්ජ",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_069_20260211_101726_d7388163.wav",
+      "text": "එකතු තැන මන්දු කරන ලකුණු පොජ්ජ",
+      "confidence": 0.75,
+      "training_weight": 0.75
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_173_20260211_235005_8f47c155.wav",
+      "text": "මහ හූරා",
+      "confidence": 0.8285714285714285,
+      "training_weight": 0.8285714285714285
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_203_20260212_003911_018a7a47.wav",
+      "text": "පණ පොජ්ජ",
+      "confidence": 0.7,
+      "training_weight": 0.7
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_303_20260212_012845_61112b07.wav",
+      "text": "මහියංගන පෝරුගම් පොජ්ජට",
+      "confidence": 0.6736363636363636,
+      "training_weight": 0.6736363636363636
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_181_20260211_235320_7cde3e8b.wav",
+      "text": "කඳ පල්ලී",
+      "confidence": 0.75,
+      "training_weight": 0.75
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_127_20260211_232631_7798e31f.wav",
+      "text": "කිරි ගෙජ්ජ",
+      "confidence": 0.76,
+      "training_weight": 0.76
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_147_20260211_233836_d7a1387e.wav",
+      "text": "මොරියං කැච්ච",
+      "confidence": 0.9000000000000001,
+      "training_weight": 0.9000000000000001
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_220_20260212_004814_39067c8e.wav",
+      "text": "කැවිල්ලානවා",
+      "confidence": 0.7818181818181817,
+      "training_weight": 0.7818181818181817
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_088_20260211_102823_3d87f0b5.wav",
+      "text": "කොයිතැනක්‌",
+      "confidence": 0.76,
+      "training_weight": 0.76
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_343_20260212_015456_ed5e8f07.wav",
+      "text": "වැව් පොජ්ජ",
+      "confidence": 0.75,
+      "training_weight": 0.75
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_277_20260212_011630_04e344ec.wav",
+      "text": "ඔය ඇත්තන්නේ",
+      "confidence": 0.6727272727272726,
+      "training_weight": 0.6727272727272726
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_323_20260212_013954_6471827f.wav",
+      "text": "කැකුලෝ ඔටා දමනවා",
+      "confidence": 0.7849999999999999,
+      "training_weight": 0.7849999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_194_20260212_003451_d823ada1.wav",
+      "text": "රූප පෙට්ට්‌ පොජ්ජ",
+      "confidence": 0.788235294117647,
+      "training_weight": 0.788235294117647
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_289_20260212_012100_13db65bd.wav",
+      "text": "මේ ඇත්තන්නේ",
+      "confidence": 0.7818181818181817,
+      "training_weight": 0.7818181818181817
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_184_20260212_002956_44149ace.wav",
+      "text": "චාලාව",
+      "confidence": 0.6799999999999999,
+      "training_weight": 0.6799999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_299_20260212_012552_a9411c4f.wav",
+      "text": "කරපොජ්ජේ",
+      "confidence": 0.6499999999999999,
+      "training_weight": 0.6499999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_271_20260212_011432_3c33f0df.wav",
+      "text": "මේ ඇත්තෝ",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_196_20260212_003536_62f673b6.wav",
+      "text": "පෝරුගං පොජ්ජ",
+      "confidence": 0.7333333333333334,
+      "training_weight": 0.7333333333333334
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_281_20260212_011746_7c4b04f2.wav",
+      "text": "කොයිබට",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_039_20260211_095938_bcfa3e1a.wav",
+      "text": "මුත්තිලැත්තෝ",
+      "confidence": 0.8,
+      "training_weight": 0.8
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_012_20260211_093140_0bfdf15a.wav",
+      "text": "රුක පොජ්ජ",
+      "confidence": 0.9555555555555555,
+      "training_weight": 0.9555555555555555
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_257_20260212_010847_461390ba.wav",
+      "text": "කඳඅරනිග දියතැන",
+      "confidence": 0.7714285714285714,
+      "training_weight": 0.7714285714285714
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_186_20260212_003055_d8f57b08.wav",
+      "text": "සිරංගිය",
+      "confidence": 0.6571428571428571,
+      "training_weight": 0.6571428571428571
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_326_20260212_014259_0f243cdd.wav",
+      "text": "මේ කැකුළා මාමකැච්චක් හොදමයි",
+      "confidence": 0.7470370370370369,
+      "training_weight": 0.7470370370370369
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_114_20260211_231658_2e9ba76b.wav",
+      "text": "රුකුල්‌ පොජ්ජේ පිටගැටයා",
+      "confidence": 0.808695652173913,
+      "training_weight": 0.808695652173913
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_180_20260211_235304_32f8e964.wav",
+      "text": "වරිග පොජ්ජ",
+      "confidence": 0.8400000000000001,
+      "training_weight": 0.8400000000000001
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_255_20260212_010750_da25fae0.wav",
+      "text": "කතාදමන්න",
+      "confidence": 0.75,
+      "training_weight": 0.75
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_332_20260212_014626_529c559c.wav",
+      "text": "මාම්ලැත්තෝ රැකං පොජ්ජ උඩතැනට මංගච්චනවා",
+      "confidence": 0.6468421052631579,
+      "training_weight": 0.6468421052631579
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_119_20260211_231936_4c721c22.wav",
+      "text": "චමනලයා",
+      "confidence": 0.7333333333333334,
+      "training_weight": 0.7333333333333334
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_352_20260212_020020_c89b0a83.wav",
+      "text": "භාර පොජ්ජක්",
+      "confidence": 0.8909090909090909,
+      "training_weight": 0.8909090909090909
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_368_20260212_020711_c1498f49.wav",
+      "text": "මංගච්චන්න කොදුයි",
+      "confidence": 0.6849999999999999,
+      "training_weight": 0.6849999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_275_20260212_011547_e631c66a.wav",
+      "text": "ඒ ඇත්තෝ",
+      "confidence": 0.6571428571428571,
+      "training_weight": 0.6571428571428571
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_363_20260212_020509_d1acf1e5.wav",
+      "text": "කෝනම් පොජ්ජක් පටෑරිලා",
+      "confidence": 0.7333333333333334,
+      "training_weight": 0.7333333333333334
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_165_20260211_234621_7092ba38.wav",
+      "text": "ඉර පොජ්ජ බිම්‌ පොජ්ජට ගමංගැච්චුවා",
+      "confidence": 0.8666666666666667,
+      "training_weight": 0.8666666666666667
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_235_20260212_005514_906588e6.wav",
+      "text": "මන්දෝ කරනවා",
+      "confidence": 0.6554545454545454,
+      "training_weight": 0.6554545454545454
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_137_20260211_233159_919bbce2.wav",
+      "text": "වේචා කොළ",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_155_20260211_234231_0ea57a71.wav",
+      "text": "රුකං පොජ්ජ",
+      "confidence": 0.96,
+      "training_weight": 0.96
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_200_20260212_003748_2cac15e0.wav",
+      "text": "බඩ රුජා දමනවා",
+      "confidence": 0.6023076923076923,
+      "training_weight": 0.6023076923076923
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_198_20260212_003651_cb63fe8d.wav",
+      "text": "මත් දිය රැච්ච",
+      "confidence": 0.7230769230769231,
+      "training_weight": 0.7230769230769231
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_375_20260212_021023_ca9bee38.wav",
+      "text": "හොච්චදික්කා",
+      "confidence": 0.7818181818181817,
+      "training_weight": 0.7818181818181817
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_003_20260211_092419_7262a092.wav",
+      "text": "මැච්ච",
+      "confidence": 0.9200000000000002,
+      "training_weight": 0.9200000000000002
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_205_20260212_003949_6361df33.wav",
+      "text": "කවි තැන",
+      "confidence": 0.8285714285714285,
+      "training_weight": 0.8285714285714285
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_117_20260211_231825_4cde91ea.wav",
+      "text": "එල මඤ්ඤා",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_221_20260212_004840_58d4dbf1.wav",
+      "text": "මංගච්චනවා",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_027_20260211_094649_81b28eaa.wav",
+      "text": "නාස්‌ පොජ්ජ",
+      "confidence": 0.8181818181818181,
+      "training_weight": 0.8181818181818181
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_122_20260211_232120_4422e80d.wav",
+      "text": "පැණි පොජ්ජ",
+      "confidence": 0.9200000000000002,
+      "training_weight": 0.9200000000000002
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_294_20260212_012243_a186bc34.wav",
+      "text": "උඩතැනට මංගච්චනවා",
+      "confidence": 0.81,
+      "training_weight": 0.81
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_226_20260212_005030_c68e12ff.wav",
+      "text": "බය දමනවා",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_301_20260212_012759_78130af3.wav",
+      "text": "ලාබච්චාගන",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_329_20260212_014456_6a6b2e0e.wav",
+      "text": "ඒ ඇත්ති මේ ඇත්තන්නේ මහ කැකුළි",
+      "confidence": 0.606551724137931,
+      "training_weight": 0.606551724137931
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_128_20260211_232726_8070f052.wav",
+      "text": "ගයි ගත්‌ කරල්‌ පොජ්ජ",
+      "confidence": 0.8400000000000001,
+      "training_weight": 0.8400000000000001
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_076_20260211_102134_d7e70e31.wav",
+      "text": "රවුම්‌ තැනක්‌",
+      "confidence": 0.7561538461538462,
+      "training_weight": 0.7561538461538462
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_308_20260212_013249_e3cea4f1.wav",
+      "text": "කඳපල්ලි පටාරන්න මංගච්චමු",
+      "confidence": 0.76,
+      "training_weight": 0.76
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_030_20260211_095200_74ec5851.wav",
+      "text": "බුච්ච",
+      "confidence": 0.9200000000000002,
+      "training_weight": 0.9200000000000002
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_085_20260211_102630_f37beab9.wav",
+      "text": "අඩු තැනක්‌",
+      "confidence": 0.96,
+      "training_weight": 0.96
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_358_20260212_020253_3b658457.wav",
+      "text": "පටෑරිලා",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_109_20260211_231327_a5abb216.wav",
+      "text": "මැච්චි",
+      "confidence": 0.9333333333333333,
+      "training_weight": 0.9333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_250_20260212_010342_0253a838.wav",
+      "text": "මංගච්චප",
+      "confidence": 0.8285714285714285,
+      "training_weight": 0.8285714285714285
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_239_20260212_005810_25b91114.wav",
+      "text": "වෙනකට මන්දෝ වෙනවා",
+      "confidence": 0.7452941176470588,
+      "training_weight": 0.7452941176470588
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_134_20260211_233011_3ede3203.wav",
+      "text": "ගයිගැට",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_185_20260212_003027_1155a738.wav",
+      "text": "කඳේ කොටන යමකේ",
+      "confidence": 0.6615384615384615,
+      "training_weight": 0.6615384615384615
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_278_20260212_011649_94db9818.wav",
+      "text": "නම්  පොජ්ජ",
+      "confidence": 0.8300000000000001,
+      "training_weight": 0.8300000000000001
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_045_20260211_100332_be5d4aab.wav",
+      "text": "කැකුළී",
+      "confidence": 0.8666666666666667,
+      "training_weight": 0.8666666666666667
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_380_20260212_021241_6472f510.wav",
+      "text": "ඔත්කයි",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_067_20260211_101556_166b058e.wav",
+      "text": "දහමයි",
+      "confidence": 0.9099999999999999,
+      "training_weight": 0.9099999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_284_20260212_011846_270932a2.wav",
+      "text": "මේ කැකුළෝ",
+      "confidence": 0.9111111111111112,
+      "training_weight": 0.9111111111111112
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_087_20260211_102741_c86e9fbf.wav",
+      "text": "තැනමයි",
+      "confidence": 0.8,
+      "training_weight": 0.8
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_187_20260212_003124_3ce746f8.wav",
+      "text": "කෝමං තැන",
+      "confidence": 0.75,
+      "training_weight": 0.75
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_072_20260211_101937_4290d8ad.wav",
+      "text": "වැඩි තැන මන්දෝ කරන ලකුණු පොජීජ",
+      "confidence": 0.8033333333333333,
+      "training_weight": 0.8033333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_160_20260211_234409_fc9e24c4.wav",
+      "text": "හඳ පොජ්ජ",
+      "confidence": 0.9000000000000001,
+      "training_weight": 0.9000000000000001
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_013_20260211_093318_80af616e.wav",
+      "text": "ලය පොජ්ජ",
+      "confidence": 0.8500000000000001,
+      "training_weight": 0.8500000000000001
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_036_20260211_095459_56a0aee5.wav",
+      "text": "පය පොජ්ජ",
+      "confidence": 0.86,
+      "training_weight": 0.86
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_029_20260211_095130_a277d3ca.wav",
+      "text": "කං රුකුල",
+      "confidence": 0.71,
+      "training_weight": 0.71
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_171_20260211_234852_47bd904d.wav",
+      "text": "සකලයෝ ඇල්ලුම්‌ පොජ්ජ මන්දු කරන උගුල්‌ පොජ්ජ",
+      "confidence": 0.7797674418604651,
+      "training_weight": 0.7797674418604651
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_143_20260211_233647_ea845564.wav",
+      "text": "ගුරු හූරා",
+      "confidence": 0.8222222222222222,
+      "training_weight": 0.8222222222222222
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_304_20260212_013013_fc8188ce.wav",
+      "text": "ඒ තැනේදී ඉඩ තැන මන්දොකරගත්තා",
+      "confidence": 0.7,
+      "training_weight": 0.7
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_364_20260212_020542_5cd2c508.wav",
+      "text": "රුකම් පොජ්ජක්",
+      "confidence": 0.7253846153846153,
+      "training_weight": 0.7253846153846153
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_151_20260211_234047_1b67268d.wav",
+      "text": "මහ දඬු කැච්ච",
+      "confidence": 0.9666666666666668,
+      "training_weight": 0.9666666666666668
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_230_20260212_005259_bb9002d7.wav",
+      "text": "තිබෙනවා",
+      "confidence": 0.7142857142857142,
+      "training_weight": 0.7142857142857142
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_223_20260212_004925_b2d036df.wav",
+      "text": "වැතිරෙනවා",
+      "confidence": 0.6444444444444444,
+      "training_weight": 0.6444444444444444
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_132_20260211_232923_cbcf9a3f.wav",
+      "text": "තල ඇට පොජ්ජ",
+      "confidence": 0.8545454545454545,
+      "training_weight": 0.8545454545454545
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_097_20260211_230621_f61b3c4e.wav",
+      "text": "ඉරි මයිරා",
+      "confidence": 0.6888888888888889,
+      "training_weight": 0.6888888888888889
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_356_20260212_020206_328071f2.wav",
+      "text": "පොතු පොජ්ජක් පටෑරගෙන",
+      "confidence": 0.7,
+      "training_weight": 0.7
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_052_20260211_100707_316c558d.wav",
+      "text": "එකම",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_242_20260212_005941_72284964.wav",
+      "text": "ලාබච්චනවා",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_286_20260212_011949_071c5f03.wav",
+      "text": "කැවිල්ලාන",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_292_20260212_012200_4ec96411.wav",
+      "text": "ඇන්න මංගච්චනවා",
+      "confidence": 0.8814285714285715,
+      "training_weight": 0.8814285714285715
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_179_20260211_235245_85408ef9.wav",
+      "text": "සුදු හූරා",
+      "confidence": 0.7333333333333334,
+      "training_weight": 0.7333333333333334
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_042_20260211_100158_c3ad3d67.wav",
+      "text": "මයහූරා",
+      "confidence": 0.6433333333333333,
+      "training_weight": 0.6433333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_369_20260212_020734_b34335ba.wav",
+      "text": "කැවිල්ලන්නේ කොදුයි",
+      "confidence": 0.7544444444444445,
+      "training_weight": 0.7544444444444445
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_207_20260212_004028_246520b0.wav",
+      "text": "දින පොජ්ජ",
+      "confidence": 0.9555555555555555,
+      "training_weight": 0.9555555555555555
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_256_20260212_010815_0fa11549.wav",
+      "text": "මේ කාල මැච්චේ",
+      "confidence": 0.7846153846153846,
+      "training_weight": 0.7846153846153846
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_317_20260212_013722_c5c57f7d.wav",
+      "text": "ඔය ඇත්තන්ට කොයි හැටිමටද",
+      "confidence": 0.701304347826087,
+      "training_weight": 0.701304347826087
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_005_20260211_092605_d6756fe0.wav",
+      "text": "කපුවලැත්තෝ",
+      "confidence": 0.72,
+      "training_weight": 0.72
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_258_20260212_010921_2070006d.wav",
+      "text": "අල පොජ්ජ",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_342_20260212_015436_2c1dbf75.wav",
+      "text": "අත් පොජ්ජ",
+      "confidence": 0.9111111111111112,
+      "training_weight": 0.9111111111111112
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_102_20260211_230857_66a45cbc.wav",
+      "text": "මුන්දි",
+      "confidence": 0.6433333333333333,
+      "training_weight": 0.6433333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_228_20260212_005149_4401d263.wav",
+      "text": "කං රුකුලට මන්දෝ කරනවා",
+      "confidence": 0.6433333333333333,
+      "training_weight": 0.6433333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_327_20260212_014324_e1e71d85.wav",
+      "text": "මේ ගම්‌ පොජ්ජට කැවිල්ලාන දියරැචිචාවත්‌ කොදොයි",
+      "confidence": 0.7233333333333333,
+      "training_weight": 0.7233333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_214_20260212_004451_c5461dbe.wav",
+      "text": "හිත්ලානවා",
+      "confidence": 0.6444444444444444,
+      "training_weight": 0.6444444444444444
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_172_20260211_234936_7d6a26b8.wav",
+      "text": "කඳං තලන්නග හබක්‌ පොජිජ",
+      "confidence": 0.7281818181818182,
+      "training_weight": 0.7281818181818182
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_100_20260211_230745_24cb9250.wav",
+      "text": "මයිරා",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_217_20260212_004720_ff8b9263.wav",
+      "text": "මෙයැත්තෝ",
+      "confidence": 0.8500000000000001,
+      "training_weight": 0.8500000000000001
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_062_20260211_101337_1169b4c7.wav",
+      "text": "පහමයි",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_048_20260211_100503_98c80dc5.wav",
+      "text": "බෑනලැත්තෝ",
+      "confidence": 0.6433333333333333,
+      "training_weight": 0.6433333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_033_20260211_095337_c680c332.wav",
+      "text": "බඩ පොජ්ජ",
+      "confidence": 0.71,
+      "training_weight": 0.71
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_270_20260212_011407_b557e6fa.wav",
+      "text": "එකමක්",
+      "confidence": 0.9200000000000002,
+      "training_weight": 0.9200000000000002
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_201_20260212_003809_a28ffc07.wav",
+      "text": "කැකුළෙක්‌ මන්දෝ වෙනවා",
+      "confidence": 0.7004761904761905,
+      "training_weight": 0.7004761904761905
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_028_20260211_094944_b207c1b4.wav",
+      "text": "කට පොජ්ජ",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_307_20260212_013223_6c45c3cc.wav",
+      "text": "යක්‌ වරිග පොජ්ජේ",
+      "confidence": 0.7749999999999999,
+      "training_weight": 0.7749999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_232_20260212_005341_c89e88cb.wav",
+      "text": "ඇනුකලනවා",
+      "confidence": 0.8,
+      "training_weight": 0.8
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_163_20260211_234513_d9a63696.wav",
+      "text": "උඩතැනෙන්‌ දිය රැච්චා මන්දෝ වුනා",
+      "confidence": 0.7680645161290323,
+      "training_weight": 0.7680645161290323
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_325_20260212_014220_343252fc.wav",
+      "text": "හූර කොයිබට මංගච්චන්නේ",
+      "confidence": 0.6433333333333333,
+      "training_weight": 0.6433333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_139_20260211_233425_d60d0158.wav",
+      "text": "ජීචාකාරී",
+      "confidence": 0.75,
+      "training_weight": 0.75
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_136_20260211_233121_124956ec.wav",
+      "text": "ගල් මඳ",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_129_20260211_232808_d317f5c3.wav",
+      "text": "ගලේ ලා කරකුරු ගච්චන ඇටපොජ්ජ",
+      "confidence": 0.835925925925926,
+      "training_weight": 0.835925925925926
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_009_20260211_092925_4368fcd0.wav",
+      "text": "නැන්දම්මිලැත්තෝ",
+      "confidence": 0.7866666666666666,
+      "training_weight": 0.7866666666666666
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_066_20260211_101508_9e583567.wav",
+      "text": "නමයමයි",
+      "confidence": 0.7766666666666666,
+      "training_weight": 0.7766666666666666
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_015_20260211_093438_a03e0167.wav",
+      "text": "හෙට දින මැච්ච",
+      "confidence": 0.8153846153846154,
+      "training_weight": 0.8153846153846154
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_157_20260211_234309_eeb44eda.wav",
+      "text": "දිය ගං ඇල්ල",
+      "confidence": 0.709090909090909,
+      "training_weight": 0.709090909090909
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_041_20260211_100106_cea74a24.wav",
+      "text": "තුන්නලැත්තෝ",
+      "confidence": 0.8736363636363635,
+      "training_weight": 0.8736363636363635
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_350_20260212_015829_c4c27118.wav",
+      "text": "රුකුල් පොජ්ජ",
+      "confidence": 0.9099999999999999,
+      "training_weight": 0.9099999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_341_20260212_015406_5ed4ddf5.wav",
+      "text": "කෝනම් පොජ්ජ",
+      "confidence": 0.8009090909090909,
+      "training_weight": 0.8009090909090909
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_218_20260212_004740_efd75c6e.wav",
+      "text": "එයිබ",
+      "confidence": 0.7,
+      "training_weight": 0.7
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_282_20260212_011805_a1900fff.wav",
+      "text": "මංගච්චන්නේ",
+      "confidence": 0.9200000000000002,
+      "training_weight": 0.9200000000000002
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_330_20260212_014529_6c1c26f3.wav",
+      "text": "අම්මිලැත්තෝ දියරැචිච ඇන්න මංගච්චනවා",
+      "confidence": 0.8528571428571429,
+      "training_weight": 0.8528571428571429
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_238_20260212_005749_3d1065ae.wav",
+      "text": "ගච්චනවා",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_208_20260212_004106_2520a09a.wav",
+      "text": "හොර තැන",
+      "confidence": 0.7714285714285714,
+      "training_weight": 0.7714285714285714
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_213_20260212_004422_8f0d5278.wav",
+      "text": "හොඳමයි",
+      "confidence": 0.7333333333333334,
+      "training_weight": 0.7333333333333334
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_298_20260212_012524_001e4522.wav",
+      "text": "මිනිග්ගජ්ජු",
+      "confidence": 0.709090909090909,
+      "training_weight": 0.709090909090909
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_348_20260212_015735_df20f238.wav",
+      "text": "භාර පොජ්ජක් මන්දො වෙනවා",
+      "confidence": 0.8404347826086956,
+      "training_weight": 0.8404347826086956
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_254_20260212_010612_88d6af1b.wav",
+      "text": "ඔය ඇත්තෝ",
+      "confidence": 0.7,
+      "training_weight": 0.7
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_373_20260212_020930_687b7fa8.wav",
+      "text": "කරකුරු ගච්චන යමෙක",
+      "confidence": 0.6982352941176471,
+      "training_weight": 0.6982352941176471
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_349_20260212_015756_0b8a5559.wav",
+      "text": "සන්තෝස පොජ්ජක්",
+      "confidence": 0.8571428571428572,
+      "training_weight": 0.8571428571428572
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_306_20260212_013144_ea0d8506.wav",
+      "text": "එක්ක ඉද තබව්වේ",
+      "confidence": 0.6857142857142857,
+      "training_weight": 0.6857142857142857
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_272_20260212_011449_3e07570c.wav",
+      "text": "කතාදාමු",
+      "confidence": 0.8857142857142857,
+      "training_weight": 0.8857142857142857
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_202_20260212_003851_d771e183.wav",
+      "text": "මිනිග්ගජ්ජා",
+      "confidence": 0.7454545454545454,
+      "training_weight": 0.7454545454545454
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_162_20260211_234439_960e0983.wav",
+      "text": "දිය රැච්ච",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_044_20260211_100309_74735f3d.wav",
+      "text": "කැකුළා",
+      "confidence": 0.9333333333333333,
+      "training_weight": 0.9333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_219_20260212_004755_b6c21abc.wav",
+      "text": "කොයිබ",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_191_20260212_003314_b5d2bd88.wav",
+      "text": "පය ලාන යමකේ",
+      "confidence": 0.7818181818181817,
+      "training_weight": 0.7818181818181817
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_312_20260212_013456_35cec3a7.wav",
+      "text": "මේ කාල මැච්චේ කඳඅරනිග දියතැන කොදොයි",
+      "confidence": 0.72,
+      "training_weight": 0.72
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_262_20260212_011041_dbee9c25.wav",
+      "text": "කැකුළා",
+      "confidence": 0.9333333333333333,
+      "training_weight": 0.9333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_107_20260211_231134_af497928.wav",
+      "text": "පිලිපොත්තා",
+      "confidence": 0.72,
+      "training_weight": 0.72
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_002_20260211_092113_bc0966ed.wav",
+      "text": "ඉච්චර",
+      "confidence": 0.76,
+      "training_weight": 0.76
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_050_20260211_100617_4c7d0aa4.wav",
+      "text": "මාමිලැත්තෝ",
+      "confidence": 0.63,
+      "training_weight": 0.63
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_082_20260211_102527_9d12d3fd.wav",
+      "text": "කොල පොජ්ජ",
+      "confidence": 0.7766666666666666,
+      "training_weight": 0.7766666666666666
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_206_20260212_004008_c762c3b0.wav",
+      "text": "කෝණ පොජ්ජ",
+      "confidence": 0.9111111111111112,
+      "training_weight": 0.9111111111111112
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_035_20260211_095422_33be5321.wav",
+      "text": "ඇඟිලි පොජ්ජ",
+      "confidence": 0.8372727272727272,
+      "training_weight": 0.8372727272727272
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_266_20260212_011220_ff577420.wav",
+      "text": "කරකුරු ගච්චන රුකුල් පොජ්ජට",
+      "confidence": 0.9099999999999999,
+      "training_weight": 0.9099999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_093_20260211_230426_87b4d045.wav",
+      "text": "කබරා",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_053_20260211_100726_d304ba9c.wav",
+      "text": "දෙකම",
+      "confidence": 0.7,
+      "training_weight": 0.7
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_267_20260212_011258_78201dbb.wav",
+      "text": "මංගැච්චුවා",
+      "confidence": 0.9200000000000002,
+      "training_weight": 0.9200000000000002
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_243_20260212_010011_e413b3da.wav",
+      "text": "පුච්චා කඩනවා",
+      "confidence": 0.7666666666666666,
+      "training_weight": 0.7666666666666666
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_014_20260211_093350_744cb290.wav",
+      "text": "අද දින මැච්ච",
+      "confidence": 0.8333333333333333,
+      "training_weight": 0.8333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_318_20260212_013749_b221c528.wav",
+      "text": "උණුදිය රැච්ච එකමක් කැවිල්ලාමු",
+      "confidence": 0.7168965517241379,
+      "training_weight": 0.7168965517241379
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_090_20260211_230237_b483c64d.wav",
+      "text": "මාම කැච්චයි",
+      "confidence": 0.709090909090909,
+      "training_weight": 0.709090909090909
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_276_20260212_011610_fe3f1e50.wav",
+      "text": "මෙයිබ කොදොයි",
+      "confidence": 0.6766666666666666,
+      "training_weight": 0.6766666666666666
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_167_20260211_234717_4599b355.wav",
+      "text": "ලූල් පොජ්ජ",
+      "confidence": 0.75,
+      "training_weight": 0.75
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_331_20260212_014557_20312fd6.wav",
+      "text": "අප්පිලැත්තෝ කැලෑ පොජ්ජේ මංගච්චනවා",
+      "confidence": 0.8372727272727272,
+      "training_weight": 0.8372727272727272
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_375_20260212_021043_61a6081c.wav",
+      "text": "කුක්කා",
+      "confidence": 0.9333333333333333,
+      "training_weight": 0.9333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_135_20260211_233050_dc0cbaa8.wav",
+      "text": "පැඟිරි කොළ",
+      "confidence": 0.6799999999999999,
+      "training_weight": 0.6799999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_309_20260212_013326_c4e84616.wav",
+      "text": "විට පොජ්ජක් කැවිල්ලාන්න මංගච්චප",
+      "confidence": 0.677741935483871,
+      "training_weight": 0.677741935483871
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_367_20260212_020651_fa3d198b.wav",
+      "text": "මංගච්චන්න",
+      "confidence": 0.8666666666666667,
+      "training_weight": 0.8666666666666667
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_322_20260212_013924_0f135445.wav",
+      "text": "ඒ ඇත්තෝ මෙයිබ කොදොයි",
+      "confidence": 0.8300000000000001,
+      "training_weight": 0.8300000000000001
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_245_20260212_010116_780e00e8.wav",
+      "text": "පටාරින්න",
+      "confidence": 0.8,
+      "training_weight": 0.8
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_051_20260211_100643_34146093.wav",
+      "text": "කුඩප්පිලැත්තෝ",
+      "confidence": 0.7253846153846153,
+      "training_weight": 0.7253846153846153
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_175_20260211_235102_f9b9d778.wav",
+      "text": "මහ කැකුළියක්‌ මන්දෝ වෙනවා",
+      "confidence": 0.728,
+      "training_weight": 0.728
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_190_20260212_003241_296ed65c.wav",
+      "text": "කරුකුරු ගච්චන මහ රුකුල පොජ්ජ",
+      "confidence": 0.9857142857142858,
+      "training_weight": 0.9857142857142858
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_379_20260212_021221_41ce36ec.wav",
+      "text": "එත්කයි",
+      "confidence": 0.6666666666666666,
+      "training_weight": 0.6666666666666666
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_188_20260212_003144_523be7d8.wav",
+      "text": "දිය කෝමං තැන",
+      "confidence": 0.8333333333333333,
+      "training_weight": 0.8333333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_170_20260211_234820_8e9ade6e.wav",
+      "text": "උගුල් පොජ්ජ",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_049_20260211_100544_fb86db06.wav",
+      "text": "නැන්දම්මිලැත්තො",
+      "confidence": 0.6433333333333333,
+      "training_weight": 0.6433333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_347_20260212_015700_b5434959.wav",
+      "text": "ගෑනියෙක් මන්දො කර ගන්නවා",
+      "confidence": 0.7266666666666667,
+      "training_weight": 0.7266666666666667
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_237_20260212_005726_921fc87f.wav",
+      "text": "වටනවා",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_259_20260212_010656_d6d1de4c.wav",
+      "text": "කවිතැන",
+      "confidence": 0.7333333333333334,
+      "training_weight": 0.7333333333333334
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_022_20260211_094303_0d0936b5.wav",
+      "text": "ඉච්‌ ගෙජ්ජේ බුච්ච",
+      "confidence": 0.6747058823529412,
+      "training_weight": 0.6747058823529412
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_316_20260212_013653_e39c9647.wav",
+      "text": "මංගච්චල රදන්න",
+      "confidence": 0.8484615384615384,
+      "training_weight": 0.8484615384615384
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_161_20260211_234423_a1c66b09.wav",
+      "text": "ගිනි රැච්ච",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_279_20260212_011710_3a0ebc72.wav",
+      "text": "මොන්නෙක",
+      "confidence": 0.6571428571428571,
+      "training_weight": 0.6571428571428571
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_192_20260212_003359_4a2f39ac.wav",
+      "text": "කරකුරැ ගච්චන යමකේ",
+      "confidence": 0.7688235294117647,
+      "training_weight": 0.7688235294117647
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_267_20260212_012422_d14d3555.wav",
+      "text": "චප්පිල ඇත්තන්",
+      "confidence": 0.8461538461538463,
+      "training_weight": 0.8461538461538463
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_346_20260212_015634_9b4b7eeb.wav",
+      "text": "රුකල් පොජ්ජක් මන්දො කරනවා",
+      "confidence": 0.8300000000000001,
+      "training_weight": 0.8300000000000001
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_260_20260212_010942_6c659a85.wav",
+      "text": "තැනමක්‌",
+      "confidence": 0.7142857142857142,
+      "training_weight": 0.7142857142857142
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_150_20260211_234005_d77a41be.wav",
+      "text": "පය පොජ්ජෙං මංගච්චන දඬු කැච්ච",
+      "confidence": 0.8671428571428572,
+      "training_weight": 0.8671428571428572
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_131_20260211_232859_19a26c71.wav",
+      "text": "පැණි ඇට පොජ්ජ",
+      "confidence": 0.8461538461538463,
+      "training_weight": 0.8461538461538463
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_152_20260211_234108_efb54c75.wav",
+      "text": "හුටු හුටු දඬු කැච්ච",
+      "confidence": 0.8736842105263158,
+      "training_weight": 0.8736842105263158
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_362_20260212_020448_7ae0e491.wav",
+      "text": "කෝනම් පොජ්ජක්",
+      "confidence": 0.8461538461538463,
+      "training_weight": 0.8461538461538463
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_089_20260211_102903_473ef6fb.wav",
+      "text": "මෙත්තයි",
+      "confidence": 0.7714285714285714,
+      "training_weight": 0.7714285714285714
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_333_20260212_014654_4c07bfdb.wav",
+      "text": "කැකුළෙක්‌ චප්පිල ඇත්තන්ට ගච්චනවා",
+      "confidence": 0.7224999999999999,
+      "training_weight": 0.7224999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_216_20260212_004623_39fba1b2.wav",
+      "text": "තොපන්‌",
+      "confidence": 0.7333333333333334,
+      "training_weight": 0.7333333333333334
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_123_20260211_232216_d57d2451.wav",
+      "text": "මස් පොජ්ජ",
+      "confidence": 0.9111111111111112,
+      "training_weight": 0.9111111111111112
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_381_20260212_021301_6bec8a15.wav",
+      "text": "ඇත්තකයි",
+      "confidence": 0.6571428571428571,
+      "training_weight": 0.6571428571428571
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_021_20260211_094214_7f7521aa.wav",
+      "text": "ඉච්‌ ගෙජ්ජ",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_189_20260212_003205_8c2dd2c1.wav",
+      "text": "කරකුරු ගච්චන රුකුල්පොජ්ජ",
+      "confidence": 0.7433333333333333,
+      "training_weight": 0.7433333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_073_20260211_102013_bbe72fb7.wav",
+      "text": "වැඩි තැන මන්දු කරන ලකුණු පොජීජ",
+      "confidence": 0.8033333333333333,
+      "training_weight": 0.8033333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_108_20260211_231305_3c6ab90b.wav",
+      "text": "පෙඟිචා",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_273_20260212_011507_25d39ae2.wav",
+      "text": "මේ ඇත්තොන්ට",
+      "confidence": 0.8545454545454545,
+      "training_weight": 0.8545454545454545
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_351_20260212_015848_302f1240.wav",
+      "text": "ගෑනියෙක්",
+      "confidence": 0.7,
+      "training_weight": 0.7
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_104_20260211_230942_fda22824.wav",
+      "text": "පාට චප්පි",
+      "confidence": 0.7777777777777777,
+      "training_weight": 0.7777777777777777
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_001_20260211_091413_d1dd712e.wav",
+      "text": "ඌරුවරිගේ වන්නියලැත්තෝ",
+      "confidence": 0.6952380952380952,
+      "training_weight": 0.6952380952380952
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_010_20260211_093009_5f640d19.wav",
+      "text": "මාමිලැත්තෝ",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_016_20260211_093508_b7807f05.wav",
+      "text": "කාල මැච්ච",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_034_20260211_095356_d17cc747.wav",
+      "text": "අයි දණ්ඩ",
+      "confidence": 0.61,
+      "training_weight": 0.61
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_040_20260211_100032_07ccb53d.wav",
+      "text": "ආත්තිලැත්තෝ",
+      "confidence": 0.6918181818181818,
+      "training_weight": 0.6918181818181818
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_056_20260211_100833_07b59c93.wav",
+      "text": "පහමයි",
+      "confidence": 0.9099999999999999,
+      "training_weight": 0.9099999999999999
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_065_20260211_101447_b6eb614d.wav",
+      "text": "අටමයි",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_078_20260211_102230_703f3f15.wav",
+      "text": "දිගතැනේ කොටු පොජ්ජ",
+      "confidence": 0.6877777777777777,
+      "training_weight": 0.6877777777777777
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_080_20260211_102444_0be84e14.wav",
+      "text": "බාග තැනයි",
+      "confidence": 0.6433333333333333,
+      "training_weight": 0.6433333333333333
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_092_20260211_230347_a83150c9.wav",
+      "text": "බොටකඳා",
+      "confidence": 0.8,
+      "training_weight": 0.8
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_103_20260211_230921_d0b88203.wav",
+      "text": "කඳං තලන්නා",
+      "confidence": 0.8,
+      "training_weight": 0.8
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_118_20260211_231907_23032905.wav",
+      "text": "මී මඤ්ඤා",
+      "confidence": 0.71,
+      "training_weight": 0.71
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_142_20260211_233622_aab61480.wav",
+      "text": "පයින්ඩකාරී",
+      "confidence": 0.76,
+      "training_weight": 0.76
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_149_20260211_233931_43e62a4c.wav",
+      "text": "දඬු කැච්ච",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_158_20260211_234327_31a75c5b.wav",
+      "text": "මහ දිය ගං ඇල්ල",
+      "confidence": 0.7957142857142857,
+      "training_weight": 0.7957142857142857
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_169_20260211_234756_2ca19447.wav",
+      "text": "තඩි පොජ්ජ",
+      "confidence": 0.8666666666666667,
+      "training_weight": 0.8666666666666667
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_195_20260212_003513_8b24f169.wav",
+      "text": "මං පොජ්ජ",
+      "confidence": 0.7,
+      "training_weight": 0.7
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_209_20260212_004132_3e93668a.wav",
+      "text": "බොරු තැන මන්දො වෙනචා",
+      "confidence": 0.75,
+      "training_weight": 0.75
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_215_20260212_004553_dc1410cd.wav",
+      "text": "කොදොයි",
+      "confidence": 0.8,
+      "training_weight": 0.8
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_236_20260212_005705_3d83b232.wav",
+      "text": "ඉඳ තිබනවා",
+      "confidence": 0.6444444444444444,
+      "training_weight": 0.6444444444444444
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_244_20260212_010049_7259e4e1.wav",
+      "text": "කඳපල්ලි",
+      "confidence": 0.7714285714285714,
+      "training_weight": 0.7714285714285714
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_248_20260212_010247_a9c2259d.wav",
+      "text": "විට පොජ්ජක්",
+      "confidence": 0.8545454545454545,
+      "training_weight": 0.8545454545454545
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_252_20260212_010508_cb8114f0.wav",
+      "text": "ගුටි පොජ්ජ මන්දො කරගන්න",
+      "confidence": 0.718695652173913,
+      "training_weight": 0.718695652173913
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_253_20260212_010557_0d4c0f64.wav",
+      "text": "කොදොයි",
+      "confidence": 0.7333333333333334,
+      "training_weight": 0.7333333333333334
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_261_20260212_011018_d50640f3.wav",
+      "text": "කැවිල්ලාන්න",
+      "confidence": 0.7818181818181817,
+      "training_weight": 0.7818181818181817
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_264_20260212_011136_2a624a55.wav",
+      "text": "කවි තැනක්‌",
+      "confidence": 0.72,
+      "training_weight": 0.72
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_265_20260212_011156_da6a6e22.wav",
+      "text": "කතා දමන්න",
+      "confidence": 0.6444444444444444,
+      "training_weight": 0.6444444444444444
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_268_20260212_011313_5465d417.wav",
+      "text": "මංගච්චල",
+      "confidence": 0.8285714285714285,
+      "training_weight": 0.8285714285714285
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_269_20260212_011339_141e493c.wav",
+      "text": "රදන්න",
+      "confidence": 0.76,
+      "training_weight": 0.76
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_283_20260212_011823_fcb3fc39.wav",
+      "text": "මේ කැකුළා",
+      "confidence": 0.9555555555555555,
+      "training_weight": 0.9555555555555555
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_288_20260212_012042_42640828.wav",
+      "text": "ඒ ඇත්තී",
+      "confidence": 0.6571428571428571,
+      "training_weight": 0.6571428571428571
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_290_20260212_012120_881e44f5.wav",
+      "text": "මහ",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_314_20260212_013551_f37762ba.wav",
+      "text": "කැකුළා හොඳවාගේ කවි තැනක්‌ කතා දමන්න",
+      "confidence": 0.6014285714285714,
+      "training_weight": 0.6014285714285714
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_321_20260212_013858_c26e378a.wav",
+      "text": "මාම කැච්ච්මක් සතුටු තැනෙයි",
+      "confidence": 0.6946153846153846,
+      "training_weight": 0.6946153846153846
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_361_20260212_020413_f5d0112a.wav",
+      "text": "කඳුළු පොජ්ජක් පටෑරුනා",
+      "confidence": 0.7904761904761904,
+      "training_weight": 0.7904761904761904
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_366_20260212_020633_46584568.wav",
+      "text": "මංගච්චනවා",
+      "confidence": 1.0,
+      "training_weight": 1.0
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_376_20260212_021100_15c8fb4a.wav",
+      "text": "චප්පි",
+      "confidence": 0.8400000000000001,
+      "training_weight": 0.8400000000000001
+    },
+    {
+      "audio_path": "vedda-asr-model\\data\\raw\\vedda_382_20260212_021336_120e673c.wav",
+      "text": "මේ",
+      "confidence": 0.6,
+      "training_weight": 0.6
+    }
+  ]
+}
