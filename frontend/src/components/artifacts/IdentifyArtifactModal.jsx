@@ -25,9 +25,9 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
         return;
       }
 
-      // Validate file size (5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error('Image size should be less than 5MB');
+      // Validate file size (10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error('Image size should be less than 10MB');
         return;
       }
 
@@ -269,7 +269,7 @@ const IdentifyArtifactModal = ({ isOpen, onClose }) => {
                   <label className="flex-1 flex flex-col items-center justify-center cursor-pointer rounded-lg transition-colors" style={{ color: "#5c4a1e" }} onMouseEnter={(e) => e.currentTarget.style.background = "rgba(200,165,90,0.08)"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>
                     <Upload size={64} className="mb-4" />
                     <p className="text-lg mb-2 font-medium">Click to upload artifact image</p>
-                    <p className="text-sm" style={{ color: "#7c6a47" }}>PNG, JPG, WEBP up to 5MB</p>
+                    <p className="text-sm" style={{ color: "#7c6a47" }}>PNG, JPG, WEBP up to 10MB</p>
                     <input
                       type="file"
                       accept="image/*"

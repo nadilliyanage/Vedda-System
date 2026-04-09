@@ -67,8 +67,8 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
         toast.error("Please select an image file");
         return;
       }
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error("Image size should be less than 5MB");
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error("Image size should be less than 10MB");
         return;
       }
 
@@ -91,8 +91,8 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
         toast.error(`${file.name} is not an image file`);
         continue;
       }
-      if (file.size > 5 * 1024 * 1024) {
-        toast.error(`${file.name} is too large (max 5MB)`);
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error(`${file.name} is too large (max 10MB)`);
         continue;
       }
       validFiles.push(file);
@@ -471,7 +471,7 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
                       className="text-sm"
                       style={{ color: "rgba(212,180,131,0.45)" }}
                     >
-                      PNG, JPG, WEBP up to 5MB
+                      PNG, JPG, WEBP up to 10MB
                     </p>
                     <input
                       type="file"
@@ -674,7 +674,7 @@ const ArtifactFormModal = ({ isOpen, onClose, onSuccess, artifact = null }) => {
                       className="text-xs mt-2"
                       style={{ color: "rgba(212,180,131,0.45)" }}
                     >
-                      You can add multiple additional images. Max 5MB each.
+                      You can add multiple additional images. Max 10MB each.
                     </p>
                   </div>
                 </div>

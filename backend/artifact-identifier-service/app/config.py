@@ -35,4 +35,4 @@ class Config:
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp'}
     
     # Class names (must match training order)
-    CLASS_NAMES = ['axe', 'bow', 'guitar', 'spoon', 'vedda drum']
+    CLASS_NAMES = ['arrow', 'axe', 'betel nut crusher', 'bow', 'bummadiya', 'clay pot', 'coconut shell cup', 'double mortar', 'drum', 'fire stone', 'gourd vessel', 'hoe blade', 'sickle', 'spoon', 'vase']
