@@ -30,6 +30,8 @@ class VeddaTranslator:
             'විට': 'විට', 
             'යට': 'යට',
             'මෙන්': 'මෙන්', 
+            'යනු': 'යනු',
+            'බලා': 'බලා'
             # Add more words here in the format: 'sinhala_word': 'vedda_or_original'
         }
 
@@ -815,10 +817,18 @@ class VeddaTranslator:
             if response.status_code == 200:
                 result = response.json()
                 if result and len(result) > 0 and len(result[0]) > 0:
-                    translated_text = result[0][0][0]
-                    total_time = (time.perf_counter() - start) * 1000
-                    print(f"[PERF] google_translate total: {total_time:.1f}ms")
-                    return translated_text
+                    # Handle both single and multi-chunk responses
+                    # For large texts, Google Translate returns multiple chunks in result[0]
+                    # Each chunk is [translated_text, original_text, ...]
+                    translated_text = ''
+                    for chunk in result[0]:
+                        if chunk and len(chunk) > 0 and chunk[0]:
+                            translated_text += chunk[0]
+                    
+                    if translated_text:
+                        total_time = (time.perf_counter() - start) * 1000
+                        print(f"[PERF] google_translate total: {total_time:.1f}ms")
+                        return translated_text
             return None
             
         except Exception as e:
