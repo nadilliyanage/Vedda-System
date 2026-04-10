@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
+import * as XLSX from "xlsx";
 import LoadingScreen from "../components/ui/LoadingScreen";
 
 const AdminWords = () => {
@@ -269,7 +270,7 @@ const AdminWords = () => {
   const downloadTemplate = () => {
     const csvContent = `vedda_word,sinhala_word,english_word,vedda_ipa,sinhala_ipa,english_ipa,word_type,usage_example
 කැකුළෝ,ළමයි,children,kækulo,ləməi,ˈtʃɪldrən,noun,මේ කැකුළෝ ගෙදර ඉන්නවා - These children are at home
-දියරච්ඡා,වතුර,water,dijaracca,vaturu,ˈwɔːtər,noun,දියරච්ඡා බොන්න - drink water`;
+දියරච්ඡා,වතුර,water,dijaracca,vaturu,ˈwɔːтə,noun,දියරච්ඡා බොන්න - drink water`;
 
     const blob = new Blob([csvContent], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
@@ -278,6 +279,51 @@ const AdminWords = () => {
     a.download = "vedda_dictionary_template.csv";
     a.click();
     window.URL.revokeObjectURL(url);
+  };
+
+  const exportToExcel = () => {
+    if (words.length === 0) {
+      toast.error("No words to export");
+      return;
+    }
+
+    try {
+      const exportData = words.map((word) => ({
+        "Vedda Word": word.vedda_word || "",
+        "Sinhala Word": word.sinhala_word || "",
+        "English Word": word.english_word || "",
+        "Vedda IPA": word.vedda_ipa || "",
+        "Sinhala IPA": word.sinhala_ipa || "",
+        "English IPA": word.english_ipa || "",
+        "Word Type": word.word_type || "",
+        "Usage Example": word.usage_example || "",
+      }));
+
+      const workbook = XLSX.utils.book_new();
+      const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+      worksheet["!cols"] = [
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 15 },
+        { wch: 12 },
+        { wch: 35 },
+      ];
+
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Dictionary Words");
+
+      const timestamp = new Date().toISOString().slice(0, 10);
+      const fileName = `vedda_dictionary_${timestamp}.xlsx`;
+
+      XLSX.writeFile(workbook, fileName);
+      toast.success(`Exported ${words.length} words to Excel!`);
+    } catch (error) {
+      console.error("Error exporting to Excel:", error);
+      toast.error("Failed to export to Excel");
+    }
   };
 
   const handleEditWord = (word) => {
@@ -426,7 +472,7 @@ const AdminWords = () => {
       </div>
 
       {/* Action Buttons */}
-      <div className="mb-6 flex gap-4">
+      <div className="mb-6 flex gap-4 flex-wrap">
         <button
           onClick={() => setShowAddForm(!showAddForm)}
           className="admin-btn-primary px-4 py-2"
@@ -444,6 +490,17 @@ const AdminWords = () => {
           className="admin-btn-secondary px-4 py-2"
         >
           Download Template
+        </button>
+        <button
+          onClick={exportToExcel}
+          className="admin-btn-primary px-4 py-2"
+          disabled={words.length === 0}
+          style={{
+            opacity: words.length === 0 ? 0.5 : 1,
+            cursor: words.length === 0 ? "not-allowed" : "pointer",
+          }}
+        >
+          Export as Excel
         </button>
       </div>
 
