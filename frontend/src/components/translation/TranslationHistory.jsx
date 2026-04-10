@@ -56,7 +56,7 @@ const TranslationHistory = ({
       />
 
       {history.length > 0 ? (
-        <div className="space-y-2">
+        <div className="space-y-2 max-h-[calc(100vh-320px)] overflow-y-auto pr-2">
           {history.map((item, index) => (
             <div
               key={item.id ?? index}

@@ -27,6 +27,9 @@ class VeddaTranslator:
         # Format: Sinhala word → (vedda equivalent or keep as-is)
         self.sinhala_ignore_list = {
             'එකට': 'එකට',           # together (keep as-is, no Vedda translation needed)
+            'විට': 'විට', 
+            'යට': 'යට',
+            'මෙන්': 'මෙන්', 
             # Add more words here in the format: 'sinhala_word': 'vedda_or_original'
         }
 
