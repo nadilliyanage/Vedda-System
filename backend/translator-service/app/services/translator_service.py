@@ -164,17 +164,15 @@ class VeddaTranslator:
 
         # Ordered longest-first to avoid partial stripping before specific forms.
         suffix_rules = [
-            # ===== UNIVERSAL SUFFIX EXTRACTION (HIGHEST PRIORITY) =====
-            # These are applied FIRST to ANY word, regardless of type
-            # Format: If word ends with suffix, it will be:
-            #   1. Extracted by _extract_verb_suffix()
-            #   2. Preserved as separate word: [base] [suffix]
-
-            # CRITICAL: Any word ending in ට gets extracted and preserved
+            # ===== SINHALA PLURAL & NOUN FORM NORMALIZATION (longest first) =====
+            # These convert plural/variant noun forms to singular base forms
             # Examples:
-            #   මුවන්ට → (extract ට) → මුවන් [base] + ට [preserved]
-            #   දඩයම් කිරීමට → (extract ට) → දඩයම් කිරීම [base] + ට [preserved]
-            #   Any word ending in ට follows this pattern
+            #   බළලුන් (plural cats) → බළලා (singular cat)
+            #   දරුවුන් (plural children) → දරුවා (singular child)
+            #   ගෝලු (plural spheres) → ගෝලය (singular sphere)
+            ('ුන්', 'ා'),      # Plural suffix → singular marker: බළලුන් → බළලා
+            ('වුන්', 'වා'),    # Plural variant: දරුවුන් → දරුවා
+            ('ුවන්', 'ුවා'),   # Plural variant form
 
             # ===== NOUN DECLENSION & INFLECTION RULES (longest first) =====
             # These normalize noun base forms that have markers or inflections
@@ -925,11 +923,11 @@ class VeddaTranslator:
                         vedda_words.append(vedda_word)
                         word_sources.append(('vedda', translation_dict, vedda_word))
 
-                    # CRITICAL: Preserve suffix if it was extracted from single word
+                    # CRITICAL: Only preserve suffix if VEDDA TRANSLATION exists
+                    # Preserve suffix with space only when there is a valid Vedda translation
                     if phrase_suffix and phrase_len == 1:
                         vedda_words[-1] = vedda_words[-1] + ' ' + phrase_suffix
                         word_sources.append(('sinhala', phrase_suffix, phrase_suffix))
-
 
                     # Mark all words in this phrase as processed
                     for j in range(i, i + phrase_len):
@@ -968,14 +966,16 @@ class VeddaTranslator:
                         vedda_words.append(vedda_word)
                         word_sources.append(('vedda', translation_dict, vedda_word))
 
-                    # CRITICAL: Preserve extracted suffix with space - ALWAYS append if suffix exists
+                    # CRITICAL: Only preserve suffix if base form was found in dictionary
+                    # If translation exists for base word, preserve ට as separate word
                     if preserve_suffix:
                         vedda_words[-1] = vedda_words[-1] + ' ' + preserve_suffix
                         word_sources.append(('sinhala', preserve_suffix, preserve_suffix))
 
                     dictionary_hits += 1
                 else:
-                    # Base form not found in dictionary, try the original word with normalization
+                    # Base form not found in dictionary
+                    # DO NOT preserve suffix - use original word with suffix intact
                     batch_results = self._batch_translate_sinhala_with_normalization([sinhala_word], 'vedda')
 
                     if sinhala_word in batch_results and batch_results[sinhala_word]['found']:
@@ -997,17 +997,10 @@ class VeddaTranslator:
 
                         dictionary_hits += 1
                     else:
-                        # Fallback: keep Sinhala word unchanged
-                        # But still preserve suffix if it was extracted
-                        if preserve_suffix:
-                            # Word not found, but preserve suffix as requested
-                            vedda_words.append(base_word)
-                            word_sources.append(('sinhala', base_word, base_word))
-                            vedda_words[-1] = vedda_words[-1] + ' ' + preserve_suffix
-                            word_sources.append(('sinhala', preserve_suffix, preserve_suffix))
-                        else:
-                            vedda_words.append(sinhala_word)
-                            word_sources.append(('sinhala', sinhala_word, sinhala_word))
+                        # No translation found at all
+                        # Use original word WITH suffix (no separation)
+                        vedda_words.append(sinhala_word)
+                        word_sources.append(('sinhala', sinhala_word, sinhala_word))
 
                 processed_indices.add(i)
                 i += 1
