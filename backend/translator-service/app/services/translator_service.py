@@ -157,6 +157,14 @@ class VeddaTranslator:
             ('යෙ', 'නවා'),      # informal past
             ('ආ', 'නවා'),       # came/went past marker
 
+            # ===== POSSESSIVE/GENITIVE CASE MARKERS =====
+            # These normalize possessive forms to base noun forms in dictionary
+            # Examples: කැලේ → කැලය or කැල; පැලේ → පැලය or පැල
+            # (Dictionary has base forms like: කැලය, පැලය, කුඹුර, රට, etc.)
+
+            # Generate candidates for both with-ය and without-ය base forms
+            # They're handled by expansion rules below: ('ේ', 'ය') and existing ('ේ', '')
+
             # ===== NOUN SUFFIXES (existing) =====
             ('වලටත්', ''),
             ('වලගෙ', ''),
@@ -248,7 +256,8 @@ class VeddaTranslator:
             ('යන්', 'ය'),
             ('න්', 'ා'),
             ('ෝ', 'ා'),
-            ('ේ', ''),
+            ('ේ', 'ය'),         # possessive ේ → ය: කැලේ→කැලය, පැලේ→පැලය
+            ('ේ', ''),          # OR just remove ේ: කුඹුරේ→කුඹුර, රටේ→රට
             ('ී', 'ි'),
             ('ක්ද', ''),
             ('ක්ම', ''),
