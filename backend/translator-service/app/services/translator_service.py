@@ -21,7 +21,15 @@ class VeddaTranslator:
         self.dictionary_service_url = dictionary_service_url
         self.history_service_url = history_service_url
         self.google_translate_url = google_translate_url
-        
+
+        # IGNORE RULES LIST - Sinhala words that should NOT be translated
+        # These words will be passed through without translation attempt
+        # Format: Sinhala word → (vedda equivalent or keep as-is)
+        self.sinhala_ignore_list = {
+            'එකට': 'එකට',           # together (keep as-is, no Vedda translation needed)
+            # Add more words here in the format: 'sinhala_word': 'vedda_or_original'
+        }
+
         # Create persistent session for connection pooling
         self.session = requests.Session()
         
@@ -85,6 +93,65 @@ class VeddaTranslator:
             'estonian': 'et'
         }
 
+    def _is_ignored_word(self, word):
+        """
+        Check if word is in the ignore list.
+        Returns (is_ignored, translation) tuple.
+        If ignored: (True, vedda_translation_or_word)
+        If not ignored: (False, None)
+        """
+        if word in self.sinhala_ignore_list:
+            return True, self.sinhala_ignore_list[word]
+        return False, None
+
+    def _extract_verb_suffix(self, word):
+        """
+        Extract verb suffix from Sinhala word while preserving it.
+        Returns tuple (base_word, suffix) where suffix is what should be preserved.
+
+        Usage:
+            දඩයම් කිරීමට → (දඩයම් කිරීම, ට)
+            දඩයම් කරනවා → (දඩයම් කරන, වා)
+        """
+        if not word:
+            return word, ''
+
+        # Common verb suffixes that should be preserved (longest first, but ට is HIGHEST PRIORITY)
+        preservable_suffixes = [
+            'ට',       # ❌ HIGHEST PRIORITY: Any word ending in ට gets extracted
+                        # Examples: මුවන්ට, දඩයම් කිරීමට, ඕනෑ ඕනෑ ට
+            'ගේ',      # possessive/dative
+            'ෙන්',     # instrumental
+            'ගෙන්',    # instrumental (with)
+            'තින්',    # with/by means of
+            'දී',      # location/time
+            'දීම',     # action noun
+            'ලයි',     # completed
+            'ලා',      # having done
+            'නවා',     # continuous present
+            'වා',      # past/completed
+            'ශි',      # honorific
+            'සලු',     # together
+        ]
+
+        for suffix in preservable_suffixes:
+            if len(word) > len(suffix) and word.endswith(suffix):
+                base = word[:-len(suffix)]
+                return base, suffix
+
+        return word, ''
+
+    def _is_ignored_word(self, word):
+        """
+        Check if word is in the ignore list.
+        Returns (is_ignored, translation) tuple.
+        If ignored: (True, vedda_translation_or_word)
+        If not ignored: (False, None)
+        """
+        if word in self.sinhala_ignore_list:
+            return True, self.sinhala_ignore_list[word]
+        return False, None
+
     def _generate_sinhala_normalization_candidates(self, word):
         """Generate likely Sinhala base-form candidates for inflected Sinhala words."""
         if not word:
@@ -92,9 +159,49 @@ class VeddaTranslator:
 
         # Ordered longest-first to avoid partial stripping before specific forms.
         suffix_rules = [
+            # ===== UNIVERSAL SUFFIX EXTRACTION (HIGHEST PRIORITY) =====
+            # These are applied FIRST to ANY word, regardless of type
+            # Format: If word ends with suffix, it will be:
+            #   1. Extracted by _extract_verb_suffix()
+            #   2. Preserved as separate word: [base] [suffix]
+
+            # CRITICAL: Any word ending in ට gets extracted and preserved
+            # Examples:
+            #   මුවන්ට → (extract ට) → මුවන් [base] + ට [preserved]
+            #   දඩයම් කිරීමට → (extract ට) → දඩයම් කිරීම [base] + ට [preserved]
+            #   Any word ending in ට follows this pattern
+
+            # ===== NOUN DECLENSION & INFLECTION RULES (longest first) =====
+            # These normalize noun base forms that have markers or inflections
+            # Examples:
+            #   දඩයම් (with marker) → දඩයම (base form in dictionary)
+            #   කලිම් (with marker) → කලිම (base form)
+            ('ම්', 'ම'),      # Remove halant/marker from nouns - දඩයම් → දඩයම
+            ('ය්', 'ය'),      # Remove halant from nouns - කලිය් → කලිය
+
             # ===== VERB CONJUGATION SUFFIXES =====
             # Vedda doesn't use Sinhala person-based verb conjugations
             # All forms should normalize to base form (verb root + න or නවා)
+
+            # Verb suffix preservation rules (longest first)
+            # These extract the base verb form while preserving suffixes
+            # Examples:
+            #   දඩයම් කිරීමට → දඩයම් කිරීම + ට (suffix preserved as separate word)
+            #   දඩයම් කරනවා → දඩයම් කරන + වා (suffix preserved)
+            #   ගිහි ගේ → ගිහි + ගේ (suffix preserved)
+            ('නවාට', 'නවා ට'),   
+            ('නවාගේ', 'නවා ගේ'),  
+            ('නවාදී', 'නවා දී'),   
+            ('নවාලයි', 'නවා ලයි'),  
+            ('නවාලා', 'නවා ලා'),   
+            ('තිබ්බටට', 'තිබ්බ ට'),  # was + dative
+            ('තිබ්බගේ', 'තිබ්බ ගේ'), # was + possessive
+            ('කරනු ඇතිවා', 'කරන ු ඇතිවා'), # will do
+
+            # Infinitive noun form normalization
+            # These handle නම infinitive noun forms (කිරීම) which need base form (කරන්න)
+            # The pattern: remove ිරීම and replace with nothing, leaving the root verb
+            ('ිරීම', ''),  # infinitive noun marker - උයිම → උයි, කිරීම → ක, ගිහිම → ගි
 
             # Past tense forms (longest first)
             # Strip suffixes to get past root, then verb_root_transformations will convert to present form
@@ -156,6 +263,14 @@ class VeddaTranslator:
             ('වා', 'නවා'),      # past/action marker
             ('යෙ', 'නවා'),      # informal past
             ('ආ', 'නවා'),       # came/went past marker
+
+            # ===== POSSESSIVE/GENITIVE CASE MARKERS =====
+            # These normalize possessive forms to base noun forms in dictionary
+            # Examples: කැලේ → කැලය or කැල; පැලේ → පැලය or පැල
+            # (Dictionary has base forms like: කැලය, පැලය, කුඹුර, රට, etc.)
+
+            # Generate candidates for both with-ය and without-ය base forms
+            # They're handled by expansion rules below: ('ේ', 'ය') and existing ('ේ', '')
 
             # ===== NOUN SUFFIXES (existing) =====
             ('වලටත්', ''),
@@ -248,7 +363,8 @@ class VeddaTranslator:
             ('යන්', 'ය'),
             ('න්', 'ා'),
             ('ෝ', 'ා'),
-            ('ේ', ''),
+            ('ේ', 'ය'),         # possessive ේ → ය: කැලේ→කැලය, පැලේ→පැලය
+            ('ේ', ''),          # OR just remove ේ: කුඹුරේ→කුඹුර, රටේ→රට
             ('ී', 'ි'),
             ('ක්ද', ''),
             ('ක්ම', ''),
@@ -271,7 +387,27 @@ class VeddaTranslator:
         # These handle cases where past tense changes the verb root vowel
         # Transform to FULL dictionary form (typically present continuous: verb + නවා)
         verb_root_transformations = [
-            # Common irregular verb patterns (past root → present continuous form)
+            # ===== INFINITIVE NOUN → BASE FORM TRANSFORMATIONS =====
+            # These handle infinitive noun forms (suffix ිරීම) which need to be normalized to base form
+            # Usage: දඩයම් කිරීම → දඩයම් කරන්න (the base form that exists in dictionary)
+            ('කිරීම', 'කරන්න'),     # infinitive noun to base infinitive (for "do")
+            ('උයිම', 'උයනවා'),     # cooking infinitive noun
+            ('ගිහිම', 'යනවා'),      # going infinitive noun
+            ('දෙණීම', 'දෙනවා'),    # giving infinitive noun
+            ('െයිම', 'ෙන්න'),       # infinitive noun to base infinitive (for "said")
+            ('යිම', 'යන්න'),        # infinitive noun to base infinitive (for "go")
+
+            # ===== CONJUGATED FORM → BASE FORM TRANSFORMATIONS =====
+            # These handle verb conjugations that need to be converted to base form
+            # Pattern: conjugated_form → base_form
+            # Example: මුවන්ට (extract ට) → මුවන් → මුවා → කබරා ට
+            ('මුවන්', 'මුවා'),       # conjugated form to base: මුවන් → මුවා (take/carry)
+            ('ගිනුවන්', 'ගිනුවා'),   # conjugated form to base
+            ('සිනුවන්', 'සිනුවා'),   # conjugated form to base
+            ('පිනුවන්', 'පිනුවා'),   # conjugated form to base
+
+            # ===== COMMON IRREGULAR VERB PATTERNS =====
+            # (past root → present continuous form)
             ('කෑව', 'කනවා'),      # ate → eat: කෑවා/කෑවෙමු/කෑවේය → කනවා
             ('කා', 'කනවා'),        # eating → eat (also handles කාලා)
             ('ගිය', 'යනවා'),       # went → go
@@ -727,11 +863,36 @@ class VeddaTranslator:
             for phrase_len in range(min(5, len(sinhala_words) - i), 0, -1):
                 phrase = ' '.join(sinhala_words[i:i+phrase_len])
 
-                # Try exact match first, then normalization candidates
-                batch_results = self._batch_translate_sinhala_with_normalization([phrase], 'vedda')
+                # IMPORTANT: For single words, check ignore list FIRST
+                if phrase_len == 1:
+                    is_ignored, ignore_translation = self._is_ignored_word(phrase)
+                    if is_ignored:
+                        # Word is in ignore list - use as-is without translation
+                        print(f"[TRANSLATE] ⊘ Ignoring word (in ignore list): '{phrase}' → '{ignore_translation}'")
+                        vedda_words.append(ignore_translation)
+                        word_sources.append(('ignored', ignore_translation, ignore_translation))
 
-                if phrase in batch_results and batch_results[phrase]['found']:
-                    vedda_translation = batch_results[phrase]['translation']
+                        # Mark as processed
+                        processed_indices.add(i)
+                        i += 1
+                        matched = True
+                        break
+
+                # IMPORTANT: For single words, extract suffix BEFORE translating
+                # This ensures suffixes like ට are always preserved
+                phrase_base = phrase
+                phrase_suffix = ''
+
+                if phrase_len == 1:
+                    # Single word: extract and preserve suffix
+                    phrase_base, phrase_suffix = self._extract_verb_suffix(phrase)
+
+                # Try exact match first, then normalization candidates
+                # Translate the base form (with suffix removed)
+                batch_results = self._batch_translate_sinhala_with_normalization([phrase_base], 'vedda')
+
+                if phrase_base in batch_results and batch_results[phrase_base]['found']:
+                    vedda_translation = batch_results[phrase_base]['translation']
                     print(f"[TRANSLATE] ✓ Found Sinhala phrase match: '{phrase}' → '{vedda_translation}'")
 
                     # Handle multi-word Vedda translations
@@ -751,6 +912,12 @@ class VeddaTranslator:
                         vedda_words.append(vedda_word)
                         word_sources.append(('vedda', translation_dict, vedda_word))
 
+                    # CRITICAL: Preserve suffix if it was extracted from single word
+                    if phrase_suffix and phrase_len == 1:
+                        vedda_words[-1] = vedda_words[-1] + ' ' + phrase_suffix
+                        word_sources.append(('sinhala', phrase_suffix, phrase_suffix))
+
+
                     # Mark all words in this phrase as processed
                     for j in range(i, i + phrase_len):
                         processed_indices.add(j)
@@ -763,21 +930,21 @@ class VeddaTranslator:
             if not matched:
                 # STEP 2: No phrase match, try single word with normalization
                 sinhala_word = sinhala_words[i]
-                preserve_suffix = ''
-                if sinhala_word.endswith('ගේ'):
-                    preserve_suffix = 'ගේ'
-                elif sinhala_word.endswith('ට'):
-                    preserve_suffix = 'ට'
 
-                batch_results = self._batch_translate_sinhala_with_normalization([sinhala_word], 'vedda')
+                # CRITICAL: Extract ANY suffix from word (especially ට)
+                base_word, preserve_suffix = self._extract_verb_suffix(sinhala_word)
 
-                if sinhala_word in batch_results and batch_results[sinhala_word]['found']:
-                    vedda_translation = batch_results[sinhala_word]['translation']
+                # Try to translate the base form first
+                batch_results = self._batch_translate_sinhala_with_normalization([base_word], 'vedda')
+
+                if base_word in batch_results and batch_results[base_word]['found']:
+                    # Base form found - translate it
+                    vedda_translation = batch_results[base_word]['translation']
                     vedda_phrase_words = [w.strip() for w in vedda_translation.split() if w.strip()]
 
                     translation_dict = {
                         'vedda': vedda_translation,
-                        'sinhala': sinhala_word,
+                        'sinhala': base_word,
                         'vedda_ipa': '',
                         'sinhala_ipa': '',
                         'english': '',
@@ -788,19 +955,46 @@ class VeddaTranslator:
                         vedda_words.append(vedda_word)
                         word_sources.append(('vedda', translation_dict, vedda_word))
 
-                    # Preserve Sinhala trailing markers
-                    if preserve_suffix and vedda_words and vedda_phrase_words:
-                        if preserve_suffix == 'ගේ':
-                            vedda_words[-1] = vedda_words[-1] + 'ගේ'
-                        elif vedda_phrase_words[-1] != preserve_suffix:
-                            vedda_words.append(preserve_suffix)
-                            word_sources.append(('sinhala', preserve_suffix, preserve_suffix))
+                    # CRITICAL: Preserve extracted suffix with space - ALWAYS append if suffix exists
+                    if preserve_suffix:
+                        vedda_words[-1] = vedda_words[-1] + ' ' + preserve_suffix
+                        word_sources.append(('sinhala', preserve_suffix, preserve_suffix))
 
                     dictionary_hits += 1
                 else:
-                    # Fallback: keep Sinhala word
-                    vedda_words.append(sinhala_word)
-                    word_sources.append(('sinhala', sinhala_word, sinhala_word))
+                    # Base form not found in dictionary, try the original word with normalization
+                    batch_results = self._batch_translate_sinhala_with_normalization([sinhala_word], 'vedda')
+
+                    if sinhala_word in batch_results and batch_results[sinhala_word]['found']:
+                        vedda_translation = batch_results[sinhala_word]['translation']
+                        vedda_phrase_words = [w.strip() for w in vedda_translation.split() if w.strip()]
+
+                        translation_dict = {
+                            'vedda': vedda_translation,
+                            'sinhala': sinhala_word,
+                            'vedda_ipa': '',
+                            'sinhala_ipa': '',
+                            'english': '',
+                            'english_ipa': ''
+                        }
+
+                        for vedda_word in vedda_phrase_words:
+                            vedda_words.append(vedda_word)
+                            word_sources.append(('vedda', translation_dict, vedda_word))
+
+                        dictionary_hits += 1
+                    else:
+                        # Fallback: keep Sinhala word unchanged
+                        # But still preserve suffix if it was extracted
+                        if preserve_suffix:
+                            # Word not found, but preserve suffix as requested
+                            vedda_words.append(base_word)
+                            word_sources.append(('sinhala', base_word, base_word))
+                            vedda_words[-1] = vedda_words[-1] + ' ' + preserve_suffix
+                            word_sources.append(('sinhala', preserve_suffix, preserve_suffix))
+                        else:
+                            vedda_words.append(sinhala_word)
+                            word_sources.append(('sinhala', sinhala_word, sinhala_word))
 
                 processed_indices.add(i)
                 i += 1
