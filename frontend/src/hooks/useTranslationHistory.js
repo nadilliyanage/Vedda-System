@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 const STORAGE_KEY = "vedda_translation_history";
-const MAX_HISTORY = 5;
+const MAX_HISTORY = 10;
 
 const loadFromStorage = () => {
   try {

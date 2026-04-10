@@ -97,7 +97,7 @@ const ExamplePhrases = ({ onSelectExample }) => {
     setIsRefreshing(true);
     setLoading(true);
     try {
-      const words = await getRandomWords(5);
+      const words = await getRandomWords(10);
       setExamples(words);
     } catch (error) {
       console.error("Failed to fetch random words:", error);
@@ -150,8 +150,8 @@ const ExamplePhrases = ({ onSelectExample }) => {
       />
 
       {loading ? (
-        <div className="space-y-2">
-          {[...Array(5)].map((_, i) => (
+        <div className="space-y-2 max-h-[calc(100vh-320px)] overflow-y-auto pr-2">
+          {[...Array(10)].map((_, i) => (
             <div
               key={i}
               className="rounded-lg p-3 animate-pulse"
@@ -172,7 +172,7 @@ const ExamplePhrases = ({ onSelectExample }) => {
           ))}
         </div>
       ) : examples.length > 0 ? (
-        <div className="space-y-2">
+        <div className="space-y-2 max-h-[calc(100vh-320px)] overflow-y-auto pr-2">
           {examples.map((word, index) => {
             const singlish = toSinglish(word.vedda_word);
             return (
