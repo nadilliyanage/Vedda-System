@@ -13,24 +13,24 @@ const AdminLearnings = () => {
       id: "lessons",
       title: "Manage Lessons",
       icon: FaBook,
-      bg: 'linear-gradient(135deg, rgba(59,130,246,0.72) 0%, rgba(37,99,235,0.72) 100%)',
-      shadow: 'rgba(37,99,235,0.30)',
+      bg: "linear-gradient(135deg, rgba(59,130,246,0.72) 0%, rgba(37,99,235,0.72) 100%)",
+      shadow: "rgba(37,99,235,0.30)",
       description: "Create and organize learning lessons",
     },
     {
       id: "exercises",
       title: "Manage Exercises",
       icon: FaDumbbell,
-      bg: 'linear-gradient(135deg, rgba(34,197,94,0.72) 0%, rgba(22,163,74,0.72) 100%)',
-      shadow: 'rgba(22,163,74,0.30)',
+      bg: "linear-gradient(135deg, rgba(34,197,94,0.72) 0%, rgba(22,163,74,0.72) 100%)",
+      shadow: "rgba(22,163,74,0.30)",
       description: "Design practice exercises for learners",
     },
     {
       id: "challenges",
       title: "Manage Challenges",
       icon: FaTrophy,
-      bg: 'linear-gradient(135deg, rgba(249,115,22,0.72) 0%, rgba(234,88,12,0.72) 100%)',
-      shadow: 'rgba(234,88,12,0.30)',
+      bg: "linear-gradient(135deg, rgba(249,115,22,0.72) 0%, rgba(234,88,12,0.72) 100%)",
+      shadow: "rgba(234,88,12,0.30)",
       description: "Configure quiz challenges and assessments",
     },
   ];
@@ -52,7 +52,7 @@ const AdminLearnings = () => {
             Learning Management
           </h1>
           <p className="mt-2" style={{ color: "rgba(212,180,131,0.70)" }}>
-            Manage lessons, exercises, and challenges for the Vedda System
+            Manage lessons, exercises, and challenges for the Vedda Heritage
           </p>
         </div>
 
@@ -66,13 +66,19 @@ const AdminLearnings = () => {
                 className="text-white rounded-xl shadow-lg p-8 transition-all duration-200 transform hover:scale-105 hover:shadow-xl flex flex-col items-center justify-center min-h-[280px] relative overflow-hidden"
                 style={{
                   background: card.bg,
-                  backdropFilter: 'blur(14px)',
-                  WebkitBackdropFilter: 'blur(14px)',
-                  border: '1px solid rgba(255,255,255,0.25)',
+                  backdropFilter: "blur(14px)",
+                  WebkitBackdropFilter: "blur(14px)",
+                  border: "1px solid rgba(255,255,255,0.25)",
                   boxShadow: `0 8px 32px ${card.shadow}, inset 0 1px 0 rgba(255,255,255,0.20)`,
                 }}
               >
-                <div className="absolute inset-0 pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%)' }} />
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, rgba(255,255,255,0.18) 0%, transparent 55%)",
+                  }}
+                />
                 <IconComponent className="text-6xl mb-4 relative z-10" />
                 <h2 className="text-2xl font-bold text-center mb-2 relative z-10">
                   {card.title}
