@@ -1,7 +1,7 @@
 {
   "name": "vedda-system-frontend",
   "version": "1.0.0",
-  "description": "Frontend for Vedda System",
+  "description": "Frontend for Vedda Heritage",
   "private": true,
   "type": "module",
   "dependencies": {

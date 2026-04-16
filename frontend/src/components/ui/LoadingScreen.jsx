@@ -1,4 +1,4 @@
-const LoadingScreen = ({ message = "Loading Vedda System..." }) => {
+const LoadingScreen = ({ message = "Loading Vedda Heritage..." }) => {
   return (
     <div
       className="fixed inset-0 flex items-center justify-center z-50"
@@ -21,7 +21,7 @@ const LoadingScreen = ({ message = "Loading Vedda System..." }) => {
         <div className="mb-8 animate-pulse">
           <img
             src="/logo.png"
-            alt="Vedda System"
+            alt="Vedda Heritage"
             className="w-32 h-32 mx-auto object-contain"
             style={{ filter: "drop-shadow(0 0 18px rgba(200,165,90,0.30))" }}
           />
