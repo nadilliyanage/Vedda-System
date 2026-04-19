@@ -111,32 +111,33 @@ class VeddaTranslator:
 
     def _extract_verb_suffix(self, word):
         """
-        Extract verb suffix from Sinhala word while preserving it.
-        Returns tuple (base_word, suffix) where suffix is what should be preserved.
+        Extract ONLY true syntactic suffixes (case markers, postpositions) from Sinhala words.
+        Do NOT extract tense markers like 'නවා' (present continuous) or 'වා' (past) as these
+        are verb conjugations that should be translated as part of the verb, not preserved separately.
+        
+        Returns tuple (base_word, suffix) where suffix is a true grammatical case/postposition.
 
         Usage:
             දඩයම් කිරීමට → (දඩයම් කිරීම, ට)
-            දඩයම් කරනවා → (දඩයම් කරන, වා)
+            දඩයම් කරනවා → (දඩයම් කරනවා, '')  [නවා is tense marker, NOT preserved]
         """
         if not word:
             return word, ''
 
-        # Common verb suffixes that should be preserved (longest first, but ට is HIGHEST PRIORITY)
+        # Only preserve TRUE syntactic suffixes (case markers, postpositions)
+        # ⚠️ CRITICAL: Do NOT include tense markers like 'නවා', 'වා', 'ලා', 'ලයි', etc.
+        # These are part of verb conjugation and should be translated, not preserved separately
         preservable_suffixes = [
-            'ට',       # ❌ HIGHEST PRIORITY: Any word ending in ට gets extracted
-                        # Examples: මුවන්ට, දඩයම් කිරීමට, ඕනෑ ඕනෑ ට
-            'ගේ',      # possessive/dative
-            'ෙන්',     # instrumental
-            'ගෙන්',    # instrumental (with)
-            'තින්',    # with/by means of
-            'දී',      # location/time
-            'දීම',     # action noun
-            'ලයි',     # completed
-            'ලා',      # having done
-            'නවා',     # continuous present
-            'වා',      # past/completed
-            'ශි',      # honorific
-            'සලු',     # together
+            'ට',       # HIGHEST PRIORITY: Dative/accusative case marker
+                        # Examples: මුවන්ට, දඩයම් කිරීමට, ඕනෑටම
+            'ගේ',      # Possessive/genitive case
+            'ගෙන්',    # Instrumental (with/by means of)
+            'තින්',    # Instrumental with/by
+            'දී',      # Locative/temporal marker
+            'ෙන්',     # Agentive/instrumental
+            'දීම',     # Action nominalization (noun form of action)
+            'ශි',      # Honorific marker
+            'සලු',     # Together/collective marker
         ]
 
         for suffix in preservable_suffixes:
