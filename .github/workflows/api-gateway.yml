@@ -1,0 +1,120 @@
+name: api-gateway — CI/CD
+
+on:
+  push:
+    branches: ["main"]
+    paths:
+      - "backend/api-gateway/**"
+      - ".github/workflows/api-gateway.yml"
+  pull_request:
+    branches: ["main"]
+    paths:
+      - "backend/api-gateway/**"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+  security-events: write
+  id-token: write
+
+env:
+  REGISTRY: ${{ secrets.AZURE_ACR_REGISTRY_URL_API_GATEWAY }}
+  SERVICE: api-gateway
+  IMAGE_NAME: vedda-system-api-gateway
+
+jobs:
+  audit:
+    name: Lint & Security Audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        working-directory: backend/api-gateway
+        run: pip install -r requirements.txt
+      - name: Run pip-audit
+        working-directory: backend/api-gateway
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt
+        continue-on-error: true
+
+  security-scan:
+    name: Container Security Scan
+    runs-on: ubuntu-latest
+    needs: audit
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image for scanning
+        run: docker build -t ${{ env.IMAGE_NAME }}:scan backend/api-gateway
+      - name: Run Trivy scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: "${{ env.IMAGE_NAME }}:scan"
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
+        continue-on-error: true
+      - name: Upload Trivy results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: "trivy-results.sarif"
+        continue-on-error: true
+
+  build-and-push:
+    name: Build & Push Docker Image
+    runs-on: ubuntu-latest
+    needs: [audit, security-scan]
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Login to ACR
+        run: |
+          echo "${{ secrets.AZURE_ACR_PASSWORD_API_GATEWAY }}" | docker login \
+            -u "${{ secrets.AZURE_ACR_USERNAME_API_GATEWAY }}" \
+            --password-stdin "${{ env.REGISTRY }}"
+      - name: Build and Push
+        run: |
+          docker build -t "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest" \
+                       -t "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}" \
+                       backend/api-gateway
+          docker push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
+          docker push "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+
+  deploy:
+    name: Deploy to Azure
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && github.ref == 'refs/heads/main'
+    steps:
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Update Container App
+        uses: azure/CLI@v2
+        with:
+          inlineScript: |
+            az containerapp update \
+              --name ${{ env.SERVICE }} \
+              --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+              --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
+              --set-env-vars \
+                "TRANSLATOR_SERVICE_URL=http://translator-service" \
+                "LEARN_SERVICE_URL=http://learn-service" \
+                "DICTIONARY_SERVICE_URL=http://dictionary-service" \
+                "HISTORY_SERVICE_URL=http://history-service" \
+                "SPEECH_SERVICE_URL=http://speech-service" \
+                "AUTH_SERVICE_URL=http://auth-service" \
+                "THREE_D_MODEL_SERVICE_URL=http://3d-model-service" \
+                "ARTIFACT_SERVICE_URL=http://artifact-service" \
+                "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
+                "BUILD_ID=${{ github.run_id }}" \
+                "BUILD_SHA=${{ github.sha }}"
