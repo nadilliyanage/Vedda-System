@@ -1,11 +1,11 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_BASE = 'http://localhost:5000';
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 // Add auth token to all requests
 axios.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -13,7 +13,7 @@ axios.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // ========== 3D Model Words API ==========
@@ -30,7 +30,7 @@ export const modelAPI = {
     const queryParams = { limit, skip, has_vedda_ipa: hasVeddaIpa };
     if (english_word) queryParams.english_word = english_word;
     return axios.get(`${API_BASE}/api/3d-models/words/ipa-only`, {
-      params: queryParams
+      params: queryParams,
     });
   },
 
@@ -43,7 +43,7 @@ export const modelAPI = {
   getWordsWithIPA: (params = {}) => {
     const { limit = 100, skip = 0 } = params;
     return axios.get(`${API_BASE}/api/3d-models/words/ipa`, {
-      params: { limit, skip }
+      params: { limit, skip },
     });
   },
 
@@ -51,13 +51,17 @@ export const modelAPI = {
    * Get a specific word by ID
    * @param {string} wordId - The word ID
    */
-  getWordById: (wordId) => axios.get(`${API_BASE}/api/3d-models/words/${wordId}`),
+  getWordById: (wordId) =>
+    axios.get(`${API_BASE}/api/3d-models/words/${wordId}`),
 
   /**
    * Get word details by Vedda word
    * @param {string} veddaWord - The Vedda word
    */
-  getWordByVedda: (veddaWord) => axios.get(`${API_BASE}/api/3d-models/words/vedda/${encodeURIComponent(veddaWord)}`),
+  getWordByVedda: (veddaWord) =>
+    axios.get(
+      `${API_BASE}/api/3d-models/words/vedda/${encodeURIComponent(veddaWord)}`,
+    ),
 
   /**
    * Search words with filters
@@ -74,10 +78,10 @@ export const modelAPI = {
         word_type: wordType,
         search,
         limit,
-        skip
-      }
+        skip,
+      },
     });
-  }
+  },
 };
 
 export default modelAPI;
