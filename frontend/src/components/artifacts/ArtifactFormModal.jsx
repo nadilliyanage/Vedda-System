@@ -7,11 +7,6 @@ import {
   uploadImage,
   generateMetadata,
 } from "../../services/artifactService";
-import axios from "axios";
-
-const API_URL =
-  import.meta.env.VITE_ARTIFACT_SERVICE_URL ||
-  "http://localhost:5010/api/artifacts";
 
 const CATEGORIES = [
   { value: "tools", label: "Tools" },

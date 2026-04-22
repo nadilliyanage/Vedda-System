@@ -49,11 +49,16 @@ const AdminDashboard = () => {
 
         // Fetch artifact count (for both admin and elder)
         try {
+          const apiGatewayBaseUrl = import.meta.env.VITE_API_GATEWAY_URL || "";
           const artifactServiceUrl =
             import.meta.env.VITE_ARTIFACT_SERVICE_URL ||
-            "http://localhost:5010/api/artifacts";
+            `${apiGatewayBaseUrl}/api/artifacts`;
+          const token = localStorage.getItem("token");
           const artifactResponse = await axios.get(
             `${artifactServiceUrl}?limit=1`,
+            token
+              ? { headers: { Authorization: `Bearer ${token}` } }
+              : undefined,
           );
           if (artifactResponse.data.success) {
             setStats((prev) => ({

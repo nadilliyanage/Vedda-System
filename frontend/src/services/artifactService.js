@@ -1,6 +1,12 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_ARTIFACT_SERVICE_URL || 'http://localhost:5010/api/artifacts';
+const API_GATEWAY_BASE_URL = import.meta.env.VITE_API_GATEWAY_URL || '';
+const API_URL = import.meta.env.VITE_ARTIFACT_SERVICE_URL || `${API_GATEWAY_BASE_URL}/api/artifacts`;
+const rawIdentifierBaseUrl = import.meta.env.VITE_IDENTIFIER_SERVICE_URL || `${API_GATEWAY_BASE_URL}/api/identifier`;
+const normalizedIdentifierBaseUrl = rawIdentifierBaseUrl.replace(/\/+$/, '');
+const IDENTIFIER_PREDICT_URL = normalizedIdentifierBaseUrl.includes('/api/identifier')
+  ? `${normalizedIdentifierBaseUrl}/predict`
+  : `${normalizedIdentifierBaseUrl}/api/identifier/predict`;
 
 // Create axios instance
 const artifactAPI = axios.create({
@@ -102,16 +108,20 @@ export const generateMetadata = async (imageUrl) => {
 
 // Identify artifact from image using AI
 export const identifyArtifact = async (imageFile) => {
-  const IDENTIFIER_API_URL = import.meta.env.VITE_IDENTIFIER_SERVICE_URL || 'http://localhost:5009';
-
   const formData = new FormData();
   formData.append('file', imageFile);
+  const token = localStorage.getItem('token');
 
   try {
-    const response = await axios.post(`${IDENTIFIER_API_URL}/api/identifier/predict`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
+    const response = await axios.post(IDENTIFIER_PREDICT_URL, formData, {
+      headers: token
+        ? {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`,
+          }
+        : {
+            'Content-Type': 'multipart/form-data',
+          },
     });
 
     if (response.data.success) {
