@@ -122,7 +122,7 @@ const AuthPage = ({ initialMode = "login" }) => {
         >
           <img
             src="/logo.png"
-            alt="Vedda System"
+            alt="Vedda Heritage"
             className="w-16 h-16 rounded-full object-cover mb-5 shadow-lg"
             style={{ border: "2px solid rgba(245,233,200,0.35)" }}
           />
