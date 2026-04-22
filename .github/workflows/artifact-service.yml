@@ -122,8 +122,7 @@ jobs:
               "CLOUDINARY_CLOUD_NAME=df4wacecx" \
               "CLOUDINARY_API_KEY=862168236588176" \
               "CLOUDINARY_API_SECRET=MYHTg7Kx7TRTpz7REgULdacSvX0" \
-              "CLOUDINARY_FOLDER=vedda-artifacts" \
-              "GEMINI_API_KEY=AIzaSyDq8CVN4LOTem1dr6ZAo91pFV8GgL7gXkw"
+              "CLOUDINARY_FOLDER=vedda-artifacts"
 
             az containerapp ingress enable \
               --name ${{ env.SERVICE }} \
