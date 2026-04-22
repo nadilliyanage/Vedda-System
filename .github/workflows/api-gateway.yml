@@ -114,8 +114,8 @@ jobs:
                 "SPEECH_SERVICE_URL=http://speech-service" \
                 "AUTH_SERVICE_URL=http://auth-service" \
                 "THREE_D_MODEL_SERVICE_URL=http://3d-model-service" \
-                "ARTIFACT_SERVICE_URL=http://artifact-service" \
-                "ARTIFACT_IDENTIFIER_SERVICE_URL=http://artifact-identifier-service" \
+                "ARTIFACT_SERVICE_URL=http://artifact-service:5010" \
+                "ARTIFACT_IDENTIFIER_SERVICE_URL=http://artifact-identifier-service:5009" \
                 "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
                 "BUILD_ID=${{ github.run_id }}" \
                 "BUILD_SHA=${{ github.sha }}"

@@ -109,6 +109,7 @@ jobs:
               --name ${{ env.SERVICE }} \
               --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
               --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
+              --min-replicas 1 \
               --set-env-vars \
               "BUILD_ID=${{ github.run_id }}" \
               "BUILD_SHA=${{ github.sha }}" \
@@ -123,3 +124,9 @@ jobs:
               "CLOUDINARY_API_SECRET=MYHTg7Kx7TRTpz7REgULdacSvX0" \
               "CLOUDINARY_FOLDER=vedda-artifacts" \
               "GEMINI_API_KEY=AIzaSyDq8CVN4LOTem1dr6ZAo91pFV8GgL7gXkw"
+
+            az containerapp ingress enable \
+              --name ${{ env.SERVICE }} \
+              --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+              --target-port 5010 \
+              --type internal
