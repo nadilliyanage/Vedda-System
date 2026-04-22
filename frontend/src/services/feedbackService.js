@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_URL = import.meta.env.VITE_ARTIFACT_SERVICE_URL || 'http://localhost:5010/api/feedback';
+const API_GATEWAY_BASE_URL = import.meta.env.VITE_API_GATEWAY_URL || '';
+const API_URL = import.meta.env.VITE_FEEDBACK_SERVICE_URL || `${API_GATEWAY_BASE_URL}/api/feedback`;
 
 // Create axios instance
 const feedbackAPI = axios.create({

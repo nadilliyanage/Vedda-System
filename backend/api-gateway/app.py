@@ -51,6 +51,10 @@ SERVICES = {
     'artifacts': {
         'url': os.getenv('ARTIFACT_SERVICE_URL', 'http://localhost:5010'),
         'health': '/health'
+    },
+    'identifier': {
+        'url': os.getenv('ARTIFACT_IDENTIFIER_SERVICE_URL', 'http://localhost:5009'),
+        'health': '/health'
     }
 }
 
@@ -69,6 +73,7 @@ ROUTE_MAPPINGS = {
     '/api/auth': 'auth',
     '/api/3d-models': '3d-models',
     '/api/artifacts': 'artifacts',
+    '/api/identifier': 'identifier',
     '/api/feedback': 'artifacts'
 }
 
@@ -81,16 +86,28 @@ PUBLIC_ROUTE_PREFIXES = [
     '/api/tts',
     '/api/stt',
     '/api/3d-models',
+    '/api/identifier',
     '/health'
+]
+
+# Read-only routes that are publicly accessible.
+PUBLIC_GET_ROUTE_PREFIXES = [
+    '/api/artifacts'
 ]
 
 def get_service_url(service_name):
     """Get the base URL for a service"""
     return SERVICES.get(service_name, {}).get('url', '')
 
-def is_public_route(full_path):
+def is_public_route(full_path, method):
     """Return True if the path should skip auth checks"""
-    return any(full_path.startswith(prefix) for prefix in PUBLIC_ROUTE_PREFIXES)
+    if any(full_path.startswith(prefix) for prefix in PUBLIC_ROUTE_PREFIXES):
+        return True
+
+    if method == 'GET' and any(full_path.startswith(prefix) for prefix in PUBLIC_GET_ROUTE_PREFIXES):
+        return True
+
+    return False
 
 def extract_token_from_header():
     """Extract Bearer token from Authorization header"""
@@ -184,7 +201,7 @@ def api_gateway(path):
     headers = {}
     incoming_auth_headers = request.headers.get('Authorization')
     
-    if not is_public_route(full_path):
+    if not is_public_route(full_path, request.method):
         token = extract_token_from_header()
         if not token:
             return jsonify({'error': 'Authorization token missing'}), 401
@@ -216,12 +233,12 @@ def api_gateway(path):
     headers['Authorization'] = incoming_auth_headers or ''
 
     if request.method in ['POST', 'PUT']:
-        # Handle file uploads for STT endpoint
-        if full_path == '/api/stt' and request.files:
+        # Handle file uploads for endpoints that accept multipart/form-data.
+        if request.files:
             files = {}
             for key, file in request.files.items():
                 files[key] = (file.filename, file.stream, file.content_type)
-            # Get form data for STT
+            # Include form fields alongside files.
             data = request.form.to_dict()
         else:
             data = request.get_json(silent=True) or {}

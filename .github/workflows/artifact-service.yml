@@ -109,4 +109,17 @@ jobs:
               --name ${{ env.SERVICE }} \
               --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
               --image ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
-              --set-env-vars "BUILD_ID=${{ github.run_id }}" "BUILD_SHA=${{ github.sha }}"
+              --set-env-vars \
+              "BUILD_ID=${{ github.run_id }}" \
+              "BUILD_SHA=${{ github.sha }}" \
+              "PORT=5010" \
+              "NODE_ENV=development" \
+              "JWT_SECRET=c9b68d055658679667166a6f88d8d708" \
+              "MONGODB_URI=mongodb+srv://heshan:3UAXaHwpIRwEqK8K@cluster0.quemmhk.mongodb.net/vedda-artifact-db?retryWrites=true&w=majority&appName=Cluster0" \
+              "MAX_FILE_SIZE=5242880" \
+              "UPLOAD_PATH=./uploads" \
+              "CLOUDINARY_CLOUD_NAME=df4wacecx" \
+              "CLOUDINARY_API_KEY=862168236588176" \
+              "CLOUDINARY_API_SECRET=MYHTg7Kx7TRTpz7REgULdacSvX0" \
+              "CLOUDINARY_FOLDER=vedda-artifacts" \
+              "GEMINI_API_KEY=AIzaSyDq8CVN4LOTem1dr6ZAo91pFV8GgL7gXkw"
