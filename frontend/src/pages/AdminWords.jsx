@@ -4,6 +4,9 @@ import Swal from "sweetalert2";
 import * as XLSX from "xlsx";
 import LoadingScreen from "../components/ui/LoadingScreen";
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
+
 const AdminWords = () => {
   const [words, setWords] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -57,7 +60,7 @@ const AdminWords = () => {
 
   const fetchWords = async () => {
     try {
-      const response = await fetch("http://localhost:5002/api/dictionary/all");
+      const response = await fetch(`${API_BASE_URL}/api/dictionary/all`);
       if (response.ok) {
         const data = await response.json();
         setWords(data.results || []);
@@ -75,7 +78,7 @@ const AdminWords = () => {
 
   const fetchStatistics = async () => {
     try {
-      const response = await fetch("http://localhost:5002/health");
+      const response = await fetch(`${API_BASE_URL}/health`);
       if (response.ok) {
         const data = await response.json();
         setStatistics({ word_count: data.word_count || 0 });
@@ -151,7 +154,7 @@ const AdminWords = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5002/api/dictionary/add", {
+      const response = await fetch(`${API_BASE_URL}/api/dictionary/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -222,7 +225,7 @@ const AdminWords = () => {
 
     try {
       const response = await fetch(
-        "http://localhost:5002/api/dictionary/upload-csv",
+        `${API_BASE_URL}/api/dictionary/upload-csv`,
         {
           method: "POST",
           body: formData,
@@ -366,7 +369,7 @@ const AdminWords = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:5002/api/dictionary/${editingWord}`,
+        `${API_BASE_URL}/api/dictionary/${editingWord}`,
         {
           method: "PUT",
           headers: {
@@ -415,12 +418,9 @@ const AdminWords = () => {
     if (!result.isConfirmed) return;
 
     try {
-      const response = await fetch(
-        `http://localhost:5002/api/dictionary/${wordId}`,
-        {
-          method: "DELETE",
-        },
-      );
+      const response = await fetch(`${API_BASE_URL}/api/dictionary/${wordId}`, {
+        method: "DELETE",
+      });
 
       if (response.ok) {
         toast.success("Word deleted successfully!");
