@@ -109,15 +109,4 @@ jobs:
               --min-replicas 1 \
               --set-env-vars \
                 "BUILD_ID=${{ github.run_id }}" \
-                "BUILD_SHA=${{ github.sha }}" \
-                "PORT=5009" \
-                "METADATA_URL=https://docs.google.com/spreadsheets/d/1i87tZ76DEZoBjL9s086kdN7rgfi1hhUk/edit?usp=drive_link&ouid=115458652219080553373&rtpof=true&sd=true" \
-                "FEATURE_EXTRACTOR_URL=https://drive.google.com/file/d/1gmri4MvW7y0bzu3tGAY5EHRGFkPQ9p2Y/view?usp=sharing" \
-                "SVM_URL=https://drive.google.com/file/d/1CmbqZHyjz-rpqnghC7IpB4wGysCEiI_P/view?usp=sharing" \
-                "SCALER_URL=https://drive.google.com/file/d/1N95DeZyzORjVZ7m9KpX0ewiybmzkRfkv/view?usp=sharing"
-
-            az containerapp ingress enable \
-              --name ${{ env.SERVICE }} \
-              --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-              --target-port 5009 \
-              --type internal
+                "BUILD_SHA=${{ github.sha }}"
