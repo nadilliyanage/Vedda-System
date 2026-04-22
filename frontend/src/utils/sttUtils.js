@@ -1,6 +1,6 @@
 // Speech-to-Text utilities with real-time recording capabilities
 
-const STT_API_BASE = import.meta.env.VITE_TTS_URL || "http://localhost:5007";
+const STT_API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 /**
  * Real-time speech recording class

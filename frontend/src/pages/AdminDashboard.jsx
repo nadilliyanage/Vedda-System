@@ -26,7 +26,7 @@ const AdminDashboard = () => {
         // Fetch user stats (admins only)
         if (user?.role === "admin") {
           const userResponse = await axios.get(
-            `${import.meta.env.VITE_AUTH_SERVICE_URL}/users`,
+            `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/users`,
           );
           if (userResponse.data.success) {
             const usersData = userResponse.data.users;
@@ -49,9 +49,8 @@ const AdminDashboard = () => {
 
         // Fetch artifact count (for both admin and elder)
         try {
-          const apiGatewayBaseUrl = import.meta.env.VITE_API_GATEWAY_URL || "";
+          const apiGatewayBaseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
           const artifactServiceUrl =
-            import.meta.env.VITE_ARTIFACT_SERVICE_URL ||
             `${apiGatewayBaseUrl}/api/artifacts`;
           const token = localStorage.getItem("token");
           const artifactResponse = await axios.get(
