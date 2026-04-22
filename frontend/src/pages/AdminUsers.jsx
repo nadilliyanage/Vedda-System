@@ -17,7 +17,7 @@ const AdminUsers = () => {
       try {
         setLoading(true);
         const response = await axios.get(
-          `${import.meta.env.VITE_AUTH_SERVICE_URL}/users`,
+          `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/users`,
         );
 
         if (response.data.success) {
@@ -43,7 +43,7 @@ const AdminUsers = () => {
   const handleRoleChange = async (userId, newRole) => {
     try {
       const response = await axios.patch(
-        `${import.meta.env.VITE_AUTH_SERVICE_URL}/users/${userId}/role`,
+        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/users/${userId}/role`,
         {
           role: newRole,
         },
@@ -67,7 +67,7 @@ const AdminUsers = () => {
   const confirmDelete = async () => {
     try {
       const response = await axios.delete(
-        `${import.meta.env.VITE_AUTH_SERVICE_URL}/users/${userToDelete.id}`,
+        `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/auth/users/${userToDelete.id}`,
       );
 
       if (response.data.success) {

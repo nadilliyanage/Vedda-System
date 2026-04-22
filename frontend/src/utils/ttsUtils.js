@@ -1,6 +1,6 @@
 // Text-to-Speech API utilities using backend service
 
-const TTS_API_BASE = import.meta.env.VITE_TTS_URL || "http://localhost:5006";
+const TTS_API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 /**
  * Generate speech from text using backend TTS service

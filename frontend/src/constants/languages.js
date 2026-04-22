@@ -32,9 +32,9 @@ export const EXAMPLE_PHRASES = [
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
-// Service URLs - Use environment variables with API Gateway fallback
+// Service URLs - all routed through the API gateway base URL
 export const SERVICE_URLS = {
-  TRANSLATOR: import.meta.env.VITE_API_GATEWAY_URL || "http://localhost:5000",
-  DICTIONARY: import.meta.env.VITE_API_GATEWAY_URL || "http://localhost:5000",
-  HISTORY: import.meta.env.VITE_API_GATEWAY_URL || "http://localhost:5000",
+  TRANSLATOR: API_BASE_URL,
+  DICTIONARY: API_BASE_URL,
+  HISTORY: API_BASE_URL,
 };

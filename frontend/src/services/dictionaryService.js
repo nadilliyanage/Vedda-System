@@ -1,8 +1,8 @@
 import axios from "axios";
 
-// Route through API gateway (works in both local and Docker)
+// Route through API gateway base URL.
 const DICTIONARY_API_URL =
-  import.meta.env.VITE_API_GATEWAY_URL || "http://localhost:5000";
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:5000";
 
 /**
  * Translate a single word
