@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 
 import requests
 from flask import Flask, request, jsonify, redirect
@@ -189,7 +190,7 @@ def health_check():
     return jsonify({
         'status': overall_status,
         'services': service_health,
-        'timestamp': requests.get('http://worldtimeapi.org/api/timezone/Etc/UTC').json()['datetime'] if overall_status == 'healthy' else None
+        'timestamp': datetime.utcnow().isoformat() + 'Z'
     })
 
 
