@@ -111,33 +111,32 @@ class VeddaTranslator:
 
     def _extract_verb_suffix(self, word):
         """
-        Extract ONLY true syntactic suffixes (case markers, postpositions) from Sinhala words.
-        Do NOT extract tense markers like 'නවා' (present continuous) or 'වා' (past) as these
-        are verb conjugations that should be translated as part of the verb, not preserved separately.
-        
-        Returns tuple (base_word, suffix) where suffix is a true grammatical case/postposition.
+        Extract verb suffix from Sinhala word while preserving it.
+        Returns tuple (base_word, suffix) where suffix is what should be preserved.
 
         Usage:
             දඩයම් කිරීමට → (දඩයම් කිරීම, ට)
-            දඩයම් කරනවා → (දඩයම් කරනවා, '')  [නවා is tense marker, NOT preserved]
+            දඩයම් කරනවා → (දඩයම් කරන, වා)
         """
         if not word:
             return word, ''
 
-        # Only preserve TRUE syntactic suffixes (case markers, postpositions)
-        # ⚠️ CRITICAL: Do NOT include tense markers like 'නවා', 'වා', 'ලා', 'ලයි', etc.
-        # These are part of verb conjugation and should be translated, not preserved separately
+        # Common verb suffixes that should be preserved (longest first, but ට is HIGHEST PRIORITY)
         preservable_suffixes = [
-            'ට',       # HIGHEST PRIORITY: Dative/accusative case marker
-                        # Examples: මුවන්ට, දඩයම් කිරීමට, ඕනෑටම
-            'ගේ',      # Possessive/genitive case
-            'ගෙන්',    # Instrumental (with/by means of)
-            'තින්',    # Instrumental with/by
-            'දී',      # Locative/temporal marker
-            'ෙන්',     # Agentive/instrumental
-            'දීම',     # Action nominalization (noun form of action)
-            'ශි',      # Honorific marker
-            'සලු',     # Together/collective marker
+            'ට',       # ❌ HIGHEST PRIORITY: Any word ending in ට gets extracted
+                        # Examples: මුවන්ට, දඩයම් කිරීමට, ඕනෑ ඕනෑ ට
+            'ගේ',      # possessive/dative
+            'ෙන්',     # instrumental
+            'ගෙන්',    # instrumental (with)
+            'තින්',    # with/by means of
+            'දී',      # location/time
+            'දීම',     # action noun
+            'ලයි',     # completed
+            'ලා',      # having done
+            'නවා',     # continuous present
+            'වා',      # past/completed
+            'ශි',      # honorific
+            'සලු',     # together
         ]
 
         for suffix in preservable_suffixes:
@@ -599,44 +598,105 @@ class VeddaTranslator:
     
     def generate_vedda_sinhala_ipa(self, text):
         """Generate IPA phonetic representation for Vedda/Sinhala text"""
-        if not SINLING_AVAILABLE or not text:
+        if not text:
             return ''
         try:
-            # IPA phonetic mapping for Sinhala/Vedda script
-            sinhala_to_ipa = {
-                # Vowels
+            # Syllable-aware Sinhala/Vedda → IPA-ish mapping.
+            # Key rule: Sinhala consonant letters inherently carry /a/ *unless* a vowel sign or virama follows.
+            # This avoids the common bug where every consonant is encoded as "...a" regardless of context.
+
+            virama = '්'
+
+            independent_vowels = {
                 'අ': 'ə', 'ආ': 'aː', 'ඇ': 'æ', 'ඈ': 'æː', 'ඉ': 'i', 'ඊ': 'iː', 'උ': 'u', 'ඌ': 'uː',
                 'ඍ': 'ru', 'ඎ': 'ruː', 'ඏ': 'lu', 'ඐ': 'luː', 'එ': 'e', 'ඒ': 'eː', 'ඓ': 'ai',
                 'ඔ': 'o', 'ඕ': 'oː', 'ඖ': 'au',
-                # Consonants (Velar)
-                'ක': 'ka', 'ඛ': 'kʰa', 'ග': 'ɡa', 'ඝ': 'ɡʰa', 'ඞ': 'ŋa',
-                # Consonants (Palatal)
-                'ච': 't͡ʃa', 'ඡ': 't͡ʃʰa', 'ජ': 'd͡ʒa', 'ඣ': 'd͡ʒʰa', 'ඤ': 'ɲa',
-                # Consonants (Retroflex)
-                'ට': 'ʈa', 'ඨ': 'ʈʰa', 'ඩ': 'ɖa', 'ඪ': 'ɖʰa', 'ණ': 'ɳa',
-                # Consonants (Dental)
-                'ත': 't̪a', 'ථ': 't̪ʰa', 'ද': 'd̪a', 'ධ': 'd̪ʰa', 'න': 'na',
-                # Consonants (Labial)
-                'ප': 'pa', 'ඵ': 'pʰa', 'බ': 'ba', 'භ': 'bʰa', 'ම': 'ma',
-                # Consonants (Approximants)
-                'ය': 'ja', 'ර': 'ra', 'ල': 'la', 'ව': 'ʋa', 
-                # Consonants (Sibilants)
-                'ශ': 'ʃa', 'ෂ': 'ʂa', 'ස': 'sa', 'හ': 'ha', 'ළ': 'ɭa', 'ෆ': 'fa',
-                # Diacritics and modifiers
-                'ං': 'ŋ', 'ඃ': 'h', '්': '', 
-                'ා': 'aː', 'ැ': 'æ', 'ෑ': 'æː', 
-                'ි': 'i', 'ී': 'iː', 'ු': 'u', 'ූ': 'uː',
-                'ෘ': 'ru', 'ෲ': 'ruː', 'ෟ': 'lu', 'ෳ': 'luː', 
-                'ෙ': 'e', 'ේ': 'eː', 'ෛ': 'ai', 
-                'ො': 'o', 'ෝ': 'oː', 'ෞ': 'au'
             }
-            
-            result = ''
-            for char in text:
-                result += sinhala_to_ipa.get(char, char)
-            
-            return result.strip()
-        except Exception as e:
+
+            vowel_signs = {
+                'ා': 'aː', 'ැ': 'æ', 'ෑ': 'æː',
+                'ි': 'i', 'ී': 'iː', 'ු': 'u', 'ූ': 'uː',
+                'ෘ': 'ru', 'ෲ': 'ruː', 'ෟ': 'lu', 'ෳ': 'luː',
+                'ෙ': 'e', 'ේ': 'eː', 'ෛ': 'ai',
+                'ො': 'o', 'ෝ': 'oː', 'ෞ': 'au',
+            }
+
+            consonants = {
+                # Velar
+                'ක': 'k', 'ඛ': 'kʰ', 'ග': 'ɡ', 'ඝ': 'ɡʰ', 'ඞ': 'ŋ',
+                # Palatal
+                'ච': 't͡ʃ', 'ඡ': 't͡ʃʰ', 'ජ': 'd͡ʒ', 'ඣ': 'd͡ʒʰ', 'ඤ': 'ɲ',
+                # Retroflex
+                'ට': 'ʈ', 'ඨ': 'ʈʰ', 'ඩ': 'ɖ', 'ඪ': 'ɖʰ', 'ණ': 'ɳ',
+                # Dental
+                # Use plain t/d (dental diacritic causes confusion downstream and is stripped anyway)
+                'ත': 't', 'ථ': 'tʰ', 'ද': 'd', 'ධ': 'dʰ', 'න': 'n',
+                # Labial
+                'ප': 'p', 'ඵ': 'pʰ', 'බ': 'b', 'භ': 'bʰ', 'ම': 'm',
+                # Approximants
+                'ය': 'j', 'ර': 'r', 'ල': 'l', 'ව': 'ʋ',
+                # Sibilants + others
+                'ශ': 'ʃ', 'ෂ': 'ʂ', 'ස': 's', 'හ': 'h', 'ළ': 'ɭ', 'ෆ': 'f',
+            }
+
+            modifiers = {
+                'ං': 'ŋ',
+                'ඃ': 'h',
+            }
+
+            out = []
+            i = 0
+            while i < len(text):
+                ch = text[i]
+
+                # Skip ZWJ/ZWNJ and other invisible format chars
+                if ch in {'\u200c', '\u200d', '\ufeff'}:
+                    i += 1
+                    continue
+
+                if ch in independent_vowels:
+                    out.append(independent_vowels[ch])
+                    i += 1
+                    continue
+
+                if ch in consonants:
+                    base = consonants[ch]
+                    nxt = text[i + 1] if i + 1 < len(text) else ''
+
+                    # Consonant + virama => dead consonant, no vowel
+                    if nxt == virama:
+                        out.append(base)
+                        i += 2
+                        continue
+
+                    # Consonant + vowel sign => override inherent vowel
+                    if nxt in vowel_signs:
+                        out.append(base + vowel_signs[nxt])
+                        i += 2
+                        continue
+
+                    # Otherwise, inherent /a/
+                    out.append(base + 'a')
+                    i += 1
+                    continue
+
+                if ch in vowel_signs:
+                    # Vowel sign without a preceding consonant (rare/ill-formed) — emit the vowel value.
+                    out.append(vowel_signs[ch])
+                    i += 1
+                    continue
+
+                if ch in modifiers:
+                    out.append(modifiers[ch])
+                    i += 1
+                    continue
+
+                # Fallback: keep char as-is (spaces/punctuation)
+                out.append(ch)
+                i += 1
+
+            return ''.join(out).strip()
+        except Exception:
             return ''
     
     def generate_singlish_romanization(self, text):

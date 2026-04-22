@@ -6,6 +6,7 @@ export const ipaToViseme = {
   
   // /æ/ as in "cat" → AE
   'æ': { primary: ['AE'], secondary: [], weight: 0.9, duration: 140 },
+  'æː': { primary: ['AE'], secondary: [], weight: 0.95, duration: 200 }, // long æ (Sinhala/Vedda)
   
   // /ɑ/, /ɒ/, /ʌ/ → Ah (open mouth vowels)
   'ɑ': { primary: ['Ah'], secondary: [], weight: 0.95, duration: 150 },
@@ -21,9 +22,11 @@ export const ipaToViseme = {
   
   // /ɪ/ → Ih (relaxed smile)
   'ɪ': { primary: ['Ih'], secondary: [], weight: 0.85, duration: 120 },
+  'ɪː': { primary: ['EE'], secondary: ['Ih'], weight: 0.75, secondaryWeight: 0.25, duration: 190 },
   
   // /ɛ/, /e/ → AE or Ih (mid-front vowels)
   'ɛ': { primary: ['AE'], secondary: ['Ih'], weight: 0.7, secondaryWeight: 0.3, duration: 130 },
+  'ɛː': { primary: ['AE'], secondary: ['Ih'], weight: 0.8, secondaryWeight: 0.35, duration: 200 },
   'e': { primary: ['AE'], secondary: ['EE'], weight: 0.7, secondaryWeight: 0.3, duration: 140 },
   'eː': { primary: ['AE'], secondary: ['EE'], weight: 0.8, secondaryWeight: 0.4, duration: 200 },
   
@@ -37,13 +40,16 @@ export const ipaToViseme = {
   'u': { primary: ['WOO'], secondary: [], weight: 0.9, duration: 150 },
   'uː': { primary: ['WOO'], secondary: [], weight: 0.95, duration: 200 },
   'ʊ': { primary: ['WOO'], secondary: [], weight: 0.7, duration: 120 },
+  'ʊː': { primary: ['WOO'], secondary: [], weight: 0.85, duration: 190 },
   
   // /ə/ schwa → Ah (reduced)
   'ə': { primary: ['Ah'], secondary: [], weight: 0.4, duration: 100 },
+  'əː': { primary: ['Ah'], secondary: [], weight: 0.45, duration: 170 },
   
   // /ɜ/, /ɚ/ → Er
   'ɜ': { primary: ['Er'], secondary: [], weight: 0.8, duration: 140 },
   'ɚ': { primary: ['Er'], secondary: [], weight: 0.6, duration: 120 },
+  'ɜː': { primary: ['Er'], secondary: [], weight: 0.85, duration: 200 },
   
   // ========== DIPHTHONGS ==========
   'aɪ': { primary: ['Ah'], secondary: ['EE'], weight: 0.85, secondaryWeight: 0.7, duration: 180 },
@@ -110,7 +116,7 @@ export const ipaToViseme = {
   'ʰ': { primary: ['Ah'], secondary: [], weight: 0.25, duration: 50 },
   
   // Silence/pause
-  '_pause': { primary: ['Ah'], secondary: [], weight: 0.1, duration: 80 },
+  '_pause': { primary: ['_pause'], secondary: [], weight: 1.0, duration: 80 },
 };
 
 // Legacy simple phoneme mapping (for backward compatibility with text-based animation)
@@ -154,8 +160,14 @@ const IPA_MULTI_CHAR_SYMBOLS = [
   'eɪ',
   'oʊ',
   'aː',
+  'æː',
+  'əː',
+  'ɛː',
+  'ɪː',
   'iː',
+  'ɜː',
   'uː',
+  'ʊː',
   'oː',
   'ɔː',
   'eː',
@@ -165,14 +177,19 @@ const IPA_VOWELS = new Set([
   'a',
   'aː',
   'æ',
+  'æː',
   'ɑ',
   'ə',
+  'əː',
   'ɛ',
+  'ɛː',
   'e',
   'eː',
   'ɚ',
   'ɜ',
+  'ɜː',
   'ɪ',
+  'ɪː',
   'i',
   'iː',
   'ɒ',
@@ -181,6 +198,7 @@ const IPA_VOWELS = new Set([
   'o',
   'oː',
   'ʊ',
+  'ʊː',
   'u',
   'uː',
   'ʌ',
@@ -197,12 +215,46 @@ export function normalizeIpaString(ipaString) {
 
   return ipaString
     .trim()
-    .replace(/\//g, '')
+    // Remove common IPA delimiters and punctuation
+    .replace(/[\/\[\]{}()]/g, '')
     .replace(/[ˈˌ.]/g, '')
-    .replace(/\u0361+/g, '\u0361')
+    // Normalize ASCII length marker ':' to IPA length mark 'ː'
+    .replace(/:/g, 'ː')
+      // Defensive: explicitly normalize dental diacritics (t̪/d̪) to plain t/d
+      // (these combining marks are stripped below anyway, but this avoids any accidental remaps)
+      .replace(/t\u032A/g, 't')
+      .replace(/d\u032A/g, 'd')
+    // Normalize tie bars (t͡ʃ, d͡ʒ) and remove them
+    .replace(/[\u035C\u0361]+/g, '\u0361')
     .replace(/t\u0361ʃ/g, 'tʃ')
     .replace(/d\u0361ʒ/g, 'dʒ')
     .replace(/\u0361/g, '')
+    // Strip remaining combining marks (e.g., dental sign ◌̪)
+    .replace(/[\u0300-\u036F]+/g, '')
+    // Map Sinhala/Vedda-specific IPA letters to closest supported set
+    .replace(/ʈ/g, 't')
+    .replace(/ɖ/g, 'd')
+    .replace(/[ɳɲ]/g, 'n')
+    .replace(/ɭ/g, 'l')
+    .replace(/ʋ/g, 'v')
+    .replace(/ʂ/g, 'ʃ')
+    .replace(/[ɾɽ]/g, 'r')
+    .replace(/ɐ/g, 'ə')
+    // Fix common Sinhala/Vedda IPA generator patterns
+    .replace(/aaː/g, 'aː')
+    .replace(/iiː/g, 'iː')
+    .replace(/eeː/g, 'eː')
+    .replace(/ooː/g, 'oː')
+    .replace(/uuː/g, 'uː')
+    .replace(/ææː/g, 'æː')
+    // Sinhala/Vedda IPA generator often emits consonant + inherent 'a' followed by a vowel sign
+    // (because consonants are mapped like ක->ka and vowel signs like ැ->æ).
+    // Example: කැ -> kaæ (should be kæ), කෘ -> karu (should be kru).
+    // Remove ONLY the unwanted inherent 'a' when a vowel/vowel-sign sequence follows.
+    .replace(
+      /((?:tʃ|dʒ|[pbtdkgɡmnŋnlrɹjwvfszʃʒh]|c|ɟ)(?:ʰ)?)(?:a)(?=(?:aː|æː|æ|iː|i|uː|u|eː|e|oː|o|ɔː|ɔ|əː|ə|ɪː|ɪ|ʊː|ʊ|ɜː|ɜ|ɚ|ai|au|r(?:uː|u)|l(?:uː|u)))/g,
+      '$1'
+    )
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -250,23 +302,85 @@ function isGeminateBoundary(tokens, index) {
   return current && next && current === next && !isIpaVowel(current) && isIpaVowel(afterNext);
 }
 
+// Map our "CC Base" viseme target names to common morph-target naming schemes
+// (e.g., OVR/Rhubarb-style visemes: sil, PP, FF, TH, DD, kk, CH, SS, nn, RR, aa, E, ih, oh, ou)
+const MORPH_TARGET_ALIASES = {
+  // CC Base → OVR/Rhubarb
+  Ah: ['aa'],
+  AE: ['E'],
+  EE: ['ih', 'E'],
+  Ih: ['ih', 'E'],
+  Er: ['RR'],
+  Oh: ['oh'],
+  WOO: ['ou'],
+
+  BMP: ['PP'],
+  FV: ['FF'],
+  Th: ['TH'],
+  TLDN: ['DD', 'nn'],
+  SZ: ['SS'],
+  ChJ: ['CH'],
+  KGHNG: ['kk'],
+  R: ['RR'],
+
+  // Pause/silence
+  _pause: ['sil'],
+};
+
+function expandMorphTargets(shapeNames) {
+  const expanded = [];
+  for (const name of shapeNames || []) {
+    if (!name) continue;
+    expanded.push(name);
+    const aliases = MORPH_TARGET_ALIASES[name];
+    if (aliases && aliases.length) {
+      expanded.push(...aliases);
+    }
+  }
+  // de-dupe while preserving order (case-insensitive)
+  const seen = new Set();
+  return expanded.filter((n) => {
+    const key = n.toLowerCase();
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 // Helper function to find best matching morph target
 export function findBestMorphMatch(shapeNames, availableMorphs) {
-  for (const shapeName of shapeNames) {
-    // Exact match first
-    const exactMatch = availableMorphs.find(m => 
-      m.toLowerCase() === shapeName.toLowerCase()
+  if (!availableMorphs || availableMorphs.length === 0) return null;
+
+  const candidates = expandMorphTargets(shapeNames);
+
+  // 1) Case-insensitive exact match (preferred)
+  for (const candidate of candidates) {
+    const exactMatch = availableMorphs.find(
+      (m) => m.toLowerCase() === candidate.toLowerCase(),
     );
     if (exactMatch) return exactMatch;
-    
-    // Partial match
-    const partialMatch = availableMorphs.find(m => 
-      m.toLowerCase().includes(shapeName.toLowerCase()) ||
-      shapeName.toLowerCase().includes(m.toLowerCase())
-    );
-    if (partialMatch) return partialMatch;
   }
-  return null;
+
+  // 2) Partial match with a simple score (avoid returning the first weak match)
+  let best = null;
+  let bestScore = -1;
+  for (const candidate of candidates) {
+    const c = candidate.toLowerCase();
+    for (const m of availableMorphs) {
+      const mm = m.toLowerCase();
+      const includes = mm.includes(c) || c.includes(mm);
+      if (!includes) continue;
+
+      // Prefer longer, more specific matches and closer lengths
+      const score = Math.min(mm.length, c.length) * 10 - Math.abs(mm.length - c.length);
+      if (score > bestScore) {
+        bestScore = score;
+        best = m;
+      }
+    }
+  }
+
+  return best;
 }
 
 // Convert plain text to phonemes (legacy support)
@@ -306,31 +420,41 @@ export function ipaToPhoneticEnglish(ipaString) {
     'ʌ': 'uh',
     'ɑ': 'ah',
     'ɒ': 'o',    // short-o (British "hot" / Sinhala context) — 'ah' produces unnatural TTS
-    'æ': 'a',
+    'a': 'ah',
+    'æ': 'ae',
+    'æː': 'aae',
     'ɛ': 'eh',
-    'e': 'ay',
-    'eː': 'ay',
+    'ɛː': 'eh',
+    'e': 'eh',
+    'eː': 'eh',
     'ɪ': 'ih',
     'i': 'ee',
     'iː': 'ee',
     'ɔ': 'aw',
     'ɔː': 'aw',
     'o': 'oh',
-    'oː': 'oh',
+    'oː': 'oo',
     'u': 'oo',
     'uː': 'oo',
-    'ʊ': 'uh',
+    'ʊ': 'u',
+    'ʊː': 'uu',
     'ə': 'uh',
+    'əː': 'aa',
     'ɜ': 'er',
     'ɚ': 'er',
-    
+    'ɜː': 'er',
+
+    // Long vowel tokens (so we don't leak "ː" into TTS text)
+    'aː': 'aa',
+    'ɪː': 'ee',
+
     // Diphthongs
-    'aɪ': 'eye',
-    'aʊ': 'ow',
+    'aɪ': 'ai',
+    'aʊ': 'au',
     'ɔɪ': 'oy',
-    'eɪ': 'ay',
-    'oʊ': 'oh',
-    
+    'eɪ': 'ei',
+    'oʊ': 'ou',
+
     // Consonants
     'm': 'm',
     'n': 'n',
@@ -354,6 +478,7 @@ export function ipaToPhoneticEnglish(ipaString) {
     't͡ʃ': 'ch',   // tied notation generated by backend (t͡ʃ)
     'dʒ': 'j',
     'd͡ʒ': 'j',   // tied notation (already normalised above, kept as fallback)
+    'ʰ': 'h',
     'h': 'h',
     'w': 'w',
     'l': 'l',
@@ -366,13 +491,28 @@ export function ipaToPhoneticEnglish(ipaString) {
   };
 
   const tokens = tokenizeIpa(ipaString);
-  let result = '';
+
+  // Build per-word tokens by concatenating syllable chunks.
+  // This avoids spaced letters (which triggers spelling), and usually sounds more like a word.
+  const words = [];
+  let currentSyllables = [];
+  let consonantBuffer = '';
+
+  const flushWord = () => {
+    if (consonantBuffer) {
+      currentSyllables.push(consonantBuffer);
+      consonantBuffer = '';
+    }
+    const w = currentSyllables.filter(Boolean).join('');
+    if (w) words.push(w);
+    currentSyllables = [];
+  };
 
   for (let index = 0; index < tokens.length; index++) {
     const token = tokens[index];
 
     if (token === '_pause') {
-      result += ' ';
+      flushWord();
       continue;
     }
 
@@ -380,14 +520,44 @@ export function ipaToPhoneticEnglish(ipaString) {
       continue;
     }
 
-    result += ipaToEnglish[token] || token;
+    const mapped = ipaToEnglish[token];
+    const safeToken = mapped
+      ? mapped
+      : (/^[\x20-\x7E]+$/.test(token) ? token : '');
 
+    if (!safeToken) {
+      continue;
+    }
+
+    if (isIpaVowel(token)) {
+      currentSyllables.push((consonantBuffer + safeToken).trim());
+      consonantBuffer = '';
+    } else {
+      consonantBuffer += safeToken;
+    }
+
+    // Gemination boundary: end the current consonant cluster as its own syllable chunk
+    // so TTS doesn't swallow it (still stays within the same word via hyphens).
     if (isGeminateBoundary(tokens, index)) {
-      result += ' ';
+      if (consonantBuffer) {
+        currentSyllables.push(consonantBuffer);
+        consonantBuffer = '';
+      }
     }
   }
 
-  result = result.replace(/\s+/g, ' ').trim();
+  flushWord();
+
+  let result = words
+    .join(' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    // Keep TTS input ASCII-only (prevents some voices from cutting off early)
+    .replace(/[^\x20-\x7E]/g, '')
+    // Avoid extreme vowel runs like "aaaa" which can confuse pronunciation
+    .replace(/([aeiou])\1{2,}/gi, '$1$1')
+    .replace(/\s+/g, ' ')
+    .trim();
 
   console.log('IPA to Phonetic English:', ipaString, '→', result);
   return result;
@@ -430,4 +600,104 @@ export function ipaToPhonemes(ipaString) {
   
   console.log('Final phonemes array:', phonemes);
   return phonemes;
+}
+
+// Very lightweight Sinhala-to-Latin approximation for browser TTS fallback.
+// This is NOT a full transliteration system; it aims to produce a pronounceable Latin string
+// when the platform lacks Sinhala (si-*) voices.
+export function sinhalaToLatinApprox(text) {
+  if (!text) return '';
+
+  const independentVowels = {
+    'අ': 'a', 'ආ': 'aa', 'ඇ': 'ae', 'ඈ': 'aae', 'ඉ': 'i', 'ඊ': 'ii',
+    'උ': 'u', 'ඌ': 'uu', 'එ': 'e', 'ඒ': 'ee', 'ඔ': 'o', 'ඕ': 'oo',
+    'ඓ': 'ai', 'ඖ': 'au',
+  };
+
+  const consonants = {
+    'ක': 'k', 'ඛ': 'kh', 'ග': 'g', 'ඝ': 'gh', 'ඞ': 'ng',
+    'ච': 'ch', 'ඡ': 'chh', 'ජ': 'j', 'ඣ': 'jh', 'ඤ': 'gn',
+    'ට': 't', 'ඨ': 'th', 'ඩ': 'd', 'ඪ': 'dh', 'ණ': 'n',
+    'ත': 't', 'ථ': 'th', 'ද': 'd', 'ධ': 'dh', 'න': 'n',
+    'ප': 'p', 'ඵ': 'ph', 'බ': 'b', 'භ': 'bh', 'ම': 'm',
+    'ය': 'y', 'ර': 'r', 'ල': 'l', 'ව': 'w',
+    'ශ': 'sh', 'ෂ': 'sh', 'ස': 's', 'හ': 'h', 'ළ': 'l', 'ෆ': 'f',
+    'ඟ': 'ng', 'ඥ': 'gn',
+  };
+
+  const vowelSigns = {
+    'ා': 'aa', 'ැ': 'ae', 'ෑ': 'aae', 'ි': 'i', 'ී': 'ii', 'ු': 'u', 'ූ': 'uu',
+    'ෙ': 'e', 'ේ': 'ee', 'ො': 'o', 'ෝ': 'oo', 'ෛ': 'ai', 'ෞ': 'au',
+  };
+
+  const output = [];
+  let lastInherentVowelIndex = -1;
+
+  for (const ch of text) {
+    if (ch === '්') {
+      // Virama: remove inherent vowel if present
+      if (lastInherentVowelIndex >= 0 && output[lastInherentVowelIndex] === 'a') {
+        output.splice(lastInherentVowelIndex, 1);
+      }
+      lastInherentVowelIndex = -1;
+      continue;
+    }
+
+    if (ch === 'ං') {
+      output.push('ng');
+      lastInherentVowelIndex = -1;
+      continue;
+    }
+
+    if (ch === 'ඃ') {
+      output.push('h');
+      lastInherentVowelIndex = -1;
+      continue;
+    }
+
+    const sign = vowelSigns[ch];
+    if (sign) {
+      // Replace inherent 'a' if we just emitted a consonant
+      if (lastInherentVowelIndex >= 0 && output[lastInherentVowelIndex] === 'a') {
+        output[lastInherentVowelIndex] = sign;
+      } else {
+        output.push(sign);
+      }
+      lastInherentVowelIndex = -1;
+      continue;
+    }
+
+    const v = independentVowels[ch];
+    if (v) {
+      output.push(v);
+      lastInherentVowelIndex = -1;
+      continue;
+    }
+
+    const c = consonants[ch];
+    if (c) {
+      output.push(c);
+      output.push('a');
+      lastInherentVowelIndex = output.length - 1;
+      continue;
+    }
+
+    if (ch === ' ' || ch === '\t' || ch === '\n') {
+      output.push(' ');
+      lastInherentVowelIndex = -1;
+      continue;
+    }
+
+    // Fallback: keep ASCII letters/digits/punct, drop other unknowns
+    if (/^[\x20-\x7E]$/.test(ch)) {
+      output.push(ch);
+    }
+    lastInherentVowelIndex = -1;
+  }
+
+  return output
+    .join('')
+    .replace(/\s+/g, ' ')
+    .replace(/\s([,.!?;:])/g, '$1')
+    .trim();
 }
