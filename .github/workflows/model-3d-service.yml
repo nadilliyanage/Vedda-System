@@ -1,11 +1,11 @@
-name: 3d-model-service — CI/CD
+name: model-3d-service — CI/CD
 
 on:
   push:
     branches: ["main"]
     paths:
       - "backend/3D-model-service/**"
-      - ".github/workflows/3d-model-service.yml"
+      - ".github/workflows/model-3d-service.yml"
   pull_request:
     branches: ["main"]
     paths:
@@ -20,7 +20,7 @@ permissions:
 
 env:
   REGISTRY: ${{ secrets.AZURE_ACR_REGISTRY_URL_3D_MODEL }}
-  SERVICE: 3d-model-service
+  SERVICE: model-3d-service
   IMAGE_NAME: vedda-system-3d-model-service
 
 jobs:
