@@ -113,7 +113,7 @@ jobs:
                 "HISTORY_SERVICE_URL=http://history-service" \
                 "SPEECH_SERVICE_URL=http://speech-service" \
                 "AUTH_SERVICE_URL=http://auth-service" \
-                "THREE_D_MODEL_SERVICE_URL=http://3d-model-service" \
+                "THREE_D_MODEL_SERVICE_URL=http://model-3d-service" \
                 "ARTIFACT_SERVICE_URL=http://artifact-service" \
                 "ARTIFACT_IDENTIFIER_SERVICE_URL=http://artifact-identifier-service" \
                 "JWT_SECRET=${{ secrets.JWT_SECRET }}" \
