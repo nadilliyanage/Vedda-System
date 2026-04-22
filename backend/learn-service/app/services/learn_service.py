@@ -137,7 +137,7 @@ def get_health_info():
     col = _challenges_col()
     challenge_count = col.count_documents({})
     return {
-        "status": "healthy",
+        "status": "healthy now",
         "service": "learn-service",
         "timestamp": datetime.now().isoformat(),
         "challenge_count": challenge_count,
