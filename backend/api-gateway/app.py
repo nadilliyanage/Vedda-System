@@ -192,6 +192,7 @@ def health_check():
         'timestamp': requests.get('http://worldtimeapi.org/api/timezone/Etc/UTC').json()['datetime'] if overall_status == 'healthy' else None
     })
 
+
 @app.route('/api/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def api_gateway(path):
     """Main API gateway endpoint"""
