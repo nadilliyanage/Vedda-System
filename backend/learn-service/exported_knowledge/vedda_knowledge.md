@@ -1721,7 +1721,7 @@
     "nouns",
     "daily_life"
   ],
-  "content": "The Vedda word hineto means 'child'. It refers to a young person or child. The Vedda word 'kekula' means boy or young male. The Vedda word 'kekuli' means girl or young female.",
+  "content": "The Vedda word hineto means 'child'. It refers to a young person or child. The Vedda word kekula means 'boy' or young male. The Vedda word kekuli means 'girl' or young female.",
   "examples": [
     {
       "sentence": "Meaththo hineto balanawa.",
