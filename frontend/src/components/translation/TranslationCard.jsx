@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { HiTranslate } from "react-icons/hi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { BsChatDots } from "react-icons/bs";
+import { FaPlay } from "react-icons/fa";
 import LanguageSelector from "./LanguageSelector.jsx";
 import TranslationInput from "./TranslationInput.jsx";
 import TranslationOutput from "./TranslationOutput.jsx";
@@ -26,6 +28,8 @@ const TranslationCard = ({
   const [bridgeTranslation, setBridgeTranslation] = useState("");
   const [confidence, setConfidence] = useState(null);
   const [showConversation, setShowConversation] = useState(false);
+
+  const navigate = useNavigate();
 
   const { translate, loading, error, setError } = useTranslation();
 
@@ -86,6 +90,29 @@ const TranslationCard = ({
     if (outputText) {
       navigator.clipboard.writeText(outputText);
     }
+  };
+
+  const canShowVeddaAnimation =
+    targetLanguage === "vedda" &&
+    outputText.trim() &&
+    targetIpaTranscription &&
+    targetIpaTranscription.trim();
+
+  const handleShowAnimation = () => {
+    if (!canShowVeddaAnimation) return;
+
+    navigate("/3d-visuals/translation", {
+      state: {
+        wordData: {
+          word: outputText,
+          ipa: targetIpaTranscription,
+        },
+        backTo: "/translator",
+        backLabel: "Back to Translator",
+        title: "Translation Animation",
+        autoPlay: true,
+      },
+    });
   };
 
   return (
@@ -171,6 +198,24 @@ const TranslationCard = ({
             <BsChatDots className="w-5 h-5 mr-2" />
             Conversation
           </button>
+
+          {targetLanguage === "vedda" && (
+            <button
+              className={`btn-secondary min-w-[160px] flex items-center justify-center ${
+                canShowVeddaAnimation ? "" : "opacity-50 cursor-not-allowed"
+              }`}
+              onClick={handleShowAnimation}
+              disabled={!canShowVeddaAnimation}
+              title={
+                canShowVeddaAnimation
+                  ? "Show 3D mouth animation for the translated Vedda text"
+                  : "Translate to Vedda to enable animation"
+              }
+            >
+              <FaPlay className="w-4 h-4 mr-2" />
+              Show Animation
+            </button>
+          )}
         </div>
       </div>
 

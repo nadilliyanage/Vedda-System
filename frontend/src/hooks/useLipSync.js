@@ -7,14 +7,17 @@ import {
   textToPhonemes,
   ipaToPhonemes,
   ipaToPhoneticEnglish,
+  sinhalaToLatinApprox,
 } from "../utils/lipSyncUtils";
 
 export const useLipSync = (meshesWithMorphTargets) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [animationSpeed, setAnimationSpeed] = useState(1.0);
   const animationIdRef = useRef(null);
+  const timeoutIdRef = useRef(null);
   const isAnimatingRef = useRef(false);
   const speechRef = useRef(null);
+  const voicesRef = useRef([]);
 
   // Initialize the speech engine
   useEffect(() => {
@@ -39,6 +42,26 @@ export const useLipSync = (meshesWithMorphTargets) => {
 
     return () => {
       // Cleanup if necessary
+    };
+  }, []);
+
+  // Cache browser voices (they often load asynchronously)
+  useEffect(() => {
+    if (!('speechSynthesis' in window)) return;
+
+    const updateVoices = () => {
+      try {
+        voicesRef.current = window.speechSynthesis.getVoices() || [];
+      } catch {
+        voicesRef.current = [];
+      }
+    };
+
+    updateVoices();
+    window.speechSynthesis.addEventListener('voiceschanged', updateVoices);
+
+    return () => {
+      window.speechSynthesis.removeEventListener('voiceschanged', updateVoices);
     };
   }, []);
 
@@ -118,6 +141,10 @@ export const useLipSync = (meshesWithMorphTargets) => {
       cancelAnimationFrame(animationIdRef.current);
       animationIdRef.current = null;
     }
+    if (timeoutIdRef.current) {
+      clearTimeout(timeoutIdRef.current);
+      timeoutIdRef.current = null;
+    }
   }, []);
 
   const animateText = useCallback(
@@ -158,7 +185,7 @@ export const useLipSync = (meshesWithMorphTargets) => {
           if (openMorph) targetMorphs[openMorph] = 0.15;
           smoothTransition(targetMorphs, 80 / animationSpeed);
           phonemeIndex++;
-          setTimeout(animateNextPhoneme, 100 / animationSpeed);
+          timeoutIdRef.current = setTimeout(animateNextPhoneme, 100 / animationSpeed);
           return;
         }
 
@@ -193,7 +220,7 @@ export const useLipSync = (meshesWithMorphTargets) => {
 
           const duration = (viseme.duration || 120) / animationSpeed;
           phonemeIndex++;
-          setTimeout(animateNextPhoneme, duration);
+          timeoutIdRef.current = setTimeout(animateNextPhoneme, duration);
         } else {
           const targetMorphs = {};
           const genericMorph = findBestMorphMatch(["Ah"], availableMorphs);
@@ -201,7 +228,7 @@ export const useLipSync = (meshesWithMorphTargets) => {
           smoothTransition(targetMorphs, 60 / animationSpeed);
 
           phonemeIndex++;
-          setTimeout(animateNextPhoneme, 100 / animationSpeed);
+          timeoutIdRef.current = setTimeout(animateNextPhoneme, 100 / animationSpeed);
         }
       };
 
@@ -412,7 +439,7 @@ export const useLipSync = (meshesWithMorphTargets) => {
           if (openMorph) targetMorphs[openMorph] = 0.15;
           smoothTransition(targetMorphs, 80 / animationSpeed);
           phonemeIndex++;
-          setTimeout(animateNextPhoneme, 100 / animationSpeed);
+          timeoutIdRef.current = setTimeout(animateNextPhoneme, 100 / animationSpeed);
           return;
         }
 
@@ -447,7 +474,7 @@ export const useLipSync = (meshesWithMorphTargets) => {
 
           const duration = (viseme.duration || 120) / animationSpeed;
           phonemeIndex++;
-          setTimeout(animateNextPhoneme, duration);
+          timeoutIdRef.current = setTimeout(animateNextPhoneme, duration);
         } else {
           const targetMorphs = {};
           const genericMorph = findBestMorphMatch(["Ah"], availableMorphs);
@@ -455,7 +482,7 @@ export const useLipSync = (meshesWithMorphTargets) => {
           smoothTransition(targetMorphs, 60 / animationSpeed);
 
           phonemeIndex++;
-          setTimeout(animateNextPhoneme, 100 / animationSpeed);
+          timeoutIdRef.current = setTimeout(animateNextPhoneme, 100 / animationSpeed);
         }
       };
 
@@ -618,21 +645,87 @@ export const useLipSync = (meshesWithMorphTargets) => {
       console.log("Original word:", word);
       console.log("IPA:", ipaTranscription);
 
-      if (!speechRef.current) {
-        console.error("❌ Speech-TTS engine not initialized.");
-        alert(
-          "The speech engine is not ready yet. Please try again in a moment.",
-        );
+      if (!("speechSynthesis" in window)) {
+        alert("Speech synthesis not supported in this browser.");
         return;
       }
 
-      if (!word || !ipaTranscription || meshesWithMorphTargets.length === 0) {
-        console.log("❌ Blocked - missing data");
+      if (!speechRef.current) {
+        console.warn(
+          "Speech-TTS engine not initialized; using browser speechSynthesis directly.",
+        );
+      }
+
+      if (!word) {
+        console.log("❌ Blocked - missing data", {
+          hasWord: Boolean(word),
+        });
+        return;
+      }
+
+      const hasIPA = Boolean(ipaTranscription && ipaTranscription.trim());
+
+      const canAnimate = meshesWithMorphTargets.length > 0;
+
+      const isSinhalaText = /[\u0D80-\u0DFF]/.test(word);
+      const voices = voicesRef.current.length
+        ? voicesRef.current
+        : (window.speechSynthesis.getVoices ? window.speechSynthesis.getVoices() : []);
+      const sinhalaVoice =
+        voices.find((v) => (v.lang || "").toLowerCase().startsWith("si")) ||
+        voices.find((v) => (v.name || "").toLowerCase().includes("sinhala"));
+
+      const phoneticWord = hasIPA ? ipaToPhoneticEnglish(ipaTranscription) : '';
+      console.log("Phonetic word for TTS:", phoneticWord);
+
+      // Prefer speaking actual Sinhala script when we have a Sinhala voice.
+      // If we DON'T have a Sinhala voice, Sinhala->Latin approximation usually sounds
+      // more like a real word on English voices than IPA-derived strings.
+      const sinhalaFallback = (isSinhalaText && !sinhalaVoice)
+        ? sinhalaToLatinApprox(word)
+        : '';
+
+      const speechText = (
+        isSinhalaText
+          ? (sinhalaVoice ? word : (sinhalaFallback || phoneticWord || ''))
+          : (phoneticWord || word || '')
+      ).trim();
+      if (!speechText) {
+        console.warn("Blocked - no speech text", {
+          isSinhalaText,
+          hasSinhalaVoice: Boolean(sinhalaVoice),
+          hasIPA,
+          sinhalaFallback,
+          phoneticWord,
+        });
+        isAnimatingRef.current = false;
+        setIsAnimating(false);
         return;
       }
 
       stopAnimation();
-      speechRef.current.cancel();
+      speechRef.current?.cancel?.();
+      window.speechSynthesis.cancel();
+
+      // If morph-target meshes aren't ready yet, still speak (just skip lip animation).
+      if (!canAnimate) {
+        console.warn('Meshes not ready; speaking without lip animation');
+
+        const utterance = new SpeechSynthesisUtterance(speechText);
+        utterance.rate = 0.8 * animationSpeed;
+        utterance.pitch = 1;
+
+        if (isSinhalaText && sinhalaVoice) {
+          utterance.voice = sinhalaVoice;
+          utterance.lang = sinhalaVoice.lang;
+        } else {
+          utterance.lang = (isSinhalaText && !sinhalaFallback) ? 'si-LK' : 'en-US';
+        }
+
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+        return;
+      }
 
       const availableMorphs = [];
       if (
@@ -644,25 +737,39 @@ export const useLipSync = (meshesWithMorphTargets) => {
         );
       }
 
-      const phonemes = ipaToPhonemes(ipaTranscription);
+      // Build animation phoneme stream.
+      // IMPORTANT: If we are forced to speak a Latin fallback (no Sinhala voice),
+      // animate from the same speechText so mouth shapes match what users hear.
+      const animateFromIPA = hasIPA && (isSinhalaText ? Boolean(sinhalaVoice) : true) && speechText === word;
+      const phonemes = animateFromIPA
+        ? ipaToPhonemes(ipaTranscription)
+        : textToPhonemes(speechText);
+      const visemeMap = animateFromIPA ? ipaToViseme : phonemeToViseme;
       console.log("Phonemes:", phonemes);
 
-      const phoneticWord = ipaToPhoneticEnglish(ipaTranscription);
-      console.log("Phonetic word for TTS:", phoneticWord);
+      const utteranceRate = 0.8 * animationSpeed;
+      const estimateSpeechDurationMs = (text, rate) => {
+        const r = rate && rate > 0 ? rate : 1;
+        const nonSpace = (text || '').replace(/\s+/g, '');
+        const asciiLetters = (text || '').replace(/[^A-Za-z]/g, '').length;
+        const spaces = ((text || '').match(/\s+/g) || []).length;
 
-      // Set speech rate based on animation speed
-      if (speechRef.current.setRate) {
-        speechRef.current.setRate(0.8 * animationSpeed);
-      }
+        // Heuristic: for Latin-ish text, letters dominate.
+        // For Sinhala script or mixed content, fall back to non-space length.
+        const baseUnits = asciiLetters > 0 ? asciiLetters : nonSpace.length;
+        const baseMs = baseUnits * 85 + spaces * 140;
+        const scaled = baseMs / r;
+        return Math.max(350, Math.min(15000, Math.round(scaled)));
+      };
 
-      // BUILD TIMELINE FROM IPA PHONEME DURATIONS (THE KEY FIX!)
+
+      // BUILD TIMELINE FROM PHONEME DURATIONS
       const phonemeTimeline = [];
       let cumulativeTime = 0;
       phonemes.forEach((phoneme) => {
-        const viseme = ipaToViseme[phoneme];
-        // Apply speed control: reduce duration by 20% for tighter sync, then adjust by animationSpeed
-        const baseDuration = viseme ? (viseme.duration || 120) * 0.8 : 70;
-        const duration = baseDuration / animationSpeed;
+        const viseme = visemeMap[phoneme] || (phoneme === '_pause' ? ipaToViseme._pause : undefined);
+        const baseDuration = viseme ? (viseme.duration || 120) : 70;
+        const duration = baseDuration / (utteranceRate || 1);
         phonemeTimeline.push({
           phoneme,
           viseme,
@@ -672,9 +779,26 @@ export const useLipSync = (meshesWithMorphTargets) => {
         cumulativeTime += duration;
       });
 
+      // Scale the timeline to match the estimated utterance duration for the chosen speechText.
+      // This improves sync across different voices and fallback strategies.
+      const estimatedSpeechDuration = estimateSpeechDurationMs(speechText, utteranceRate);
+      const rawTimelineDuration = cumulativeTime || 1;
+      const timelineScale = Math.max(0.6, Math.min(1.6, estimatedSpeechDuration / rawTimelineDuration));
+      let dynamicTimelineScale = timelineScale;
+      let boundaryEventCount = 0;
+
+      const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+
       console.log("Timeline built:", phonemeTimeline);
-      console.log("Total expected duration:", cumulativeTime, "ms");
+      console.log("Raw timeline duration:", cumulativeTime, "ms");
+      console.log("Estimated speech duration:", estimatedSpeechDuration, "ms");
+      console.log("Timeline scale:", timelineScale);
       console.log("Animation speed:", animationSpeed);
+
+      const nowMs = () =>
+        typeof performance !== 'undefined' && typeof performance.now === 'function'
+          ? performance.now()
+          : Date.now();
 
       isAnimatingRef.current = true;
       setIsAnimating(true);
@@ -692,10 +816,17 @@ export const useLipSync = (meshesWithMorphTargets) => {
         }
 
         if (!startTime) {
-          startTime = Date.now();
+          startTime = nowMs();
         }
 
-        const elapsed = Date.now() - startTime;
+        const elapsed = nowMs() - startTime;
+
+        // If the engine stops speaking but onend is delayed, stop ASAP.
+        if (isSpeaking && !window.speechSynthesis.speaking) {
+          console.log("⏹️ speechSynthesis.speaking=false (early stop)");
+          isSpeaking = false;
+          speechEndTime = elapsed;
+        }
 
         // Stop animation if speech has ended and we've given time for final transition
         if (speechEndTime && elapsed >= speechEndTime + 50) {
@@ -723,13 +854,15 @@ export const useLipSync = (meshesWithMorphTargets) => {
         let targetPhonemeIndex = currentPhonemeIndex;
         for (let i = 0; i < phonemeTimeline.length; i++) {
           const phonemeData = phonemeTimeline[i];
+          const scaledStart = phonemeData.startTime * dynamicTimelineScale;
+          const scaledEnd = scaledStart + phonemeData.duration * dynamicTimelineScale;
           if (
-            elapsed >= phonemeData.startTime &&
-            elapsed < phonemeData.startTime + phonemeData.duration
+            elapsed >= scaledStart &&
+            elapsed < scaledEnd
           ) {
             targetPhonemeIndex = i;
             break;
-          } else if (elapsed >= phonemeData.startTime + phonemeData.duration) {
+          } else if (elapsed >= scaledEnd) {
             targetPhonemeIndex = Math.min(i + 1, phonemeTimeline.length - 1);
           }
         }
@@ -749,7 +882,13 @@ export const useLipSync = (meshesWithMorphTargets) => {
           );
 
           const targetMorphs = {};
-          if (viseme && phoneme !== "_pause") {
+          if (phoneme === "_pause") {
+            // Prefer explicit silence morphs (e.g., 'sil') when present; otherwise return to neutral.
+            const silenceMorph = findBestMorphMatch(["_pause"], availableMorphs);
+            if (silenceMorph) {
+              targetMorphs[silenceMorph] = 1.0;
+            }
+          } else if (viseme) {
             const primaryMorph = findBestMorphMatch(
               viseme.primary,
               availableMorphs,
@@ -783,67 +922,111 @@ export const useLipSync = (meshesWithMorphTargets) => {
         }
       };
 
-      speechRef.current
-        .speak({
-          text: phoneticWord,
-          queue: false,
-          listeners: {
-            onstart: () => {
-              console.log("✅ Speech started");
-              startTime = Date.now();
-              hasEnded = false;
-              isSpeaking = true;
-              speechEndTime = null;
-              animateSpeaking();
-            },
-            onend: () => {
-              const duration = startTime ? Date.now() - startTime : 0;
-              console.log(
-                "✅ Speech ended - Actual:",
-                duration,
-                "ms | Expected:",
-                cumulativeTime,
-                "ms",
-              );
+      const utterance = new SpeechSynthesisUtterance(speechText);
+      utterance.rate = utteranceRate;
+      utterance.pitch = 1;
 
-              // Mark speech as ended immediately
-              isSpeaking = false;
-              speechEndTime = duration;
-              
-              // Allow animation loop to catch the end naturally
-              // It will stop within 50ms after checking speechEndTime
-              setTimeout(() => {
-                if (animationFrameId) {
-                  cancelAnimationFrame(animationFrameId);
-                  animationFrameId = null;
-                }
-                hasEnded = true;
-                isAnimatingRef.current = false;
-                setIsAnimating(false);
-                smoothTransition({}, 80);
-              }, 50);
-            },
-            onerror: (e) => {
-              console.error("❌ Speech error:", e);
-              isSpeaking = false;
-              hasEnded = true;
-              isAnimatingRef.current = false;
-              setIsAnimating(false);
-              if (animationFrameId) {
-                cancelAnimationFrame(animationFrameId);
-                animationFrameId = null;
-              }
-              smoothTransition({}, 100);
-            },
-          },
-        })
-        .catch((e) => {
-          console.error("❌ Error while speaking:", e);
-          isSpeaking = false;
+      if (isSinhalaText && sinhalaVoice) {
+        utterance.voice = sinhalaVoice;
+        utterance.lang = sinhalaVoice.lang;
+      } else {
+        // Hint Sinhala even when we don't have an explicit Sinhala voice selected.
+        // Some platforms will still pick a better default voice based on lang.
+        // If we fell back to Latin transliteration, keep en-US.
+        utterance.lang = (isSinhalaText && !sinhalaFallback) ? 'si-LK' : 'en-US';
+      }
+
+      utterance.onstart = () => {
+        console.log("✅ Speech started");
+        startTime = nowMs();
+        hasEnded = false;
+        isSpeaking = true;
+        speechEndTime = null;
+        animateSpeaking();
+      };
+
+      // Boundary events (word/character) allow us to auto-correct drift.
+      // Note: Some browsers fire only word boundaries; still useful to reduce long-term drift.
+      utterance.onboundary = (event) => {
+        boundaryEventCount++;
+
+        // Prefer engine-provided elapsedTime when available; otherwise use our clock.
+        const elapsedMs =
+          typeof event.elapsedTime === 'number'
+            ? Math.max(0, Math.round(event.elapsedTime * 1000))
+            : (startTime ? nowMs() - startTime : null);
+
+        const textLen = (speechText || '').length;
+        const charIndex = typeof event.charIndex === 'number' ? event.charIndex : null;
+        const charLength = typeof event.charLength === 'number' ? event.charLength : 0;
+        if (elapsedMs == null || !textLen || charIndex == null) return;
+
+        const progress = clamp((charIndex + charLength) / textLen, 0, 1);
+        // Avoid noisy early/late updates.
+        if (progress < 0.05 || progress > 0.97) return;
+
+        const expectedAtProgress = rawTimelineDuration * progress;
+        if (expectedAtProgress < 80) return;
+
+        const suggestedScale = elapsedMs / expectedAtProgress;
+        // Smooth the correction to avoid jitter, but react fast enough to be noticeable.
+        dynamicTimelineScale = clamp(
+          dynamicTimelineScale * 0.55 + suggestedScale * 0.45,
+          0.45,
+          2.2,
+        );
+
+        if (boundaryEventCount <= 5) {
+          console.log('🧭 boundary', {
+            name: event.name,
+            charIndex,
+            charLength,
+            elapsedMs,
+            progress: Number(progress.toFixed(3)),
+            suggestedScale: Number(suggestedScale.toFixed(3)),
+            dynamicTimelineScale: Number(dynamicTimelineScale.toFixed(3)),
+          });
+        }
+      };
+
+      utterance.onend = () => {
+        const duration = startTime ? nowMs() - startTime : 0;
+        console.log(
+          "✅ Speech ended - Actual:",
+          duration,
+          "ms | Expected:",
+          cumulativeTime,
+          "ms",
+        );
+
+        isSpeaking = false;
+        speechEndTime = duration;
+
+        setTimeout(() => {
+          if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+          }
           hasEnded = true;
-          isAnimatingRef.current = false;
-          setIsAnimating(false);
-        });
+          stopAnimation();
+          smoothTransition({}, 80);
+        }, 50);
+      };
+
+      utterance.onerror = (e) => {
+        console.error("❌ Speech error:", e);
+        isSpeaking = false;
+        hasEnded = true;
+        stopAnimation();
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+          animationFrameId = null;
+        }
+        smoothTransition({}, 100);
+      };
+
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
     },
     [meshesWithMorphTargets, animationSpeed, stopAnimation, smoothTransition],
   );
