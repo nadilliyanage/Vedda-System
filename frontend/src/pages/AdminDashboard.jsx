@@ -69,9 +69,19 @@ const AdminDashboard = () => {
           console.error("Failed to fetch artifact count:", err);
         }
 
-        // TODO: Fetch word count when word management API is ready
-        // For now, set a placeholder or remove this section
-        setStats((prev) => ({ ...prev, wordCount: 0 }));
+        // Fetch word count from dictionary service
+        try {
+          const wordResponse = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL || "http://localhost:5000"}/api/dictionary/all`
+          );
+          if (wordResponse.ok) {
+            const wordData = await wordResponse.json();
+            const count = (wordData.results || []).length;
+            setStats((prev) => ({ ...prev, wordCount: count }));
+          }
+        } catch (err) {
+          console.error("Failed to fetch word count:", err);
+        }
       } catch (err) {
         setError(err.response?.data?.message || "Failed to fetch statistics");
       } finally {
