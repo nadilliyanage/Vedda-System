@@ -10,7 +10,18 @@ const TranslationInput = ({
   sourceSinglish,
   onInputChange,
   onClear,
+  onEnterTranslate,
+  loading,
 }) => {
+  const handleKeyDown = (e) => {
+    // Enter without Shift triggers translation
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      if (inputText.trim() && !loading && onEnterTranslate) {
+        onEnterTranslate();
+      }
+    }
+  };
   const getLanguageName = (code) => {
     const lang = LANGUAGES.find((l) => l.code === code);
     return lang ? lang.name : code;
@@ -74,6 +85,7 @@ const TranslationInput = ({
           rows={8}
           value={inputText}
           onChange={(e) => onInputChange(e.target.value)}
+          onKeyDown={handleKeyDown}
           placeholder={`Type in ${getLanguageName(sourceLanguage)}`}
           className="textarea-field h-full text-lg leading-relaxed resize-none"
           maxLength={5000}
@@ -216,9 +228,14 @@ const TranslationInput = ({
           </button>
         </div>
 
-        <p className="text-sm" style={{ color: "#8c7040" }}>
-          {inputText.length}/5000
-        </p>
+        <div className="flex flex-col items-end gap-0.5">
+          <p className="text-sm" style={{ color: "#8c7040" }}>
+            {inputText.length}/5000
+          </p>
+          <p className="text-xs" style={{ color: "rgba(140,112,64,0.50)" }}>
+            Press Enter to translate
+          </p>
+        </div>
       </div>
     </div>
   );
