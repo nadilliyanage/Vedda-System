@@ -232,9 +232,7 @@ const TranslationInput = ({
           <p className="text-sm" style={{ color: "#8c7040" }}>
             {inputText.length}/5000
           </p>
-          <p className="text-xs" style={{ color: "rgba(140,112,64,0.50)" }}>
-            Press Enter to translate
-          </p>
+          
         </div>
       </div>
     </div>
