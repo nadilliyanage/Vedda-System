@@ -141,6 +141,8 @@ const TranslationCard = ({
               sourceSinglish={sourceSinglish}
               onInputChange={setInputText}
               onClear={handleClearInput}
+              onEnterTranslate={handleTranslate}
+              loading={loading}
             />
           </div>
 

@@ -63,7 +63,10 @@ const AdminWords = () => {
       const response = await fetch(`${API_BASE_URL}/api/dictionary/all`);
       if (response.ok) {
         const data = await response.json();
-        setWords(data.results || []);
+        const fetchedWords = data.results || [];
+        setWords(fetchedWords);
+        // Set count atomically from the same fetch — avoids stale-state timing
+        setStatistics({ word_count: fetchedWords.length });
       } else {
         console.error("Failed to fetch words:", response.status);
         toast.error("Failed to fetch words");
@@ -77,15 +80,9 @@ const AdminWords = () => {
   };
 
   const fetchStatistics = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/health`);
-      if (response.ok) {
-        const data = await response.json();
-        setStatistics({ word_count: data.word_count || 0 });
-      }
-    } catch (error) {
-      console.error("Error fetching statistics:", error);
-    }
+    // word count is derived directly from the fetched words array
+    // (the gateway /health endpoint does not expose word_count)
+    setStatistics({ word_count: words.length });
   };
 
   const handleInputChange = (e) => {
