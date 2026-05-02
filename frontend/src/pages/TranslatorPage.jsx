@@ -13,8 +13,8 @@ import { useTranslationHistory } from "../hooks/useTranslationHistory";
 const TranslatorPage = () => {
   const navigate = useNavigate();
   const [inputText, setInputText] = useState("");
-  const [sourceLanguage, setSourceLanguage] = useState("vedda");
-  const [targetLanguage, setTargetLanguage] = useState("english");
+  const [sourceLanguage, setSourceLanguage] = useState("english");
+  const [targetLanguage, setTargetLanguage] = useState("vedda");
 
   const { translationHistory, fetchHistory, addToHistory, deleteHistoryItem } =
     useTranslationHistory();
@@ -26,7 +26,7 @@ const TranslatorPage = () => {
   };
 
   const handleExampleSelect = (example) => {
-    setInputText(example.vedda);
+    setInputText(example.vedda || example.english);
     setSourceLanguage("vedda");
     setTargetLanguage("english");
   };
