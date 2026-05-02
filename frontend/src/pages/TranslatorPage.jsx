@@ -26,9 +26,9 @@ const TranslatorPage = () => {
   };
 
   const handleExampleSelect = (example) => {
-    setInputText(example.english || example.vedda);
-    setSourceLanguage("english");
-    setTargetLanguage("vedda");
+    setInputText(example.vedda || example.english);
+    setSourceLanguage("vedda");
+    setTargetLanguage("english");
   };
 
   return (
