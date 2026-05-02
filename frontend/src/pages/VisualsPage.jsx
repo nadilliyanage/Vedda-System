@@ -18,7 +18,7 @@ const VisualsPage = () => {
   const [search, setSearch] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [onlyWithIPA, setOnlyWithIPA] = useState(false); // filter toggle
+  const [onlyWithIPA, setOnlyWithIPA] = useState(true); // default to true to hide non-IPA words
 
   const fetchWords = useCallback(
     async (pageToFetch = page, searchValue = search, filterIPA = onlyWithIPA) => {
@@ -56,8 +56,8 @@ const VisualsPage = () => {
             englishWord: item.english_word || '',
           }));
 
-        // Filter out words without vedda_word
-        normalized = normalized.filter(item => item.word);
+        // Filter out words without vedda_word or without IPA
+        normalized = normalized.filter(item => item.word && item.ipa);
 
         // Set total count from backend metadata
         setTotalCount(result.metadata?.total || 0);
