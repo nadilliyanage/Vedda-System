@@ -31,7 +31,8 @@ class VeddaTranslator:
             'යට': 'යට',
             'මෙන්': 'මෙන්', 
             'යනු': 'යනු',
-            'බලා': 'බලා'
+            'බලා': 'බලා',
+              
             # Add more words here in the format: 'sinhala_word': 'vedda_or_original'
         }
 
@@ -133,7 +134,7 @@ class VeddaTranslator:
             'දීම',     # action noun
             'ලයි',     # completed
             'ලා',      # having done
-            'නවා',     # continuous present
+           
             'වා',      # past/completed
             'ශි',      # honorific
             'සලු',     # together
