@@ -706,20 +706,48 @@ export const useLipSync = (meshesWithMorphTargets) => {
    * Shared animation runner used by both backend-audio and browser-fallback paths.
    * Drives lip-sync phoneme animation for a given real audio duration (ms).
    */
+  /**
+   * Measures the initial silence at the start of an audio blob so the lip sync
+   * can start exactly when the voice begins rather than guessing a fixed offset.
+   * Falls back to `defaultDelayMs` if the Web Audio API is unavailable.
+   */
+  const measureLeadingSilenceMs = useCallback(async (audioBlob, defaultDelayMs = 100) => {
+    try {
+      const arrayBuffer = await audioBlob.arrayBuffer();
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const decoded = await ctx.decodeAudioData(arrayBuffer);
+      ctx.close();
+
+      const channelData = decoded.getChannelData(0);
+      const sampleRate = decoded.sampleRate;
+      const SILENCE_THRESHOLD = 0.005;
+
+      for (let i = 0; i < channelData.length; i++) {
+        if (Math.abs(channelData[i]) > SILENCE_THRESHOLD) {
+          return Math.round((i / sampleRate) * 1000);
+        }
+      }
+      return defaultDelayMs; // entire buffer is silent – shouldn't happen
+    } catch {
+      return defaultDelayMs; // API unavailable or decode error
+    }
+  }, []);
+
   const runLipSyncAnimation = useCallback(
-    (phonemes, visemeMap, audioDurationMs, availableMorphs) => {
+    (phonemes, visemeMap, activeAudioDurationMs, availableMorphs) => {
+      // activeAudioDurationMs is the duration of the *voiced* portion (silence already excluded)
       let totalPhonemeDuration = 0;
       phonemes.forEach((p) => {
         const v = visemeMap[p];
         totalPhonemeDuration += v ? (v.duration || 120) : 100;
       });
 
-      // Scale all phoneme durations so they fill the active audio duration
-      // (accounting for ~200ms of natural silence padding in generated MP3s)
-      const activeAudioDuration = Math.max(100, audioDurationMs - 200);
+      // Leave an 80ms buffer before the audio end so the last phoneme
+      // always completes cleanly without over-running.
+      const targetDuration = Math.max(100, activeAudioDurationMs - 80);
       const scaleFactor = Math.max(
-        0.2, // Allow aggressive compression so it never exceeds audio duration
-        Math.min(1.8, activeAudioDuration / (totalPhonemeDuration || 1))
+        0.25,
+        Math.min(2.0, targetDuration / (totalPhonemeDuration || 1))
       );
 
       let phonemeIndex = 0;
@@ -826,7 +854,7 @@ export const useLipSync = (meshesWithMorphTargets) => {
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
 
       // ──────────────────────────────────────────────────────────────────────
-      // PRIMARY PATH: Backend gTTS → clear Google TTS audio
+      // PRIMARY PATH: Backend Edge TTS → precise lip sync
       // ──────────────────────────────────────────────────────────────────────
       const tryBackendTTS = async () => {
         try {
@@ -840,27 +868,35 @@ export const useLipSync = (meshesWithMorphTargets) => {
           if (!response.ok) throw new Error(`Backend TTS error: ${response.status}`);
 
           const audioBlob = await response.blob();
+
+          // Measure the actual leading silence so we start the lip sync exactly
+          // when the voice begins, not at a fixed offset.
+          const leadingSilenceMs = await measureLeadingSilenceMs(audioBlob, 100);
+          console.log(`🔇 Leading silence detected: ${leadingSilenceMs} ms`);
+
           const audioUrl = URL.createObjectURL(audioBlob);
           const audio = new Audio(audioUrl);
-          // Keep a reference to cancel if needed
           window.__activeGTTSAudio = audio;
 
-          // Wait until we know the duration, then start animation + playback together
           await new Promise((resolve, reject) => {
             audio.onloadedmetadata = () => {
-              const audioDurationMs = audio.duration * 1000;
-              console.log(`🎙️ Edge TTS audio ready – ${audioDurationMs.toFixed(0)} ms`);
+              const totalDurationMs = audio.duration * 1000;
+              // The voiced portion is the total minus the leading silence and a small tail guard
+              const voicedDurationMs = Math.max(100, totalDurationMs - leadingSilenceMs - 80);
+              console.log(`🎙️ Edge TTS ready – total: ${totalDurationMs.toFixed(0)} ms | voiced: ${voicedDurationMs.toFixed(0)} ms`);
 
               audio.onplay = () => {
-                console.log('▶️  Edge TTS playback started, syncing animation');
-                // Edge TTS generated MP3s have ~150ms of initial silence padding. 
-                // Delaying the lip sync slightly perfectly aligns the first mouth movement with the sound.
-                setTimeout(() => {
-                  runLipSyncAnimation(phonemes, visemeMap, audioDurationMs, availableMorphs);
-                }, 150);
+                console.log('▶️  Edge TTS playback started');
+                const animationStartTime = Date.now();
 
-                // FORCE STOP fallback: Chrome sometimes drops the 'onended' event.
-                // Guarantee the mouth stops moving strictly when the audio duration is reached.
+                // Start lip sync after the measured leading silence
+                setTimeout(() => {
+                  console.log(`🎬 Lip sync starting after ${leadingSilenceMs} ms`);
+                  runLipSyncAnimation(phonemes, visemeMap, voicedDurationMs, availableMorphs);
+                }, leadingSilenceMs);
+
+                // Force-stop guard: fires when the *entire* audio duration has elapsed
+                // from the play event (independent of animation start delay).
                 setTimeout(() => {
                   if (isAnimatingRef.current) {
                     console.log('⏹️  Force stopping animation (audio duration reached)');
@@ -869,11 +905,11 @@ export const useLipSync = (meshesWithMorphTargets) => {
                     stopAnimation();
                     smoothTransition({}, 80);
                   }
-                }, audioDurationMs + 50);
+                }, totalDurationMs - (Date.now() - animationStartTime) + 60);
               };
 
               audio.onended = () => {
-                console.log('⏹️  gTTS playback finished');
+                console.log('⏹️  Edge TTS playback finished');
                 isAnimatingRef.current = false;
                 setIsAnimating(false);
                 stopAnimation();
@@ -983,6 +1019,7 @@ export const useLipSync = (meshesWithMorphTargets) => {
       smoothTransition,
       getBestEnglishVoice,
       runLipSyncAnimation,
+      measureLeadingSilenceMs,
     ]
   );
 
