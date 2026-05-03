@@ -438,7 +438,7 @@ export function ipaToPhoneticEnglish(ipaString) {
     'uː': 'oo',
     'ʊ': 'u',
     'ʊː': 'uu',
-    'ə': 'uh',
+    'ə': 'a',
     'əː': 'aa',
     'ɜ': 'er',
     'ɚ': 'er',
@@ -556,6 +556,8 @@ export function ipaToPhoneticEnglish(ipaString) {
     .replace(/[^\x20-\x7E]/g, '')
     // Avoid extreme vowel runs like "aaaa" which can confuse pronunciation
     .replace(/([aeiou])\1{2,}/gi, '$1$1')
+    // Fix double 'j' which TTS often mispronounces. 'dj' forces the correct hard 'j' sound (e.g. "podja")
+    .replace(/jj/gi, 'dj')
     .replace(/\s+/g, ' ')
     .trim();
 
