@@ -3,6 +3,7 @@ import { HiX, HiMicrophone, HiVolumeUp } from "react-icons/hi";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useTranslation } from "../../hooks/useTranslation";
 import { generateSpeech } from "../../utils/ttsUtils";
+import { SpeechRecorder } from "../../utils/sttUtils";
 
 const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
   const [messages, setMessages] = useState([]);
@@ -125,7 +126,7 @@ const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
       }
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = async (event) => {
       console.error("Speech recognition error:", event.error);
       setIsRecording(false);
 
@@ -140,9 +141,9 @@ const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
         // Don't alert for no-speech, just silently fail
         console.log("No speech detected");
       } else if (event.error === "network") {
-        alert(
-          "Network error. Speech recognition requires an internet connection. Please check your connection and try again.",
-        );
+        // Browser speech API failed with network error — fall back to backend STT
+        console.warn("Browser speech recognition network error — falling back to backend STT");
+        await handleBackendSTT(language);
       } else if (event.error === "audio-capture") {
         alert("No microphone found. Please ensure a microphone is connected.");
       } else if (event.error !== "aborted") {
@@ -159,15 +160,84 @@ const ConversationMode = ({ sourceLanguage, targetLanguage, onClose }) => {
     } catch (error) {
       console.error("Error starting recognition:", error);
       setIsRecording(false);
-      if (error.message.includes("network")) {
-        alert(
-          "Cannot start speech recognition. Please check your internet connection.",
-        );
-      } else {
-        alert("Failed to start speech recognition. Please try again.");
-      }
+      // Fall back to backend STT
+      handleBackendSTT(language);
     }
   };
+
+  /**
+   * Fallback: use backend STT service (MediaRecorder + server-side Whisper)
+   */
+  const handleBackendSTT = async (language) => {
+    const recorder = new SpeechRecorder();
+
+    setIsRecording(true);
+    setActiveLanguage(language);
+
+    recorder.onResult = async (result) => {
+      setIsRecording(false);
+      recorder.cleanup();
+
+      if (!result?.text) return;
+
+      const transcript = result.text.replace(/\.+$/, "").trim();
+
+      const userMessage = {
+        id: Date.now(),
+        text: transcript,
+        language: language,
+        type: "user",
+        isSource: language === sourceLanguage,
+      };
+      setMessages((prev) => [...prev, userMessage]);
+
+      const targetLang =
+        language === sourceLanguage ? targetLanguage : sourceLanguage;
+
+      try {
+        const translation = await translate(transcript, language, targetLang);
+        if (translation?.translatedText) {
+          const translatedMessage = {
+            id: Date.now() + 1,
+            text: translation.translatedText,
+            language: targetLang,
+            type: "translated",
+            isSource: targetLang === sourceLanguage,
+            confidence: translation.confidence,
+          };
+          setMessages((prev) => [...prev, translatedMessage]);
+          setTimeout(() => handleSpeak(translation.translatedText, targetLang), 300);
+        }
+      } catch (err) {
+        console.error("Translation error:", err);
+      }
+    };
+
+    recorder.onError = (err) => {
+      setIsRecording(false);
+      recorder.cleanup();
+      console.error("Backend STT error:", err);
+      alert("Speech recognition failed. Please try typing your message instead.");
+    };
+
+    try {
+      await recorder.initialize(language);
+      await recorder.startRecording();
+
+      // Auto-stop after 6 seconds
+      setTimeout(() => {
+        if (recorder.isRecording) {
+          recorder.stopRecording();
+        }
+      }, 6000);
+    } catch (err) {
+      setIsRecording(false);
+      recorder.cleanup();
+      console.error("Failed to start backend STT:", err);
+      alert("Could not access microphone. Please check your browser permissions.");
+    }
+  };
+
 
   const getLanguageLabel = (lang) => {
     return lang.charAt(0).toUpperCase() + lang.slice(1);
