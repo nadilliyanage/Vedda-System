@@ -84,8 +84,6 @@ class ArtifactIdentifierService:
             img_array = np.expand_dims(img_array, axis=0)
             
             # Extract deep features using CNN feature extractor
-            # Use layer-by-layer inference to avoid Sequential.call() compatibility
-            # issues across different TensorFlow versions (e.g., macOS vs Windows)
             try:
                 x = tf.constant(img_array)
                 for layer in self.feature_extractor.layers:
@@ -102,7 +100,7 @@ class ArtifactIdentifierService:
             class_index = self.svm.predict(features_scaled)[0]
             artifact_name = self.class_names[class_index]
             
-            # Approximate confidence using decision function + softmax
+            # Approximate confidence using decision function
             decision_scores = self.svm.decision_function(features_scaled)[0]
             probs = np.exp(decision_scores) / np.sum(np.exp(decision_scores))
             confidence = float(probs[class_index])
